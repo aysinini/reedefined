@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reedefined — Your May Issue</title>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Barlow+Condensed:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink:#0C0C0C; --ink2:#1A1A1A; --mid:#3A3A3A; --muted:#777; --light:#AAA;
+  --rule:#E2E2E2; --rule2:#EBEBEB; --bg:#F8F7F4; --bg2:#F0EEE9; --white:#FFFFFF;
+  --teal:#4A6670; --teal-l:#D8E4E8; --teal-ll:#EEF3F5;
+  --red:#C8251A; --gold:#B8953A;
+  --H:'Libre Baskerville',Georgia,serif;
+  --C:'Barlow Condensed',sans-serif;
+  --S:'Barlow',sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:var(--S);-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+
+/* ─── UTIL BAR ─── */
+.util-bar{background:var(--ink);color:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 32px;height:32px;font-family:var(--C);font-size:11px;font-weight:500;letter-spacing:1px}
+.live-dot{width:6px;height:6px;border-radius:50%;background:var(--red);animation:blink 1.4s ease-in-out infinite;display:inline-block;margin-right:6px}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.25}}
+.util-right{display:flex;align-items:center;gap:16px}
+.util-right a{color:rgba(255,255,255,0.6);transition:color .15s}
+.util-right a:hover{color:#fff}
+.util-sep{width:1px;height:12px;background:rgba(255,255,255,0.18)}
+
+/* ─── NAV ─── */
+.site-nav{background:var(--white);border-bottom:3px solid var(--ink);position:sticky;top:0;z-index:200}
+.nav-inner{max-width:1360px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:0 32px;height:62px}
+.nav-logo{font-family:var(--H);font-size:22px;font-weight:700;color:var(--ink)}
+.nav-links{display:flex;height:62px}
+.nav-link{font-family:var(--C);font-size:13px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--muted);padding:0 16px;height:100%;display:flex;align-items:center;border-bottom:3px solid transparent;margin-bottom:-3px;transition:color .15s,border-color .15s;cursor:pointer}
+.nav-link:hover{color:var(--ink)}
+.nav-link.active{color:var(--ink);border-bottom-color:var(--ink)}
+.nav-right{display:flex;align-items:center;gap:12px}
+.nav-avatar{width:34px;height:34px;border-radius:50%;background:var(--teal);border:2px solid var(--teal);display:flex;align-items:center;justify-content:center;font-family:var(--H);font-size:13px;font-weight:700;color:#fff;cursor:pointer}
+.nav-greet{font-family:var(--H);font-size:14px;font-style:italic;color:var(--mid)}
+
+/* ─── ISSUE BANNER ─── */
+.issue-banner{background:var(--ink);color:#fff;padding:0 32px}
+.issue-banner-inner{max-width:1360px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:44px}
+.issue-meta{display:flex;align-items:center;gap:20px}
+.issue-label{font-family:var(--C);font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,0.5)}
+.issue-title{font-family:var(--H);font-size:15px;font-style:italic;color:#fff}
+.issue-date{font-family:var(--C);font-size:10px;letter-spacing:1px;color:rgba(255,255,255,0.4)}
+.issue-progress-wrap{display:flex;align-items:center;gap:12px}
+.issue-progress-label{font-family:var(--C);font-size:10px;letter-spacing:1px;color:rgba(255,255,255,0.4)}
+.issue-progress-bar{width:120px;height:2px;background:rgba(255,255,255,0.15)}
+.issue-progress-fill{height:100%;background:var(--teal-l);width:35%}
+
+/* ─── PAGE ─── */
+.page{max-width:1360px;margin:0 auto;padding:0 32px}
+
+/* ─── HERO ISSUE ─── */
+.hero-issue{display:grid;grid-template-columns:1fr 400px;gap:0;border-bottom:1px solid var(--rule);padding:48px 0}
+.hi-left{padding-right:48px;border-right:1px solid var(--rule)}
+.hi-eyebrow{font-family:var(--C);font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--teal);margin-bottom:16px;display:flex;align-items:center;gap:12px}
+.hi-eyebrow::before{content:'';width:28px;height:1px;background:var(--teal)}
+.hi-title{font-family:var(--H);font-size:clamp(36px,4vw,60px);font-weight:700;line-height:1.05;color:var(--ink);letter-spacing:-1px;margin-bottom:16px}
+.hi-title em{font-style:italic;font-weight:400}
+.hi-dek{font-family:var(--H);font-size:18px;font-style:italic;color:var(--mid);line-height:1.7;margin-bottom:32px;max-width:520px}
+.hi-meta{display:flex;align-items:center;gap:24px;margin-bottom:36px;padding-bottom:24px;border-bottom:1px solid var(--rule2)}
+.hi-editor{display:flex;align-items:center;gap:10px}
+.hi-editor-av{width:36px;height:36px;border-radius:50%;background:var(--teal-l);border:1px solid var(--teal);display:flex;align-items:center;justify-content:center;font-family:var(--H);font-size:13px;font-weight:700;color:var(--teal)}
+.hi-editor-name{font-family:var(--H);font-size:15px;font-style:italic;color:var(--mid)}
+.hi-stats{display:flex;gap:20px}
+.hi-stat{font-family:var(--C);font-size:11px;font-weight:500;letter-spacing:1px;color:var(--light);text-transform:uppercase}
+.hi-stat strong{color:var(--ink);font-size:13px}
+.btn-read-now{display:inline-flex;align-items:center;gap:10px;font-family:var(--C);font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;background:var(--ink);color:#fff;padding:14px 28px;cursor:pointer;border:none;transition:opacity .15s}
+.btn-read-now:hover{opacity:.85}
+.btn-read-now svg{transition:transform .2s}
+.btn-read-now:hover svg{transform:translateX(3px)}
+
+/* Cover preview */
+.hi-right{padding-left:48px;display:flex;align-items:flex-start;justify-content:center}
+.cover-preview{width:240px;box-shadow:0 20px 60px rgba(0,0,0,0.15);position:relative}
+.cover-preview::after{content:'';position:absolute;inset:0;background:linear-gradient(to bottom,transparent 60%,rgba(0,0,0,0.03));pointer-events:none}
+.cp-bar{height:3px;background:var(--teal)}
+.cp-head{background:var(--teal-ll);padding:14px 16px 10px;border-bottom:1px solid var(--teal-l)}
+.cp-pub{font-family:var(--C);font-size:8px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+.cp-title{font-family:var(--H);font-size:20px;font-weight:700;color:var(--ink);line-height:1.05}
+.cp-sub{font-family:var(--C);font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-top:3px}
+.cp-visual{height:200px;background:var(--teal-l);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.cp-bg{font-family:var(--H);font-size:90px;font-weight:700;font-style:italic;color:rgba(74,102,112,0.12);line-height:.85;user-select:none}
+.cp-foot{background:var(--bg);padding:10px 16px;display:flex;justify-content:space-between;border-top:1px solid var(--rule2)}
+.cp-editor{font-family:var(--H);font-size:11px;font-style:italic;color:var(--mid)}
+.cp-pages{font-family:var(--C);font-size:9px;letter-spacing:1px;color:var(--light)}
+
+/* ─── SECTION GRID ─── */
+.sec-head{display:flex;align-items:baseline;justify-content:space-between;padding-bottom:12px;border-bottom:2px solid var(--ink);margin:48px 0 28px}
+.sec-head-title{font-family:var(--C);font-size:12px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase}
+.sec-head-link{font-family:var(--C);font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--muted);cursor:pointer;transition:color .15s}
+.sec-head-link:hover{color:var(--ink)}
+
+.sections-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--rule);margin-bottom:1px}
+
+.sec-card{background:var(--white);cursor:pointer;transition:background .15s;position:relative;overflow:hidden}
+.sec-card:hover{background:var(--teal-ll)}
+.sec-card.locked{opacity:.6;cursor:default}
+.sec-card.locked:hover{background:var(--white)}
+.sc-visual{aspect-ratio:16/9;background:var(--bg2);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.sc-bg-letter{font-family:var(--H);font-size:64px;font-weight:700;font-style:italic;color:rgba(0,0,0,0.06);user-select:none}
+.sc-icon{position:absolute;bottom:12px;right:12px;opacity:0.2}
+.sc-bar{height:2px}
+.sc-info{padding:16px}
+.sc-tag{font-family:var(--C);font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--teal);margin-bottom:6px}
+.sc-title{font-family:var(--H);font-size:18px;font-weight:700;color:var(--ink);margin-bottom:6px;line-height:1.2}
+.sc-dek{font-family:var(--H);font-size:14px;font-style:italic;color:var(--mid);line-height:1.5;margin-bottom:10px}
+.sc-meta{font-family:var(--C);font-size:10px;letter-spacing:.5px;color:var(--light)}
+.sc-lock{position:absolute;top:12px;right:12px;font-family:var(--C);font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;background:rgba(255,255,255,0.9);color:var(--muted);padding:3px 8px;border:1px solid var(--rule)}
+
+/* ─── PLAYLIST STRIP ─── */
+.playlist-strip{background:var(--ink);color:#fff;padding:32px;margin:0 -32px;display:grid;grid-template-columns:220px 1fr;gap:32px;align-items:center}
+.ps-info{}
+.ps-label{font-family:var(--C);font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#1DB954;margin-bottom:8px}
+.ps-title{font-family:var(--H);font-size:22px;font-weight:700;font-style:italic;color:#fff;margin-bottom:4px}
+.ps-sub{font-family:var(--C);font-size:11px;letter-spacing:1px;color:#555}
+.ps-tracks{display:flex;flex-direction:column;gap:0}
+.ps-track{display:flex;align-items:center;gap:14px;padding:10px 0;border-bottom:1px solid #1a1a1a}
+.ps-track:last-child{border:none}
+.ps-tn{font-family:var(--H);font-size:11px;font-style:italic;color:#444;width:16px;text-align:center;flex-shrink:0}
+.ps-tart{width:34px;height:34px;background:#1a1a1a;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.ps-ttitle{font-family:var(--H);font-size:15px;color:#fff;flex:1}
+.ps-tartist{font-family:var(--C);font-size:11px;color:#555;letter-spacing:.5px}
+.ps-tdur{font-family:var(--C);font-size:11px;color:#333;flex-shrink:0;letter-spacing:.5px}
+
+/* ─── SHOP STRIP ─── */
+.shop-strip{padding:48px 0}
+.shop-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--rule)}
+.shop-item{background:var(--white);cursor:pointer;transition:background .15s}
+.shop-item:hover{background:var(--bg)}
+.si-img{aspect-ratio:3/4;background:var(--bg2);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.si-img-letter{font-family:var(--H);font-size:52px;font-weight:700;font-style:italic;color:rgba(0,0,0,0.06);user-select:none}
+.si-info{padding:14px}
+.si-source{font-family:var(--C);font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:5px}
+.si-title{font-family:var(--H);font-size:15px;font-weight:700;color:var(--ink);margin-bottom:3px}
+.si-price{font-family:var(--C);font-size:13px;font-weight:600;color:var(--teal);letter-spacing:.5px}
+
+/* ─── NEXT ISSUE ─── */
+.next-issue{background:var(--teal-ll);border-top:2px solid var(--teal-l);border-bottom:2px solid var(--teal-l);padding:32px;margin:0 -32px;display:flex;align-items:center;justify-content:space-between}
+.ni-left{}
+.ni-label{font-family:var(--C);font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--teal);margin-bottom:6px}
+.ni-title{font-family:var(--H);font-size:20px;font-weight:700;color:var(--ink)}
+.ni-date{font-family:var(--H);font-size:14px;font-style:italic;color:var(--mid);margin-top:3px}
+.ni-btn{font-family:var(--C);font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;border:1px solid var(--teal);color:var(--teal);background:none;padding:10px 22px;cursor:pointer;transition:all .15s}
+.ni-btn:hover{background:var(--teal);color:#fff}
+
+/* ─── FULL READER OVERLAY ─── */
+.reader{display:none;position:fixed;inset:0;background:#111;z-index:500;flex-direction:column}
+.reader.open{display:flex}
+.reader-bar{height:52px;background:rgba(10,10,10,0.98);border-bottom:1px solid #1e1e1e;display:flex;align-items:center;justify-content:space-between;padding:0 24px;flex-shrink:0}
+.rb-left{display:flex;align-items:center;gap:16px}
+.rb-title{font-family:var(--H);font-size:16px;color:#fff;font-style:italic}
+.rb-info{font-family:var(--C);font-size:10px;color:#444;letter-spacing:1px;text-transform:uppercase}
+.rb-controls{display:flex;align-items:center;gap:8px}
+.rb-btn{font-family:var(--C);font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;padding:7px 14px;border:1px solid #2a2a2a;background:none;color:#666;cursor:pointer;transition:all .15s}
+.rb-btn:hover,.rb-btn.active{color:#fff;border-color:#555}
+.rb-close{font-size:18px;color:#555;background:none;border:none;cursor:pointer;padding:4px 8px;transition:color .15s;margin-left:8px}
+.rb-close:hover{color:#fff}
+.reader-progress{height:2px;background:#1e1e1e;flex-shrink:0}
+.reader-prog-fill{height:100%;background:var(--teal);transition:width .3s}
+.reader-stage{flex:1;display:flex;align-items:center;justify-content:center;padding:24px;position:relative;overflow:hidden}
+.reader-spread{display:flex;height:100%;max-height:720px;width:100%;max-width:1160px;box-shadow:0 40px 100px rgba(0,0,0,0.7);transition:opacity .2s}
+.reader-spread.turning{opacity:0}
+.rp-left,.rp-right{flex:1;background:#fff;overflow:hidden;position:relative}
+.rp-left{border-right:1px solid #e8e8e8}
+.rp-spine{width:4px;background:linear-gradient(to right,#ccc,#eee,#ccc);flex-shrink:0}
+.r-nav{position:absolute;top:50%;transform:translateY(-50%);width:40px;height:40px;border:1px solid #2a2a2a;background:rgba(0,0,0,0.5);color:#777;font-size:22px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;z-index:10}
+.r-nav:hover{background:rgba(0,0,0,0.85);color:#fff}
+.r-nav:disabled{opacity:.1;cursor:default}
+.r-nav.left{left:8px}
+.r-nav.right{right:8px}
+.r-counter{position:absolute;bottom:12px;left:50%;transform:translateX(-50%);font-family:var(--C);font-size:10px;color:#444;letter-spacing:2px;background:rgba(0,0,0,0.5);padding:4px 12px}
+
+/* Page content inside reader */
+.pc{width:100%;height:100%;overflow:hidden;position:relative;background:#fff}
+.pc-cover{display:flex;flex-direction:column;height:100%}
+.pc-cbar{height:3px;background:var(--teal);flex-shrink:0}
+.pc-chead{padding:16px 20px 12px;border-bottom:1px solid #eee;flex-shrink:0;background:#f8f7f4}
+.pc-cpub{font-family:var(--C);font-size:8px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#aaa;margin-bottom:4px}
+.pc-ctitle{font-family:var(--H);font-size:clamp(20px,3.5vw,34px);font-weight:700;color:#0a0a0a;line-height:1.0;letter-spacing:-.5px}
+.pc-csub{font-family:var(--C);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#aaa;margin-top:4px}
+.pc-cvis{flex:1;background:#eef3f5;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.pc-cbg{font-family:var(--H);font-size:clamp(60px,10vw,110px);font-weight:700;font-style:italic;color:rgba(74,102,112,0.1);line-height:.85;user-select:none}
+.pc-cpull{position:absolute;bottom:16px;left:16px;right:16px;font-family:var(--H);font-size:14px;font-style:italic;color:#1a1a1a;line-height:1.4;background:rgba(255,255,255,.92);padding:10px 12px;border-left:2px solid var(--teal)}
+.pc-cfoot{padding:10px 20px;display:flex;justify-content:space-between;border-top:1px solid #eee;background:#f0eee9;flex-shrink:0}
+.pc-cft{font-family:var(--C);font-size:8px;letter-spacing:2px;text-transform:uppercase;color:#aaa}
+
+.pc-edit{padding:24px 22px;height:100%;overflow:hidden}
+.pc-kicker{font-family:var(--C);font-size:9px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--teal);margin-bottom:10px}
+.pc-hed{font-family:var(--H);font-size:clamp(16px,2.2vw,24px);font-weight:700;line-height:1.15;color:#0a0a0a;margin-bottom:10px}
+.pc-dek{font-family:var(--H);font-size:15px;font-style:italic;color:#555;line-height:1.6;margin-bottom:12px;padding-left:12px;border-left:2px solid var(--teal)}
+.pc-body{font-family:var(--H);font-size:15px;line-height:1.8;color:#333}
+.pc-body p{margin-bottom:10px}
+.pc-body p:first-child::first-letter{font-size:48px;font-weight:700;float:left;line-height:.78;margin-right:5px;margin-top:5px;color:#0a0a0a}
+.pc-rule{height:1px;background:#e8e8e8;margin:12px 0}
+.pc-pgn{position:absolute;bottom:12px;font-family:var(--C);font-size:10px;color:#bbb;letter-spacing:1px}
+.pc-pgn.l{left:22px}.pc-pgn.r{right:22px}
+
+.pc-img{height:100%;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.pc-img-cap{position:absolute;bottom:0;left:0;right:0;padding:14px 18px;background:linear-gradient(transparent,rgba(248,247,245,.97))}
+.pc-img-cap-t{font-family:var(--H);font-size:12px;font-style:italic;color:#555}
+.pc-img-cap-c{font-family:var(--C);font-size:9px;color:#aaa;margin-top:2px;letter-spacing:.5px}
+
+.pc-toc{padding:24px 20px;height:100%;background:#f8f7f4}
+.pc-toc-title{font-family:var(--H);font-size:26px;font-weight:700;color:#0a0a0a;margin-bottom:4px;letter-spacing:-.5px}
+.pc-toc-issue{font-family:var(--H);font-size:14px;font-style:italic;color:#777;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid #e8e8e8}
+.pc-toc-item{display:flex;align-items:baseline;padding:9px 0;border-bottom:1px solid #eee}
+.pc-toc-n{font-family:var(--H);font-size:11px;font-style:italic;color:#bbb;width:24px;flex-shrink:0}
+.pc-toc-t{font-family:var(--H);font-size:18px;font-weight:700;color:#0a0a0a;flex:1;line-height:1.2}
+.pc-toc-dots{flex:1;border-bottom:1px dotted #ddd;margin:0 8px;align-self:center}
+.pc-toc-pg{font-size:10px;color:#aaa;width:16px;text-align:right;flex-shrink:0}
+.pc-toc-cat{font-family:var(--C);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--teal);display:block;margin-top:2px;font-weight:700}
+
+.pc-spot{padding:22px 20px;height:100%;background:#0a0a0a;color:#fff}
+.pc-spot-lbl{font-family:var(--C);font-size:9px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#1DB954;margin-bottom:14px}
+.pc-spot-t{font-family:var(--H);font-size:19px;font-weight:700;color:#fff;margin-bottom:3px}
+.pc-spot-s{font-family:var(--C);font-size:11px;color:#444;margin-bottom:20px;letter-spacing:.5px}
+.pc-track{display:flex;align-items:center;gap:12px;padding:9px 0;border-bottom:1px solid #1a1a1a}
+.pc-track:last-child{border:none}
+.pc-track-n{font-family:var(--H);font-size:11px;color:#333;width:16px;text-align:center;flex-shrink:0;font-style:italic}
+.pc-track-art{width:34px;height:34px;background:#1a1a1a;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.pc-track-t{font-family:var(--H);font-size:14px;color:#fff;flex:1}
+.pc-track-a{font-family:var(--C);font-size:10px;color:#444;letter-spacing:.5px}
+.pc-track-d{font-family:var(--C);font-size:10px;color:#333;flex-shrink:0}
+
+@media(max-width:900px){
+  .hero-issue{grid-template-columns:1fr}.hi-right{display:none}.hi-left{border:none;padding:0}
+  .sections-grid{grid-template-columns:1fr}
+  .shop-grid{grid-template-columns:repeat(2,1fr)}
+  .playlist-strip{grid-template-columns:1fr}
+  .page{padding:0 20px}
+}
+</style>
+</head>
+<body>
+
+<!-- UTIL BAR -->
+<div class="util-bar">
+  <div style="display:flex;align-items:center;gap:16px">
+    <span><span class="live-dot"></span>Now Reading: After Hours — Issue No. 1</span>
+  </div>
+  <div class="util-right">
+    <a href="index.html">Home</a>
+    <div class="util-sep"></div>
+    <a href="newsstand.html">Newsstand</a>
+    <div class="util-sep"></div>
+    <span style="color:rgba(255,255,255,0.35)">Sunday, 17 May 2026</span>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav class="site-nav">
+  <div class="nav-inner">
+    <div class="nav-logo">Reedefined</div>
+    <div class="nav-links">
+      <div class="nav-link active">My Issue</div>
+      <div class="nav-link" onclick="location.href='newsstand.html'">Newsstand</div>
+      <div class="nav-link" onclick="location.href='editor-portal.html'" style="color:var(--red)">Editor Portal ↗</div>
+    </div>
+    <div class="nav-right">
+      <span class="nav-greet">Good morning, Sofia</span>
+      <div class="nav-avatar">S</div>
+    </div>
+  </div>
+</nav>
+
+<!-- ISSUE BANNER -->
+<div class="issue-banner">
+  <div class="issue-banner-inner">
+    <div class="issue-meta">
+      <span class="issue-label">Current Issue</span>
+      <span class="issue-title">After Hours — Issue No. 1</span>
+      <span class="issue-date">May 2026</span>
+    </div>
+    <div class="issue-progress-wrap">
+      <span class="issue-progress-label">35% read</span>
+      <div class="issue-progress-bar"><div class="issue-progress-fill"></div></div>
+    </div>
+  </div>
+</div>
+
+<div class="page">
+
+  <!-- HERO ISSUE -->
+  <div class="hero-issue">
+    <div class="hi-left">
+      <div class="hi-eyebrow">Your May Issue</div>
+      <h1 class="hi-title">After Hours<br><em>by Marco R.</em></h1>
+      <p class="hi-dek">"Cinema, music, and the spaces in between. A magazine for people who stay up late thinking about films."</p>
+      <div class="hi-meta">
+        <div class="hi-editor">
+          <div class="hi-editor-av">M</div>
+          <div>
+            <div class="hi-editor-name">by Marco R.</div>
+            <div style="font-family:var(--C);font-size:10px;letter-spacing:1px;color:var(--light);text-transform:uppercase">Editor · Verified</div>
+          </div>
+        </div>
+        <div class="hi-stats">
+          <div class="hi-stat"><strong>10</strong> pages</div>
+          <div class="hi-stat"><strong>18</strong> min read</div>
+          <div class="hi-stat"><strong>3,100</strong> subscribers</div>
+        </div>
+      </div>
+      <button class="btn-read-now" onclick="openReader()">
+        Read Full Issue
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </div>
+    <div class="hi-right">
+      <div class="cover-preview">
+        <div class="cp-bar"></div>
+        <div class="cp-head">
+          <div class="cp-pub">Reedefined</div>
+          <div class="cp-title">After Hours</div>
+          <div class="cp-sub">Cinema · Music · Night</div>
+        </div>
+        <div class="cp-visual">
+          <div class="cp-bg">AH</div>
+          <!-- Film reel SVG -->
+          <svg style="position:absolute;bottom:16px;right:16px;opacity:0.18" width="72" height="72" viewBox="0 0 72 72" fill="none">
+            <circle cx="36" cy="36" r="27" stroke="#4A6670" stroke-width="2.5"/>
+            <circle cx="36" cy="36" r="9.5" stroke="#4A6670" stroke-width="2.5"/>
+            <circle cx="36" cy="9" r="5" fill="#4A6670"/>
+            <circle cx="36" cy="63" r="5" fill="#4A6670"/>
+            <circle cx="9" cy="36" r="5" fill="#4A6670"/>
+            <circle cx="63" cy="36" r="5" fill="#4A6670"/>
+          </svg>
+        </div>
+        <div class="cp-foot">
+          <span class="cp-editor">by Marco R.</span>
+          <span class="cp-pages">10 pages</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTIONS -->
+  <div class="sec-head">
+    <span class="sec-head-title">This Issue</span>
+    <span class="sec-head-link" onclick="openReader()">Read all →</span>
+  </div>
+
+  <div class="sections-grid">
+
+    <!-- Cinema -->
+    <div class="sec-card" onclick="openReaderAt(1)">
+      <div class="sc-visual" style="background:linear-gradient(145deg,#1A2830,#2A3840)">
+        <div class="sc-bg-letter" style="color:rgba(255,255,255,0.06)">C</div>
+        <svg class="sc-icon" width="64" height="64" viewBox="0 0 64 64" fill="none">
+          <circle cx="32" cy="32" r="24" stroke="white" stroke-width="2"/>
+          <circle cx="32" cy="32" r="8" stroke="white" stroke-width="2"/>
+          <circle cx="32" cy="8" r="4.5" fill="white" opacity=".6"/>
+          <circle cx="32" cy="56" r="4.5" fill="white" opacity=".6"/>
+          <circle cx="8" cy="32" r="4.5" fill="white" opacity=".6"/>
+          <circle cx="56" cy="32" r="4.5" fill="white" opacity=".6"/>
+        </svg>
+      </div>
+      <div class="sc-bar" style="background:#4A6670"></div>
+      <div class="sc-info">
+        <div class="sc-tag">Cinema</div>
+        <div class="sc-title">What I watched this month</div>
+        <div class="sc-dek">"All of Us Strangers changed the way I think about grief. Five stars — and I never give five stars."</div>
+        <div class="sc-meta">3 films · Letterboxd · p.3</div>
+      </div>
+    </div>
+
+    <!-- Music -->
+    <div class="sec-card" onclick="openReaderAt(2)">
+      <div class="sc-visual" style="background:linear-gradient(145deg,#0A0A0A,#1A1A1A)">
+        <div class="sc-bg-letter" style="color:rgba(255,255,255,0.05)">M</div>
+        <!-- Music SVG -->
+        <svg class="sc-icon" width="64" height="64" viewBox="0 0 64 64" fill="none">
+          <path d="M22 44c0 4-3.5 6.5-7 6.5S8 48 8 44c0-3.5 3-5.8 7.5-5.8 2.2 0 3.8.7 6.5 2V18.5L56 11v24c0 3.5-3.5 5.5-8 5.5s-7-2.2-7-5.5c0-3.2 3.3-5 7.5-5 2 0 3.5.3 7.5 1.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        </svg>
+      </div>
+      <div class="sc-bar" style="background:#1DB954"></div>
+      <div class="sc-info">
+        <div class="sc-tag">Music</div>
+        <div class="sc-title">On rotation — May playlist</div>
+        <div class="sc-dek">Arooj Aftab, Mk.gee, Sufjan Stevens. Five tracks that defined the month.</div>
+        <div class="sc-meta">5 tracks · Spotify · p.5</div>
+      </div>
+    </div>
+
+    <!-- Fashion -->
+    <div class="sec-card" onclick="openReaderAt(3)">
+      <div class="sc-visual" style="background:linear-gradient(145deg,#E8D8E8,#D8C8D8)">
+        <div class="sc-bg-letter">F</div>
+        <!-- Hanger SVG -->
+        <svg class="sc-icon" width="64" height="64" viewBox="0 0 64 64" fill="none">
+          <path d="M32 16c0-7 10-8 10-3" stroke="#4A6670" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+          <path d="M32 16 9 35c-4 4-1 9 4 9h38c5 0 8-5 4-9z" stroke="#4A6670" stroke-width="2.5" fill="none" stroke-linejoin="round"/>
+          <path d="M10 50h44" stroke="#4A6670" stroke-width="2.5" stroke-linecap="round" opacity=".4"/>
+        </svg>
+      </div>
+      <div class="sc-bar" style="background:#8A6A8A"></div>
+      <div class="sc-info">
+        <div class="sc-tag">Fashion</div>
+        <div class="sc-title">From my Depop this month</div>
+        <div class="sc-dek">Five pieces. All second-hand. All better than anything I saw in stores.</div>
+        <div class="sc-meta">5 items · Depop · p.7</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- SPOTIFY STRIP -->
+  <div class="playlist-strip">
+    <div class="ps-info">
+      <div class="ps-label">Spotify · Issue Playlist</div>
+      <div class="ps-title">After Hours — May Playlist</div>
+      <div class="ps-sub">Curated by Marco R. · 5 tracks · 19 min</div>
+    </div>
+    <div class="ps-tracks">
+      <div class="ps-track">
+        <span class="ps-tn">1</span>
+        <div class="ps-tart"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="5.5" stroke="#333" stroke-width="1"/><circle cx="8" cy="8" r="1.8" stroke="#333" stroke-width="1"/><circle cx="8" cy="2.5" r="1" fill="#333" opacity=".4"/><circle cx="8" cy="13.5" r="1" fill="#333" opacity=".4"/></svg></div>
+        <div style="flex:1"><div class="ps-ttitle">Motion Sickness</div><div class="ps-tartist">Phoebe Bridgers</div></div>
+        <span class="ps-tdur">3:42</span>
+      </div>
+      <div class="ps-track">
+        <span class="ps-tn">2</span>
+        <div class="ps-tart"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="5.5" stroke="#333" stroke-width="1"/><circle cx="8" cy="8" r="1.8" stroke="#333" stroke-width="1"/><circle cx="8" cy="2.5" r="1" fill="#333" opacity=".4"/><circle cx="8" cy="13.5" r="1" fill="#333" opacity=".4"/></svg></div>
+        <div style="flex:1"><div class="ps-ttitle">Soft Place</div><div class="ps-tartist">Arooj Aftab</div></div>
+        <span class="ps-tdur">4:18</span>
+      </div>
+      <div class="ps-track">
+        <span class="ps-tn">3</span>
+        <div class="ps-tart"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="5.5" stroke="#333" stroke-width="1"/><circle cx="8" cy="8" r="1.8" stroke="#333" stroke-width="1"/><circle cx="8" cy="2.5" r="1" fill="#333" opacity=".4"/><circle cx="8" cy="13.5" r="1" fill="#333" opacity=".4"/></svg></div>
+        <div style="flex:1"><div class="ps-ttitle">Two Star</div><div class="ps-tartist">Mk.gee</div></div>
+        <span class="ps-tdur">3:56</span>
+      </div>
+      <div class="ps-track">
+        <span class="ps-tn">4</span>
+        <div class="ps-tart"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="5.5" stroke="#333" stroke-width="1"/><circle cx="8" cy="8" r="1.8" stroke="#333" stroke-width="1"/><circle cx="8" cy="2.5" r="1" fill="#333" opacity=".4"/><circle cx="8" cy="13.5" r="1" fill="#333" opacity=".4"/></svg></div>
+        <div style="flex:1"><div class="ps-ttitle">Death With Dignity</div><div class="ps-tartist">Sufjan Stevens</div></div>
+        <span class="ps-tdur">3:50</span>
+      </div>
+      <div class="ps-track">
+        <span class="ps-tn">5</span>
+        <div class="ps-tart"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="5.5" stroke="#333" stroke-width="1"/><circle cx="8" cy="8" r="1.8" stroke="#333" stroke-width="1"/><circle cx="8" cy="2.5" r="1" fill="#333" opacity=".4"/><circle cx="8" cy="13.5" r="1" fill="#333" opacity=".4"/></svg></div>
+        <div style="flex:1"><div class="ps-ttitle">Savior Complex</div><div class="ps-tartist">Phoebe Bridgers</div></div>
+        <span class="ps-tdur">4:12</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- SHOP -->
+  <div class="shop-strip">
+    <div class="sec-head">
+      <span class="sec-head-title">From the Editor's Shop</span>
+      <span class="sec-head-link">View all on Depop →</span>
+    </div>
+    <div class="shop-grid">
+      <div class="shop-item">
+        <div class="si-img"><div class="si-img-letter">V</div>
+          <svg style="position:absolute;opacity:0.12" width="60" height="76" viewBox="0 0 60 76" fill="none"><path d="M10 14L50 14L44 68H16Z" stroke="#4A6670" stroke-width="3" fill="none" stroke-linejoin="round"/><path d="M18 14C18 5 42 5 42 14" stroke="#4A6670" stroke-width="3" stroke-linecap="round" fill="none"/></svg>
+        </div>
+        <div class="si-info"><div class="si-source">Depop</div><div class="si-title">Vintage blazer, 90s cut</div><div class="si-price">€48</div></div>
+      </div>
+      <div class="shop-item">
+        <div class="si-img"><div class="si-img-letter">L</div></div>
+        <div class="si-info"><div class="si-source">Vinted</div><div class="si-title">Leather shoulder bag</div><div class="si-price">€65</div></div>
+      </div>
+      <div class="shop-item">
+        <div class="si-img"><div class="si-img-letter">C</div></div>
+        <div class="si-info"><div class="si-source">Depop</div><div class="si-title">Canvas sneakers, size 40</div><div class="si-price">€32</div></div>
+      </div>
+      <div class="shop-item">
+        <div class="si-img"><div class="si-img-letter">S</div></div>
+        <div class="si-info"><div class="si-source">Vinted</div><div class="si-title">Silk scarf, vintage print</div><div class="si-price">€22</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NEXT ISSUE -->
+  <div class="next-issue">
+    <div class="ni-left">
+      <div class="ni-label">Coming Next</div>
+      <div class="ni-title">After Hours — Issue No. 2</div>
+      <div class="ni-date">Drops 1 June 2026</div>
+    </div>
+    <button class="ni-btn">Notify Me</button>
+  </div>
+
+</div><!-- /page -->
+
+<!-- READER -->
+<div class="reader" id="reader">
+  <div class="reader-bar">
+    <div class="rb-left">
+      <div class="rb-title">After Hours</div>
+      <div class="rb-info">by Marco R. · Issue No. 1 · May 2026</div>
+    </div>
+    <div class="rb-controls">
+      <button class="rb-btn active" onclick="setMode('spread')">⟷ Spread</button>
+      <button class="rb-btn" onclick="setMode('scroll')">↕ Scroll</button>
+      <button class="rb-close" onclick="closeReader()">✕</button>
+    </div>
+  </div>
+  <div class="reader-progress"><div class="reader-prog-fill" id="prog" style="width:0%"></div></div>
+  <div class="reader-stage" id="stage">
+    <button class="r-nav left" id="rnav-l" onclick="prevPage()">‹</button>
+    <div class="reader-spread" id="spread"></div>
+    <button class="r-nav right" id="rnav-r" onclick="nextPage()">›</button>
+    <div class="r-counter" id="r-counter">1 / 5</div>
+  </div>
+</div>
+
+<script>
+let curPage=0;
+const pages=[
+  {L:{type:'cover',title:'After Hours',editor:'Marco R.',sub:'Cinema · Music · Night',bg:'linear-gradient(145deg,#1A2830,#2A3840)',letter:'AH',color:'#4A6670'},R:{type:'toc',title:'After Hours'}},
+  {L:{type:'edit',kicker:'Cinema',hed:'What I watched in May',dek:'"All of Us Strangers changed how I think about grief. Five stars — and I never give five stars."',body:'<p>Andrew Haigh\'s film arrived quietly, without much fanfare, and then stayed with me for weeks. That is the mark of something real.</p><p>Past Lives did something similar — that final scene on the street in New York is the most precisely observed piece of cinema I have seen in years.</p>',pg:3,side:'l'},R:{type:'img',bg:'linear-gradient(145deg,#1A2830,#2A3840)',caption:'From the Letterboxd diary of Marco R.',credit:'May 2026',icon:'<circle cx="50" cy="50" r="38" stroke="white" stroke-width="2.5" fill="none"/><circle cx="50" cy="50" r="13" stroke="white" stroke-width="2.5" fill="none"/><circle cx="50" cy="12" r="7" fill="white" opacity=".5"/><circle cx="50" cy="88" r="7" fill="white" opacity=".5"/><circle cx="12" cy="50" r="7" fill="white" opacity=".5"/><circle cx="88" cy="50" r="7" fill="white" opacity=".5"/>',pg:4,side:'r'}},
+  {L:{type:'spotify',title:'After Hours — May Playlist',editor:'Marco R.',tracks:[{n:1,t:'Motion Sickness',a:'Phoebe Bridgers',d:'3:42'},{n:2,t:'Soft Place',a:'Arooj Aftab',d:'4:18'},{n:3,t:'Two Star',a:'Mk.gee',d:'3:56'},{n:4,t:'Death With Dignity',a:'Sufjan Stevens',d:'3:50'},{n:5,t:'Savior Complex',a:'Phoebe Bridgers',d:'4:12'}]},R:{type:'edit',kicker:'Fashion',hed:'From my Depop — five pieces worth finding',dek:'All second-hand. All better than anything new I saw this month.',body:'<p>There is something specific about finding the right piece on Depop. It arrives already lived in, already finished. The hard work of breaking it in has already been done by someone else.</p>',pg:7,side:'r'}},
+  {L:{type:'edit',kicker:"Editor's Letter",hed:'On curating a life worth reading',dek:'Every issue begins with the same question: what did this month actually feel like?',body:'<p>I write this last. After the films are listed, after the playlist is finished, after the Depop haul is photographed and captioned.</p><p>This month felt like arriving somewhere I had been moving toward for a long time. I hope reading it feels the same.</p>',pg:9,side:'l'},R:{type:'img',bg:'linear-gradient(145deg,#F8F7F4,#F0EEE9)',caption:'After Hours · Issue No. 1 · May 2026',credit:'by Marco R. · reedefined.app',icon:'',pg:10,side:'r'}},
+];
+
+function renderPC(p){
+  if(!p)return'';
+  if(p.type==='cover')return`<div class="pc pc-cover"><div class="pc-cbar" style="background:${p.color}"></div><div class="pc-chead"><div class="pc-cpub">Reedefined</div><div class="pc-ctitle">${p.title}</div><div class="pc-csub">${p.sub}</div></div><div class="pc-cvis" style="background:${p.bg}"><div class="pc-cbg">${p.letter}</div><div class="pc-cpull">"Cinema, music, and the spaces in between."</div></div><div class="pc-cfoot"><div class="pc-cft">${p.editor}</div><div class="pc-cft">reedefined.app</div></div></div>`;
+  if(p.type==='toc')return`<div class="pc pc-toc"><div class="pc-toc-title">Contents</div><div class="pc-toc-issue">${p.title} · May 2026</div><div class="pc-toc-item"><span class="pc-toc-n">1</span><div><div class="pc-toc-t">What I watched</div><span class="pc-toc-cat">Cinema</span></div><div class="pc-toc-dots"></div><span class="pc-toc-pg">3</span></div><div class="pc-toc-item"><span class="pc-toc-n">2</span><div><div class="pc-toc-t">May Playlist</div><span class="pc-toc-cat">Music</span></div><div class="pc-toc-dots"></div><span class="pc-toc-pg">5</span></div><div class="pc-toc-item"><span class="pc-toc-n">3</span><div><div class="pc-toc-t">From my Depop</div><span class="pc-toc-cat">Fashion</span></div><div class="pc-toc-dots"></div><span class="pc-toc-pg">7</span></div><div class="pc-toc-item"><span class="pc-toc-n">4</span><div><div class="pc-toc-t">Editor's Letter</div><span class="pc-toc-cat">Personal</span></div><div class="pc-toc-dots"></div><span class="pc-toc-pg">9</span></div></div>`;
+  if(p.type==='edit')return`<div class="pc pc-edit"><div class="pc-kicker">${p.kicker}</div><div class="pc-hed">${p.hed}</div><div class="pc-dek">${p.dek}</div><div class="pc-rule"></div><div class="pc-body">${p.body}</div>${p.pg?`<div class="pc-pgn ${p.side}">${p.pg}</div>`:''}</div>`;
+  if(p.type==='img')return`<div class="pc pc-img" style="background:${p.bg}"><svg style="opacity:.15;position:absolute" width="100" height="100" viewBox="0 0 100 100" fill="none">${p.icon}</svg><div class="pc-img-cap"><div class="pc-img-cap-t">${p.caption}</div><div class="pc-img-cap-c">${p.credit}</div></div>${p.pg?`<div class="pc-pgn ${p.side}" style="color:#aaa">${p.pg}</div>`:''}</div>`;
+  if(p.type==='spotify')return`<div class="pc pc-spot"><div class="pc-spot-lbl">Spotify · Playlist</div><div class="pc-spot-t">${p.title}</div><div class="pc-spot-s">Curated by ${p.editor} · ${p.tracks.length} tracks</div>${p.tracks.map(t=>`<div class="pc-track"><span class="pc-track-n">${t.n}</span><div class="pc-track-art"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="5" stroke="#333" stroke-width=".9"/><circle cx="7" cy="7" r="1.6" stroke="#333" stroke-width=".9"/></svg></div><div style="flex:1"><div class="pc-track-t">${t.t}</div><div class="pc-track-a">${t.a}</div></div><span class="pc-track-d">${t.d}</span></div>`).join('')}</div>`;
+  return'';
+}
+
+function renderPage(){
+  const sp=document.getElementById('spread');
+  sp.classList.add('turning');
+  setTimeout(()=>{
+    const p=pages[curPage];
+    sp.innerHTML=`<div class="rp-left">${renderPC(p.L)}</div><div class="rp-spine"></div><div class="rp-right">${renderPC(p.R)}</div>`;
+    sp.classList.remove('turning');
+    updateNav();
+  },180);
+}
+function updateNav(){
+  document.getElementById('rnav-l').disabled=curPage===0;
+  document.getElementById('rnav-r').disabled=curPage>=pages.length-1;
+  document.getElementById('r-counter').textContent=`${curPage+1} / ${pages.length}`;
+  document.getElementById('prog').style.width=((curPage+1)/pages.length*100)+'%';
+}
+function nextPage(){if(curPage<pages.length-1){curPage++;renderPage();}}
+function prevPage(){if(curPage>0){curPage--;renderPage();}}
+function openReader(at=0){curPage=at;document.getElementById('reader').classList.add('open');document.body.style.overflow='hidden';renderPage();}
+function openReaderAt(at){openReader(at);}
+function closeReader(){document.getElementById('reader').classList.remove('open');document.body.style.overflow='';}
+function setMode(m){document.querySelectorAll('.rb-btn').forEach(b=>b.classList.remove('active'));event.target.classList.add('active');}
+document.addEventListener('keydown',e=>{
+  if(!document.getElementById('reader').classList.contains('open'))return;
+  if(e.key==='ArrowRight')nextPage();
+  if(e.key==='ArrowLeft')prevPage();
+  if(e.key==='Escape')closeReader();
+});
+let tx=0;
+document.getElementById('stage').addEventListener('touchstart',e=>{tx=e.touches[0].clientX;});
+document.getElementById('stage').addEventListener('touchend',e=>{const d=tx-e.changedTouches[0].clientX;if(Math.abs(d)>50){d>0?nextPage():prevPage();}});
+</script>
+</body>
+</html>
