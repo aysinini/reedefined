@@ -1,0 +1,1276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reedefined — The Newsstand</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Barlow:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Barlow+Condensed:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink:     #0A0A0A;
+  --ink2:    #1A1A1A;
+  --mid:     #444;
+  --muted:   #888;
+  --light:   #BBB;
+  --rule:    #E0E0E0;
+  --bg:      #F8F7F5;
+  --white:   #FFFFFF;
+  --red:     #C8251A;
+  --gold:    #B8953A;
+  --H: 'Libre Baskerville', Georgia, serif;
+  --S: 'Barlow', sans-serif;
+  --C: 'Barlow Condensed', sans-serif;
+}
+
+*,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
+html { font-size:16px; }
+body { background:var(--white); color:var(--ink); font-family:var(--S); -webkit-font-smoothing:antialiased; overflow-x:hidden; }
+
+a { color:inherit; text-decoration:none; }
+img { display:block; width:100%; }
+
+/* ─── UTILITY RULES ─── */
+.rule { height:1px; background:var(--ink); margin:0; }
+.rule-thin { height:1px; background:var(--rule); }
+.tag {
+  font-family:var(--C);
+  font-size:11px;
+  font-weight:600;
+  letter-spacing:1.5px;
+  text-transform:uppercase;
+  color:var(--muted);
+}
+.tag-red { color:var(--red); }
+.tag-gold { color:var(--gold); }
+
+/* ─── TOP UTILITY BAR ─── */
+.util-bar {
+  background:var(--ink);
+  color:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 32px;
+  height:34px;
+  font-family:var(--C);
+  font-size:11px;
+  font-weight:500;
+  letter-spacing:1px;
+}
+.util-bar a { color:rgba(255,255,255,0.7); transition:color 0.15s; }
+.util-bar a:hover { color:#fff; }
+.util-left { display:flex; gap:20px; align-items:center; }
+.util-right { display:flex; gap:20px; align-items:center; }
+.util-sep { width:1px; height:14px; background:rgba(255,255,255,0.2); }
+.util-live {
+  display:flex; align-items:center; gap:6px;
+  font-size:11px; font-weight:600; color:#fff; letter-spacing:1px;
+}
+.live-dot {
+  width:7px; height:7px; border-radius:50%; background:var(--red);
+  animation: blink 1.4s ease-in-out infinite;
+}
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+/* ─── MAIN NAV ─── */
+.nav {
+  background:var(--white);
+  border-bottom:3px solid var(--ink);
+  padding:0 32px;
+  position:sticky;
+  top:0;
+  z-index:100;
+}
+.nav-inner {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  height:64px;
+}
+.nav-logo {
+  font-family:var(--H);
+  font-size:26px;
+  font-weight:700;
+  color:var(--ink);
+  letter-spacing:-0.5px;
+}
+.nav-logo span { font-style:italic; font-weight:400; }
+.nav-links {
+  display:flex;
+  gap:0;
+  height:100%;
+}
+.nav-link {
+  font-family:var(--C);
+  font-size:13px;
+  font-weight:600;
+  letter-spacing:1px;
+  text-transform:uppercase;
+  color:var(--mid);
+  padding:0 16px;
+  height:100%;
+  display:flex;
+  align-items:center;
+  border-bottom:3px solid transparent;
+  margin-bottom:-3px;
+  transition:color 0.15s, border-color 0.15s;
+  cursor:pointer;
+}
+.nav-link:hover { color:var(--ink); }
+.nav-link.active { color:var(--ink); border-bottom-color:var(--ink); }
+.nav-right {
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+.nav-subscribe {
+  font-family:var(--C);
+  font-size:12px;
+  font-weight:700;
+  letter-spacing:1.5px;
+  text-transform:uppercase;
+  background:var(--ink);
+  color:#fff;
+  padding:9px 20px;
+  transition:opacity 0.15s;
+  cursor:pointer;
+  border:none;
+}
+.nav-subscribe:hover { opacity:0.85; }
+.nav-avatar {
+  width:34px; height:34px; border-radius:50%;
+  background:var(--rule);
+  border:1px solid var(--rule);
+  display:flex; align-items:center; justify-content:center;
+  font-family:var(--H); font-size:13px; font-weight:700; color:var(--mid);
+  cursor:pointer;
+}
+
+/* ─── SECTION STRIP ─── */
+.section-strip {
+  border-bottom:1px solid var(--rule);
+  padding:0 32px;
+  display:flex;
+  gap:0;
+  overflow-x:auto;
+  scrollbar-width:none;
+}
+.section-strip::-webkit-scrollbar { display:none; }
+.strip-item {
+  font-family:var(--C);
+  font-size:12px;
+  font-weight:600;
+  letter-spacing:1.5px;
+  text-transform:uppercase;
+  color:var(--muted);
+  padding:12px 20px;
+  white-space:nowrap;
+  cursor:pointer;
+  border-bottom:2px solid transparent;
+  transition:color 0.15s, border-color 0.15s;
+}
+.strip-item:hover { color:var(--ink); }
+.strip-item.active { color:var(--ink); border-bottom-color:var(--red); }
+
+/* ─── PAGE LAYOUT ─── */
+.page { max-width:1280px; margin:0 auto; padding:0 32px; }
+
+/* ─── HERO SECTION ─── */
+.hero {
+  display:grid;
+  grid-template-columns:1fr 360px;
+  gap:0;
+  border-bottom:1px solid var(--rule);
+  margin-top:40px;
+}
+.hero-main {
+  border-right:1px solid var(--rule);
+  padding-right:32px;
+}
+.hero-tag { margin-bottom:12px; }
+.hero-hed {
+  font-family:var(--H);
+  font-size:clamp(32px,4vw,56px);
+  font-weight:700;
+  line-height:1.1;
+  letter-spacing:-1px;
+  color:var(--ink);
+  margin-bottom:16px;
+}
+.hero-dek {
+  font-family:var(--S);
+  font-size:18px;
+  font-weight:300;
+  line-height:1.65;
+  color:var(--mid);
+  max-width:540px;
+  margin-bottom:24px;
+}
+.hero-byline {
+  font-family:var(--C);
+  font-size:12px;
+  font-weight:500;
+  letter-spacing:1px;
+  color:var(--muted);
+  text-transform:uppercase;
+  margin-bottom:32px;
+}
+.hero-img {
+  aspect-ratio:16/10;
+  background:var(--bg);
+  overflow:hidden;
+  position:relative;
+  cursor:pointer;
+}
+.hero-img-inner {
+  width:100%; height:100%;
+  display:flex; align-items:center; justify-content:center;
+  font-family:var(--H);
+  font-size:clamp(80px,12vw,160px);
+  font-weight:700;
+  font-style:italic;
+  color:rgba(0,0,0,0.06);
+  letter-spacing:-4px;
+  user-select:none;
+  position:relative;
+}
+.hero-img-overlay {
+  position:absolute;
+  bottom:0; left:0; right:0;
+  padding:24px;
+  background:linear-gradient(to top, rgba(0,0,0,0.6), transparent);
+  display:flex;
+  align-items:flex-end;
+  gap:16px;
+}
+.hero-img-badge {
+  font-family:var(--C);
+  font-size:10px;
+  font-weight:700;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  background:var(--red);
+  color:#fff;
+  padding:4px 10px;
+}
+
+.hero-sidebar { padding-left:32px; }
+.sidebar-label {
+  font-family:var(--C);
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  color:var(--muted);
+  margin-bottom:16px;
+  padding-bottom:10px;
+  border-bottom:1px solid var(--rule);
+}
+.sidebar-cards { display:flex; flex-direction:column; gap:0; }
+.scard {
+  padding:18px 0;
+  border-bottom:1px solid var(--rule);
+  cursor:pointer;
+  transition:opacity 0.15s;
+}
+.scard:hover { opacity:0.75; }
+.scard:last-child { border-bottom:none; }
+.scard-tag { margin-bottom:6px; }
+.scard-hed {
+  font-family:var(--H);
+  font-size:17px;
+  font-weight:700;
+  line-height:1.25;
+  color:var(--ink);
+  margin-bottom:8px;
+}
+.scard-meta {
+  font-family:var(--C);
+  font-size:11px;
+  letter-spacing:0.5px;
+  color:var(--light);
+}
+.scard-img {
+  aspect-ratio:16/9;
+  background:var(--bg);
+  margin-bottom:12px;
+  overflow:hidden;
+  display:flex; align-items:center; justify-content:center;
+  position:relative;
+}
+.scard-img-letter {
+  font-family:var(--H);
+  font-size:72px;
+  font-weight:700;
+  font-style:italic;
+  color:rgba(0,0,0,0.07);
+  letter-spacing:-2px;
+  user-select:none;
+}
+
+/* ─── FEATURED MAGAZINES HEADER ─── */
+.section-head {
+  display:flex;
+  align-items:baseline;
+  justify-content:space-between;
+  margin:48px 0 24px;
+  padding-bottom:14px;
+  border-bottom:2px solid var(--ink);
+}
+.section-head-title {
+  font-family:var(--C);
+  font-size:13px;
+  font-weight:700;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  color:var(--ink);
+}
+.section-head-link {
+  font-family:var(--C);
+  font-size:11px;
+  font-weight:600;
+  letter-spacing:1px;
+  text-transform:uppercase;
+  color:var(--muted);
+  cursor:pointer;
+  transition:color 0.15s;
+}
+.section-head-link:hover { color:var(--ink); }
+
+/* ─── MAGAZINE GRID ─── */
+.mag-grid {
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:1px;
+  background:var(--rule);
+  margin-bottom:1px;
+}
+.mag-grid-3 { grid-template-columns:repeat(3,1fr); }
+.mag-grid-5 { grid-template-columns:repeat(5,1fr); }
+
+.mag-card {
+  background:var(--white);
+  cursor:pointer;
+  transition:background 0.15s;
+  padding:0;
+}
+.mag-card:hover { background:var(--bg); }
+.mag-card.featured { grid-column:span 2; }
+
+.mc-cover {
+  aspect-ratio:3/4;
+  background:var(--bg);
+  position:relative;
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+}
+.mc-cover.tall { aspect-ratio:2/3; }
+.mc-cover-bar { height:3px; flex-shrink:0; }
+.mc-cover-head {
+  padding:14px 16px 10px;
+  border-bottom:1px solid rgba(0,0,0,0.08);
+  flex-shrink:0;
+}
+.mc-cover-pub {
+  font-family:var(--C);
+  font-size:8px;
+  font-weight:700;
+  letter-spacing:4px;
+  text-transform:uppercase;
+  color:var(--muted);
+  margin-bottom:4px;
+}
+.mc-cover-title {
+  font-family:var(--H);
+  font-weight:700;
+  color:var(--ink);
+  line-height:1.05;
+  letter-spacing:-0.3px;
+}
+.mc-cover-sub {
+  font-family:var(--C);
+  font-size:9px;
+  letter-spacing:1.5px;
+  text-transform:uppercase;
+  color:var(--muted);
+  margin-top:4px;
+}
+.mc-cover-visual {
+  flex:1;
+  position:relative;
+  overflow:hidden;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.mc-bg-letter {
+  font-family:var(--H);
+  font-weight:700;
+  font-style:italic;
+  color:rgba(0,0,0,0.05);
+  letter-spacing:-4px;
+  line-height:0.85;
+  user-select:none;
+  position:absolute;
+}
+/* Original SVG section emoji per card */
+.mc-svg {
+  position:absolute;
+  bottom:16px;
+  right:16px;
+  opacity:0.22;
+}
+.mc-badge {
+  position:absolute;
+  top:12px;
+  right:12px;
+  font-family:var(--C);
+  font-size:8px;
+  font-weight:700;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  padding:4px 9px;
+  background:var(--ink);
+  color:#fff;
+}
+.mc-verified {
+  position:absolute;
+  top:12px;
+  left:12px;
+  font-family:var(--C);
+  font-size:8px;
+  font-weight:700;
+  letter-spacing:1.5px;
+  text-transform:uppercase;
+  padding:4px 9px;
+  border:1px solid rgba(0,0,0,0.15);
+  color:var(--mid);
+  background:rgba(255,255,255,0.9);
+}
+.mc-cover-footer {
+  padding:10px 16px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  border-top:1px solid rgba(0,0,0,0.07);
+  background:rgba(255,255,255,0.6);
+  flex-shrink:0;
+}
+.mc-editor { font-family:var(--H); font-size:12px; font-style:italic; color:var(--mid); }
+.mc-readers { font-family:var(--C); font-size:10px; letter-spacing:0.5px; color:var(--light); }
+
+.mc-info { padding:16px; }
+.mc-info-title {
+  font-family:var(--H);
+  font-size:18px;
+  font-weight:700;
+  color:var(--ink);
+  line-height:1.2;
+  margin-bottom:4px;
+  letter-spacing:-0.2px;
+}
+.mc-info-meta {
+  font-family:var(--C);
+  font-size:11px;
+  letter-spacing:0.5px;
+  color:var(--light);
+}
+
+/* ─── LIST VIEW ─── */
+.list-view { display:none; flex-direction:column; }
+.lv-item {
+  display:grid;
+  grid-template-columns:72px 1fr auto;
+  gap:20px;
+  padding:20px 0;
+  border-bottom:1px solid var(--rule);
+  cursor:pointer;
+  align-items:start;
+  transition:opacity 0.15s;
+}
+.lv-item:hover { opacity:0.75; }
+.lv-thumb {
+  aspect-ratio:2/3;
+  background:var(--bg);
+  overflow:hidden;
+  position:relative;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.lv-thumb-bar { position:absolute; top:0; left:0; right:0; height:2px; }
+.lv-thumb-letter { font-family:var(--H); font-size:28px; font-style:italic; font-weight:700; color:rgba(0,0,0,0.1); }
+.lv-title { font-family:var(--H); font-size:22px; font-weight:700; color:var(--ink); margin-bottom:4px; letter-spacing:-0.3px; }
+.lv-editor { font-family:var(--C); font-size:11px; letter-spacing:0.5px; color:var(--muted); margin-bottom:10px; text-transform:uppercase; }
+.lv-dek { font-family:var(--H); font-size:16px; font-style:italic; color:var(--mid); line-height:1.6; margin-bottom:12px; }
+.lv-tags { display:flex; gap:6px; flex-wrap:wrap; }
+.lv-tag { font-family:var(--C); font-size:10px; font-weight:600; letter-spacing:1.5px; text-transform:uppercase; color:var(--muted); border:1px solid var(--rule); padding:3px 9px; }
+.lv-pages { font-family:var(--C); font-size:11px; color:var(--light); white-space:nowrap; letter-spacing:0.5px; text-align:right; padding-top:4px; }
+
+/* ─── HORIZONTAL RULE SECTION ─── */
+.hr-section { margin:56px 0; }
+.hr-section-head {
+  font-family:var(--C);
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:3px;
+  text-transform:uppercase;
+  color:var(--muted);
+  margin-bottom:14px;
+  display:flex;
+  align-items:center;
+  gap:14px;
+}
+.hr-section-head::after { content:''; flex:1; height:1px; background:var(--rule); }
+
+/* ─── MAGAZINE READER ─── */
+.reader {
+  display:none;
+  position:fixed;
+  inset:0;
+  background:#111;
+  z-index:500;
+  flex-direction:column;
+}
+.reader.open { display:flex; }
+.reader-bar {
+  height:54px;
+  background:rgba(10,10,10,0.98);
+  border-bottom:1px solid #222;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 24px;
+  flex-shrink:0;
+}
+.rb-title { font-family:var(--H); font-size:17px; color:#fff; font-style:italic; }
+.rb-info { font-family:var(--C); font-size:11px; color:#555; letter-spacing:1px; text-transform:uppercase; }
+.rb-controls { display:flex; align-items:center; gap:10px; }
+.rb-btn {
+  font-family:var(--C); font-size:10px; font-weight:600; letter-spacing:1.5px; text-transform:uppercase;
+  padding:7px 16px; border:1px solid #333; background:none; color:#777; cursor:pointer; transition:all 0.15s;
+}
+.rb-btn:hover, .rb-btn.active { color:#fff; border-color:#666; }
+.rb-close { font-size:20px; color:#555; background:none; border:none; cursor:pointer; padding:4px 8px; transition:color 0.15s; }
+.rb-close:hover { color:#fff; }
+.reader-progress { height:2px; background:#222; flex-shrink:0; }
+.reader-prog-fill { height:100%; background:var(--red); transition:width 0.3s; }
+.reader-stage {
+  flex:1; display:flex; align-items:center; justify-content:center;
+  padding:24px; position:relative; overflow:hidden;
+}
+.reader-spread {
+  display:flex; height:100%; max-height:700px;
+  width:100%; max-width:1140px;
+  box-shadow:0 40px 100px rgba(0,0,0,0.7);
+  transition:opacity 0.2s;
+}
+.reader-spread.turning { opacity:0; }
+.rp-left, .rp-right { flex:1; background:#fff; overflow:hidden; position:relative; }
+.rp-left { border-right:1px solid #e8e8e8; }
+.rp-spine { width:4px; background:linear-gradient(to right,#ccc,#eee,#ccc); flex-shrink:0; }
+.r-nav {
+  position:absolute; top:50%; transform:translateY(-50%);
+  width:42px; height:42px; border:1px solid #333; background:rgba(0,0,0,0.5);
+  color:#888; font-size:22px; cursor:pointer; display:flex; align-items:center; justify-content:center;
+  transition:all 0.2s; z-index:10;
+}
+.r-nav:hover { background:rgba(0,0,0,0.8); color:#fff; }
+.r-nav:disabled { opacity:0.15; cursor:default; }
+.r-nav.left { left:8px; }
+.r-nav.right { right:8px; }
+.r-counter {
+  position:absolute; bottom:14px; left:50%; transform:translateX(-50%);
+  font-family:var(--C); font-size:10px; color:#555; letter-spacing:2px;
+  background:rgba(0,0,0,0.6); padding:5px 14px;
+}
+
+/* Page types */
+.page-content { width:100%; height:100%; overflow:hidden; position:relative; font-family:'Barlow',sans-serif; }
+
+.pc-cover { display:flex; flex-direction:column; height:100%; }
+.pc-cover-bar { height:4px; flex-shrink:0; }
+.pc-cover-head { padding:16px 20px 12px; border-bottom:1px solid #eee; flex-shrink:0; }
+.pc-pub { font-size:8px; letter-spacing:5px; text-transform:uppercase; color:#aaa; margin-bottom:4px; font-family:'Barlow Condensed',sans-serif; font-weight:700; }
+.pc-title { font-family:'Libre Baskerville',serif; font-size:clamp(22px,3.5vw,38px); font-weight:700; color:#0a0a0a; line-height:1.0; letter-spacing:-0.5px; }
+.pc-sub { font-family:'Barlow Condensed',sans-serif; font-size:9px; letter-spacing:2px; text-transform:uppercase; color:#aaa; margin-top:5px; }
+.pc-visual { flex:1; display:flex; align-items:center; justify-content:center; position:relative; overflow:hidden; }
+.pc-bg-letter { font-family:'Libre Baskerville',serif; font-weight:700; font-style:italic; color:rgba(0,0,0,0.05); letter-spacing:-6px; line-height:0.85; user-select:none; }
+.pc-pull { position:absolute; bottom:20px; left:18px; right:18px; font-family:'Libre Baskerville',serif; font-size:16px; font-style:italic; color:#1a1a1a; line-height:1.4; background:rgba(255,255,255,0.92); padding:12px 14px; border-left:3px solid #4A6670; }
+.pc-foot { padding:10px 20px; display:flex; justify-content:space-between; border-top:1px solid #eee; background:#f8f7f5; flex-shrink:0; }
+.pc-foot-text { font-family:'Barlow Condensed',sans-serif; font-size:8px; letter-spacing:2.5px; text-transform:uppercase; color:#aaa; }
+
+.pc-edit { padding:26px 24px; height:100%; overflow:hidden; background:#fff; }
+.pc-kicker { font-family:'Barlow Condensed',sans-serif; font-size:9px; letter-spacing:3px; text-transform:uppercase; color:#4A6670; margin-bottom:10px; font-weight:700; }
+.pc-hed { font-family:'Libre Baskerville',serif; font-size:clamp(17px,2vw,25px); font-weight:700; line-height:1.15; color:#0a0a0a; margin-bottom:12px; }
+.pc-dek { font-family:'Libre Baskerville',serif; font-size:16px; font-style:italic; color:#555; line-height:1.6; margin-bottom:14px; border-left:2px solid #4A6670; padding-left:12px; }
+.pc-body { font-family:'Libre Baskerville',serif; font-size:16px; line-height:1.8; color:#333; }
+.pc-body p { margin-bottom:12px; }
+.pc-body p:first-child::first-letter { font-size:52px; font-weight:700; float:left; line-height:0.78; margin-right:6px; margin-top:6px; color:#0a0a0a; }
+.pc-rule { height:1px; background:#e8e8e8; margin:14px 0; }
+.pc-pgnum { position:absolute; bottom:12px; font-family:'Barlow',sans-serif; font-size:10px; color:#bbb; letter-spacing:1px; }
+.pc-pgnum.l { left:24px; } .pc-pgnum.r { right:24px; }
+
+.pc-image { height:100%; position:relative; overflow:hidden; display:flex; align-items:center; justify-content:center; background:#f0ede8; }
+.pc-image-icon { opacity:0.2; }
+.pc-img-cap { position:absolute; bottom:0; left:0; right:0; padding:16px 20px; background:linear-gradient(transparent,rgba(248,247,245,0.97)); }
+.pc-img-cap-t { font-family:'Libre Baskerville',serif; font-size:12px; font-style:italic; color:#555; }
+.pc-img-cap-c { font-family:'Barlow',sans-serif; font-size:10px; color:#aaa; margin-top:3px; }
+
+.pc-contents { padding:26px 22px; height:100%; background:#f8f7f5; }
+.pc-con-title { font-family:'Libre Baskerville',serif; font-size:28px; font-weight:700; color:#0a0a0a; margin-bottom:4px; letter-spacing:-0.5px; }
+.pc-con-issue { font-family:'Libre Baskerville',serif; font-size:15px; font-style:italic; color:#777; margin-bottom:18px; padding-bottom:14px; border-bottom:1px solid #e8e8e8; }
+.pc-toc { display:flex; flex-direction:column; }
+.pc-toc-item { display:flex; align-items:baseline; padding:10px 0; border-bottom:1px solid #eee; }
+.pc-toc-n { font-family:'Libre Baskerville',serif; font-size:11px; font-style:italic; color:#bbb; width:26px; flex-shrink:0; }
+.pc-toc-t { font-family:'Libre Baskerville',serif; font-size:19px; font-weight:700; color:#0a0a0a; flex:1; line-height:1.2; }
+.pc-toc-dots { flex:1; border-bottom:1px dotted #ddd; margin:0 8px; align-self:center; }
+.pc-toc-pg { font-size:10px; color:#aaa; width:18px; text-align:right; flex-shrink:0; }
+.pc-toc-cat { font-family:'Barlow Condensed',sans-serif; font-size:9px; letter-spacing:2px; text-transform:uppercase; color:#4A6670; display:block; margin-top:2px; font-weight:600; }
+
+.pc-spotify { padding:26px 22px; height:100%; background:#0a0a0a; color:#fff; }
+.pc-sp-lbl { font-family:'Barlow Condensed',sans-serif; font-size:9px; letter-spacing:3px; text-transform:uppercase; color:#1DB954; margin-bottom:16px; font-weight:700; }
+.pc-sp-title { font-family:'Libre Baskerville',serif; font-size:20px; font-weight:700; color:#fff; margin-bottom:4px; }
+.pc-sp-sub { font-size:11px; color:#555; margin-bottom:22px; }
+.pc-track { display:flex; align-items:center; gap:12px; padding:10px 0; border-bottom:1px solid #1a1a1a; }
+.pc-track-n { font-size:11px; color:#444; width:18px; text-align:center; flex-shrink:0; }
+.pc-track-art { width:36px; height:36px; background:#1a1a1a; flex-shrink:0; display:flex; align-items:center; justify-content:center; }
+.pc-track-t { font-size:15px; color:#fff; flex:1; font-family:'Libre Baskerville',serif; }
+.pc-track-a { font-size:11px; color:#555; }
+.pc-track-d { font-size:11px; color:#444; flex-shrink:0; }
+
+.pc-shop { padding:22px; height:100%; overflow:hidden; background:#fff; }
+.pc-shop-lbl { font-family:'Barlow Condensed',sans-serif; font-size:9px; letter-spacing:3px; text-transform:uppercase; color:#888; margin-bottom:16px; font-weight:700; }
+.pc-shop-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:12px; }
+.pc-shop-item { cursor:pointer; }
+.pc-shop-img { width:100%; aspect-ratio:3/4; background:#f5f2ec; border:1px solid #e8e8e8; margin-bottom:6px; display:flex; align-items:center; justify-content:center; font-size:32px; transition:transform 0.2s; }
+.pc-shop-item:hover .pc-shop-img { transform:scale(1.02); }
+.pc-shop-t { font-size:11px; color:#0a0a0a; margin-bottom:2px; }
+.pc-shop-p { font-size:12px; color:#4A6670; font-weight:600; }
+.pc-shop-f { font-size:10px; color:#aaa; }
+
+/* ─── FOOTER ─── */
+.site-footer {
+  background:var(--ink);
+  color:#fff;
+  padding:48px 32px 32px;
+  margin-top:72px;
+}
+.footer-inner {
+  max-width:1280px;
+  margin:0 auto;
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr 1fr;
+  gap:40px;
+  padding-bottom:40px;
+  border-bottom:1px solid #222;
+}
+.footer-logo {
+  font-family:var(--H);
+  font-size:22px;
+  font-weight:700;
+  font-style:italic;
+  letter-spacing:-0.5px;
+  margin-bottom:12px;
+}
+.footer-dek { font-size:13px; color:#777; line-height:1.6; }
+.footer-col-head {
+  font-family:var(--C);
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  color:#555;
+  margin-bottom:14px;
+}
+.footer-links { display:flex; flex-direction:column; gap:8px; }
+.footer-link { font-size:13px; color:#888; transition:color 0.15s; cursor:pointer; }
+.footer-link:hover { color:#fff; }
+.footer-base {
+  max-width:1280px;
+  margin:20px auto 0;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  font-family:var(--C);
+  font-size:10px;
+  letter-spacing:1px;
+  color:#444;
+  text-transform:uppercase;
+}
+
+/* ─── RESPONSIVE ─── */
+@media(max-width:900px) {
+  .nav-links { display:none; }
+  .hero { grid-template-columns:1fr; }
+  .hero-sidebar { display:none; }
+  .hero-main { border:none; padding:0; }
+  .mag-grid { grid-template-columns:repeat(2,1fr); }
+  .mag-grid-5 { grid-template-columns:repeat(2,1fr); }
+  .mag-card.featured { grid-column:span 1; }
+  .footer-inner { grid-template-columns:1fr 1fr; }
+  .page { padding:0 20px; }
+}
+</style>
+</head>
+<body>
+
+<!-- UTILITY BAR -->
+<div class="util-bar">
+  <div class="util-left">
+    <div class="util-live">
+      <div class="live-dot"></div>
+      Live Radio
+    </div>
+    <div class="util-sep"></div>
+    <span style="color:rgba(255,255,255,0.55)">Now playing:</span>
+    <span>The Reedefined Daily</span>
+  </div>
+  <div class="util-right">
+    <a href="index.html">Home</a>
+    <div class="util-sep"></div>
+    <a href="#">Subscribe</a>
+    <div class="util-sep"></div>
+    <span style="color:rgba(255,255,255,0.45)">Sunday, 17 May 2026</span>
+  </div>
+</div>
+
+<!-- MAIN NAV -->
+<nav class="nav">
+  <div class="nav-inner">
+    <div class="nav-logo">Reedefined</div>
+    <div class="nav-links">
+      <div class="nav-link active" onclick="setCat(this,'all')">Discover</div>
+      <div class="nav-link" onclick="setCat(this,'cinema')">Cinema</div>
+      <div class="nav-link" onclick="setCat(this,'fashion')">Fashion</div>
+      <div class="nav-link" onclick="setCat(this,'music')">Music</div>
+      <div class="nav-link" onclick="setCat(this,'food')">Food</div>
+      <div class="nav-link" onclick="setCat(this,'culture')">Culture</div>
+      <div class="nav-link" onclick="location.href='studio.html'" style="color:var(--red)">Studio ↗</div>
+    </div>
+    <div class="nav-right">
+      <div style="display:flex;gap:8px;align-items:center">
+        <button onclick="setView('grid')" id="vbtn-grid" style="font-family:var(--C);font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;border:1px solid var(--rule);background:var(--ink);color:#fff;padding:6px 12px;cursor:pointer;">Grid</button>
+        <button onclick="setView('list')" id="vbtn-list" style="font-family:var(--C);font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;border:1px solid var(--rule);background:transparent;color:var(--muted);padding:6px 12px;cursor:pointer;">List</button>
+      </div>
+      <button class="nav-subscribe" onclick="location.href='index.html#waitlist'">Subscribe</button>
+      <div class="nav-avatar">A</div>
+    </div>
+  </div>
+</nav>
+
+<!-- SECTION STRIP -->
+<div class="section-strip">
+  <div class="strip-item active" onclick="stripItem(this)">All</div>
+  <div class="strip-item" onclick="stripItem(this)">Fashion</div>
+  <div class="strip-item" onclick="stripItem(this)">Cinema</div>
+  <div class="strip-item" onclick="stripItem(this)">Music</div>
+  <div class="strip-item" onclick="stripItem(this)">Food &amp; Drink</div>
+  <div class="strip-item" onclick="stripItem(this)">Beauty</div>
+  <div class="strip-item" onclick="stripItem(this)">Sport</div>
+  <div class="strip-item" onclick="stripItem(this)">Art &amp; Design</div>
+  <div class="strip-item" onclick="stripItem(this)">Travel</div>
+  <div class="strip-item" onclick="stripItem(this)">Nightlife</div>
+  <div class="strip-item" onclick="stripItem(this)">Verified</div>
+</div>
+
+<div class="page" style="padding-top:0">
+
+  <!-- HERO -->
+  <div class="hero" style="padding:40px 0 40px">
+    <div class="hero-main">
+      <div class="hero-tag"><span class="tag tag-red">Editor's Pick · May 2026</span></div>
+      <h1 class="hero-hed">The issue that made 8,400 people rethink how they dress.</h1>
+      <p class="hero-dek">Jana K.'s Soleil is the most-read independent magazine on Reedefined this season. A love letter to food, slow travel, and dressing for yourself — not the algorithm.</p>
+      <div class="hero-byline">By Jana K. &nbsp;·&nbsp; Food · Travel · Culture &nbsp;·&nbsp; 12 pages &nbsp;·&nbsp; 22 min read</div>
+      <div class="hero-img" onclick="openReader('Soleil','Jana K.','#B8953A','linear-gradient(145deg,#F5F0EB,#E8D8C8)')">
+        <div class="hero-img-inner" style="background:linear-gradient(145deg,#F5F0EB,#EAD9C5);">
+          <span style="font-size:clamp(80px,12vw,160px)">S</span>
+          <!-- Original SVG: sun/food icon -->
+          <svg style="position:absolute;bottom:32px;right:40px;opacity:0.14" width="140" height="140" viewBox="0 0 140 140" fill="none">
+            <circle cx="70" cy="70" r="35" stroke="#4A6670" stroke-width="3"/>
+            <circle cx="70" cy="20" r="7" fill="#4A6670"/>
+            <circle cx="70" cy="120" r="7" fill="#4A6670"/>
+            <circle cx="20" cy="70" r="7" fill="#4A6670"/>
+            <circle cx="120" cy="70" r="7" fill="#4A6670"/>
+            <circle cx="34" cy="34" r="5.5" fill="#4A6670"/>
+            <circle cx="106" cy="106" r="5.5" fill="#4A6670"/>
+            <circle cx="106" cy="34" r="5.5" fill="#4A6670"/>
+            <circle cx="34" cy="106" r="5.5" fill="#4A6670"/>
+          </svg>
+        </div>
+        <div class="hero-img-overlay">
+          <div class="hero-img-badge">Read Now</div>
+          <span style="font-family:var(--C);font-size:11px;color:rgba(255,255,255,0.7);letter-spacing:1px">Flip to read →</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-sidebar">
+      <div class="sidebar-label">Latest Issues</div>
+      <div class="sidebar-cards">
+
+        <div class="scard" onclick="openReader('After Hours','Marco R.','#4A6670','linear-gradient(145deg,#1A2830,#2A3840)')">
+          <div class="scard-img" style="background:linear-gradient(145deg,#1A2830,#2A3840)">
+            <span class="scard-img-letter" style="color:rgba(255,255,255,0.07)">AH</span>
+            <!-- Cinema SVG -->
+            <svg style="position:absolute;bottom:8px;right:8px;opacity:0.3" width="48" height="48" viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="18" stroke="white" stroke-width="2"/><circle cx="24" cy="24" r="6" stroke="white" stroke-width="2"/><circle cx="24" cy="6" r="3.5" fill="white" opacity="0.7"/><circle cx="24" cy="42" r="3.5" fill="white" opacity="0.7"/><circle cx="6" cy="24" r="3.5" fill="white" opacity="0.7"/><circle cx="42" cy="24" r="3.5" fill="white" opacity="0.7"/></svg>
+          </div>
+          <div class="scard-tag"><span class="tag">Cinema · Music</span></div>
+          <div class="scard-hed">After Hours</div>
+          <div class="scard-meta">Marco R. &nbsp;·&nbsp; 3,100 readers &nbsp;·&nbsp; 10 pages</div>
+        </div>
+
+        <div class="scard" onclick="openReader('The Edit','Chloe M.','#8A6A8A','linear-gradient(145deg,#E8D8E8,#D8C8D8)')">
+          <div class="scard-img" style="background:linear-gradient(145deg,#E8D8E8,#D8C8D8)">
+            <span class="scard-img-letter">E</span>
+            <!-- Hanger SVG -->
+            <svg style="position:absolute;bottom:8px;right:8px;opacity:0.2" width="48" height="48" viewBox="0 0 48 48" fill="none"><path d="M24 12c0-5 7.5-6 7.5-2" stroke="#4A6670" stroke-width="2.5" stroke-linecap="round" fill="none"/><path d="M24 12 7 27c-3 3-1 7 3 7h28c4 0 6-4 3-7z" stroke="#4A6670" stroke-width="2.5" fill="none" stroke-linejoin="round"/><path d="M9 38h30" stroke="#4A6670" stroke-width="2.5" stroke-linecap="round" opacity="0.5"/></svg>
+          </div>
+          <div class="scard-tag"><span class="tag">Fashion · Beauty</span></div>
+          <div class="scard-hed">The Edit</div>
+          <div class="scard-meta">Chloe M. &nbsp;·&nbsp; 12,600 readers &nbsp;·&nbsp; 14 pages</div>
+        </div>
+
+        <div class="scard" onclick="openReader('Feu','Daria K.','#B05A38','linear-gradient(145deg,#E8C8B8,#D8B8A8)')">
+          <div class="scard-img" style="background:linear-gradient(145deg,#E8C8B8,#D8B8A8)">
+            <span class="scard-img-letter">F</span>
+            <!-- Fire SVG -->
+            <svg style="position:absolute;bottom:8px;right:8px;opacity:0.2" width="48" height="48" viewBox="0 0 48 48" fill="none"><path d="M24 42c-9 0-16-7-16-15 0-9 9-14 9-4 0 0 4 5 4 10 0 0 5-5 5-13 0 0 8 7 8 14 0 7-5 8-10 8z" stroke="#B05A38" stroke-width="2.5" fill="none" stroke-linejoin="round"/></svg>
+          </div>
+          <div class="scard-tag"><span class="tag">Food · Culture</span></div>
+          <div class="scard-hed">Feu</div>
+          <div class="scard-meta">Daria K. &nbsp;·&nbsp; 5,200 readers &nbsp;·&nbsp; 16 pages</div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- FEATURED THIS MONTH -->
+  <div class="section-head">
+    <span class="section-head-title">Featured This Month</span>
+    <span class="section-head-link">See all →</span>
+  </div>
+
+  <!-- GRID VIEW -->
+  <div id="view-grid">
+    <div class="mag-grid" style="margin-bottom:1px">
+
+      <!-- Soleil FEATURED -->
+      <div class="mag-card featured" onclick="openReader('Soleil','Jana K.','#B8953A','linear-gradient(145deg,#F5F0EB,#E8D8C8)')">
+        <div class="mc-cover tall" style="background:linear-gradient(145deg,#F5F0EB,#EAD9C5)">
+          <div class="mc-cover-bar" style="background:#B8953A"></div>
+          <div class="mc-cover-head">
+            <div class="mc-cover-pub">Reedefined</div>
+            <div class="mc-cover-title" style="font-size:28px">Soleil</div>
+            <div class="mc-cover-sub">Food · Travel · Culture</div>
+          </div>
+          <div class="mc-cover-visual">
+            <div class="mc-bg-letter" style="font-size:120px">S</div>
+            <svg class="mc-svg" width="90" height="90" viewBox="0 0 90 90" fill="none">
+              <circle cx="45" cy="45" r="22" stroke="#4A6670" stroke-width="2"/>
+              <circle cx="45" cy="13" r="5" fill="#4A6670"/>
+              <circle cx="45" cy="77" r="5" fill="#4A6670"/>
+              <circle cx="13" cy="45" r="5" fill="#4A6670"/>
+              <circle cx="77" cy="45" r="5" fill="#4A6670"/>
+              <circle cx="22" cy="22" r="4" fill="#4A6670"/>
+              <circle cx="68" cy="68" r="4" fill="#4A6670"/>
+              <circle cx="68" cy="22" r="4" fill="#4A6670"/>
+              <circle cx="22" cy="68" r="4" fill="#4A6670"/>
+            </svg>
+            <div class="mc-badge">Editor's Pick</div>
+            <div class="mc-verified">◆ Verified</div>
+          </div>
+          <div class="mc-cover-footer">
+            <span class="mc-editor">by Jana K.</span>
+            <span class="mc-readers">8.4k readers</span>
+          </div>
+        </div>
+        <div class="mc-info">
+          <div class="mc-info-title">Soleil — May Issue</div>
+          <div class="mc-info-meta">Food · Travel · 12 pages · 22 min read</div>
+        </div>
+      </div>
+
+      <!-- After Hours -->
+      <div class="mag-card" onclick="openReader('After Hours','Marco R.','#4A6670','linear-gradient(145deg,#1A2830,#2A3840)')">
+        <div class="mc-cover" style="background:linear-gradient(145deg,#1A2830,#2A3840)">
+          <div class="mc-cover-bar" style="background:#4A6670"></div>
+          <div class="mc-cover-head">
+            <div class="mc-cover-pub" style="color:#556">Reedefined</div>
+            <div class="mc-cover-title" style="font-size:20px;color:#fff">After Hours</div>
+            <div class="mc-cover-sub" style="color:#556">Cinema · Music · Night</div>
+          </div>
+          <div class="mc-cover-visual">
+            <div class="mc-bg-letter" style="font-size:88px;color:rgba(255,255,255,0.04)">AH</div>
+            <!-- Cinema/film reel SVG -->
+            <svg class="mc-svg" width="70" height="70" viewBox="0 0 70 70" fill="none">
+              <circle cx="35" cy="35" r="26" stroke="white" stroke-width="2"/>
+              <circle cx="35" cy="35" r="9" stroke="white" stroke-width="2"/>
+              <circle cx="35" cy="9" r="5" fill="white" opacity="0.6"/>
+              <circle cx="35" cy="61" r="5" fill="white" opacity="0.6"/>
+              <circle cx="9" cy="35" r="5" fill="white" opacity="0.6"/>
+              <circle cx="61" cy="35" r="5" fill="white" opacity="0.6"/>
+            </svg>
+          </div>
+          <div class="mc-cover-footer" style="background:rgba(0,0,0,0.3);border-top-color:rgba(255,255,255,0.08)">
+            <span class="mc-editor" style="color:#888">by Marco R.</span>
+            <span class="mc-readers">3.1k readers</span>
+          </div>
+        </div>
+        <div class="mc-info">
+          <div class="mc-info-title">After Hours — May</div>
+          <div class="mc-info-meta">Cinema · Music · 10 pages</div>
+        </div>
+      </div>
+
+      <!-- The Edit -->
+      <div class="mag-card" onclick="openReader('The Edit','Chloe M.','#8A6A8A','linear-gradient(145deg,#E8D8E8,#D8C8D8)')">
+        <div class="mc-cover" style="background:linear-gradient(145deg,#E8D8E8,#D8C8D8)">
+          <div class="mc-cover-bar" style="background:#8A6A8A"></div>
+          <div class="mc-cover-head">
+            <div class="mc-cover-pub">Reedefined</div>
+            <div class="mc-cover-title" style="font-size:20px">The Edit</div>
+            <div class="mc-cover-sub">Fashion · Beauty · Art</div>
+          </div>
+          <div class="mc-cover-visual">
+            <div class="mc-bg-letter" style="font-size:88px">E</div>
+            <!-- Hanger SVG -->
+            <svg class="mc-svg" width="70" height="70" viewBox="0 0 70 70" fill="none">
+              <path d="M35 17c0-7.5 11-9 11-3" stroke="#4A6670" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+              <path d="M35 17 10 39c-4.5 4-1.5 10 4.5 10h41c6 0 9-6 4.5-10z" stroke="#4A6670" stroke-width="2.5" fill="none" stroke-linejoin="round"/>
+              <path d="M12 55h46" stroke="#4A6670" stroke-width="2.5" stroke-linecap="round" opacity="0.5"/>
+            </svg>
+            <div class="mc-verified">◆ Verified</div>
+          </div>
+          <div class="mc-cover-footer">
+            <span class="mc-editor">by Chloe M.</span>
+            <span class="mc-readers">12.6k readers</span>
+          </div>
+        </div>
+        <div class="mc-info">
+          <div class="mc-info-title">The Edit — May</div>
+          <div class="mc-info-meta">Fashion · Beauty · 14 pages</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- More magazines row -->
+    <div class="mag-grid mag-grid-5">
+      <div class="mag-card" onclick="openReader('Nuit','Remi D.','#3A3A6A','linear-gradient(145deg,#1A1A2A,#2A2A3A)')">
+        <div class="mc-cover" style="background:linear-gradient(145deg,#1A1A2A,#2A2A3A)">
+          <div class="mc-cover-bar" style="background:#3A3A6A"></div>
+          <div class="mc-cover-head">
+            <div class="mc-cover-pub" style="color:#555">Reedefined</div>
+            <div class="mc-cover-title" style="font-size:18px;color:#fff">Nuit</div>
+          </div>
+          <div class="mc-cover-visual">
+            <div class="mc-bg-letter" style="font-size:72px;color:rgba(255,255,255,0.04)">N</div>
+            <!-- Moon SVG -->
+            <svg class="mc-svg" width="56" height="56" viewBox="0 0 56 56" fill="none">
+              <path d="M36 28c0 11-8 20-18 21-3 0-5.5-.7-7.5-2C16 49 22.5 49.5 28.5 46c9-5 12.5-17 7.5-27-2-3.5-5-6-8.5-7.5C38 13.5 36 22.5 36 28z" stroke="white" stroke-width="2" fill="none" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div class="mc-cover-footer" style="background:rgba(0,0,0,0.3);border-top-color:rgba(255,255,255,0.06)">
+            <span class="mc-editor" style="color:#666">Remi D.</span>
+            <span class="mc-readers">650</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="mag-card" onclick="openReader('Verdure','Isla T.','#4A6A4A','linear-gradient(145deg,#C8D8C8,#D8E8D8)')">
+        <div class="mc-cover" style="background:linear-gradient(145deg,#C8D8C8,#D8E8D8)">
+          <div class="mc-cover-bar" style="background:#4A6A4A"></div>
+          <div class="mc-cover-head">
+            <div class="mc-cover-pub">Reedefined</div>
+            <div class="mc-cover-title" style="font-size:18px">Verdure</div>
+          </div>
+          <div class="mc-cover-visual">
+            <div class="mc-bg-letter" style="font-size:72px">V</div>
+            <!-- Leaf/plant SVG -->
+            <svg class="mc-svg" width="56" height="56" viewBox="0 0 56 56" fill="none">
+              <path d="M28 48V22M28 22c0-12 16-16 16-16s-3 16-16 16M28 22c0-9-13-14-13-14s3 14 13 14" stroke="#2A5A2A" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+            </svg>
+          </div>
+          <div class="mc-cover-footer">
+            <span class="mc-editor">Isla T.</span>
+            <span class="mc-readers">1.8k</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="mag-card" onclick="openReader('Tempo','Alex V.','#8A6A4A','linear-gradient(145deg,#E8D8C8,#D8C8B8)')">
+        <div class="mc-cover" style="background:linear-gradient(145deg,#E8D8C8,#D8C8B8)">
+          <div class="mc-cover-bar" style="background:#8A6A4A"></div>
+          <div class="mc-cover-head">
+            <div class="mc-cover-pub">Reedefined</div>
+            <div class="mc-cover-title" style="font-size:18px">Tempo</div>
+          </div>
+          <div class="mc-cover-visual">
+            <div class="mc-bg-letter" style="font-size:72px">T</div>
+            <!-- Clock SVG -->
+            <svg class="mc-svg" width="56" height="56" viewBox="0 0 56 56" fill="none">
+              <circle cx="28" cy="30" r="18" stroke="#8A6A4A" stroke-width="2.5" fill="none"/>
+              <path d="M28 30V18M28 30l9-7.5" stroke="#8A6A4A" stroke-width="2.5" stroke-linecap="round"/>
+              <circle cx="28" cy="30" r="2.5" fill="#8A6A4A"/>
+            </svg>
+          </div>
+          <div class="mc-cover-footer">
+            <span class="mc-editor">Alex V.</span>
+            <span class="mc-readers">2.3k</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="mag-card" onclick="openReader('Blanc','Lena S.','#888','linear-gradient(145deg,#F0F0F0,#E8E8E8)')">
+        <div class="mc-cover" style="background:linear-gradient(145deg,#F0F0F0,#E8E8E8)">
+          <div class="mc-cover-bar" style="background:#888"></div>
+          <div class="mc-cover-head">
+            <div class="mc-cover-pub">Reedefined</div>
+            <div class="mc-cover-title" style="font-size:18px">Blanc</div>
+          </div>
+          <div class="mc-cover-visual">
+            <div class="mc-bg-letter" style="font-size:72px">B</div>
+            <!-- Open book SVG -->
+            <svg class="mc-svg" width="56" height="56" viewBox="0 0 56 56" fill="none">
+              <rect x="4" y="10" width="22" height="36" rx="2" stroke="#888" stroke-width="2.5" fill="none"/>
+              <rect x="30" y="10" width="22" height="36" rx="2" stroke="#888" stroke-width="2.5" fill="none"/>
+              <path d="M26 10v36M30 10v36" stroke="#888" stroke-width="1" opacity="0.4"/>
+              <rect x="8" y="18" width="14" height="1.5" rx=".75" fill="#888" opacity="0.4"/>
+              <rect x="8" y="23" width="10" height="1.5" rx=".75" fill="#888" opacity="0.3"/>
+              <rect x="34" y="18" width="14" height="1.5" rx=".75" fill="#888" opacity="0.4"/>
+              <rect x="34" y="23" width="10" height="1.5" rx=".75" fill="#888" opacity="0.3"/>
+            </svg>
+          </div>
+          <div class="mc-cover-footer">
+            <span class="mc-editor">Lena S.</span>
+            <span class="mc-readers">940</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="mag-card" onclick="openReader('Feu','Daria K.','#B05A38','linear-gradient(145deg,#E8C8B8,#D8B8A8)')">
+        <div class="mc-cover" style="background:linear-gradient(145deg,#E8C8B8,#D8B8A8)">
+          <div class="mc-cover-bar" style="background:linear-gradient(90deg,#B05A38,#D07048)"></div>
+          <div class="mc-cover-head">
+            <div class="mc-cover-pub">Reedefined</div>
+            <div class="mc-cover-title" style="font-size:18px">Feu</div>
+          </div>
+          <div class="mc-cover-visual">
+            <div class="mc-bg-letter" style="font-size:72px">F</div>
+            <!-- Flame SVG -->
+            <svg class="mc-svg" width="56" height="56" viewBox="0 0 56 56" fill="none">
+              <path d="M28 50c-10.5 0-19-8.5-19-18 0-11 10.5-17 10.5-5 0 0 5 6.5 5 12.5 0 0 6-6 6-16 0 0 9.5 8.5 9.5 17 0 8.5-6 9.5-12 9.5z" stroke="#B05A38" stroke-width="2.5" fill="none" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div class="mc-cover-footer">
+            <span class="mc-editor">Daria K.</span>
+            <span class="mc-readers">5.2k</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LIST VIEW -->
+  <div id="view-list" class="list-view">
+    <div class="lv-item" onclick="openReader('Soleil','Jana K.','#B8953A','linear-gradient(145deg,#F5F0EB,#E8D8C8)')">
+      <div class="lv-thumb" style="background:linear-gradient(145deg,#F5F0EB,#EAD9C5)"><div class="lv-thumb-bar" style="background:#B8953A"></div><span class="lv-thumb-letter">S</span></div>
+      <div><div class="lv-title">Soleil</div><div class="lv-editor">Jana K. · 8,400 readers · ◆ Verified</div><div class="lv-dek">"A magazine about the pleasure of eating well, travelling slowly, and living with intention."</div><div class="lv-tags"><span class="lv-tag">Food</span><span class="lv-tag">Travel</span><span class="lv-tag">Culture</span></div></div>
+      <div class="lv-pages">12 pages<br>22 min read</div>
+    </div>
+    <div class="lv-item" onclick="openReader('The Edit','Chloe M.','#8A6A8A','linear-gradient(145deg,#E8D8E8,#D8C8D8)')">
+      <div class="lv-thumb" style="background:linear-gradient(145deg,#E8D8E8,#D8C8D8)"><div class="lv-thumb-bar" style="background:#8A6A8A"></div><span class="lv-thumb-letter">E</span></div>
+      <div><div class="lv-title">The Edit</div><div class="lv-editor">Chloe M. · 12,600 readers · ◆ Verified</div><div class="lv-dek">"Fashion is the only art form everyone participates in every single day. This is mine."</div><div class="lv-tags"><span class="lv-tag">Fashion</span><span class="lv-tag">Beauty</span><span class="lv-tag">Art</span></div></div>
+      <div class="lv-pages">14 pages<br>28 min read</div>
+    </div>
+    <div class="lv-item" onclick="openReader('After Hours','Marco R.','#4A6670','linear-gradient(145deg,#1A2830,#2A3840)')">
+      <div class="lv-thumb" style="background:linear-gradient(145deg,#1A2830,#2A3840)"><div class="lv-thumb-bar" style="background:#4A6670"></div><span class="lv-thumb-letter" style="color:rgba(255,255,255,0.15)">AH</span></div>
+      <div><div class="lv-title">After Hours</div><div class="lv-editor">Marco R. · 3,100 readers</div><div class="lv-dek">"Cinema, music, and the spaces in between. For people who stay up late thinking about films."</div><div class="lv-tags"><span class="lv-tag">Cinema</span><span class="lv-tag">Music</span></div></div>
+      <div class="lv-pages">10 pages<br>18 min read</div>
+    </div>
+    <div class="lv-item" onclick="openReader('Feu','Daria K.','#B05A38','linear-gradient(145deg,#E8C8B8,#D8B8A8)')">
+      <div class="lv-thumb" style="background:linear-gradient(145deg,#E8C8B8,#D8B8A8)"><div class="lv-thumb-bar" style="background:#B05A38"></div><span class="lv-thumb-letter">F</span></div>
+      <div><div class="lv-title">Feu</div><div class="lv-editor">Daria K. · 5,200 readers</div><div class="lv-dek">"A quarterly of heat: food that burns, art that provokes, music that refuses to cool down."</div><div class="lv-tags"><span class="lv-tag">Food</span><span class="lv-tag">Art</span><span class="lv-tag">Culture</span></div></div>
+      <div class="lv-pages">16 pages<br>30 min read</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div>
+      <div class="footer-logo">Reedefined</div>
+      <p class="footer-dek">Your vision. Your magazine. The platform for independent digital publishing.</p>
+    </div>
+    <div>
+      <div class="footer-col-head">Discover</div>
+      <div class="footer-links">
+        <span class="footer-link">Fashion</span>
+        <span class="footer-link">Cinema</span>
+        <span class="footer-link">Music</span>
+        <span class="footer-link">Food</span>
+        <span class="footer-link">Culture</span>
+        <span class="footer-link">Travel</span>
+      </div>
+    </div>
+    <div>
+      <div class="footer-col-head">Publish</div>
+      <div class="footer-links">
+        <span class="footer-link">Studio</span>
+        <span class="footer-link">Connect platforms</span>
+        <span class="footer-link">AI Director</span>
+        <span class="footer-link">Monetise</span>
+        <span class="footer-link">Analytics</span>
+      </div>
+    </div>
+    <div>
+      <div class="footer-col-head">Company</div>
+      <div class="footer-links">
+        <span class="footer-link">About</span>
+        <span class="footer-link">Join waitlist</span>
+        <span class="footer-link">Legal</span>
+        <span class="footer-link">Privacy</span>
+        <span class="footer-link">Contact</span>
+      </div>
+    </div>
+  </div>
+  <div class="footer-base">
+    <span>© 2026 Reedefined. All rights reserved.</span>
+    <span>Your vision. Your magazine.</span>
+  </div>
+</footer>
+
+<!-- MAGAZINE READER -->
+<div class="reader" id="reader">
+  <div class="reader-bar">
+    <div style="display:flex;align-items:center;gap:16px">
+      <div class="rb-title" id="r-title">Soleil</div>
+      <div class="rb-info" id="r-info">by Jana K. · May 2026</div>
+    </div>
+    <div class="rb-controls">
+      <button class="rb-btn active" id="rbtn-h" onclick="setMode('h')">⟷ Spread</button>
+      <button class="rb-btn" id="rbtn-v" onclick="setMode('v')">↕ Scroll</button>
+      <button class="rb-close" onclick="closeReader()">✕</button>
+    </div>
+  </div>
+  <div class="reader-progress"><div class="reader-prog-fill" id="prog" style="width:0%"></div></div>
+  <div class="reader-stage" id="stage">
+    <button class="r-nav left" id="rnav-l" onclick="prevPage()">‹</button>
+    <div class="reader-spread" id="spread"></div>
+    <button class="r-nav right" id="rnav-r" onclick="nextPage()">›</button>
+    <div class="r-counter" id="r-counter">1 / 6</div>
+  </div>
+</div>
+
+<script>
+// NAV
+function setCat(el, cat) {
+  document.querySelectorAll('.nav-link').forEach(l=>l.classList.remove('active'));
+  el.classList.add('active');
+}
+function stripItem(el) {
+  document.querySelectorAll('.strip-item').forEach(s=>s.classList.remove('active'));
+  el.classList.add('active');
+}
+function setView(v) {
+  const grid = document.getElementById('view-grid');
+  const list = document.getElementById('view-list');
+  const gbtn = document.getElementById('vbtn-grid');
+  const lbtn = document.getElementById('vbtn-list');
+  if (v==='grid') {
+    grid.style.display='block'; list.style.display='none';
+    gbtn.style.background='var(--ink)'; gbtn.style.color='#fff';
+    lbtn.style.background='transparent'; lbtn.style.color='var(--muted)';
+  } else {
+    grid.style.display='none'; list.style.display='flex';
+    lbtn.style.background='var(--ink)'; lbtn.style.color='#fff';
+    gbtn.style.background='transparent'; gbtn.style.color='var(--muted)';
+  }
+}
+
+// READER
+let pages=[], curPage=0, curColor='#4A6670';
+
+function buildPages(title, editor, color, bg) {
+  return [
+    {L:{type:'cover',title,editor,color,bg}, R:{type:'contents',title}},
+    {L:{type:'edit',kicker:'Cover Story',hed:'"I stopped dressing for the algorithm"',dek:'Thirty days. No recommendations. Just a wardrobe and thirty mornings.',body:'<p>It started the way most experiments do — with a small irritation that became impossible to ignore. I had spent forty minutes scrolling, trying to decide what to put on for a Tuesday morning.</p><p>At some point I looked up from my phone and realised I was standing in front of a wardrobe full of clothes I had chosen, at various points in my life, because they made me feel something.</p>',pg:3,side:'l'},R:{type:'image',caption:'Day 14 — The vintage blazer',credit:'From the editor\'s archive',bg:'linear-gradient(145deg,#f0ede8,#e8e0d8)',icon:`<svg width="100" height="100" viewBox="0 0 100 100" fill="none"><path d="M50 25c0-12 17-15 17-5" stroke="#4A6670" stroke-width="3" stroke-linecap="round" fill="none"/><path d="M50 25 14 58c-6 6-2 16 6 16h60c8 0 12-10 6-16z" stroke="#4A6670" stroke-width="3" fill="none" stroke-linejoin="round"/><path d="M16 82h68" stroke="#4A6670" stroke-width="3" stroke-linecap="round" opacity="0.4"/></svg>`,pg:4,side:'r'}},
+    {L:{type:'spotify',title:`${title} — May Playlist`,editor,tracks:[{n:1,t:'Motion Sickness',a:'Phoebe Bridgers',d:'3:42'},{n:2,t:'Soft Place',a:'Arooj Aftab',d:'4:18'},{n:3,t:'Two Star',a:'Mk.gee',d:'3:56'},{n:4,t:'Death With Dignity',a:'Sufjan Stevens',d:'3:50'},{n:5,t:'Savior Complex',a:'Phoebe Bridgers',d:'4:12'}]},R:{type:'shop',items:[{t:'Vintage blazer',p:'€48',f:'Depop'},{t:'Leather bag',p:'€65',f:'Vinted'},{t:'Canvas sneakers',p:'€32',f:'Depop'},{t:'Silk scarf',p:'€22',f:'Vinted'}]}},
+    {L:{type:'edit',kicker:'Food',hed:'The pasta my grandmother never wrote down',dek:'A recipe recovered from memory, from smell, from thirty years of trying to get it right.',body:'<p>She never measured anything. That was the first thing I understood, watching her cook from the age of six. A handful of this. Enough of that. The pasta water should taste like the sea.</p><p>When she died, I realised I had been watching without recording. I had assumed I had time.</p>',pg:7,side:'l'},R:{type:'image',caption:'The kitchen, 2024',credit:'Personal archive',bg:'linear-gradient(145deg,#f5f0eb,#ead9c5)',icon:`<svg width="100" height="100" viewBox="0 0 100 100" fill="none"><path d="M20 60C20 40 35 25 50 25s30 15 30 35" stroke="#B8953A" stroke-width="3" fill="none"/><path d="M12 62h76" stroke="#B8953A" stroke-width="3.5" stroke-linecap="round"/><path d="M22 75h56" stroke="#B8953A" stroke-width="2.5" stroke-linecap="round" opacity="0.4"/><path d="M50 25V16" stroke="#B8953A" stroke-width="2.5" stroke-linecap="round"/><circle cx="50" cy="13" r="4" fill="#B8953A" opacity="0.5"/></svg>`,pg:8,side:'r'}},
+    {L:{type:'edit',kicker:'Cinema',hed:'The films that made me rethink grief',dek:'Not sad films. Films about what it means to carry something.',body:'<p>There is a particular kind of film I keep returning to. Not sad films, exactly — but films about the texture of loss. The way grief reshapes the furniture of a room. The way it changes who you are when you are not thinking about it.</p>',pg:9,side:'l'},R:{type:'edit',kicker:"Editor's Letter",hed:'On curating a life worth reading',dek:'Every issue begins with the same question: what did this month actually feel like?',body:'<p>I write this letter last. After the articles are placed, after the playlists are finalised, after the shop is curated. I need to know what the issue became before I can explain why it matters.</p><p>This month felt like the beginning of something. I hope you feel it too.</p>',pg:10,side:'r'}},
+    {L:{type:'image',caption:`${title} · May 2026 · Issue No. 5`,credit:`by ${editor} · reedefined.app`,bg:`linear-gradient(145deg,${color}22,${color}44)`,icon:'',pg:11,side:'l'},R:{type:'cover',title,editor,color,bg,back:true}},
+  ];
+}
+
+function openReader(title, editor, color, bg) {
+  document.getElementById('r-title').textContent = title;
+  document.getElementById('r-info').textContent = `by ${editor} · May 2026`;
+  curColor = color; curPage = 0;
+  pages = buildPages(title, editor, color, bg);
+  document.getElementById('reader').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  renderPage();
+}
+function closeReader() {
+  document.getElementById('reader').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function renderPage() {
+  const sp = document.getElementById('spread');
+  sp.classList.add('turning');
+  setTimeout(() => {
+    const p = pages[curPage];
+    sp.innerHTML = `<div class="rp-left page-content">${renderPC(p.L)}</div><div class="rp-spine"></div><div class="rp-right page-content">${renderPC(p.R)}</div>`;
+    sp.classList.remove('turning');
+    updateNav();
+  }, 180);
+}
+
+function renderPC(p) {
+  if (!p) return '';
+  if (p.type==='cover') return `<div class="pc-cover"><div class="pc-cover-bar" style="background:${p.color}"></div><div class="pc-cover-head"><div class="pc-pub">Reedefined</div><div class="pc-title" style="font-size:clamp(24px,4vw,44px)">${p.title}</div><div class="pc-sub">May 2026 · Issue No. 5</div></div><div class="pc-visual"><div class="pc-bg-letter" style="font-size:clamp(60px,8vw,100px)">${p.title.charAt(0)}</div><div class="pc-pull">"Everything you follow, elevated into one publication."</div></div><div class="pc-foot"><div class="pc-foot-text">${p.editor}</div><div class="pc-foot-text">reedefined.app</div></div></div>`;
+  if (p.type==='contents') return `<div class="pc-contents"><div class="pc-con-title">Contents</div><div class="pc-con-issue">${p.title} · May 2026</div><div class="pc-toc"><div class="pc-toc-item"><span class="pc-toc-n">1</span><div><div class="pc-toc-t">Cover Story</div><span class="pc-toc-cat">Fashion · Essay</span></div><div class="pc-toc-dots"></div><span class="pc-toc-pg">3</span></div><div class="pc-toc-item"><span class="pc-toc-n">2</span><div><div class="pc-toc-t">Playlist</div><span class="pc-toc-cat">Music · Spotify</span></div><div class="pc-toc-dots"></div><span class="pc-toc-pg">5</span></div><div class="pc-toc-item"><span class="pc-toc-n">3</span><div><div class="pc-toc-t">My grandmother's recipe</div><span class="pc-toc-cat">Food</span></div><div class="pc-toc-dots"></div><span class="pc-toc-pg">7</span></div><div class="pc-toc-item"><span class="pc-toc-n">4</span><div><div class="pc-toc-t">Films about grief</div><span class="pc-toc-cat">Cinema</span></div><div class="pc-toc-dots"></div><span class="pc-toc-pg">9</span></div><div class="pc-toc-item"><span class="pc-toc-n">5</span><div><div class="pc-toc-t">Editor's Letter</div><span class="pc-toc-cat">Personal</span></div><div class="pc-toc-dots"></div><span class="pc-toc-pg">10</span></div></div></div>`;
+  if (p.type==='edit') return `<div class="pc-edit"><div class="pc-kicker">${p.kicker}</div><div class="pc-hed">${p.hed}</div><div class="pc-dek">${p.dek}</div><div class="pc-rule"></div><div class="pc-body">${p.body}</div>${p.pg?`<div class="pc-pgnum ${p.side}">${p.pg}</div>`:''}</div>`;
+  if (p.type==='image') return `<div class="pc-image"><div style="position:absolute;inset:0;background:${p.bg}"></div><div class="pc-image-icon">${p.icon||''}</div><div class="pc-img-cap"><div class="pc-img-cap-t">${p.caption}</div><div class="pc-img-cap-c">${p.credit}</div></div>${p.pg?`<div class="pc-pgnum ${p.side}" style="color:#aaa">${p.pg}</div>`:''}</div>`;
+  if (p.type==='spotify') return `<div class="pc-spotify"><div class="pc-sp-lbl">🎧 Spotify · Issue Playlist</div><div class="pc-sp-title">${p.title}</div><div class="pc-sp-sub">Curated by ${p.editor} · ${p.tracks.length} tracks</div>${p.tracks.map(t=>`<div class="pc-track"><span class="pc-track-n">${t.n}</span><div class="pc-track-art"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="6" stroke="#333" stroke-width="1"/><circle cx="9" cy="9" r="2" stroke="#333" stroke-width="1"/><circle cx="9" cy="3.5" r="1" fill="#333" opacity="0.4"/><circle cx="9" cy="14.5" r="1" fill="#333" opacity="0.4"/><circle cx="3.5" cy="9" r="1" fill="#333" opacity="0.4"/><circle cx="14.5" cy="9" r="1" fill="#333" opacity="0.4"/></svg></div><div><div class="pc-track-t">${t.t}</div><div class="pc-track-a">${t.a}</div></div><span class="pc-track-d">${t.d}</span></div>`).join('')}</div>`;
+  if (p.type==='shop') return `<div class="pc-shop"><div class="pc-shop-lbl">Shop This Issue</div><div class="pc-shop-grid">${p.items.map(i=>`<div class="pc-shop-item"><div class="pc-shop-img"><svg width="32" height="40" viewBox="0 0 32 40" fill="none"><path d="M5 10L27 10L24 36H8Z" stroke="#ccc" stroke-width="1.5" fill="none" stroke-linejoin="round"/><path d="M10 10C10 5 22 5 22 10" stroke="#ccc" stroke-width="1.5" stroke-linecap="round" fill="none"/></svg></div><div class="pc-shop-t">${i.t}</div><div class="pc-shop-p">${i.p}</div><div class="pc-shop-f">${i.f}</div></div>`).join('')}</div>`;
+  return '';
+}
+
+function updateNav() {
+  document.getElementById('rnav-l').disabled = curPage===0;
+  document.getElementById('rnav-r').disabled = curPage>=pages.length-1;
+  document.getElementById('r-counter').textContent = `${curPage+1} / ${pages.length}`;
+  document.getElementById('prog').style.width = ((curPage+1)/pages.length*100)+'%';
+}
+function nextPage() { if(curPage<pages.length-1){curPage++;renderPage();} }
+function prevPage() { if(curPage>0){curPage--;renderPage();} }
+
+function setMode(m) {
+  document.getElementById('rbtn-h').classList.toggle('active',m==='h');
+  document.getElementById('rbtn-v').classList.toggle('active',m==='v');
+}
+
+document.addEventListener('keydown',e=>{
+  if(!document.getElementById('reader').classList.contains('open')) return;
+  if(e.key==='ArrowRight'||e.key==='ArrowDown') nextPage();
+  if(e.key==='ArrowLeft'||e.key==='ArrowUp') prevPage();
+  if(e.key==='Escape') closeReader();
+});
+let tx=0;
+document.getElementById('stage').addEventListener('touchstart',e=>{tx=e.touches[0].clientX;});
+document.getElementById('stage').addEventListener('touchend',e=>{
+  const d=tx-e.changedTouches[0].clientX;
+  if(Math.abs(d)>50){d>0?nextPage():prevPage();}
+});
+</script>
+</body>
+</html>
