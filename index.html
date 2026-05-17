@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="tiktok-domain-verification" content="hVzFgjsRoBRYSJKXVAYgroBXhxr64tSC">
+<meta name="tiktok-domain-verification" content="4Oo4Nq3DlWoB7f8isxeU4GwMijyr5fcU">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reedefined — Your vision. Your magazine.</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,700;0,6..96,900;1,6..96,400;1,6..96,700&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Outfit:wght@300;400;500&display=swap');
+
+    :root {
+    --cloud:   #FFFFFF;
+    --lav:     #D8E4E8;
+    --lav-d:   #B0C8D0;
+    --blush:   #C8D8DC;
+    --blush-d: #8AAAB4;
+    --blue:    #E0E8EC;
+    --blue-d:  #7A9098;
+    --ser:     #4A6670;
+    --ink:     #1A2830;
+    --mid:     #3A5060;
+    --muted:   #7A9098;
+    --H: 'Bodoni Moda', Georgia, serif;
+    --B: 'Crimson Pro', Georgia, serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--cloud);
+    color: var(--ink);
+    font-family: var(--B);
+    font-size: 18px;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 20px 48px;
+    background: rgba(248,244,240,0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 0.5px solid var(--lav-d);
+  }
+  .nav-logo {
+    font-family: var(--H);
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: 6px;
+    color: var(--ink);
+    text-decoration: none;
+  }
+  .nav-links { display: flex; gap: 32px; align-items: center; }
+  .nav-links a {
+    font-family: var(--B);
+    font-size: 14px;
+    color: var(--mid);
+    text-decoration: none;
+    letter-spacing: 1.5px;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--ink); }
+  .nav-cta {
+    background: var(--ink) !important;
+    color: var(--cloud) !important;
+    padding: 8px 22px;
+    border-radius: 2px;
+    font-size: 13px !important;
+    letter-spacing: 2px !important;
+    transition: opacity 0.2s !important;
+  }
+  .nav-cta:hover { opacity: 0.85 !important; }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding-top: 80px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-left {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 80px 48px 80px 72px;
+    position: relative;
+    z-index: 2;
+  }
+
+  .hero-eyebrow {
+    font-family: var(--B);
+    font-size: 11px;
+    letter-spacing: 4px;
+    color: var(--ser);
+    margin-bottom: 28px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .hero-eyebrow::before {
+    content: '';
+    display: block;
+    width: 32px;
+    height: 1px;
+    background: var(--ser);
+  }
+
+  .hero-title {
+    font-family: var(--H);
+    font-size: clamp(52px, 6vw, 88px);
+    font-weight: 300;
+    line-height: 1.05;
+    color: var(--ink);
+    margin-bottom: 32px;
+    letter-spacing: -1px;
+  }
+  .hero-title em {
+    font-style: italic;
+    color: var(--mid);
+  }
+
+  .hero-sub {
+    font-family: var(--B);
+    font-size: 19px;
+    color: var(--mid);
+    line-height: 1.7;
+    max-width: 420px;
+    margin-bottom: 48px;
+  }
+
+  /* Waitlist form */
+  .waitlist-form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    max-width: 400px;
+  }
+  .form-row { display: flex; gap: 0; }
+  .waitlist-input {
+    flex: 1;
+    padding: 14px 20px;
+    font-family: var(--B);
+    font-size: 16px;
+    color: var(--ink);
+    background: var(--cloud);
+    border: 0.5px solid var(--lav-d);
+    border-right: none;
+    border-radius: 2px 0 0 2px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .waitlist-input:focus { border-color: var(--ser); }
+  .waitlist-input::placeholder { color: var(--muted); }
+  .waitlist-btn {
+    padding: 14px 28px;
+    font-family: var(--B);
+    font-size: 14px;
+    letter-spacing: 2px;
+    color: var(--cloud);
+    background: var(--ink);
+    border: none;
+    border-radius: 0 2px 2px 0;
+    cursor: pointer;
+    transition: opacity 0.2s;
+    white-space: nowrap;
+  }
+  .waitlist-btn:hover { opacity: 0.85; }
+  .form-note {
+    font-size: 13px;
+    color: var(--muted);
+    letter-spacing: 0.5px;
+  }
+
+  .success-msg {
+    display: none;
+    padding: 14px 20px;
+    background: var(--lav);
+    border: 0.5px solid var(--lav-d);
+    border-radius: 2px;
+    font-size: 15px;
+    color: var(--ink);
+    font-style: italic;
+  }
+
+  /* ── HERO RIGHT — magazine cover mockup ── */
+  .hero-right {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 80px 48px;
+    position: relative;
+  }
+
+  .magazine-mockup {
+    position: relative;
+    width: 320px;
+    animation: float 6s ease-in-out infinite;
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(0px) rotate(-1deg); }
+    50% { transform: translateY(-18px) rotate(0.5deg); }
+  }
+
+  .mag-cover {
+    width: 320px;
+    height: 440px;
+    background: var(--lav);
+    border-radius: 4px;
+    border: 0.5px solid var(--lav-d);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    position: relative;
+  }
+  .mag-top-bar { height: 4px; background: var(--ser); }
+  .mag-header {
+    padding: 20px 24px 12px;
+    border-bottom: 0.5px solid var(--lav-d);
+  }
+  .mag-name {
+    font-family: var(--H);
+    font-size: 11px;
+    letter-spacing: 5px;
+    color: var(--mid);
+    margin-bottom: 4px;
+  }
+  .mag-issue {
+    font-family: var(--H);
+    font-size: 28px;
+    font-weight: 600;
+    color: var(--ink);
+    line-height: 1.1;
+  }
+  .mag-tagline { font-size: 11px; color: var(--muted); letter-spacing: 1px; margin-top: 4px; }
+
+  .mag-image-block {
+    background: var(--blush);
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+  }
+  .mag-circle {
+    position: absolute;
+    border-radius: 50%;
+    opacity: 0.35;
+  }
+  .mc1 { width: 200px; height: 200px; background: var(--ser); top: -40px; right: -40px; }
+  .mc2 { width: 120px; height: 120px; background: var(--lav-d); bottom: 20px; left: 10px; }
+  .mc3 { width: 60px; height: 60px; background: var(--blush-d); bottom: 80px; right: 30px; }
+
+  .mag-pull-quote {
+    position: absolute;
+    bottom: 24px;
+    left: 20px;
+    right: 20px;
+    font-family: var(--H);
+    font-size: 16px;
+    font-style: italic;
+    color: var(--ink);
+    line-height: 1.4;
+    opacity: 0.9;
+  }
+
+  .mag-footer {
+    padding: 14px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 0.5px solid var(--lav-d);
+    background: var(--cloud);
+  }
+  .mag-sections { font-size: 10px; letter-spacing: 1.5px; color: var(--muted); }
+  .mag-issue-num { font-size: 11px; color: var(--mid); font-style: italic; }
+
+  /* Shadow magazine behind */
+  .mag-shadow {
+    position: absolute;
+    width: 300px;
+    height: 420px;
+    background: var(--blue);
+    border-radius: 4px;
+    top: 72px;
+    left: 50%;
+    transform: translateX(-50%) rotate(4deg);
+    z-index: -1;
+    border: 0.5px solid var(--blue-d);
+  }
+  .mag-shadow2 {
+    position: absolute;
+    width: 290px;
+    height: 410px;
+    background: var(--blush);
+    border-radius: 4px;
+    top: 76px;
+    left: 50%;
+    transform: translateX(-50%) rotate(-3deg);
+    z-index: -2;
+    border: 0.5px solid var(--blush-d);
+  }
+
+  /* Decorative bg shapes */
+  .bg-shape {
+    position: absolute;
+    border-radius: 50%;
+    opacity: 0.18;
+    pointer-events: none;
+  }
+  .bs1 { width: 500px; height: 500px; background: var(--lav); top: -100px; right: -100px; }
+  .bs2 { width: 300px; height: 300px; background: var(--blush); bottom: 50px; left: 100px; }
+
+  /* ── FEATURES ── */
+  .features {
+    padding: 120px 72px;
+    background: var(--cloud);
+  }
+
+  .features-header { text-align: center; margin-bottom: 72px; }
+  .section-eyebrow {
+    font-size: 11px;
+    letter-spacing: 4px;
+    color: var(--ser);
+    margin-bottom: 16px;
+    display: block;
+  }
+  .section-title {
+    font-family: var(--H);
+    font-size: clamp(36px, 4vw, 58px);
+    font-weight: 300;
+    color: var(--ink);
+    line-height: 1.1;
+  }
+  .section-title em { font-style: italic; color: var(--mid); }
+
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    background: var(--lav-d);
+  }
+  .feature-card {
+    background: var(--cloud);
+    padding: 48px 36px;
+    transition: background 0.3s;
+  }
+  .feature-card:hover { background: var(--lav); }
+  .feature-num {
+    font-family: var(--H);
+    font-size: 48px;
+    font-weight: 300;
+    color: var(--lav-d);
+    line-height: 1;
+    margin-bottom: 16px;
+  }
+  .feature-title {
+    font-family: var(--H);
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 12px;
+    line-height: 1.2;
+  }
+  .feature-desc {
+    font-size: 16px;
+    color: var(--mid);
+    line-height: 1.7;
+  }
+
+  /* ── HOW IT WORKS ── */
+  .how {
+    padding: 120px 72px;
+    background: var(--lav);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+  .how-left {}
+  .how-steps { margin-top: 48px; display: flex; flex-direction: column; gap: 0; }
+  .step {
+    display: flex;
+    gap: 24px;
+    padding: 28px 0;
+    border-bottom: 0.5px solid var(--lav-d);
+    cursor: pointer;
+    transition: padding-left 0.3s;
+  }
+  .step:last-child { border-bottom: none; }
+  .step:hover { padding-left: 8px; }
+  .step-num {
+    font-family: var(--H);
+    font-size: 13px;
+    letter-spacing: 2px;
+    color: var(--ser);
+    padding-top: 4px;
+    min-width: 28px;
+  }
+  .step-content {}
+  .step-title {
+    font-family: var(--H);
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 6px;
+  }
+  .step-desc { font-size: 16px; color: var(--mid); line-height: 1.6; }
+
+  .how-right {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .taste-card {
+    background: var(--cloud);
+    border: 0.5px solid var(--lav-d);
+    border-radius: 4px;
+    padding: 20px 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    transition: transform 0.2s;
+  }
+  .taste-card:hover { transform: translateX(6px); }
+  .taste-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+  .taste-label { font-family: var(--H); font-size: 18px; font-weight: 600; color: var(--ink); }
+  .taste-sub { font-size: 13px; color: var(--muted); }
+  .taste-check { margin-left: auto; color: var(--ser); font-size: 20px; }
+
+  /* ── QUOTE ── */
+  .quote-section {
+    padding: 120px 72px;
+    background: var(--ink);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .quote-bg1 { position: absolute; width: 400px; height: 400px; border-radius: 50%; background: var(--lav); opacity: 0.05; top: -100px; left: -100px; }
+  .quote-bg2 { position: absolute; width: 300px; height: 300px; border-radius: 50%; background: var(--blush); opacity: 0.06; bottom: -80px; right: -80px; }
+  .big-quote {
+    font-family: var(--H);
+    font-size: clamp(32px, 4vw, 56px);
+    font-weight: 300;
+    font-style: italic;
+    color: var(--cloud);
+    line-height: 1.3;
+    max-width: 800px;
+    margin: 0 auto 32px;
+    position: relative;
+    z-index: 1;
+  }
+  .big-quote span { color: var(--lav-d); }
+  .quote-attr {
+    font-size: 13px;
+    letter-spacing: 3px;
+    color: var(--muted);
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ── WAITLIST BOTTOM ── */
+  .waitlist-bottom {
+    padding: 120px 72px;
+    background: var(--cloud);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+  .wl-title {
+    font-family: var(--H);
+    font-size: clamp(36px, 4vw, 58px);
+    font-weight: 300;
+    color: var(--ink);
+    line-height: 1.1;
+    margin-bottom: 20px;
+  }
+  .wl-title em { font-style: italic; color: var(--mid); }
+  .wl-sub { font-size: 17px; color: var(--mid); line-height: 1.7; margin-bottom: 12px; }
+  .wl-count { font-size: 13px; color: var(--ser); letter-spacing: 2px; }
+
+  .wl-right {}
+  .wl-form-large { display: flex; flex-direction: column; gap: 14px; }
+  .wl-input-group { display: flex; flex-direction: column; gap: 6px; }
+  .wl-label { font-size: 12px; letter-spacing: 2px; color: var(--muted); }
+  .wl-input {
+    padding: 16px 20px;
+    font-family: var(--B);
+    font-size: 17px;
+    color: var(--ink);
+    background: var(--cloud);
+    border: 0.5px solid var(--lav-d);
+    border-radius: 2px;
+    outline: none;
+    width: 100%;
+    transition: border-color 0.2s;
+  }
+  .wl-input:focus { border-color: var(--ser); }
+  .wl-input::placeholder { color: var(--muted); }
+  .wl-submit {
+    padding: 16px;
+    font-family: var(--B);
+    font-size: 16px;
+    letter-spacing: 3px;
+    color: var(--cloud);
+    background: var(--ink);
+    border: none;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: opacity 0.2s;
+    width: 100%;
+  }
+  .wl-submit:hover { opacity: 0.85; }
+
+  /* ── FOOTER ── */
+  footer {
+    padding: 40px 72px;
+    background: var(--ink);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .footer-logo {
+    font-family: var(--H);
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: 5px;
+    color: var(--cloud);
+  }
+  .footer-tagline { font-size: 13px; color: var(--muted); font-style: italic; }
+  .footer-dots { display: flex; gap: 8px; }
+  .footer-dot { width: 8px; height: 8px; border-radius: 50%; }
+
+  /* ── ANIMATIONS ── */
+  .fade-up {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .fade-up.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  @media (max-width: 900px) {
+    nav { padding: 16px 24px; }
+    .nav-links { display: none; }
+    .hero { grid-template-columns: 1fr; }
+    .hero-right { display: none; }
+    .hero-left { padding: 60px 24px; }
+    .features { padding: 80px 24px; }
+    .features-grid { grid-template-columns: 1fr; }
+    .how { grid-template-columns: 1fr; padding: 80px 24px; gap: 40px; }
+    .quote-section { padding: 80px 24px; }
+    .waitlist-bottom { grid-template-columns: 1fr; padding: 80px 24px; gap: 40px; }
+    footer { flex-direction: column; gap: 16px; text-align: center; padding: 32px 24px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="#">REEDEFINED</a>
+  <div class="nav-links">
+    <a href="#how">How it works</a>
+    <a href="#features">Features</a>
+    <a href="#waitlist" class="nav-cta">JOIN WAITLIST</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="bs1 bg-shape"></div>
+  <div class="bs2 bg-shape"></div>
+
+  <div class="hero-left">
+    <div class="hero-eyebrow">YOUR VISION. YOUR MAGAZINE.</div>
+
+    <h1 class="hero-title">
+      Taste is<br>
+      the new<br>
+      <em>currency.</em>
+    </h1>
+
+    <p class="hero-sub">
+      Reedefined turns your digital life into a monthly magazine — curated by you, elevated by AI, read by the people who follow your taste.
+    </p>
+
+    <div class="waitlist-form">
+      <div class="form-row">
+        <input class="waitlist-input" type="email" id="hero-email" placeholder="your@email.com">
+        <button class="waitlist-btn" onclick="joinWaitlist('hero')">JOIN WAITLIST</button>
+      </div>
+      <p class="form-note">Be first. No spam. Unsubscribe anytime.</p>
+      <div class="success-msg" id="hero-success">
+        You're on the list. We'll be in touch when Reedefined is ready for you. ✦
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <div class="magazine-mockup">
+      <div class="mag-shadow2"></div>
+      <div class="mag-shadow"></div>
+      <div class="mag-cover">
+        <div class="mag-top-bar"></div>
+        <div class="mag-header">
+          <div class="mag-name">REEDEFINED</div>
+          <div class="mag-issue">Autumn<br>Issue No. 1</div>
+          <div class="mag-tagline">FILM · FOOD · FASHION · MUSIC</div>
+        </div>
+        <div class="mag-image-block">
+          <div class="mag-circle mc1"></div>
+          <div class="mag-circle mc2"></div>
+          <div class="mag-circle mc3"></div>
+          <div class="mag-pull-quote">"Everything I love, in one place — finally."</div>
+        </div>
+        <div class="mag-footer">
+          <div class="mag-sections">CULTURE · CINEMA · LIFE</div>
+          <div class="mag-issue-num">Vol. 1</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="features" id="features">
+  <div class="features-header fade-up">
+    <span class="section-eyebrow">WHAT REEDEFINED DOES</span>
+    <h2 class="section-title">Not a feed.<br><em>A publication.</em></h2>
+  </div>
+
+  <div class="features-grid">
+    <div class="feature-card fade-up">
+      <div class="feature-num">01</div>
+      <div class="feature-title">Your magazine, your way</div>
+      <div class="feature-desc">Monthly issues with a cover, sections, and a point of view that is entirely yours. You're the editor-in-chief.</div>
+    </div>
+    <div class="feature-card fade-up">
+      <div class="feature-num">02</div>
+      <div class="feature-title">AI Creative Director</div>
+      <div class="feature-desc">Your AI suggests layouts, writes pull quotes, curates content from your platforms, and designs your cover — automatically.</div>
+    </div>
+    <div class="feature-card fade-up">
+      <div class="feature-num">03</div>
+      <div class="feature-title">Everything connected</div>
+      <div class="feature-desc">Instagram, Spotify, Letterboxd, Goodreads, Pinterest, TikTok Shop, Vinted, Depop — all pulled into one elegant publication.</div>
+    </div>
+    <div class="feature-card fade-up">
+      <div class="feature-num">04</div>
+      <div class="feature-title">Your shop, your terms</div>
+      <div class="feature-desc">Link your Vinted, Depop or TikTok Shop directly in your magazine. Shopping becomes editorial, not transactional.</div>
+    </div>
+    <div class="feature-card fade-up">
+      <div class="feature-num">05</div>
+      <div class="feature-title">Readers who subscribe</div>
+      <div class="feature-desc">Your audience subscribes to your magazine — not your feed. They get each issue dropped like a real publication.</div>
+    </div>
+    <div class="feature-card fade-up">
+      <div class="feature-num">06</div>
+      <div class="feature-title">Earn from your taste</div>
+      <div class="feature-desc">Reach 5,000 subscribers and unlock ad revenue, brand deals, and paid subscriptions. Taste becomes income.</div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how" id="how">
+  <div class="how-left">
+    <span class="section-eyebrow">HOW IT WORKS</span>
+    <h2 class="section-title fade-up">Four steps to your<br><em>first issue.</em></h2>
+    <div class="how-steps">
+      <div class="step fade-up">
+        <div class="step-num">01</div>
+        <div class="step-content">
+          <div class="step-title">Connect your world</div>
+          <div class="step-desc">Link your social platforms. Reedefined pulls your content automatically every month.</div>
+        </div>
+      </div>
+      <div class="step fade-up">
+        <div class="step-num">02</div>
+        <div class="step-content">
+          <div class="step-title">Curate & add</div>
+          <div class="step-desc">Add recipes, concerts, interviews, wishlists — anything that reflects your taste.</div>
+        </div>
+      </div>
+      <div class="step fade-up">
+        <div class="step-num">03</div>
+        <div class="step-content">
+          <div class="step-title">Let AI elevate it</div>
+          <div class="step-desc">Your AI Creative Director designs the cover, writes the intro and styles each section.</div>
+        </div>
+      </div>
+      <div class="step fade-up">
+        <div class="step-num">04</div>
+        <div class="step-content">
+          <div class="step-title">Publish & grow</div>
+          <div class="step-desc">Drop your issue. Readers subscribe. Your magazine grows with your taste.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="how-right fade-up">
+    <div class="taste-card">
+      <div class="taste-icon" style="background:#E8D5E8;">🎬</div>
+      <div><div class="taste-label">Cinema</div><div class="taste-sub">Letterboxd · personal reviews</div></div>
+      <div class="taste-check">✦</div>
+    </div>
+    <div class="taste-card">
+      <div class="taste-icon" style="background:#F7CAC9;">🎵</div>
+      <div><div class="taste-label">Music</div><div class="taste-sub">Spotify · playlists · concerts</div></div>
+      <div class="taste-check">✦</div>
+    </div>
+    <div class="taste-card">
+      <div class="taste-icon" style="background:#D4DCE8;">👗</div>
+      <div><div class="taste-label">Fashion</div><div class="taste-sub">Vinted · Depop · Pinterest</div></div>
+      <div class="taste-check">✦</div>
+    </div>
+    <div class="taste-card">
+      <div class="taste-icon" style="background:#E8D5E8;">📚</div>
+      <div><div class="taste-label">Literature</div><div class="taste-sub">Goodreads · recommendations</div></div>
+      <div class="taste-check">✦</div>
+    </div>
+    <div class="taste-card">
+      <div class="taste-icon" style="background:#F7CAC9;">🍽️</div>
+      <div><div class="taste-label">Food</div><div class="taste-sub">Recipes · restaurant picks</div></div>
+      <div class="taste-check">✦</div>
+    </div>
+    <div class="taste-card">
+      <div class="taste-icon" style="background:#D4DCE8;">🌙</div>
+      <div><div class="taste-label">Nightlife</div><div class="taste-sub">Events · venues · culture</div></div>
+      <div class="taste-check">✦</div>
+    </div>
+  </div>
+</section>
+
+<!-- QUOTE -->
+<section class="quote-section">
+  <div class="quote-bg1"></div>
+  <div class="quote-bg2"></div>
+  <p class="big-quote fade-up">
+    "Everyone creates.<br>
+    <span>Nobody curates.</span><br>
+    Until now."
+  </p>
+  <p class="quote-attr">REEDEFINED — COMING SOON</p>
+</section>
+
+<!-- WAITLIST BOTTOM -->
+<section class="waitlist-bottom" id="waitlist">
+  <div>
+    <h2 class="wl-title fade-up">Be among the<br><em>first editors.</em></h2>
+    <p class="wl-sub">Reedefined is in development. Join the waitlist and be first to publish when we launch.</p>
+    <p class="wl-count">✦ EARLY ACCESS WAITLIST</p>
+  </div>
+  <div class="wl-right fade-up">
+    <form class="wl-form-large" onsubmit="joinWaitlistFull(event)">
+      <div class="wl-input-group">
+        <label class="wl-label">YOUR NAME</label>
+        <input class="wl-input" type="text" id="wl-name" placeholder="Sofia Esposito" required>
+      </div>
+      <div class="wl-input-group">
+        <label class="wl-label">EMAIL ADDRESS</label>
+        <input class="wl-input" type="email" id="wl-email" placeholder="sofia@example.com" required>
+      </div>
+      <div class="wl-input-group">
+        <label class="wl-label">YOUR MAIN TASTE</label>
+        <select class="wl-input" id="wl-taste">
+          <option value="">Select a category…</option>
+          <option>Fashion & style</option>
+          <option>Cinema & film</option>
+          <option>Music & concerts</option>
+          <option>Food & recipes</option>
+          <option>Literature & books</option>
+          <option>Art & culture</option>
+          <option>Travel & lifestyle</option>
+          <option>Nightlife & events</option>
+        </select>
+      </div>
+      <button class="wl-submit" type="submit">JOIN THE WAITLIST</button>
+      <div class="success-msg" id="wl-success" style="display:none;">
+        Welcome to Reedefined. We'll be in touch soon. ✦
+      </div>
+    </form>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">REEDEFINED</div>
+  <div class="footer-tagline">Your vision. Your magazine. Coming soon.</div>
+  <div class="footer-dots">
+    <div class="footer-dot" style="background:#C8B0D8;"></div>
+    <div class="footer-dot" style="background:#D4A0A0;"></div>
+    <div class="footer-dot" style="background:#8A9EC0;"></div>
+  </div>
+</footer>
+
+<script>
+  const SUPABASE_URL = 'https://tzzungihuguiubdprada.supabase.co';
+  const SUPABASE_KEY = 'sb_publishable_dpxS14vPJaTcmfRmpUz2-Q_aDwFFRP-';
+
+  async function saveToSupabase(data) {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/waitlist`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'apikey': SUPABASE_KEY,
+        'Authorization': `Bearer ${SUPABASE_KEY}`,
+        'Prefer': 'return=minimal'
+      },
+      body: JSON.stringify(data)
+    });
+    return res.ok;
+  }
+
+  async function joinWaitlist(source) {
+    const emailEl = document.getElementById(source + '-email');
+    const btn = document.querySelector('.waitlist-btn');
+    const email = emailEl.value;
+    if (!email || !email.includes('@')) return;
+
+    btn.textContent = '...';
+    btn.disabled = true;
+
+    const ok = await saveToSupabase({ email, name: null, taste: null });
+
+    if (ok) {
+      document.getElementById(source + '-success').style.display = 'block';
+      emailEl.style.display = 'none';
+      btn.style.display = 'none';
+    } else {
+      btn.textContent = 'JOIN WAITLIST';
+      btn.disabled = false;
+      alert('Something went wrong — please try again.');
+    }
+  }
+
+  async function joinWaitlistFull(e) {
+    e.preventDefault();
+    const name  = document.getElementById('wl-name').value;
+    const email = document.getElementById('wl-email').value;
+    const taste = document.getElementById('wl-taste').value;
+    const btn   = document.querySelector('.wl-submit');
+
+    btn.textContent = 'SAVING...';
+    btn.disabled = true;
+
+    const ok = await saveToSupabase({ name, email, taste });
+
+    if (ok) {
+      document.getElementById('wl-success').style.display = 'block';
+      btn.style.display = 'none';
+    } else {
+      btn.textContent = 'JOIN THE WAITLIST';
+      btn.disabled = false;
+      alert('Something went wrong — please try again.');
+    }
+  }
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), i * 80);
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>

@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="tiktok-domain-verification" content="hVzFgjsRoBRYSJKXVAYgroBXhxr64tSC">
+<meta name="tiktok-domain-verification" content="4Oo4Nq3DlWoB7f8isxeU4GwMijyr5fcU">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reedefined — Connect Platforms</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,700;0,6..96,900;1,6..96,400;1,6..96,700&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Outfit:wght@300;400;500&display=swap');
+
+  :root {
+    --white:   #FFFFFF;
+    --bg:      #F4F6F7;
+    --panel:   #FFFFFF;
+    --border:  #DDE4E6;
+    --border-d:#B0C8D0;
+    --teal:    #4A6670;
+    --teal-l:  #D8E4E8;
+    --teal-ll: #EEF3F5;
+    --ink:     #1A2830;
+    --mid:     #3A5060;
+    --muted:   #7A9098;
+    --success: #3A7A50;
+    --success-l:#D8EEE0;
+    --H: 'Bodoni Moda', Georgia, serif;
+    --B: 'Crimson Pro', Georgia, serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--B);
+    font-size: 15px;
+    min-height: 100vh;
+  }
+
+  /* ── TOP BAR ── */
+  .topbar {
+    height: 52px;
+    background: var(--panel);
+    border-bottom: 0.5px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 32px;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+  .topbar-logo {
+    font-family: var(--H);
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: 4px;
+    color: var(--ink);
+    text-decoration: none;
+  }
+  .topbar-nav { display: flex; gap: 24px; align-items: center; }
+  .topbar-link {
+    font-size: 12px;
+    letter-spacing: 1.5px;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.15s;
+    font-family: var(--B);
+  }
+  .topbar-link:hover, .topbar-link.active { color: var(--ink); }
+  .topbar-link.active { border-bottom: 1px solid var(--teal); padding-bottom: 1px; color: var(--teal); }
+
+  /* ── PAGE ── */
+  .page {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 48px 32px 80px;
+  }
+
+  .page-eyebrow {
+    font-size: 10px;
+    letter-spacing: 3px;
+    color: var(--teal);
+    margin-bottom: 12px;
+    font-family: var(--B);
+  }
+  .page-title {
+    font-family: var(--H);
+    font-size: 40px;
+    font-weight: 300;
+    color: var(--ink);
+    line-height: 1.1;
+    margin-bottom: 10px;
+  }
+  .page-title em { font-style: italic; color: var(--mid); }
+  .page-sub {
+    font-size: 15px;
+    color: var(--mid);
+    margin-bottom: 40px;
+    max-width: 520px;
+    line-height: 1.6;
+  }
+
+  /* ── CONTENT PREVIEW STRIP ── */
+  .preview-strip {
+    background: var(--teal-ll);
+    border: 0.5px solid var(--border-d);
+    border-radius: 3px;
+    padding: 14px 20px;
+    margin-bottom: 36px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .preview-strip-icon { font-size: 20px; }
+  .preview-strip-text { flex: 1; }
+  .preview-strip-title { font-size: 13px; font-weight: 500; color: var(--ink); margin-bottom: 2px; font-family: var(--B); }
+  .preview-strip-sub { font-size: 12px; color: var(--muted); font-family: var(--B); }
+  .preview-strip-count {
+    font-family: var(--H);
+    font-size: 24px;
+    font-weight: 300;
+    color: var(--teal);
+  }
+
+  /* ── SECTION LABEL ── */
+  .section-label {
+    font-size: 10px;
+    letter-spacing: 3px;
+    color: var(--muted);
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 0.5px solid var(--border);
+    font-family: var(--B);
+  }
+
+  /* ── PLATFORM CARDS ── */
+  .platforms-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 40px;
+  }
+
+  .platform-card {
+    background: var(--panel);
+    border: 0.5px solid var(--border);
+    border-radius: 3px;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+  .platform-card:hover { border-color: var(--border-d); }
+  .platform-card.connected { border-color: var(--success); }
+  .platform-card.connecting { border-color: var(--teal); }
+
+  .platform-card-header {
+    padding: 16px 18px 12px;
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    border-bottom: 0.5px solid var(--border);
+  }
+  .platform-logo {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+  .platform-info { flex: 1; }
+  .platform-name {
+    font-family: var(--H);
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--ink);
+    line-height: 1.1;
+    margin-bottom: 3px;
+  }
+  .platform-desc { font-size: 12px; color: var(--muted); font-family: var(--B); line-height: 1.4; }
+
+  .platform-status-badge {
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    padding: 3px 8px;
+    border-radius: 2px;
+    font-family: var(--B);
+    flex-shrink: 0;
+  }
+  .badge-connected { background: var(--success-l); color: var(--success); }
+  .badge-pending { background: var(--teal-ll); color: var(--teal); }
+  .badge-disconnected { background: var(--bg); color: var(--muted); border: 0.5px solid var(--border); }
+
+  .platform-card-body { padding: 12px 18px; }
+
+  /* Content preview rows */
+  .content-preview { display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; }
+  .content-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 7px 10px;
+    background: var(--teal-ll);
+    border-radius: 2px;
+    border: 0.5px solid var(--border);
+  }
+  .content-thumb {
+    width: 32px;
+    height: 32px;
+    border-radius: 2px;
+    background: var(--teal-l);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+  .content-meta { flex: 1; }
+  .content-title { font-size: 12px; color: var(--ink); font-family: var(--B); }
+  .content-sub { font-size: 11px; color: var(--muted); font-family: var(--B); }
+  .content-include {
+    width: 16px; height: 16px;
+    border-radius: 50%;
+    border: 0.5px solid var(--border-d);
+    background: var(--white);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    flex-shrink: 0;
+    transition: all 0.15s;
+  }
+  .content-include.included { background: var(--teal); border-color: var(--teal); color: var(--white); }
+
+  /* Connect button */
+  .platform-connect-btn {
+    width: 100%;
+    padding: 9px;
+    font-family: var(--B);
+    font-size: 12px;
+    letter-spacing: 2px;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: 0.5px solid var(--border-d);
+    background: var(--white);
+    color: var(--mid);
+  }
+  .platform-connect-btn:hover { background: var(--teal-ll); color: var(--teal); border-color: var(--teal); }
+  .platform-connect-btn.connected-btn { background: var(--success-l); color: var(--success); border-color: var(--success); }
+  .platform-connect-btn.loading-btn { background: var(--teal-ll); color: var(--teal); border-color: var(--teal); }
+
+  /* OAuth modal */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(26, 40, 48, 0.5);
+    z-index: 100;
+    align-items: center;
+    justify-content: center;
+  }
+  .modal-overlay.visible { display: flex; }
+  .modal {
+    background: var(--white);
+    border-radius: 4px;
+    width: 400px;
+    overflow: hidden;
+    border: 0.5px solid var(--border-d);
+  }
+  .modal-header {
+    padding: 20px 24px;
+    border-bottom: 0.5px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .modal-icon { font-size: 24px; }
+  .modal-title { font-family: var(--H); font-size: 22px; font-weight: 600; color: var(--ink); }
+  .modal-sub { font-size: 12px; color: var(--muted); font-family: var(--B); }
+  .modal-body { padding: 20px 24px; }
+  .modal-permissions { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; }
+  .permission-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+    color: var(--mid);
+    font-family: var(--B);
+  }
+  .permission-icon { color: var(--teal); font-size: 14px; }
+  .modal-note { font-size: 11px; color: var(--muted); font-style: italic; font-family: var(--B); line-height: 1.5; margin-bottom: 16px; }
+  .modal-actions { display: flex; gap: 8px; }
+  .modal-btn {
+    flex: 1;
+    padding: 10px;
+    font-family: var(--B);
+    font-size: 13px;
+    letter-spacing: 1.5px;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: opacity 0.15s;
+    border: 0.5px solid var(--border-d);
+    background: var(--white);
+    color: var(--mid);
+  }
+  .modal-btn:hover { background: var(--teal-ll); }
+  .modal-btn.primary { background: var(--ink); color: var(--white); border-color: var(--ink); }
+  .modal-btn.primary:hover { opacity: 0.85; }
+
+  /* AI pull strip */
+  .ai-pull-section {
+    background: var(--panel);
+    border: 0.5px solid var(--border);
+    border-radius: 3px;
+    overflow: hidden;
+    margin-bottom: 16px;
+  }
+  .ai-pull-header {
+    padding: 12px 18px;
+    border-bottom: 0.5px solid var(--border);
+    background: var(--teal-ll);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .ai-pull-title { font-size: 11px; letter-spacing: 2px; color: var(--teal); font-family: var(--B); }
+  .ai-pull-body { padding: 16px 18px; }
+  .ai-pull-text { font-size: 14px; color: var(--mid); font-style: italic; font-family: var(--B); line-height: 1.6; margin-bottom: 12px; }
+  .ai-pull-actions { display: flex; gap: 8px; }
+  .ai-action-btn {
+    padding: 7px 14px;
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    border-radius: 2px;
+    cursor: pointer;
+    font-family: var(--B);
+    transition: all 0.15s;
+    border: 0.5px solid var(--border-d);
+    background: var(--white);
+    color: var(--mid);
+  }
+  .ai-action-btn:hover { background: var(--teal-ll); color: var(--teal); border-color: var(--teal); }
+  .ai-action-btn.primary { background: var(--ink); color: var(--white); border-color: var(--ink); }
+  .ai-action-btn.primary:hover { opacity: 0.85; }
+
+  /* Bottom CTA */
+  .bottom-cta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 24px;
+    background: var(--panel);
+    border: 0.5px solid var(--border);
+    border-radius: 3px;
+  }
+  .bottom-cta-text { font-size: 15px; color: var(--mid); font-family: var(--B); }
+  .bottom-cta-text strong { color: var(--ink); }
+  .btn-primary-lg {
+    padding: 12px 28px;
+    font-family: var(--B);
+    font-size: 13px;
+    letter-spacing: 2.5px;
+    color: var(--white);
+    background: var(--ink);
+    border: none;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: opacity 0.15s;
+  }
+  .btn-primary-lg:hover { opacity: 0.85; }
+
+  /* Spinner */
+  .spinner {
+    display: inline-block;
+    width: 12px; height: 12px;
+    border: 1.5px solid var(--border-d);
+    border-top-color: var(--teal);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    vertical-align: middle;
+    margin-right: 6px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <a class="topbar-logo" href="#">REEDEFINED</a>
+  <div class="topbar-nav">
+    <a class="topbar-link" href="#">STUDIO</a>
+    <a class="topbar-link active" href="#">CONNECTIONS</a>
+    <a class="topbar-link" href="#">ANALYTICS</a>
+    <a class="topbar-link" href="#">SETTINGS</a>
+  </div>
+</div>
+
+<!-- PAGE -->
+<div class="page">
+
+  <div class="page-eyebrow">PLATFORM CONNECTIONS</div>
+  <h1 class="page-title">Connect your<br><em>digital world.</em></h1>
+  <p class="page-sub">Link your platforms once. Every month, Reedefined pulls your best content automatically and your AI Creative Director weaves it into your magazine.</p>
+
+  <!-- Summary strip -->
+  <div class="preview-strip">
+    <div class="preview-strip-icon">✦</div>
+    <div class="preview-strip-text">
+      <div class="preview-strip-title">Content ready for your next issue</div>
+      <div class="preview-strip-sub">Connect more platforms to enrich your magazine</div>
+    </div>
+    <div class="preview-strip-count" id="connected-count">0 connected</div>
+  </div>
+
+  <!-- Priority platforms -->
+  <div class="section-label">PRIORITY PLATFORMS — HIGHEST IMPACT</div>
+  <div class="platforms-grid">
+
+    <!-- Instagram -->
+    <div class="platform-card" id="card-instagram">
+      <div class="platform-card-header">
+        <div class="platform-logo" style="background:linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);">📸</div>
+        <div class="platform-info">
+          <div class="platform-name">Instagram</div>
+          <div class="platform-desc">Posts, reels, captions — pulled via Meta Graph API</div>
+        </div>
+        <div class="platform-status-badge badge-disconnected" id="badge-instagram">NOT CONNECTED</div>
+      </div>
+      <div class="platform-card-body">
+        <div class="content-preview" id="preview-instagram">
+          <div style="font-size:12px;color:var(--muted);font-style:italic;font-family:var(--B);padding:8px 0;">Connect to see your recent posts here.</div>
+        </div>
+        <button class="platform-connect-btn" id="btn-instagram" onclick="connectPlatform('instagram')">CONNECT INSTAGRAM</button>
+      </div>
+    </div>
+
+    <!-- TikTok -->
+    <div class="platform-card" id="card-tiktok">
+      <div class="platform-card-header">
+        <div class="platform-logo" style="background:#010101;">🎵</div>
+        <div class="platform-info">
+          <div class="platform-name">TikTok</div>
+          <div class="platform-desc">Videos, captions, saved content — via TikTok API</div>
+        </div>
+        <div class="platform-status-badge badge-disconnected" id="badge-tiktok">NOT CONNECTED</div>
+      </div>
+      <div class="platform-card-body">
+        <div class="content-preview" id="preview-tiktok">
+          <div style="font-size:12px;color:var(--muted);font-style:italic;font-family:var(--B);padding:8px 0;">Connect to pull your TikTok content.</div>
+        </div>
+        <button class="platform-connect-btn" id="btn-tiktok" onclick="connectTikTokReal()">CONNECT TIKTOK</button>
+      </div>
+    </div>
+
+    <!-- Spotify -->
+    <div class="platform-card" id="card-spotify">
+      <div class="platform-card-header">
+        <div class="platform-logo" style="background:#1DB954;">🎧</div>
+        <div class="platform-info">
+          <div class="platform-name">Spotify</div>
+          <div class="platform-desc">Top tracks, playlists, recently played</div>
+        </div>
+        <div class="platform-status-badge badge-disconnected" id="badge-spotify">NOT CONNECTED</div>
+      </div>
+      <div class="platform-card-body">
+        <div class="content-preview" id="preview-spotify">
+          <div style="font-size:12px;color:var(--muted);font-style:italic;font-family:var(--B);padding:8px 0;">Connect to pull your listening history.</div>
+        </div>
+        <button class="platform-connect-btn" id="btn-spotify" onclick="connectPlatform('spotify')">CONNECT SPOTIFY</button>
+      </div>
+    </div>
+
+    <!-- Letterboxd -->
+    <div class="platform-card" id="card-letterboxd">
+      <div class="platform-card-header">
+        <div class="platform-logo" style="background:#2C3440;">🎬</div>
+        <div class="platform-info">
+          <div class="platform-name">Letterboxd</div>
+          <div class="platform-desc">Film diary, reviews, watchlist</div>
+        </div>
+        <div class="platform-status-badge badge-disconnected" id="badge-letterboxd">NOT CONNECTED</div>
+      </div>
+      <div class="platform-card-body">
+        <div class="content-preview" id="preview-letterboxd">
+          <div style="font-size:12px;color:var(--muted);font-style:italic;font-family:var(--B);padding:8px 0;">Connect to pull your film diary.</div>
+        </div>
+        <button class="platform-connect-btn" id="btn-letterboxd" onclick="connectPlatform('letterboxd')">CONNECT LETTERBOXD</button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- More platforms -->
+  <div class="section-label">MORE PLATFORMS</div>
+  <div class="platforms-grid">
+
+    <div class="platform-card" id="card-pinterest">
+      <div class="platform-card-header">
+        <div class="platform-logo" style="background:#E60023;">📌</div>
+        <div class="platform-info">
+          <div class="platform-name">Pinterest</div>
+          <div class="platform-desc">Boards, saved pins, mood boards</div>
+        </div>
+        <div class="platform-status-badge badge-disconnected" id="badge-pinterest">NOT CONNECTED</div>
+      </div>
+      <div class="platform-card-body">
+        <button class="platform-connect-btn" id="btn-pinterest" onclick="connectPlatform('pinterest')">CONNECT PINTEREST</button>
+      </div>
+    </div>
+
+    <div class="platform-card" id="card-goodreads">
+      <div class="platform-card-header">
+        <div class="platform-logo" style="background:#F4F1EA;">📚</div>
+        <div class="platform-info">
+          <div class="platform-name">Goodreads</div>
+          <div class="platform-desc">Reading list, reviews, currently reading</div>
+        </div>
+        <div class="platform-status-badge badge-disconnected" id="badge-goodreads">NOT CONNECTED</div>
+      </div>
+      <div class="platform-card-body">
+        <button class="platform-connect-btn" id="btn-goodreads" onclick="connectPlatform('goodreads')">CONNECT GOODREADS</button>
+      </div>
+    </div>
+
+    <div class="platform-card" id="card-depop">
+      <div class="platform-card-header">
+        <div class="platform-logo" style="background:#FF2D55;">🛍️</div>
+        <div class="platform-info">
+          <div class="platform-name">Depop / Vinted</div>
+          <div class="platform-desc">Your shop listings, sold items</div>
+        </div>
+        <div class="platform-status-badge badge-disconnected" id="badge-depop">NOT CONNECTED</div>
+      </div>
+      <div class="platform-card-body">
+        <button class="platform-connect-btn" id="btn-depop" onclick="connectPlatform('depop')">CONNECT SHOP</button>
+      </div>
+    </div>
+
+    <div class="platform-card" id="card-youtube">
+      <div class="platform-card-header">
+        <div class="platform-logo" style="background:#FF0000;">▶️</div>
+        <div class="platform-info">
+          <div class="platform-name">YouTube</div>
+          <div class="platform-desc">Liked videos, playlists, watch history</div>
+        </div>
+        <div class="platform-status-badge badge-disconnected" id="badge-youtube">NOT CONNECTED</div>
+      </div>
+      <div class="platform-card-body">
+        <button class="platform-connect-btn" id="btn-youtube" onclick="connectPlatform('youtube')">CONNECT YOUTUBE</button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- AI pull section -->
+  <div class="ai-pull-section">
+    <div class="ai-pull-header">
+      <span class="ai-pull-title">AI CREATIVE DIRECTOR</span>
+      <span style="font-size:11px;color:var(--muted);font-family:var(--B);" id="ai-status-text">Waiting for connections…</span>
+    </div>
+    <div class="ai-pull-body">
+      <div class="ai-pull-text" id="ai-pull-message">
+        "Connect Instagram and TikTok first — they'll give me the richest material to work with for your first issue."
+      </div>
+      <div class="ai-pull-actions">
+        <button class="ai-action-btn primary" id="ai-build-btn" onclick="buildWithAI()">BUILD MY ISSUE WITH AI</button>
+        <button class="ai-action-btn" onclick="previewContent()">PREVIEW PULLED CONTENT</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom CTA -->
+  <div class="bottom-cta">
+    <div class="bottom-cta-text">
+      <strong id="cta-count">0 platforms</strong> connected — <span id="cta-sub">connect at least one to build your first issue</span>
+    </div>
+    <button class="btn-primary-lg" onclick="goToStudio()">GO TO EDITOR STUDIO →</button>
+  </div>
+
+</div>
+
+<!-- OAuth Modal -->
+<div class="modal-overlay" id="modal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-icon" id="modal-icon">📸</div>
+      <div>
+        <div class="modal-title" id="modal-title">Connect Instagram</div>
+        <div class="modal-sub" id="modal-sub">Via Meta Graph API</div>
+      </div>
+    </div>
+    <div class="modal-body">
+      <div class="modal-permissions">
+        <div class="permission-row"><span class="permission-icon">✦</span><span id="perm-1">Read your recent posts and captions</span></div>
+        <div class="permission-row"><span class="permission-icon">✦</span><span id="perm-2">Access your reels and images</span></div>
+        <div class="permission-row"><span class="permission-icon">✦</span><span id="perm-3">View your profile information</span></div>
+      </div>
+      <div class="modal-note">Reedefined will never post on your behalf or share your data. You can disconnect at any time.</div>
+      <div class="modal-actions">
+        <button class="modal-btn" onclick="closeModal()">CANCEL</button>
+        <button class="modal-btn primary" id="modal-confirm" onclick="confirmConnect()">AUTHORISE & CONNECT</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const SUPABASE_URL = 'https://tzzungihuguiubdprada.supabase.co';
+  const SUPABASE_KEY = 'sb_publishable_dpxS14vPJaTcmfRmpUz2-Q_aDwFFRP-';
+  const TIKTOK_CLIENT_KEY = 'sbawjnbw6uuqa6rgac'; // sandbox key
+  const REDIRECT_URI = 'https://reedefined.app/callback.html';
+
+  function connectTikTokReal() {
+    const state = Math.random().toString(36).substring(2);
+    sessionStorage.setItem('tiktok_state', state);
+    const params = new URLSearchParams({
+      client_key: TIKTOK_CLIENT_KEY,
+      scope: 'user.info.basic,video.list',
+      response_type: 'code',
+      redirect_uri: REDIRECT_URI,
+      state: state
+    });
+    window.location.href = `https://www.tiktok.com/v2/auth/authorize?${params}`;
+  }
+
+  const platforms = {
+    instagram: {
+      icon: '📸', name: 'Instagram', sub: 'Via Meta Graph API',
+      perms: ['Read your recent posts and captions', 'Access your reels and images', 'View your profile information'],
+      demoContent: [
+        { icon: '🌅', title: 'Morning routine post', sub: '2 days ago · 847 likes' },
+        { icon: '🎬', title: 'Film reel — October picks', sub: '5 days ago · 1.2k likes' },
+        { icon: '✨', title: 'Autumn wardrobe edit', sub: '1 week ago · 634 likes' },
+      ]
+    },
+    tiktok: {
+      icon: '🎵', name: 'TikTok', sub: 'Via TikTok for Developers',
+      perms: ['Read your recent videos and captions', 'Access your saved and liked content', 'View your profile and follower count'],
+      demoContent: [
+        { icon: '🎬', title: 'Cinema rankings video', sub: '3 days ago · 4.2k views' },
+        { icon: '👗', title: 'Depop haul — vintage finds', sub: '6 days ago · 8.9k views' },
+        { icon: '🍽️', title: 'Restaurant review — Lisbon', sub: '2 weeks ago · 3.1k views' },
+      ]
+    },
+    spotify: {
+      icon: '🎧', name: 'Spotify', sub: 'Via Spotify Web API',
+      perms: ['Read your recently played tracks', 'Access your top artists and songs', 'View your public playlists'],
+      demoContent: [
+        { icon: '🎵', title: 'Arooj Aftab — Vulture Prince', sub: 'Top album this month' },
+        { icon: '🎵', title: 'Mk.gee — Two Star & The Dream Police', sub: 'On repeat · 38 plays' },
+        { icon: '🎵', title: 'Sufjan Stevens — Carrie & Lowell', sub: 'Evening playlist staple' },
+      ]
+    },
+    letterboxd: {
+      icon: '🎬', name: 'Letterboxd', sub: 'Via Letterboxd API',
+      perms: ['Read your film diary and ratings', 'Access your watchlist', 'View your reviews'],
+      demoContent: [
+        { icon: '🎬', title: 'All of Us Strangers', sub: '★★★★★ · Watched last week' },
+        { icon: '🎬', title: 'Past Lives', sub: '★★★★½ · Watched this month' },
+        { icon: '🎬', title: 'Showing Up', sub: '★★★★ · Watched this month' },
+      ]
+    },
+    pinterest: {
+      icon: '📌', name: 'Pinterest', sub: 'Via Pinterest API',
+      perms: ['Read your boards and pins', 'Access your saved ideas', 'View your profile'],
+      demoContent: []
+    },
+    goodreads: {
+      icon: '📚', name: 'Goodreads', sub: 'Via Goodreads API',
+      perms: ['Read your reading list', 'Access your reviews and ratings', 'View your reading history'],
+      demoContent: []
+    },
+    depop: {
+      icon: '🛍️', name: 'Depop / Vinted', sub: 'Via shop OAuth',
+      perms: ['Read your active listings', 'Access your sold items', 'Display your shop in your magazine'],
+      demoContent: []
+    },
+    youtube: {
+      icon: '▶️', name: 'YouTube', sub: 'Via Google API',
+      perms: ['Read your liked videos', 'Access your public playlists', 'View your channel info'],
+      demoContent: []
+    },
+  };
+
+  let currentPlatform = null;
+  let connectedPlatforms = new Set();
+
+  function connectPlatform(platform) {
+    currentPlatform = platform;
+    const p = platforms[platform];
+    document.getElementById('modal-icon').textContent = p.icon;
+    document.getElementById('modal-title').textContent = 'Connect ' + p.name;
+    document.getElementById('modal-sub').textContent = p.sub;
+    document.getElementById('perm-1').textContent = p.perms[0];
+    document.getElementById('perm-2').textContent = p.perms[1];
+    document.getElementById('perm-3').textContent = p.perms[2];
+    document.getElementById('modal').classList.add('visible');
+  }
+
+  function closeModal() {
+    document.getElementById('modal').classList.remove('visible');
+    currentPlatform = null;
+  }
+
+  function confirmConnect() {
+    if (!currentPlatform) return;
+    const p = platforms[currentPlatform];
+
+    // Show loading state
+    const btn = document.getElementById('modal-confirm');
+    btn.innerHTML = '<span class="spinner"></span> CONNECTING…';
+    btn.disabled = true;
+
+    // Simulate OAuth handshake
+    setTimeout(() => {
+      closeModal();
+      btn.innerHTML = 'AUTHORISE & CONNECT';
+      btn.disabled = false;
+      markConnected(currentPlatform);
+    }, 1800);
+  }
+
+  function markConnected(platform) {
+    connectedPlatforms.add(platform);
+    const p = platforms[platform];
+
+    // Update badge
+    const badge = document.getElementById('badge-' + platform);
+    badge.textContent = 'CONNECTED';
+    badge.className = 'platform-status-badge badge-connected';
+
+    // Update card border
+    document.getElementById('card-' + platform).classList.add('connected');
+
+    // Update button
+    const btn = document.getElementById('btn-' + platform);
+    btn.textContent = '✦ CONNECTED — CLICK TO MANAGE';
+    btn.className = 'platform-connect-btn connected-btn';
+
+    // Show demo content for priority platforms
+    const preview = document.getElementById('preview-' + platform);
+    if (preview && p.demoContent.length > 0) {
+      preview.innerHTML = p.demoContent.map(item => `
+        <div class="content-row">
+          <div class="content-thumb">${item.icon}</div>
+          <div class="content-meta">
+            <div class="content-title">${item.title}</div>
+            <div class="content-sub">${item.sub}</div>
+          </div>
+          <div class="content-include included" onclick="toggleInclude(this)">✦</div>
+        </div>
+      `).join('');
+    }
+
+    // Update counts
+    updateCounts();
+    updateAI();
+
+    // Save to Supabase
+    saveConnectionToSupabase(platform);
+  }
+
+  function toggleInclude(el) {
+    el.classList.toggle('included');
+    el.textContent = el.classList.contains('included') ? '✦' : '';
+  }
+
+  function updateCounts() {
+    const count = connectedPlatforms.size;
+    document.getElementById('connected-count').textContent = count + ' connected';
+    document.getElementById('cta-count').textContent = count + ' platform' + (count !== 1 ? 's' : '');
+    document.getElementById('cta-sub').textContent = count === 0
+      ? 'connect at least one to build your first issue'
+      : count < 3
+      ? 'connect more for a richer magazine'
+      : 'you\'re ready to build your first issue ✦';
+  }
+
+  const aiMessages = [
+    '"Connect Instagram and TikTok first — they\'ll give me the richest material to work with."',
+    '"Great — I can see your content. I\'ll use your top posts and film picks for Issue No. 1."',
+    '"Excellent mix. I\'m seeing strong cinema + music themes — your magazine has a clear voice."',
+    '"You have everything I need. Ready to build your first issue whenever you are."',
+  ];
+
+  function updateAI() {
+    const count = connectedPlatforms.size;
+    const idx = Math.min(count, aiMessages.length - 1);
+    document.getElementById('ai-pull-message').textContent = aiMessages[idx];
+    document.getElementById('ai-status-text').textContent =
+      count === 0 ? 'Waiting for connections…' : count + ' platform' + (count > 1 ? 's' : '') + ' connected';
+  }
+
+  function buildWithAI() {
+    if (connectedPlatforms.size === 0) {
+      alert('Connect at least one platform first so I have content to work with.');
+      return;
+    }
+    const btn = document.getElementById('ai-build-btn');
+    btn.innerHTML = '<span class="spinner"></span> BUILDING…';
+    btn.disabled = true;
+    setTimeout(() => {
+      btn.innerHTML = 'BUILD MY ISSUE WITH AI';
+      btn.disabled = false;
+      alert('Your first issue is ready in the Editor Studio! ✦');
+    }, 2500);
+  }
+
+  function previewContent() {
+    if (connectedPlatforms.size === 0) {
+      alert('Connect a platform first to preview pulled content.');
+      return;
+    }
+    alert('Content preview — ' + connectedPlatforms.size + ' platforms connected. Full preview available in the Editor Studio.');
+  }
+
+  function goToStudio() {
+    alert('Opening Editor Studio with your connected content…');
+  }
+
+  async function saveConnectionToSupabase(platform) {
+    try {
+      await fetch(`${SUPABASE_URL}/rest/v1/platform_connections`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'apikey': SUPABASE_KEY,
+          'Authorization': `Bearer ${SUPABASE_KEY}`,
+          'Prefer': 'return=minimal'
+        },
+        body: JSON.stringify({ platform, connected_at: new Date().toISOString() })
+      });
+    } catch(e) {
+      console.log('Supabase save skipped — table not created yet');
+    }
+  }
+
+  // Close modal on overlay click
+  document.getElementById('modal').addEventListener('click', function(e) {
+    if (e.target === this) closeModal();
+  });
+</script>
+</body>
+</html>
