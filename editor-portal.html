@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="tiktok-domain-verification" content="hVzFgjsRoBRYSJKXVAYgroBXhxr64tSC">
+<meta name="tiktok-domain-verification" content="4Oo4Nq3DlWoB7f8isxeU4GwMijyr5fcU">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reedefined — Write Your Column</title>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Barlow+Condensed:wght@400;500;600;700&family=Barlow:wght@300;400;500&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700;1,900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0C0C0C;--mid:#3A3A3A;--muted:#777;--light:#AAA;
+  --rule:#E0E0E0;--rule2:#EBEBEB;--bg:#F8F7F4;--bg2:#F0EEE9;--white:#FFF;
+  --teal:#4A6670;--teal-l:#D8E4E8;--teal-ll:#EEF3F5;
+  --red:#C8251A;--green:#3A7A50;--green-l:#D8EEE0;
+  --H:'Libre Baskerville',Georgia,serif;
+  --P:'Playfair Display',Georgia,serif;
+  --C:'Barlow Condensed',sans-serif;
+  --S:'Barlow',sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:var(--S);-webkit-font-smoothing:antialiased;min-height:100vh;display:flex;flex-direction:column}
+a{color:inherit;text-decoration:none}
+
+/* ── TOP BAR ── */
+.topbar{
+  height:52px;background:rgba(28,32,42,.98);border-bottom:1px solid #3a3e4e;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 28px;flex-shrink:0;position:sticky;top:0;z-index:200;
+}
+.tb-logo{font-family:var(--H);font-size:20px;font-weight:700;color:#fff;letter-spacing:-.2px;cursor:pointer}
+.tb-center{display:flex;align-items:center;gap:8px}
+.tb-issue{font-family:var(--C);font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.35)}
+.tb-sep{width:1px;height:16px;background:#3a3e4e}
+.tb-draft{font-family:var(--H);font-size:13px;font-style:italic;color:rgba(255,255,255,.4)}
+.tb-right{display:flex;align-items:center;gap:8px}
+.tb-btn{font-family:var(--C);font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:7px 16px;border:1px solid #3a3e4e;background:none;color:rgba(255,255,255,.5);cursor:pointer;transition:all .15s;border-radius:20px}
+.tb-btn:hover{color:#fff;border-color:#888}
+.tb-submit{background:var(--teal);color:#fff;border-color:var(--teal)}
+.tb-submit:hover{background:#3a5560;border-color:#3a5560;opacity:1}
+.tb-av{width:30px;height:30px;border-radius:50%;background:var(--teal);display:flex;align-items:center;justify-content:center;font-family:var(--H);font-size:12px;font-weight:700;color:#fff;cursor:pointer;flex-shrink:0}
+
+/* ── LAYOUT ── */
+.layout{display:grid;grid-template-columns:1fr 280px;flex:1;max-width:1200px;margin:0 auto;width:100%;padding:0 24px;gap:0}
+
+/* ── EDITOR AREA ── */
+.editor-area{padding:48px 56px 96px 0;border-right:1px solid var(--rule);min-width:0}
+
+/* Issue label */
+.issue-label{display:flex;align-items:center;gap:10px;margin-bottom:32px}
+.il-dot{width:7px;height:7px;border-radius:50%;background:var(--teal);animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.7)}}
+.il-text{font-family:var(--C);font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted)}
+
+/* Title */
+.title-input{
+  width:100%;border:none;outline:none;background:transparent;
+  font-family:var(--P);font-size:clamp(32px,4vw,52px);font-weight:700;
+  color:var(--ink);line-height:1.1;letter-spacing:-1px;
+  margin-bottom:6px;resize:none;overflow:hidden;
+  caret-color:var(--teal);
+}
+.title-input::placeholder{color:rgba(12,12,12,.15)}
+
+/* Tagline */
+.tagline-input{
+  width:100%;border:none;outline:none;background:transparent;
+  font-family:var(--H);font-size:20px;font-style:italic;
+  color:var(--muted);line-height:1.5;margin-bottom:28px;resize:none;overflow:hidden;
+  caret-color:var(--teal);
+}
+.tagline-input::placeholder{color:rgba(12,12,12,.1)}
+
+/* Divider */
+.editor-rule{height:2px;background:var(--ink);margin-bottom:32px}
+
+/* Body editor */
+.body-area{
+  width:100%;min-height:420px;border:none;outline:none;background:transparent;
+  font-family:var(--H);font-size:19px;line-height:1.9;color:var(--mid);
+  resize:none;caret-color:var(--teal);
+}
+.body-area::placeholder{color:rgba(12,12,12,.1);font-style:italic}
+
+/* ── BLOCKS ── */
+.blocks-list{display:flex;flex-direction:column;gap:12px;margin-top:32px}
+
+/* Add block toolbar */
+.add-toolbar{
+  display:flex;align-items:center;gap:0;
+  border:1px solid var(--rule);background:var(--white);
+  overflow:hidden;margin-top:32px;
+}
+.add-toolbar-label{
+  font-family:var(--C);font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;
+  color:var(--muted);padding:0 16px;white-space:nowrap;border-right:1px solid var(--rule);
+  height:100%;display:flex;align-items:center;
+}
+.add-btns{display:flex;flex:1;overflow-x:auto;scrollbar-width:none}
+.add-btns::-webkit-scrollbar{display:none}
+.add-btn{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;
+  padding:14px 20px;cursor:pointer;border-right:1px solid var(--rule);
+  transition:background .15s;background:var(--white);border-top:none;border-bottom:none;border-left:none;
+  flex-shrink:0;
+}
+.add-btn:hover{background:var(--teal-ll)}
+.add-btn:last-child{border-right:none}
+.add-btn-icon{color:var(--teal)}
+.add-btn-label{font-family:var(--C);font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted)}
+
+/* ── MEDIA BLOCKS ── */
+.block{
+  border:1px solid var(--rule);background:var(--white);overflow:hidden;
+  transition:border-color .15s;
+}
+.block:hover{border-color:var(--teal-l)}
+.block-header{
+  padding:10px 16px;background:var(--bg);border-bottom:1px solid var(--rule2);
+  display:flex;align-items:center;gap:10px;
+}
+.bh-icon{width:20px;height:20px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.bh-label{font-family:var(--C);font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--teal);flex:1}
+.bh-tag{font-family:var(--C);font-size:9px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--muted);padding:3px 8px;border:1px solid var(--rule);background:var(--white)}
+.bh-del{font-family:var(--C);font-size:11px;color:var(--light);background:none;border:none;cursor:pointer;padding:3px 6px;transition:color .15s}
+.bh-del:hover{color:var(--red)}
+.block-body{padding:18px 20px}
+
+/* Spotify block */
+.spotify-block{display:flex;align-items:center;gap:14px}
+.sp-art{width:56px;height:56px;background:var(--bg2);border:1px solid var(--rule);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.sp-info{flex:1;min-width:0}
+.sp-title{font-family:var(--H);font-size:16px;font-weight:700;color:var(--ink);margin-bottom:3px}
+.sp-artist{font-family:var(--H);font-size:14px;font-style:italic;color:var(--muted)}
+.sp-type{font-family:var(--C);font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#1DB954;margin-top:5px}
+.sp-play{width:36px;height:36px;border-radius:50%;background:#1DB954;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:transform .15s}
+.sp-play:hover{transform:scale(1.08)}
+
+/* Instagram/TikTok block */
+.social-block-inner{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.social-cell{aspect-ratio:1;background:var(--bg2);border:1px dashed var(--rule);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;cursor:pointer;transition:background .15s}
+.social-cell:hover{background:var(--teal-ll);border-color:var(--teal)}
+.social-cell.filled{border:none;background:var(--bg2);position:relative;overflow:hidden}
+.social-cell.video{aspect-ratio:9/16}
+.sc-label{font-family:var(--C);font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted)}
+.sc-tag{position:absolute;bottom:6px;left:6px;font-family:var(--C);font-size:8px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#fff;background:rgba(0,0,0,.5);padding:2px 6px}
+
+/* Video block */
+.video-block{position:relative;background:#1a1a2a;aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.vb-bg{position:absolute;inset:0;background:linear-gradient(135deg,#1a1a2a,#2a2040)}
+.vb-play{width:56px;height:56px;border-radius:50%;border:2px solid rgba(255,255,255,.4);display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;z-index:1;transition:all .2s}
+.vb-play:hover{border-color:#fff;background:rgba(255,255,255,.1)}
+.vb-label{position:absolute;bottom:14px;left:14px;font-family:var(--C);font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.4)}
+
+/* Pull quote block */
+.pq-block{font-family:var(--P);font-size:24px;font-style:italic;color:var(--ink);line-height:1.45;padding-left:20px;border-left:2px solid var(--teal)}
+
+/* URL embed block */
+.url-block{display:flex;align-items:center;gap:14px;padding:14px 18px;background:var(--bg);border-top:none}
+.url-domain{font-family:var(--C);font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--teal)}
+.url-title{font-family:var(--H);font-size:15px;font-weight:700;color:var(--ink);margin-top:2px}
+.url-desc{font-family:var(--H);font-size:13px;font-style:italic;color:var(--muted);margin-top:2px}
+.url-thumb{width:56px;height:56px;background:var(--rule);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+
+/* Connected badge */
+.conn-badge{display:inline-flex;align-items:center;gap:5px;font-family:var(--C);font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--green);background:var(--green-l);padding:3px 9px}
+.conn-dot{width:5px;height:5px;border-radius:50%;background:var(--green)}
+
+/* ── SIDEBAR ── */
+.sidebar{padding:40px 0 0 32px;display:flex;flex-direction:column;gap:0}
+
+.sb-section{padding-bottom:24px;margin-bottom:24px;border-bottom:1px solid var(--rule)}
+.sb-section:last-child{border:none}
+.sb-label{font-family:var(--C);font-size:10px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--muted);margin-bottom:14px}
+
+/* Stats */
+.stat-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--rule2)}
+.stat-row:last-child{border:none}
+.stat-n{font-family:var(--H);font-size:22px;font-weight:700;color:var(--ink);line-height:1}
+.stat-l{font-family:var(--C);font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-top:2px}
+.stat-change{font-family:var(--C);font-size:10px;color:var(--green)}
+
+/* Connections */
+.conn-item{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--rule2);cursor:pointer;transition:opacity .15s}
+.conn-item:hover{opacity:.75}
+.conn-item:last-child{border:none}
+.conn-logo{width:30px;height:30px;border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.conn-name{font-family:var(--S);font-size:14px;color:var(--ink);flex:1}
+.conn-status{font-family:var(--C);font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase}
+.conn-status.on{color:var(--green)}
+.conn-status.off{color:var(--light)}
+
+/* Issue deadline */
+.deadline-card{background:var(--teal-ll);border:1px solid var(--teal-l);padding:14px}
+.dl-label{font-family:var(--C);font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--teal);margin-bottom:6px}
+.dl-date{font-family:var(--H);font-size:17px;font-weight:700;color:var(--ink);margin-bottom:3px}
+.dl-sub{font-family:var(--H);font-size:13px;font-style:italic;color:var(--muted)}
+.dl-bar{height:2px;background:var(--teal-l);margin-top:10px}
+.dl-fill{height:100%;background:var(--teal);width:55%}
+
+/* AI hint */
+.ai-hint{background:var(--bg2);border-left:2px solid var(--teal);padding:12px 14px}
+.ai-badge{font-family:var(--C);font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--teal);margin-bottom:6px;display:flex;align-items:center;gap:5px}
+.ai-dot{width:4px;height:4px;border-radius:50%;background:var(--teal);animation:pulse 2s ease-in-out infinite}
+.ai-text{font-family:var(--H);font-size:13px;font-style:italic;color:var(--mid);line-height:1.55;margin-bottom:8px}
+.ai-btn{font-family:var(--C);font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--teal);background:none;border:1px solid rgba(74,102,112,.35);padding:5px 11px;cursor:pointer;transition:all .15s}
+.ai-btn:hover{background:var(--teal);color:#fff}
+
+/* Preview strip */
+.preview-strip{margin-top:auto;padding-top:24px}
+.prev-card{border:1px solid var(--rule);overflow:hidden}
+.prev-bar{height:2px;background:var(--teal)}
+.prev-head{padding:8px 12px;background:var(--bg);border-bottom:1px solid var(--rule2)}
+.prev-pub{font-family:var(--C);font-size:7px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:3px}
+.prev-title{font-family:var(--H);font-size:13px;font-weight:700;color:var(--ink)}
+.prev-body{height:44px;background:var(--bg2);display:flex;gap:6px;padding:8px;align-items:center}
+.prev-col{flex:1;display:flex;flex-direction:column;gap:3px}
+.prev-line{height:4px;background:var(--rule)}
+.prev-img{width:44px;height:100%;background:var(--teal-l)}
+.prev-foot{padding:7px 12px;font-family:var(--C);font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--muted)}
+.btn-preview{width:100%;padding:10px;font-family:var(--C);font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;background:none;border:1px solid var(--rule);color:var(--muted);cursor:pointer;margin-top:8px;transition:all .15s}
+.btn-preview:hover{border-color:var(--teal);color:var(--teal)}
+
+/* Modal */
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:500;align-items:center;justify-content:center}
+.modal-bg.open{display:flex}
+.modal{background:var(--white);width:560px;max-height:80vh;display:flex;flex-direction:column;box-shadow:0 32px 80px rgba(0,0,0,.2)}
+.modal-accent{height:3px;background:linear-gradient(90deg,var(--ink),var(--teal));background-size:200%;animation:shimmer 3s ease-in-out infinite}
+@keyframes shimmer{0%,100%{background-position:0%}50%{background-position:100%}}
+.modal-head{padding:18px 22px;border-bottom:1px solid var(--rule);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.modal-title{font-family:var(--H);font-size:20px;font-weight:700;color:var(--ink)}
+.modal-close{font-size:18px;color:var(--muted);background:none;border:none;cursor:pointer}
+.modal-body{flex:1;overflow-y:auto;padding:22px}
+.modal-tabs{display:flex;border-bottom:1px solid var(--rule);margin:-22px -22px 22px;padding:0 22px}
+.mt{font-family:var(--C);font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);padding:11px 14px;border-bottom:2px solid transparent;cursor:pointer;background:none;border-top:none;border-left:none;border-right:none;transition:all .15s}
+.mt:hover{color:var(--ink)}.mt.on{color:var(--ink);border-bottom-color:var(--ink)}
+.mp{display:none}.mp.on{display:block}
+.m-field{margin-bottom:16px}
+.m-label{font-family:var(--C);font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:7px}
+.m-input{width:100%;padding:12px 14px;font-family:var(--S);font-size:15px;color:var(--ink);background:var(--bg);border:1px solid var(--rule);outline:none;transition:border-color .15s}
+.m-input:focus{border-color:var(--teal);background:var(--white)}
+.m-input::placeholder{color:var(--light)}
+.m-textarea{width:100%;padding:12px 14px;font-family:var(--H);font-size:16px;font-style:italic;color:var(--ink);background:var(--bg);border:1px solid var(--rule);outline:none;resize:vertical;min-height:100px;line-height:1.6;transition:border-color .15s}
+.m-textarea:focus{border-color:var(--teal);background:var(--white)}
+.m-textarea::placeholder{color:var(--light)}
+.upload-zone{border:1px dashed var(--rule);padding:36px;text-align:center;cursor:pointer;background:var(--bg);transition:all .15s}
+.upload-zone:hover{border-color:var(--teal);background:var(--teal-ll)}
+.uz-label{font-family:var(--C);font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin:10px 0 4px}
+.uz-sub{font-family:var(--H);font-size:14px;font-style:italic;color:var(--light)}
+.social-import{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.si-card{background:var(--bg);border:1px solid var(--rule);padding:14px;text-align:center;cursor:pointer;transition:all .15s}
+.si-card:hover{border-color:var(--teal);background:var(--teal-ll)}
+.si-card.conn{border-color:var(--green);background:var(--green-l)}
+.si-icon{margin:0 auto 8px;width:32px;height:32px;display:flex;align-items:center;justify-content:center}
+.si-name{font-family:var(--C);font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink);margin-bottom:2px}
+.si-stat{font-family:var(--C);font-size:9px;letter-spacing:.5px;color:var(--muted)}
+.si-card.conn .si-stat{color:var(--green)}
+.modal-foot{padding:14px 22px;border-top:1px solid var(--rule);display:flex;justify-content:space-between;align-items:center;flex-shrink:0;background:var(--bg)}
+.mf-note{font-family:var(--H);font-size:13px;font-style:italic;color:var(--muted)}
+.mf-acts{display:flex;gap:8px}
+.btn-cancel{font-family:var(--C);font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:9px 18px;border:1px solid var(--rule);background:var(--white);color:var(--muted);cursor:pointer;transition:all .15s}
+.btn-cancel:hover{border-color:var(--ink);color:var(--ink)}
+.btn-add{font-family:var(--C);font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:9px 18px;background:var(--ink);color:#fff;border:none;cursor:pointer;transition:opacity .15s}
+.btn-add:hover{opacity:.85}
+
+/* Submit confirm */
+.submit-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:600;align-items:center;justify-content:center}
+.submit-overlay.open{display:flex}
+.submit-card{background:var(--white);width:440px;overflow:hidden;box-shadow:0 32px 80px rgba(0,0,0,.25)}
+.sc-accent{height:3px;background:var(--teal)}
+.sc-body{padding:36px;text-align:center}
+.sc-icon{margin:0 auto 20px;width:52px;height:52px;border-radius:50%;background:var(--teal-ll);border:1px solid var(--teal-l);display:flex;align-items:center;justify-content:center}
+.sc-title{font-family:var(--H);font-size:26px;font-weight:700;color:var(--ink);margin-bottom:8px;letter-spacing:-.3px}
+.sc-sub{font-family:var(--H);font-size:16px;font-style:italic;color:var(--muted);line-height:1.6;margin-bottom:28px}
+.sc-acts{display:flex;gap:10px;justify-content:center}
+
+::-webkit-scrollbar{width:3px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--rule)}
+
+@media(max-width:900px){.layout{grid-template-columns:1fr}.sidebar{display:none}.editor-area{padding:32px 0 80px}}
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="tb-logo" onclick="location.href='index.html'">Reedefined</div>
+  <div class="tb-center">
+    <span class="tb-issue">Issue No. 1 · May 2026</span>
+    <div class="tb-sep"></div>
+    <span class="tb-draft" id="draft-status">Draft saved</span>
+  </div>
+  <div class="tb-right">
+    <button class="tb-btn" onclick="saveDraft()">Save</button>
+    <button class="tb-btn" onclick="location.href='magazine-reader.html'">Preview ↗</button>
+    <button class="tb-btn tb-submit" onclick="openSubmit()">Submit Column →</button>
+    <div class="tb-av">M</div>
+  </div>
+</div>
+
+<!-- LAYOUT -->
+<div class="layout">
+
+  <!-- EDITOR -->
+  <div class="editor-area">
+
+    <div class="issue-label">
+      <div class="il-dot"></div>
+      <span class="il-text">Contributing to Issue No. 1 · Deadline 28 May 2026</span>
+    </div>
+
+    <!-- Title -->
+    <textarea class="title-input" id="col-title" placeholder="Your column title…" rows="1" oninput="autoResize(this);updatePreview()">After Hours</textarea>
+
+    <!-- Tagline -->
+    <textarea class="tagline-input" id="col-tagline" placeholder="A single line that earns the read…" rows="1" oninput="autoResize(this)">Culture through my eyes — cinema, music, the city at night.</textarea>
+
+    <div class="editor-rule"></div>
+
+    <!-- Body -->
+    <textarea class="body-area" id="col-body" placeholder="Start writing. This is your column — your voice is the whole point.&#10;&#10;You can also add rich blocks below: music, video, social content…" oninput="autoResize(this)">This month I watched three films that I'm still thinking about. I made a playlist of everything I listened to on the train home from work. I found a restaurant I've now been to four times.
+
+None of it was planned. That's usually when the best things happen.</textarea>
+
+    <!-- BLOCKS LIST -->
+    <div class="blocks-list" id="blocks-list">
+
+      <!-- Spotify block (connected) -->
+      <div class="block" id="block-spotify">
+        <div class="block-header">
+          <div class="bh-icon">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 8c0-2.8 2-5 4.5-5s4.5 2.2 4.5 5" stroke="#1DB954" stroke-width="1.2" fill="none"/><rect x="1.5" y="8" width="2.5" height="3.5" rx=".8" stroke="#1DB954" stroke-width="1.2" fill="none"/><rect x="10" y="8" width="2.5" height="3.5" rx=".8" stroke="#1DB954" stroke-width="1.2" fill="none"/></svg>
+          </div>
+          <span class="bh-label">Spotify — May Playlist</span>
+          <span class="conn-badge"><span class="conn-dot"></span>Connected</span>
+          <button class="bh-del" onclick="delBlock('block-spotify')">✕</button>
+        </div>
+        <div class="block-body">
+          <div class="spotify-block">
+            <div class="sp-art">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="#1DB954" stroke-width="1.2"/><circle cx="12" cy="12" r="3.5" stroke="#1DB954" stroke-width="1.2"/><circle cx="12" cy="12" r="1" fill="#1DB954"/></svg>
+            </div>
+            <div class="sp-info">
+              <div class="sp-title">May — what I actually listened to</div>
+              <div class="sp-artist">Marco R. · 5 tracks · 19 min</div>
+              <div class="sp-type">Spotify Playlist</div>
+            </div>
+            <button class="sp-play">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M4 2.5l8 4.5-8 4.5z" fill="white"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Instagram OOTD block -->
+      <div class="block" id="block-instagram">
+        <div class="block-header">
+          <div class="bh-icon">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="1" y="1" width="12" height="12" rx="3.5" stroke="url(#igG)" stroke-width="1.2" fill="none"/><circle cx="7" cy="7" r="3" stroke="url(#igG)" stroke-width="1.2" fill="none"/><circle cx="10.5" cy="3.5" r="1" fill="#E1306C"/><defs><linearGradient id="igG" x1="1" y1="13" x2="13" y2="1"><stop offset="0%" stop-color="#f09433"/><stop offset="50%" stop-color="#e6683c"/><stop offset="100%" stop-color="#bc1888"/></linearGradient></defs></svg>
+          </div>
+          <span class="bh-label">Instagram — OOTD</span>
+          <span class="bh-tag">3 posts</span>
+          <button class="bh-del" onclick="delBlock('block-instagram')">✕</button>
+        </div>
+        <div class="block-body">
+          <div class="social-block-inner">
+            <div class="social-cell filled" style="background:linear-gradient(135deg,#E8D8E0,#D0C0D0)">
+              <svg width="28" height="28" viewBox="0 0 28 28" fill="none" style="opacity:.35"><rect x="2" y="2" width="24" height="24" rx="6" stroke="#666" stroke-width="1.5"/><circle cx="14" cy="14" r="7" stroke="#666" stroke-width="1.5"/><circle cx="20" cy="8" r="2" fill="#666"/></svg>
+              <span class="sc-tag">OOTD</span>
+            </div>
+            <div class="social-cell filled" style="background:linear-gradient(135deg,#D8E0E8,#C8D0D8)">
+              <svg width="28" height="28" viewBox="0 0 28 28" fill="none" style="opacity:.35"><rect x="2" y="2" width="24" height="24" rx="6" stroke="#666" stroke-width="1.5"/><circle cx="14" cy="14" r="7" stroke="#666" stroke-width="1.5"/><circle cx="20" cy="8" r="2" fill="#666"/></svg>
+              <span class="sc-tag">OOTD</span>
+            </div>
+            <div class="social-cell" onclick="openModal('import')">
+              <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M11 4v14M4 11h14" stroke="#aaa" stroke-width="1.5" stroke-linecap="round"/></svg>
+              <span class="sc-label">Add post</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TikTok video block -->
+      <div class="block" id="block-tiktok">
+        <div class="block-header">
+          <div class="bh-icon">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5.5 10.5c0 .9-.7 1.4-1.5 1.4S3 11.3 3 10.5c0-.8.6-1.3 1.6-1.3.4 0 .7.1 1.4.4V5.3L12 4v5.2c0 .8-.7 1.3-1.6 1.3-.9 0-1.4-.5-1.4-1.2s.6-1.1 1.6-1.1c.3 0 .6.1 1.4.3" stroke="var(--ink)" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
+          </div>
+          <span class="bh-label">TikTok — Recipe Video</span>
+          <span class="bh-tag">GRWM / Recipe</span>
+          <button class="bh-del" onclick="delBlock('block-tiktok')">✕</button>
+        </div>
+        <div class="block-body" style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px">
+          <div class="video-block">
+            <div class="vb-bg"></div>
+            <div class="vb-play">
+              <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M5 3l11 6-11 6z" fill="rgba(255,255,255,.8)"/></svg>
+            </div>
+            <div class="vb-label">@marco.r · TikTok</div>
+          </div>
+          <div class="social-cell video" onclick="openModal('video')" style="background:var(--bg2)">
+            <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><rect x="1" y="3" width="13" height="16" rx="2" stroke="#aaa" stroke-width="1.3" fill="none"/><path d="M14 8l7-5v16l-7-5z" stroke="#aaa" stroke-width="1.3" fill="none" stroke-linejoin="round"/></svg>
+            <span class="sc-label">Add video</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pull quote block -->
+      <div class="block" id="block-quote">
+        <div class="block-header">
+          <div class="bh-icon">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 8.5C2 6.5 3.5 5 6 5c0 0-1.5 1.5-1.5 3 0 1.8 1.5 2.5 1.5 2.5S5.5 11.5 4 11.5C2.7 11.5 2 10.5 2 8.5z" fill="#4A6670" opacity=".6"/><path d="M8 8.5C8 6.5 9.5 5 12 5c0 0-1.5 1.5-1.5 3 0 1.8 1.5 2.5 1.5 2.5S11.5 11.5 10 11.5C8.7 11.5 8 10.5 8 8.5z" fill="#4A6670" opacity=".6"/></svg>
+          </div>
+          <span class="bh-label">Pull Quote</span>
+          <button class="bh-del" onclick="delBlock('block-quote')">✕</button>
+        </div>
+        <div class="block-body">
+          <div class="pq-block" contenteditable="true" data-placeholder='"A sentence worth highlighting…"'>"This month felt like a series of perfect moments — each one worth capturing, none of them planned."</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ADD TOOLBAR -->
+    <div class="add-toolbar">
+      <div class="add-toolbar-label">Add block</div>
+      <div class="add-btns">
+        <button class="add-btn" onclick="openModal('write')">
+          <div class="add-btn-icon"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="2" y="3" width="14" height="12" rx="2" stroke="#4A6670" stroke-width="1.3" fill="none"/><path d="M5 7h8M5 10h5" stroke="#4A6670" stroke-width="1.3" stroke-linecap="round"/></svg></div>
+          <span class="add-btn-label">Text</span>
+        </button>
+        <button class="add-btn" onclick="openModal('quote')">
+          <div class="add-btn-icon"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3 10C3 7.5 5 6 7.5 6c0 0-2 2-2 4 0 2.2 2 3 2 3S7 14 5 14C3.5 14 3 12.5 3 10z" fill="#4A6670" opacity=".6"/><path d="M10 10C10 7.5 12 6 14.5 6c0 0-2 2-2 4 0 2.2 2 3 2 3S14 14 12 14C10.5 14 10 12.5 10 10z" fill="#4A6670" opacity=".6"/></svg></div>
+          <span class="add-btn-label">Quote</span>
+        </button>
+        <button class="add-btn" onclick="openModal('spotify')">
+          <div class="add-btn-icon"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M4 11c0-3.9 2.7-7 6.5-7s6.5 3.1 6.5 7" stroke="#1DB954" stroke-width="1.3" fill="none"/><rect x="2" y="11" width="3.5" height="5" rx="1" stroke="#1DB954" stroke-width="1.3" fill="none"/><rect x="13" y="11" width="3.5" height="5" rx="1" stroke="#1DB954" stroke-width="1.3" fill="none"/></svg></div>
+          <span class="add-btn-label">Spotify</span>
+        </button>
+        <button class="add-btn" onclick="openModal('video')">
+          <div class="add-btn-icon"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="1" y="4" width="11" height="10" rx="1.5" stroke="#4A6670" stroke-width="1.3" fill="none"/><path d="M12 7l5-3v10l-5-3z" stroke="#4A6670" stroke-width="1.3" fill="none" stroke-linejoin="round"/></svg></div>
+          <span class="add-btn-label">Video</span>
+        </button>
+        <button class="add-btn" onclick="openModal('import')">
+          <div class="add-btn-icon"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="1" y="1" width="16" height="16" rx="4.5" stroke="url(#igG2)" stroke-width="1.3" fill="none"/><circle cx="9" cy="9" r="4" stroke="url(#igG2)" stroke-width="1.3" fill="none"/><circle cx="13.5" cy="4.5" r="1.2" fill="#E1306C"/><defs><linearGradient id="igG2" x1="1" y1="17" x2="17" y2="1"><stop offset="0%" stop-color="#f09433"/><stop offset="100%" stop-color="#bc1888"/></linearGradient></defs></svg></div>
+          <span class="add-btn-label">Instagram</span>
+        </button>
+        <button class="add-btn" onclick="openModal('tiktok')">
+          <div class="add-btn-icon"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M7 13.5c0 1.1-.8 1.8-2 1.8s-2-.7-2-1.8c0-1 .8-1.7 2-1.7.5 0 .9.2 1.9.5V7L16 5v6.5c0 1-.8 1.7-2 1.7s-1.8-.6-1.8-1.5.8-1.5 2-1.5c.4 0 .8.1 1.8.4" stroke="var(--ink)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></div>
+          <span class="add-btn-label">TikTok</span>
+        </button>
+        <button class="add-btn" onclick="openModal('photo')">
+          <div class="add-btn-icon"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="1" y="3" width="16" height="12" rx="2" stroke="#4A6670" stroke-width="1.3" fill="none"/><circle cx="9" cy="9" r="3" stroke="#4A6670" stroke-width="1.3" fill="none"/></svg></div>
+          <span class="add-btn-label">Photo</span>
+        </button>
+        <button class="add-btn" onclick="openModal('link')">
+          <div class="add-btn-icon"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M7 11l4-4M5.5 9.5l-2 2a3.5 3.5 0 005 5l2-2M11.5 8.5l2-2a3.5 3.5 0 00-5-5l-2 2" stroke="#4A6670" stroke-width="1.3" stroke-linecap="round"/></svg></div>
+          <span class="add-btn-label">Link</span>
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+
+    <!-- Stats -->
+    <div class="sb-section">
+      <div class="sb-label">Your Stats</div>
+      <div class="stat-row">
+        <div><div class="stat-n">3,100</div><div class="stat-l">Followers</div></div>
+        <div class="stat-change">+48 ↑</div>
+      </div>
+      <div class="stat-row">
+        <div><div class="stat-n">72%</div><div class="stat-l">Read-through</div></div>
+        <div class="stat-change">Last issue</div>
+      </div>
+      <div class="stat-row">
+        <div><div class="stat-n">184</div><div class="stat-l">Shop clicks</div></div>
+        <div class="stat-change">Last issue</div>
+      </div>
+    </div>
+
+    <!-- Connected platforms -->
+    <div class="sb-section">
+      <div class="sb-label">Connections</div>
+      <div class="conn-item" onclick="location.href='connections.html'">
+        <div class="conn-logo" style="background:#1a1a1a">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3.5 10c0-1.6 1.2-2.8 3-2.8s3 1.2 3 2.8" stroke="#1DB954" stroke-width="1.1" fill="none"/><rect x="2" y="10" width="2" height="3" rx=".6" stroke="#1DB954" stroke-width="1.1" fill="none"/><rect x="8.5" y="10" width="2" height="3" rx=".6" stroke="#1DB954" stroke-width="1.1" fill="none"/></svg>
+        </div>
+        <span class="conn-name">Spotify</span>
+        <span class="conn-status on">Connected</span>
+      </div>
+      <div class="conn-item" onclick="location.href='connections.html'">
+        <div class="conn-logo" style="background:linear-gradient(135deg,#f09433,#bc1888)">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="2" y="2" width="12" height="12" rx="3.5" stroke="white" stroke-width="1.1" fill="none"/><circle cx="8" cy="8" r="3" stroke="white" stroke-width="1.1" fill="none"/><circle cx="11.5" cy="4.5" r="1" fill="white"/></svg>
+        </div>
+        <span class="conn-name">Instagram</span>
+        <span class="conn-status on">Connected</span>
+      </div>
+      <div class="conn-item" onclick="location.href='connections.html'">
+        <div class="conn-logo" style="background:#010101">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6.5 12c0 1-.8 1.6-1.7 1.6S3 12.8 3 12c0-.9.7-1.4 1.8-1.4.5 0 .8.2 1.7.5V6L14 4.5v6c0 .9-.8 1.4-1.8 1.4s-1.7-.5-1.7-1.3.8-1.3 1.9-1.3c.4 0 .7.1 1.6.3" stroke="white" stroke-width="1" stroke-linecap="round" fill="none"/></svg>
+        </div>
+        <span class="conn-name">TikTok</span>
+        <span class="conn-status off">Connect →</span>
+      </div>
+      <div class="conn-item" onclick="location.href='connections.html'">
+        <div class="conn-logo" style="background:#2C3440">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="5.5" stroke="white" stroke-width="1.1"/><circle cx="8" cy="8" r="2" stroke="white" stroke-width="1.1"/><circle cx="8" cy="2.8" r=".9" fill="white" opacity=".7"/><circle cx="8" cy="13.2" r=".9" fill="white" opacity=".7"/><circle cx="2.8" cy="8" r=".9" fill="white" opacity=".7"/><circle cx="13.2" cy="8" r=".9" fill="white" opacity=".7"/></svg>
+        </div>
+        <span class="conn-name">Letterboxd</span>
+        <span class="conn-status on">Connected</span>
+      </div>
+    </div>
+
+    <!-- Deadline -->
+    <div class="sb-section">
+      <div class="sb-label">Issue Deadline</div>
+      <div class="deadline-card">
+        <div class="dl-label">Issue No. 1</div>
+        <div class="dl-date">28 May 2026</div>
+        <div class="dl-sub">11 days remaining</div>
+        <div class="dl-bar"><div class="dl-fill"></div></div>
+      </div>
+    </div>
+
+    <!-- AI hint -->
+    <div class="sb-section">
+      <div class="ai-hint">
+        <div class="ai-badge"><div class="ai-dot"></div>AI Director</div>
+        <div class="ai-text" id="ai-text">"Your column has strong voice. Add a pull quote to your cinema section to anchor it."</div>
+        <button class="ai-btn" onclick="nextHint()">Apply →</button>
+      </div>
+    </div>
+
+    <!-- Preview -->
+    <div class="preview-strip">
+      <div class="sb-label">As it appears in your readers' issue</div>
+      <div class="prev-card">
+        <div class="prev-bar"></div>
+        <div class="prev-head">
+          <div class="prev-pub">Reedefined · May 2026</div>
+          <div class="prev-title" id="prev-title">After Hours</div>
+        </div>
+        <div class="prev-body">
+          <div class="prev-col">
+            <div class="prev-line" style="width:100%"></div>
+            <div class="prev-line" style="width:80%"></div>
+            <div class="prev-line" style="width:60%"></div>
+          </div>
+          <div class="prev-img"></div>
+        </div>
+        <div class="prev-foot">Spotify · Instagram · TikTok · Video</div>
+      </div>
+      <button class="btn-preview" onclick="location.href='magazine-reader.html'">Open Full Preview ↗</button>
+    </div>
+
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-bg" id="modal">
+  <div class="modal">
+    <div class="modal-accent"></div>
+    <div class="modal-head">
+      <div class="modal-title" id="modal-title">Add Content</div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-tabs" id="modal-tabs">
+        <button class="mt on" onclick="setMT(this,'write')">Write</button>
+        <button class="mt" onclick="setMT(this,'quote')">Pull Quote</button>
+        <button class="mt" onclick="setMT(this,'spotify')">Spotify</button>
+        <button class="mt" onclick="setMT(this,'video')">Video</button>
+        <button class="mt" onclick="setMT(this,'import')">Social Import</button>
+        <button class="mt" onclick="setMT(this,'photo')">Photo</button>
+        <button class="mt" onclick="setMT(this,'link')">Link</button>
+      </div>
+
+      <!-- Write -->
+      <div class="mp on" id="mp-write">
+        <div class="m-field"><label class="m-label">Headline</label><input class="m-input" type="text" placeholder="What did this month feel like?"></div>
+        <div class="m-field"><label class="m-label">Body</label><textarea class="m-textarea" placeholder="Start writing. Your voice is the whole point." style="min-height:160px"></textarea></div>
+        <div class="m-field"><label class="m-label">Pull Quote (optional)</label><input class="m-input" type="text" placeholder='"A sentence worth highlighting…"'></div>
+      </div>
+
+      <!-- Pull quote -->
+      <div class="mp" id="mp-quote">
+        <div class="m-field"><label class="m-label">Your pull quote</label><textarea class="m-textarea" placeholder='"Something worth saying twice."' style="min-height:80px"></textarea></div>
+      </div>
+
+      <!-- Spotify -->
+      <div class="mp" id="mp-spotify">
+        <div class="m-field"><label class="m-label">Spotify URL or Search</label><input class="m-input" type="text" placeholder="Paste a Spotify track, album or playlist URL…"></div>
+        <div style="padding:12px 0;font-family:var(--H);font-size:14px;font-style:italic;color:var(--muted);text-align:center">— or —</div>
+        <div class="m-field"><label class="m-label">Import from connected Spotify</label>
+          <div style="border:1px solid var(--rule);padding:14px 16px;background:var(--bg);cursor:pointer" onclick="importSpotify()">
+            <div style="font-family:var(--C);font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#1DB954;margin-bottom:4px">Spotify · Connected</div>
+            <div style="font-family:var(--H);font-size:15px;color:var(--ink)">Import your top tracks or recent playlists</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Video -->
+      <div class="mp" id="mp-video">
+        <div class="m-field"><label class="m-label">TikTok URL</label><input class="m-input" type="url" placeholder="https://www.tiktok.com/@username/video/…"></div>
+        <div style="padding:12px 0;font-family:var(--H);font-size:14px;font-style:italic;color:var(--muted);text-align:center">— or upload directly —</div>
+        <div class="upload-zone" onclick="this.querySelector('input').click()">
+          <input type="file" accept="video/*" style="display:none">
+          <svg width="36" height="36" viewBox="0 0 36 36" fill="none" style="margin:0 auto;display:block;opacity:.35"><rect x="2" y="7" width="22" height="22" rx="3" stroke="#aaa" stroke-width="1.8" fill="none"/><path d="M24 13l10-7v24l-10-7z" stroke="#aaa" stroke-width="1.8" fill="none" stroke-linejoin="round"/></svg>
+          <div class="uz-label">Upload video file</div>
+          <div class="uz-sub">MP4, MOV up to 500MB</div>
+        </div>
+        <div class="m-field" style="margin-top:16px"><label class="m-label">Content type</label>
+          <select class="m-input">
+            <option>GRWM (Get Ready With Me)</option>
+            <option>Recipe / Food</option>
+            <option>OOTD (Outfit of the Day)</option>
+            <option>Travel / Vlog</option>
+            <option>Review</option>
+            <option>Other</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Social Import -->
+      <div class="mp" id="mp-import">
+        <div class="m-field"><label class="m-label">Import from your connected platforms</label>
+          <div class="social-import">
+            <div class="si-card conn">
+              <div class="si-icon"><svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect x="2" y="2" width="24" height="24" rx="6" stroke="#3A7A50" stroke-width="1.5" fill="none"/><circle cx="14" cy="14" r="7" stroke="#3A7A50" stroke-width="1.5" fill="none"/><circle cx="20.5" cy="7.5" r="1.8" fill="#3A7A50"/></svg></div>
+              <div class="si-name">Instagram</div>
+              <div class="si-stat">23 posts · Connected ✓</div>
+            </div>
+            <div class="si-card conn">
+              <div class="si-icon"><svg width="28" height="28" viewBox="0 0 28 28" fill="none"><path d="M8 18c0 1.7-1.2 2.8-3 2.8S2 19.5 2 18c0-1.6 1.2-2.6 3-2.6.8 0 1.4.3 3 .9V9L26 7v10c0 1.6-1.3 2.5-3 2.5s-2.8-.9-2.8-2.3 1.2-2.2 3-2.2c.7 0 1.3.2 3 .6" stroke="#3A7A50" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></div>
+              <div class="si-name">Spotify</div>
+              <div class="si-stat">5 playlists · Connected ✓</div>
+            </div>
+            <div class="si-card" onclick="location.href='connections.html'">
+              <div class="si-icon"><svg width="28" height="28" viewBox="0 0 28 28" fill="none"><path d="M10 21c0 2-1.4 3.2-3.5 3.2S3 22.8 3 21c0-1.9 1.4-3 3.5-3 1 0 1.7.3 3.5 1V10L25 7.5v11.5c0 1.8-1.5 2.8-3.5 2.8s-3.3-1-3.3-2.7 1.5-2.5 3.5-2.5c.8 0 1.5.2 3.3.7" stroke="#4A6670" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></div>
+              <div class="si-name">TikTok</div>
+              <div class="si-stat">Connect →</div>
+            </div>
+            <div class="si-card conn">
+              <div class="si-icon"><svg width="28" height="28" viewBox="0 0 28 28" fill="none"><circle cx="14" cy="14" r="11" stroke="#3A7A50" stroke-width="1.5"/><circle cx="14" cy="14" r="4" stroke="#3A7A50" stroke-width="1.5"/><circle cx="14" cy="3.5" r="2" fill="#3A7A50" opacity=".6"/><circle cx="14" cy="24.5" r="2" fill="#3A7A50" opacity=".6"/><circle cx="3.5" cy="14" r="2" fill="#3A7A50" opacity=".6"/><circle cx="24.5" cy="14" r="2" fill="#3A7A50" opacity=".6"/></svg></div>
+              <div class="si-name">Letterboxd</div>
+              <div class="si-stat">12 films · Connected ✓</div>
+            </div>
+            <div class="si-card" onclick="location.href='connections.html'">
+              <div class="si-icon"><svg width="28" height="28" viewBox="0 0 28 28" fill="none"><path d="M4 19h20l-2.5-14H6.5z" stroke="#4A6670" stroke-width="1.5" fill="none" stroke-linejoin="round"/><path d="M10 8C10 4.5 18 4.5 18 8" stroke="#4A6670" stroke-width="1.5" stroke-linecap="round" fill="none"/></svg></div>
+              <div class="si-name">Depop</div>
+              <div class="si-stat">Connect →</div>
+            </div>
+            <div class="si-card" onclick="location.href='connections.html'">
+              <div class="si-icon"><svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect x="3" y="3" width="22" height="22" rx="3" stroke="#4A6670" stroke-width="1.5" fill="none"/><path d="M8 12h12M8 17h8" stroke="#4A6670" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+              <div class="si-name">Goodreads</div>
+              <div class="si-stat">Connect →</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Photo -->
+      <div class="mp" id="mp-photo">
+        <div class="upload-zone" onclick="this.querySelector('input').click()">
+          <input type="file" accept="image/*" style="display:none" multiple>
+          <svg width="36" height="36" viewBox="0 0 36 36" fill="none" style="margin:0 auto;display:block;opacity:.35"><rect x="2" y="8" width="32" height="22" rx="3" stroke="#aaa" stroke-width="1.8" fill="none"/><circle cx="12" cy="19" r="4.5" stroke="#aaa" stroke-width="1.8" fill="none"/><path d="M2 27l9-9 7 7 5-5 11 9" stroke="#aaa" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M24 4v10M20 8l4-4 4 4" stroke="#aaa" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <div class="uz-label">Drag photos here or click to upload</div>
+          <div class="uz-sub">JPG, PNG, WEBP up to 20MB each</div>
+        </div>
+        <div class="m-field" style="margin-top:16px"><label class="m-label">Caption (optional)</label><input class="m-input" type="text" placeholder="A detail worth noting."></div>
+      </div>
+
+      <!-- Link -->
+      <div class="mp" id="mp-link">
+        <div class="m-field"><label class="m-label">URL</label><input class="m-input" type="url" placeholder="https://…" oninput="previewLink(this.value)"></div>
+        <div id="link-preview" style="display:none;border:1px solid var(--rule);overflow:hidden;margin-top:4px">
+          <div class="url-block">
+            <div class="url-thumb"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M8 12l4-4M6.5 10.5l-1.5 1.5a3 3 0 004.2 4.2l1.5-1.5M12.5 9.5l1.5-1.5a3 3 0 00-4.2-4.2l-1.5 1.5" stroke="#aaa" stroke-width="1.3" stroke-linecap="round"/></svg></div>
+            <div>
+              <div class="url-domain" id="link-domain">reedefined.app</div>
+              <div class="url-title" id="link-title">Link title will appear here</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="modal-foot">
+      <div class="mf-note">AI will format this for your readers.</div>
+      <div class="mf-acts">
+        <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+        <button class="btn-add" onclick="addBlock()">Add to Column →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SUBMIT OVERLAY -->
+<div class="submit-overlay" id="submit-overlay">
+  <div class="submit-card">
+    <div class="sc-accent"></div>
+    <div class="sc-body">
+      <div class="sc-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5 9-10" stroke="#4A6670" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <div class="sc-title">Ready to submit?</div>
+      <div class="sc-sub">Your column will appear in your readers' May issue on 1 June. You can still edit until 28 May.</div>
+      <div class="sc-acts">
+        <button class="btn-cancel" onclick="closeSubmit()">Not yet</button>
+        <button class="btn-add" onclick="confirmSubmit()">Submit Column →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const SBU='https://tzzungihuguiubdprada.supabase.co';
+const SBK='sb_publishable_dpxS14vPJaTcmfRmpUz2-Q_aDwFFRP-';
+
+// Auto-resize textareas
+function autoResize(el){el.style.height='auto';el.style.height=el.scrollHeight+'px'}
+document.querySelectorAll('textarea').forEach(t=>{autoResize(t);t.addEventListener('input',()=>autoResize(t))});
+
+// Update preview title
+function updatePreview(){
+  const t=document.getElementById('col-title').value||'Your Column';
+  document.getElementById('prev-title').textContent=t;
+}
+
+// Draft save
+let draftTimer;
+['col-title','col-tagline','col-body'].forEach(id=>{
+  document.getElementById(id).addEventListener('input',()=>{
+    clearTimeout(draftTimer);
+    document.getElementById('draft-status').textContent='Saving…';
+    draftTimer=setTimeout(()=>{
+      document.getElementById('draft-status').textContent='Draft saved';
+    },1200);
+  });
+});
+
+function saveDraft(){
+  document.getElementById('draft-status').textContent='Saving…';
+  setTimeout(()=>document.getElementById('draft-status').textContent='Draft saved',800);
+}
+
+// Modal
+let activeTab='write';
+function openModal(tab){
+  document.getElementById('modal').classList.add('open');
+  document.body.style.overflow='hidden';
+  if(tab){
+    setMT(document.querySelector(`.mt[onclick*="'${tab}'"]`),tab);
+  }
+}
+function closeModal(){document.getElementById('modal').classList.remove('open');document.body.style.overflow=''}
+function setMT(el,id){
+  if(!el)return;
+  document.querySelectorAll('.mt').forEach(t=>t.classList.remove('on'));
+  document.querySelectorAll('.mp').forEach(p=>p.classList.remove('on'));
+  el.classList.add('on');
+  document.getElementById('mp-'+id).classList.add('on');
+  activeTab=id;
+}
+
+// Add block
+function addBlock(){
+  closeModal();
+  const labels={
+    write:'Article',quote:'Pull Quote',spotify:'Spotify Track',
+    video:'Video',import:'Social Content',photo:'Photo',link:'Link'
+  };
+  const b=document.createElement('div');
+  b.className='block';
+  b.innerHTML=`<div class="block-header">
+    <span class="bh-label">${labels[activeTab]||'New Block'} — added just now</span>
+    <button class="bh-del" onclick="delBlock(this.closest('.block').id)">✕</button>
+  </div>
+  <div class="block-body" style="font-family:var(--H);font-size:15px;font-style:italic;color:var(--muted)">Content will appear here after formatting.</div>`;
+  b.id='block-'+Date.now();
+  document.querySelector('.add-toolbar').before(b);
+  b.scrollIntoView({behavior:'smooth',block:'center'});
+}
+
+function delBlock(id){
+  if(confirm('Remove this block?'))document.getElementById(id).remove();
+}
+
+// Submit
+function openSubmit(){document.getElementById('submit-overlay').classList.add('open');document.body.style.overflow='hidden'}
+function closeSubmit(){document.getElementById('submit-overlay').classList.remove('open');document.body.style.overflow=''}
+async function confirmSubmit(){
+  const title=document.getElementById('col-title').value;
+  const body=document.getElementById('col-body').value;
+  try{
+    await fetch(`${SBU}/rest/v1/contributions`,{
+      method:'POST',
+      headers:{'Content-Type':'application/json','apikey':SBK,'Authorization':`Bearer ${SBK}`,'Prefer':'return=minimal'},
+      body:JSON.stringify({title,body,submitted_at:new Date().toISOString(),issue:'2026-05'})
+    });
+  }catch(e){}
+  closeSubmit();
+  alert('Column submitted. ◆ Your readers will see it in their May issue.');
+}
+
+// Link preview
+function previewLink(url){
+  const p=document.getElementById('link-preview');
+  if(!url||!url.includes('.')){p.style.display='none';return}
+  try{
+    const d=new URL(url).hostname.replace('www.','');
+    document.getElementById('link-domain').textContent=d;
+    document.getElementById('link-title').textContent='Page from '+d;
+    p.style.display='block';
+  }catch(e){}
+}
+
+// Spotify import placeholder
+function importSpotify(){alert('Spotify connected. In production this pulls your recent playlists.')}
+
+// AI hints
+const hints=[
+  '"Your column has strong voice. Add a pull quote to anchor the cinema section."',
+  '"Connect TikTok to pull your recent videos directly into your column."',
+  '"Your readers loved your music section last issue — add a playlist this month."',
+  '"A photo block would make your food writing more vivid."',
+  '"Ready to submit? You\'re at 40% — add one more block and you\'re there."'
+];
+let hi=0;
+function nextHint(){hi=(hi+1)%hints.length;document.getElementById('ai-text').textContent=hints[hi]}
+
+// Modal backdrop
+document.getElementById('modal').addEventListener('click',function(e){if(e.target===this)closeModal()});
+document.getElementById('submit-overlay').addEventListener('click',function(e){if(e.target===this)closeSubmit()});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal();closeSubmit()}});
+</script>
+</body>
+</html>
