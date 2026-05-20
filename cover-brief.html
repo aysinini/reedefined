@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="tiktok-domain-verification" content="hVzFgjsRoBRYSJKXVAYgroBXhxr64tSC">
+<meta name="tiktok-domain-verification" content="4Oo4Nq3DlWoB7f8isxeU4GwMijyr5fcU">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reedefined — Cover Brief · Issue No. 2</title>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Barlow+Condensed:wght@400;500;600;700&family=Barlow:wght@300;400;500&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700;1,900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0C0C0C;--mid:#3A3A3A;--muted:#777;--light:#AAA;
+  --rule:#E0E0E0;--rule2:#EBEBEB;--bg:#F8F7F4;--bg2:#F0EEE9;--white:#FFF;
+  --teal:#4A6670;--teal-l:#D8E4E8;--teal-ll:#EEF3F5;
+  --red:#C8251A;--green:#3A7A50;--green-l:#D8EEE0;
+  --H:'Libre Baskerville',Georgia,serif;
+  --P:'Playfair Display',Georgia,serif;
+  --C:'Barlow Condensed',sans-serif;
+  --S:'Barlow',sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--white);color:var(--ink);font-family:var(--S);-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+
+/* ── UTIL BAR ── */
+.util{background:var(--ink);height:34px;display:flex;align-items:center;justify-content:space-between;padding:0 40px;font-family:var(--C);font-size:12px;font-weight:500;letter-spacing:1px;color:rgba(255,255,255,.45)}
+.util a{color:rgba(255,255,255,.45);transition:color .15s}.util a:hover{color:#fff}
+.util-r{display:flex;align-items:center;gap:20px}
+.util-sep{width:1px;height:12px;background:rgba(255,255,255,.15)}
+
+/* ── NAV ── */
+.nav{background:var(--white);border-bottom:3px solid var(--ink);position:sticky;top:0;z-index:100}
+.nav-inner{max-width:1100px;margin:0 auto;padding:0 40px;height:66px;display:flex;align-items:center;justify-content:space-between}
+.nav-logo{font-family:var(--H);font-size:26px;font-weight:700;color:var(--ink);letter-spacing:-.3px;cursor:pointer}
+.nav-links{display:flex;align-items:center;gap:28px}
+.nav-link{font-family:var(--C);font-size:13px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);transition:color .15s;cursor:pointer}
+.nav-link:hover{color:var(--ink)}
+.nav-link.on{color:var(--teal);border-bottom:1px solid var(--teal);padding-bottom:1px}
+.nav-btn{font-family:var(--C);font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;background:var(--ink);color:#fff;padding:11px 24px;border:none;cursor:pointer;transition:opacity .15s}
+.nav-btn:hover{opacity:.85}
+
+/* ── HERO ── */
+.hero{border-bottom:1px solid var(--rule)}
+.hero-inner{max-width:1100px;margin:0 auto;padding:72px 40px 64px;display:grid;grid-template-columns:1fr 340px;gap:80px;align-items:end}
+.hero-left{}
+.hero-kicker{font-family:var(--C);font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--red);margin-bottom:20px;display:flex;align-items:center;gap:12px}
+.hero-kicker::before{content:'';width:28px;height:1px;background:var(--red)}
+.hero-kicker-dot{width:6px;height:6px;border-radius:50%;background:var(--red);animation:blink 1.4s ease-in-out infinite;margin-left:-6px}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+.hero-h1{font-family:var(--P);font-size:clamp(52px,7vw,96px);font-weight:900;line-height:.95;color:var(--ink);letter-spacing:-3px;margin-bottom:24px}
+.hero-h1 em{font-style:italic;font-weight:400;display:block;color:var(--muted)}
+.hero-sub{font-family:var(--H);font-size:19px;font-style:italic;color:var(--mid);line-height:1.7;max-width:500px;margin-bottom:36px}
+.hero-meta{display:flex;align-items:center;gap:24px;padding-top:28px;border-top:1px solid var(--rule)}
+.hm-item{}
+.hm-label{font-family:var(--C);font-size:10px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--muted);margin-bottom:5px}
+.hm-val{font-family:var(--H);font-size:17px;font-weight:700;color:var(--ink)}
+.hm-sep{width:1px;height:36px;background:var(--rule)}
+
+/* Deadline countdown */
+.hero-right{}
+.countdown-card{background:var(--bg);border:1px solid var(--rule);padding:28px}
+.cc-label{font-family:var(--C);font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:18px}
+.cc-days{font-family:var(--P);font-size:72px;font-weight:900;color:var(--ink);line-height:1;letter-spacing:-3px;margin-bottom:4px}
+.cc-unit{font-family:var(--C);font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted)}
+.cc-bar{height:2px;background:var(--rule);margin:16px 0}
+.cc-fill{height:100%;background:var(--teal);transition:width 1s}
+.cc-date{font-family:var(--H);font-size:15px;font-style:italic;color:var(--mid);margin-bottom:20px}
+.cc-btn{width:100%;padding:14px;font-family:var(--C);font-size:11px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;background:var(--ink);color:#fff;border:none;cursor:pointer;transition:opacity .15s}
+.cc-btn:hover{opacity:.85}
+
+/* ── THEME SECTION ── */
+.section{max-width:1100px;margin:0 auto;padding:72px 40px}
+.sec-head{display:flex;align-items:baseline;justify-content:space-between;padding-bottom:16px;border-bottom:2px solid var(--ink);margin-bottom:48px}
+.sec-title{font-family:var(--C);font-size:13px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase}
+.sec-num{font-family:var(--H);font-size:14px;font-style:italic;color:var(--light)}
+
+/* Theme word */
+.theme-word{font-family:var(--P);font-size:clamp(64px,10vw,140px);font-weight:900;font-style:italic;color:var(--ink);letter-spacing:-4px;line-height:.9;margin-bottom:28px}
+.theme-dek{font-family:var(--H);font-size:20px;font-style:italic;color:var(--mid);line-height:1.7;max-width:640px;margin-bottom:0}
+
+/* Mood words */
+.mood-grid{display:flex;gap:10px;flex-wrap:wrap;margin-top:48px}
+.mood-word{
+  font-family:var(--H);font-size:18px;font-style:italic;color:var(--ink);
+  padding:14px 24px;border:1px solid var(--rule);background:var(--bg);
+  transition:all .2s;cursor:default;
+}
+.mood-word:hover{border-color:var(--teal);background:var(--teal-ll)}
+
+/* ── PALETTE ── */
+.palette-section{background:var(--bg);border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);padding:64px 0}
+.palette-inner{max-width:1100px;margin:0 auto;padding:0 40px}
+.palette-swatches{display:grid;grid-template-columns:repeat(5,1fr);gap:0;background:var(--rule);margin-top:40px}
+.swatch-item{background:var(--white);padding:0}
+.swatch-color{height:140px;position:relative}
+.swatch-info{padding:16px 18px;border-top:1px solid var(--rule)}
+.swatch-name{font-family:var(--H);font-size:15px;font-weight:700;color:var(--ink);margin-bottom:4px}
+.swatch-hex{font-family:var(--C);font-size:11px;font-weight:600;letter-spacing:1.5px;color:var(--muted)}
+.swatch-note{font-family:var(--H);font-size:13px;font-style:italic;color:var(--muted);margin-top:4px;line-height:1.4}
+
+/* ── FORMAT ── */
+.format-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--rule)}
+.format-item{background:var(--white);padding:32px 36px}
+.fi-num{font-family:var(--H);font-size:13px;font-style:italic;color:var(--light);margin-bottom:12px}
+.fi-rule{height:2px;background:var(--ink);margin-bottom:16px}
+.fi-title{font-family:var(--H);font-size:20px;font-weight:700;color:var(--ink);margin-bottom:8px}
+.fi-val{font-family:var(--H);font-size:17px;font-style:italic;color:var(--mid);line-height:1.6}
+.fi-note{font-family:var(--C);font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--teal);margin-top:10px}
+
+/* ── REFERENCE ── */
+.ref-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--rule)}
+.ref-item{background:var(--white);padding:28px;cursor:default}
+.ref-item:hover{background:var(--bg)}
+.ri-label{font-family:var(--C);font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--teal);margin-bottom:12px}
+.ri-text{font-family:var(--H);font-size:18px;font-style:italic;color:var(--ink);line-height:1.45}
+.ri-note{font-family:var(--H);font-size:14px;font-style:italic;color:var(--muted);margin-top:8px;line-height:1.5}
+
+/* ── PREVIOUS COVER ── */
+.prev-cover-section{background:var(--ink);padding:80px 0}
+.prev-inner{max-width:1100px;margin:0 auto;padding:0 40px;display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center}
+.prev-text{}
+.prev-kicker{font-family:var(--C);font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:20px;display:flex;align-items:center;gap:12px}
+.prev-kicker::before{content:'';width:24px;height:1px;background:rgba(255,255,255,.25)}
+.prev-h{font-family:var(--H);font-size:clamp(28px,3vw,44px);font-weight:700;color:#fff;line-height:1.1;letter-spacing:-.5px;margin-bottom:16px}
+.prev-h em{font-style:italic;font-weight:400;color:rgba(255,255,255,.5)}
+.prev-dek{font-family:var(--H);font-size:17px;font-style:italic;color:rgba(255,255,255,.45);line-height:1.7;margin-bottom:32px}
+.prev-credit{border-top:1px solid rgba(255,255,255,.1);padding-top:24px}
+.prev-credit-label{font-family:var(--C);font-size:10px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:rgba(255,255,255,.25);margin-bottom:10px}
+.prev-credit-name{font-family:var(--H);font-size:22px;font-weight:700;color:#fff;margin-bottom:4px}
+.prev-credit-handle{font-family:var(--C);font-size:12px;font-weight:600;letter-spacing:1px;color:var(--teal-l)}
+.prev-cover-img{position:relative}
+.prev-cover-card{background:#F2F0EB;padding:0;overflow:hidden;box-shadow:0 32px 80px rgba(0,0,0,.4)}
+.pcc-bar{height:3px;background:var(--teal)}
+.pcc-head{padding:16px 22px 12px;border-bottom:2px solid var(--ink)}
+.pcc-logo{font-family:var(--H);font-size:22px;font-weight:700;color:var(--ink);letter-spacing:-.5px}
+.pcc-issue{font-family:var(--C);font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-top:3px}
+.pcc-art{
+  height:280px;
+  background:
+    radial-gradient(ellipse 60% 80% at 55% 45%,rgba(160,130,175,.3) 0%,transparent 70%),
+    radial-gradient(ellipse 40% 60% at 70% 30%,rgba(100,140,160,.2) 0%,transparent 60%),
+    #EDEAE2;
+  display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;
+}
+.pcc-art-svg{opacity:.35;width:55%;height:55%}
+.pcc-art-credit{position:absolute;bottom:12px;right:14px;font-family:var(--C);font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:rgba(0,0,0,.25)}
+.pcc-foot{padding:10px 22px;background:var(--ink);display:flex;justify-content:space-between}
+.pcc-foot-t{font-family:var(--C);font-size:9px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.35)}
+
+/* ── SUBMISSION ── */
+.submit-section{max-width:760px;margin:0 auto;padding:80px 40px}
+.submit-intro{font-family:var(--H);font-size:19px;font-style:italic;color:var(--mid);line-height:1.7;margin-bottom:48px;padding-bottom:32px;border-bottom:1px solid var(--rule)}
+
+.form-field{margin-bottom:20px}
+.fl{font-family:var(--C);font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:8px}
+.fi{width:100%;padding:14px 16px;font-family:var(--S);font-size:16px;color:var(--ink);background:var(--bg);border:1px solid var(--rule);outline:none;transition:border-color .15s}
+.fi:focus{border-color:var(--teal);background:var(--white)}
+.fi::placeholder{color:var(--light)}
+.fta{width:100%;padding:14px 16px;font-family:var(--H);font-size:17px;font-style:italic;color:var(--ink);background:var(--bg);border:1px solid var(--rule);outline:none;resize:vertical;min-height:100px;line-height:1.6;transition:border-color .15s}
+.fta:focus{border-color:var(--teal);background:var(--white)}
+.fta::placeholder{color:var(--light)}
+
+.upload-zone{border:1px dashed var(--rule);padding:52px;text-align:center;cursor:pointer;background:var(--bg);transition:all .2s;position:relative}
+.upload-zone:hover,.upload-zone.drag{border-color:var(--teal);background:var(--teal-ll)}
+.upload-zone input{position:absolute;inset:0;opacity:0;cursor:pointer}
+.uz-icon{margin:0 auto 16px;display:block;opacity:.4}
+.uz-title{font-family:var(--H);font-size:18px;font-weight:700;color:var(--ink);margin-bottom:6px}
+.uz-sub{font-family:var(--H);font-size:15px;font-style:italic;color:var(--muted)}
+.uz-spec{font-family:var(--C);font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--teal);margin-top:12px}
+.upload-preview{display:none;padding:16px;background:var(--green-l);border:1px solid var(--green);align-items:center;gap:12px;margin-top:-1px}
+.up-icon{flex-shrink:0;color:var(--green)}
+.up-name{font-family:var(--H);font-size:15px;color:var(--ink)}
+.up-size{font-family:var(--C);font-size:11px;color:var(--muted);margin-top:2px}
+
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+
+.submit-note{font-family:var(--H);font-size:15px;font-style:italic;color:var(--muted);line-height:1.6;padding:16px 20px;background:var(--bg);border-left:2px solid var(--teal-l);margin-bottom:24px}
+
+.btn-submit{width:100%;padding:16px;font-family:var(--C);font-size:12px;font-weight:700;letter-spacing:3px;text-transform:uppercase;background:var(--ink);color:#fff;border:none;cursor:pointer;transition:opacity .15s}
+.btn-submit:hover{opacity:.85}
+.btn-submit:disabled{opacity:.4;cursor:default}
+
+.success-state{display:none;text-align:center;padding:52px 32px}
+.ss-icon{width:64px;height:64px;border-radius:50%;background:var(--teal-ll);border:1px solid var(--teal-l);display:flex;align-items:center;justify-content:center;margin:0 auto 24px}
+.ss-title{font-family:var(--H);font-size:32px;font-weight:700;color:var(--ink);margin-bottom:10px;letter-spacing:-.5px}
+.ss-sub{font-family:var(--H);font-size:18px;font-style:italic;color:var(--muted);line-height:1.65;max-width:440px;margin:0 auto 32px}
+.ss-note{font-family:var(--C);font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--teal)}
+
+/* ── FOOTER ── */
+.footer{background:var(--ink);padding:52px 40px 36px}
+.footer-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:20px;padding-bottom:28px;border-bottom:1px solid #1a1a1a;margin-bottom:20px}
+.footer-logo{font-family:var(--H);font-size:22px;font-weight:700;font-style:italic;color:#fff}
+.footer-links{display:flex;gap:24px;flex-wrap:wrap}
+.footer-link{font-family:var(--C);font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.3);cursor:pointer;transition:color .15s}
+.footer-link:hover{color:#fff}
+.footer-bottom{max-width:1100px;margin:0 auto;display:flex;justify-content:space-between;font-family:var(--C);font-size:11px;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,.2)}
+
+::-webkit-scrollbar{width:3px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--rule)}
+
+
+
+  .nav-inner{padding:0 16px;height:56px}
+  .nav-links .nav-btn{display:none}
+  .nav-links{gap:16px}
+  .nav-logo{font-size:20px}
+  .hero-inner{grid-template-columns:1fr;padding:40px 16px 32px;gap:28px}
+  .hero-right{display:none}
+  .hero-h1{font-size:44px}
+  .hero-sub{font-size:16px}
+  .hero-meta{flex-wrap:wrap;gap:14px}
+  .hm-sep{display:none}
+  .section{padding:48px 16px}
+  .palette-inner{padding:0 16px}
+  .palette-swatches{grid-template-columns:repeat(3,1fr)}
+  .format-grid{grid-template-columns:1fr}
+  .ref-grid{grid-template-columns:1fr}
+  .prev-inner{grid-template-columns:1fr}
+  .prev-cover-img{display:none}
+  .submit-section{padding:48px 16px}
+  .form-row{grid-template-columns:1fr}
+  .theme-word{font-size:52px}
+  .footer{padding:36px 16px}
+  .footer-inner{flex-direction:column;gap:14px}
+  .footer-links{flex-wrap:wrap;gap:12px}
+  .mod-card{width:calc(100vw - 24px)}
+}
+
+  .hero-right,.prev-cover-img{display:none}
+  .palette-swatches{grid-template-columns:repeat(3,1fr)}
+  .format-grid,.ref-grid{grid-template-columns:1fr}
+  .form-row{grid-template-columns:1fr}
+  .section,.submit-section{padding:48px 20px}
+  .nav-inner{padding:0 20px}
+  .util{padding:0 20px}
+  .hero-inner{padding:48px 20px 40px}
+}
+
+/* ── MODERATION ── */
+.mod-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:700;align-items:center;justify-content:center}
+.mod-overlay.open{display:flex}
+.mod-card{background:var(--white);width:480px;overflow:hidden;box-shadow:0 32px 80px rgba(0,0,0,.25)}
+.mod-top-warn{height:3px;background:var(--red)}
+.mod-top-ok{height:3px;background:var(--green)}
+.mod-body{padding:36px;text-align:center}
+.mod-icon{width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 20px}
+.mod-icon.warn{background:#FEF2F2;border:1px solid rgba(200,37,26,.15)}
+.mod-icon.ok{background:var(--green-l);border:1px solid rgba(58,122,80,.2)}
+.mod-title{font-family:var(--H);font-size:24px;font-weight:700;color:var(--ink);margin-bottom:8px;letter-spacing:-.3px}
+.mod-sub{font-family:var(--H);font-size:16px;font-style:italic;color:var(--muted);line-height:1.65;margin-bottom:24px}
+.mod-detail{font-family:var(--S);font-size:14px;color:var(--muted);background:var(--bg);padding:12px 16px;margin-bottom:24px;text-align:left;line-height:1.6;border-left:2px solid var(--rule)}
+.mod-acts{display:flex;gap:10px;justify-content:center}
+.mod-btn-ok{font-family:var(--C);font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:12px 24px;background:var(--ink);color:#fff;border:none;cursor:pointer;transition:opacity .15s}.mod-btn-ok:hover{opacity:.85}
+.mod-btn-cancel{font-family:var(--C);font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:12px 24px;background:none;color:var(--muted);border:1px solid var(--rule);cursor:pointer;transition:all .15s}.mod-btn-cancel:hover{border-color:var(--ink);color:var(--ink)}
+.mod-spinner{width:28px;height:28px;border:2px solid var(--teal-l);border-top-color:var(--teal);border-radius:50%;animation:modSpin .8s linear infinite;margin:0 auto 20px}
+@keyframes modSpin{to{transform:rotate(360deg)}}
+
+
+/* ── TABLET 640–1024px ── */
+@media(min-width:640px) and (max-width:1024px){
+  .nav-links .nav-btn{font-size:10px;padding:9px 16px}
+  .hero-inner{grid-template-columns:1fr;padding:48px 24px 36px;gap:28px}
+  .hero-right{display:none}
+  .hero-h1{font-size:56px}
+  .section{padding:56px 24px}
+  .palette-inner{padding:0 24px}
+  .palette-swatches{grid-template-columns:repeat(3,1fr)}
+  .swatch-color{height:100px}
+  .format-grid{grid-template-columns:1fr}
+  .ref-grid{grid-template-columns:repeat(2,1fr)}
+  .prev-inner{grid-template-columns:1fr;gap:40px}
+  .prev-cover-img{display:none}
+  .submit-section{padding:56px 24px}
+  .form-row{grid-template-columns:1fr}
+  .footer{padding:44px 24px 28px}
+  .footer-inner{flex-direction:column;gap:16px}
+}
+
+/* ── MOBILE < 640px ── */
+@media(max-width:640px){
+  .util{display:none}
+  .nav-inner{padding:0 16px;height:52px}
+  .nav-links{gap:12px}
+  .nav-links .nav-btn{display:none}
+  .nav-links .nav-link{font-size:11px;letter-spacing:1px}
+  .nav-logo{font-size:19px}
+  .hero-inner{grid-template-columns:1fr;padding:32px 16px 24px;gap:0}
+  .hero-right{display:none}
+  .hero-kicker{font-size:10px;margin-bottom:14px}
+  .hero-h1{font-size:38px;letter-spacing:-2px}
+  .hero-sub{font-size:15px;margin-bottom:24px}
+  .hero-meta{flex-wrap:wrap;gap:10px;padding-top:20px}
+  .hm-sep{display:none}
+  .hm-val{font-size:15px}
+  .section{padding:40px 16px}
+  .sec-head{flex-direction:column;gap:4px;margin-bottom:28px}
+  .theme-word{font-size:44px;letter-spacing:-2px}
+  .theme-dek{font-size:15px}
+  .mood-grid{gap:6px;margin-top:28px}
+  .mood-word{font-size:15px;padding:10px 16px}
+  .palette-inner{padding:0 16px}
+  .palette-section{padding:44px 0}
+  .palette-swatches{grid-template-columns:repeat(2,1fr)}
+  .swatch-color{height:80px}
+  .swatch-name{font-size:13px}
+  .format-grid{grid-template-columns:1fr}
+  .format-item{padding:22px 20px}
+  .fi-title{font-size:17px}
+  .fi-val{font-size:15px}
+  .ref-grid{grid-template-columns:1fr}
+  .ref-item{padding:20px 16px}
+  .ri-text{font-size:16px}
+  .prev-cover-section{padding:52px 0}
+  .prev-inner{grid-template-columns:1fr;padding:0 16px}
+  .prev-cover-img{display:none}
+  .prev-h{font-size:28px}
+  .prev-dek{font-size:15px}
+  .prev-credit-name{font-size:18px}
+  .submit-section{padding:40px 16px}
+  .submit-intro{font-size:16px;margin-bottom:32px}
+  .form-row{grid-template-columns:1fr}
+  .uz-title{font-size:16px}
+  .btn-submit{font-size:11px;padding:14px}
+  .footer{padding:32px 16px}
+  .footer-inner{flex-direction:column;gap:14px}
+  .footer-links{flex-wrap:wrap;gap:10px}
+  .footer-bottom{flex-direction:column;gap:6px;font-size:10px}
+  .mod-card{width:calc(100vw - 24px)}
+  .countdown-card{display:none}
+}
+
+</style>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%234A6670'/><rect x='30' y='22' width='10' height='56' rx='3' fill='white'/><path d='M40 22 Q68 22 68 40 Q68 58 40 58' fill='none' stroke='white' stroke-width='10' stroke-linecap='round'/><path d='M40 58 Q55 65 68 82' fill='none' stroke='white' stroke-width='9' stroke-linecap='round'/></svg>" type="image/svg+xml">
+
+  <!-- PWA -->
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#0C0C0C">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Reedefined">
+  <meta name="mobile-web-app-capable" content="yes">
+
+<script>
+if('serviceWorker' in navigator){
+  window.addEventListener('load', ()=>{
+    navigator.serviceWorker.register('/sw.js').catch(()=>{});
+  });
+}
+</script>
+</head>
+<body>
+
+<!-- UTIL BAR -->
+<div class="util">
+  <span>Reedefined — Open Call for Illustrators</span>
+  <div class="util-r">
+    <a onclick="location.href='index.html'">Home</a>
+    <div class="util-sep"></div>
+    <a onclick="location.href='newsstand.html'">The Magazine</a>
+    <div class="util-sep"></div>
+    <span id="util-deadline">Deadline: 28 May 2026</span>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-inner">
+    <div class="nav-logo" onclick="location.href='index.html'" style="display:flex;align-items:center;gap:10px;"><svg width="28" height="28" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0"><defs><radialGradient id="navG" cx="30%" cy="20%" r="80%"><stop offset="0%" stop-color="#6A8A96"/><stop offset="60%" stop-color="#4A6670"/><stop offset="100%" stop-color="#2A3E48"/></radialGradient></defs><circle cx="50" cy="50" r="48" fill="#EAE6DD"/><circle cx="50" cy="50" r="44" fill="none" stroke="rgba(74,102,112,.18)" stroke-width="1.5"/><circle cx="94" cy="50" r="2.5" fill="rgba(74,102,112,.5)"/><circle cx="6" cy="50" r="2.5" fill="rgba(74,102,112,.5)"/><circle cx="50" cy="6" r="2" fill="rgba(74,102,112,.4)"/><circle cx="50" cy="94" r="2" fill="rgba(74,102,112,.4)"/><rect x="33" y="27" width="7" height="46" rx="2" fill="url(#navG)"/><path d="M40 27 Q63 27 63 39 Q63 51 40 51" fill="none" stroke="url(#navG)" stroke-width="7" stroke-linecap="round"/><path d="M40 51 Q52 57 62 74" fill="none" stroke="url(#navG)" stroke-width="6.5" stroke-linecap="round"/></svg>Reedefined</div>
+    <div class="nav-links">
+      <span class="nav-link" onclick="location.href='index.html'">Home</span>
+      <span class="nav-link" onclick="location.href='newsstand.html'">The Magazine</span>
+      <span class="nav-link on">Cover Brief</span>
+      <button class="nav-btn" onclick="document.getElementById('submit-anchor').scrollIntoView({behavior:'smooth'})">Submit Your Work →</button>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-left">
+      <div class="hero-kicker">
+        <div class="hero-kicker-dot"></div>
+        Open call — Issue No. 2 · June 2026
+      </div>
+      <h1 class="hero-h1">Cover<br><em>Brief.</em></h1>
+      <p class="hero-sub">We are looking for an illustrator for the cover of Reedefined Issue No. 2. This is a paid commission, open to illustrators at any stage of their career. Your work will be seen by 14,000 readers.</p>
+      <div class="hero-meta">
+        <div class="hm-item">
+          <div class="hm-label">Commission</div>
+          <div class="hm-val">Paid + Credit</div>
+        </div>
+        <div class="hm-sep"></div>
+        <div class="hm-item">
+          <div class="hm-label">Issue</div>
+          <div class="hm-val">No. 2 · June 2026</div>
+        </div>
+        <div class="hm-sep"></div>
+        <div class="hm-item">
+          <div class="hm-label">Readers</div>
+          <div class="hm-val">14,000+</div>
+        </div>
+        <div class="hm-sep"></div>
+        <div class="hm-item">
+          <div class="hm-label">Deadline</div>
+          <div class="hm-val">28 May 2026</div>
+        </div>
+      </div>
+    </div>
+    <div class="hero-right">
+      <div class="countdown-card">
+        <div class="cc-label">Time remaining</div>
+        <div class="cc-days" id="cc-days">11</div>
+        <div class="cc-unit">Days left to submit</div>
+        <div class="cc-bar"><div class="cc-fill" id="cc-fill"></div></div>
+        <div class="cc-date">Deadline: 28 May 2026 at midnight</div>
+        <button class="cc-btn" onclick="document.getElementById('submit-anchor').scrollIntoView({behavior:'smooth'})">Submit Your Work →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- THEME -->
+<div class="section">
+  <div class="sec-head">
+    <span class="sec-title">01 — The Theme</span>
+    <span class="sec-num">Issue No. 2 · June 2026</span>
+  </div>
+  <div class="theme-word">Drift.</div>
+  <p class="theme-dek">The feeling of a month that moved without you noticing. The particular quality of June — long evenings, slow mornings, the sense of being between things. We want an illustration that captures something in motion, something arriving or departing, something that feels like the precise texture of this time of year.</p>
+  <div class="mood-grid">
+    <div class="mood-word">Warm</div>
+    <div class="mood-word">Unhurried</div>
+    <div class="mood-word">Intimate</div>
+    <div class="mood-word">Slightly melancholy</div>
+    <div class="mood-word">Human</div>
+    <div class="mood-word">Tactile</div>
+    <div class="mood-word">Editorial</div>
+    <div class="mood-word">Quiet</div>
+  </div>
+</div>
+
+<!-- PALETTE -->
+<div class="palette-section">
+  <div class="palette-inner">
+    <div class="sec-head">
+      <span class="sec-title">02 — Colour Palette</span>
+      <span class="sec-num">Work within this — or use it as a starting point</span>
+    </div>
+    <div class="palette-swatches">
+      <div class="swatch-item">
+        <div class="swatch-color" style="background:#F2F0EB"></div>
+        <div class="swatch-info">
+          <div class="swatch-name">Paper</div>
+          <div class="swatch-hex">#F2F0EB</div>
+          <div class="swatch-note">The page. Warm, not white.</div>
+        </div>
+      </div>
+      <div class="swatch-item">
+        <div class="swatch-color" style="background:#4A6670"></div>
+        <div class="swatch-info">
+          <div class="swatch-name">Teal</div>
+          <div class="swatch-hex">#4A6670</div>
+          <div class="swatch-note">Our primary. Use it to anchor.</div>
+        </div>
+      </div>
+      <div class="swatch-item">
+        <div class="swatch-color" style="background:#D8E4E8"></div>
+        <div class="swatch-info">
+          <div class="swatch-name">Teal Light</div>
+          <div class="swatch-hex">#D8E4E8</div>
+          <div class="swatch-note">Sky. Distance. Breath.</div>
+        </div>
+      </div>
+      <div class="swatch-item">
+        <div class="swatch-color" style="background:#0C0C0C"></div>
+        <div class="swatch-info">
+          <div class="swatch-name">Ink</div>
+          <div class="swatch-hex">#0C0C0C</div>
+          <div class="swatch-note">Not pure black. Almost.</div>
+        </div>
+      </div>
+      <div class="swatch-item">
+        <div class="swatch-color" style="background:#F0EEE9"></div>
+        <div class="swatch-info">
+          <div class="swatch-name">Linen</div>
+          <div class="swatch-hex">#F0EEE9</div>
+          <div class="swatch-note">Background warmth.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FORMAT -->
+<div class="section" style="background:var(--white);padding-bottom:0">
+  <div class="sec-head">
+    <span class="sec-title">03 — Format & Specifications</span>
+    <span class="sec-num">Please read carefully</span>
+  </div>
+  <div class="format-grid">
+    <div class="format-item">
+      <div class="fi-num">01</div>
+      <div class="fi-rule"></div>
+      <div class="fi-title">Dimensions</div>
+      <div class="fi-val">Portrait format. Minimum 2400 × 3200px at 300dpi. The cover will be displayed digitally — think screen, not print.</div>
+      <div class="fi-note">PDF, PNG or TIFF preferred</div>
+    </div>
+    <div class="format-item">
+      <div class="fi-num">02</div>
+      <div class="fi-rule"></div>
+      <div class="fi-title">Style</div>
+      <div class="fi-val">No restrictions on medium or style. Hand-drawn, digital, collage, watercolour — anything that fits the theme and feels alive.</div>
+      <div class="fi-note">Original work only</div>
+    </div>
+    <div class="format-item">
+      <div class="fi-num">03</div>
+      <div class="fi-rule"></div>
+      <div class="fi-title">Text space</div>
+      <div class="fi-val">Leave room at the top for the Reedefined masthead and at the bottom for article teasers. Roughly 15% top, 25% bottom.</div>
+      <div class="fi-note">We will overlay text — plan for it</div>
+    </div>
+    <div class="format-item">
+      <div class="fi-num">04</div>
+      <div class="fi-rule"></div>
+      <div class="fi-title">Credit & rights</div>
+      <div class="fi-val">You retain full ownership of your work. We license it for use on the Reedefined cover for Issue No. 2 only. Full credit on the cover, in the issue and across our platforms.</div>
+      <div class="fi-note">© stays with you</div>
+    </div>
+  </div>
+</div>
+
+<!-- REFERENCE -->
+<div class="section" style="border-top:1px solid var(--rule)">
+  <div class="sec-head">
+    <span class="sec-title">04 — References & Feeling</span>
+    <span class="sec-num">What we have in mind</span>
+  </div>
+  <div class="ref-grid">
+    <div class="ref-item">
+      <div class="ri-label">The feeling</div>
+      <div class="ri-text">"Like a memory of a summer you haven't had yet."</div>
+      <div class="ri-note">Something slightly out of reach. Wistful without being sad.</div>
+    </div>
+    <div class="ref-item">
+      <div class="ri-label">Publications we admire</div>
+      <div class="ri-text">"Kinfolk, The New Yorker, Monocle, Apartamento."</div>
+      <div class="ri-note">Not derivative — but the quality of attention those covers pay.</div>
+    </div>
+    <div class="ref-item">
+      <div class="ri-label">What we don't want</div>
+      <div class="ri-text">"Photorealism, stock illustration, anything that could be AI."</div>
+      <div class="ri-note">We check sketches before finals. If there's no process, there's no submission.</div>
+    </div>
+    <div class="ref-item">
+      <div class="ri-label">Subject matter</div>
+      <div class="ri-text">"A figure, a room, a city street — something that suggests a life being lived."</div>
+      <div class="ri-note">Not abstract. We want the reader to feel they're looking into someone's world.</div>
+    </div>
+    <div class="ref-item">
+      <div class="ri-label">Scale</div>
+      <div class="ri-text">"Think full-bleed. This should own the space it's in."</div>
+      <div class="ri-note">The illustration is the cover — not decoration on top of something else.</div>
+    </div>
+    <div class="ref-item">
+      <div class="ri-label">The one rule</div>
+      <div class="ri-text">"Make something you would want to read."</div>
+      <div class="ri-note">That's the only brief that really matters.</div>
+    </div>
+  </div>
+</div>
+
+<!-- PREVIOUS COVER -->
+<div class="prev-cover-section">
+  <div class="prev-inner">
+    <div class="prev-text">
+      <div class="prev-kicker">Issue No. 1 · May 2026</div>
+      <h2 class="prev-h">Our first cover<br><em>was AI-generated.</em></h2>
+      <p class="prev-dek">Issue No. 1 used an animated R — a placeholder while we found our footing. Issue No. 2 is the first Reedefined cover made by a real human hand. That matters to us.</p>
+      <div class="prev-credit">
+        <div class="prev-credit-label">Issue No. 2 cover will be credited to</div>
+        <div class="prev-credit-name">You.</div>
+        <div class="prev-credit-handle">Full credit on cover, in-issue and across reedefined.app</div>
+      </div>
+    </div>
+    <div class="prev-cover-img">
+      <div class="prev-cover-card">
+        <div class="pcc-bar"></div>
+        <div class="pcc-head">
+          <div class="pcc-logo">Reedefined</div>
+          <div class="pcc-issue">Issue No. 1 · May 2026</div>
+        </div>
+        <div class="pcc-art">
+          <svg class="pcc-art-svg" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <radialGradient id="rG" cx="30%" cy="20%" r="80%"><stop offset="0%" stop-color="#6A8A96"/><stop offset="60%" stop-color="#4A6670"/><stop offset="100%" stop-color="#2A3E48"/></radialGradient>
+            </defs>
+            <circle cx="200" cy="200" r="162" fill="none" stroke="rgba(74,102,112,.2)" stroke-width="1"/>
+            <circle cx="200" cy="200" r="128" fill="none" stroke="rgba(74,102,112,.15)" stroke-width="1" stroke-dasharray="3 9"/>
+            <rect x="152" y="122" width="22" height="156" rx="4" fill="url(#rG)"/>
+            <path d="M174 122 Q248 122 248 162 Q248 202 174 202" fill="none" stroke="url(#rG)" stroke-width="22" stroke-linecap="round"/>
+            <path d="M174 202 Q210 220 242 278" fill="none" stroke="url(#rG)" stroke-width="21" stroke-linecap="round"/>
+          </svg>
+          <div class="pcc-art-credit">AI Generated · Issue No. 1</div>
+        </div>
+        <div class="pcc-foot">
+          <span class="pcc-foot-t">The magazine shaped by the people you follow</span>
+          <span class="pcc-foot-t">reedefined.app</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SUBMISSION FORM -->
+<div class="submit-section" id="submit-anchor">
+  <div class="sec-head" style="margin-bottom:36px">
+    <span class="sec-title">05 — Submit Your Work</span>
+    <span class="sec-num">Open to all illustrators</span>
+  </div>
+
+  <p class="submit-intro">Send us your illustration and a little about yourself. We read every submission personally. You'll hear back from us within two weeks of the deadline — whether or not you're selected.</p>
+
+  <div id="form-wrap">
+    <div class="form-row">
+      <div class="form-field">
+        <label class="fl">Your Name</label>
+        <input class="fi" type="text" id="f-name" placeholder="Sofia Esposito" required>
+      </div>
+      <div class="form-field">
+        <label class="fl">Email Address</label>
+        <input class="fi" type="email" id="f-email" placeholder="sofia@example.com" required>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-field">
+        <label class="fl">Instagram or Website</label>
+        <input class="fi" type="text" id="f-social" placeholder="@yourhandle or yoursite.com">
+      </div>
+      <div class="form-field">
+        <label class="fl">Location</label>
+        <input class="fi" type="text" id="f-location" placeholder="Istanbul, Turkey">
+      </div>
+    </div>
+
+    <div class="form-field">
+      <label class="fl">Tell us about yourself and your work</label>
+      <textarea class="fta" id="f-bio" placeholder="Who you are, what you make, why this brief speaks to you. A few sentences is enough." style="min-height:90px"></textarea>
+    </div>
+
+    <div class="form-field">
+      <label class="fl">Your illustration for Issue No. 2</label>
+      <div class="upload-zone" id="upload-zone">
+        <input type="file" accept="image/*,.pdf" id="file-input" onchange="handleFile(this)">
+        <svg class="uz-icon" width="48" height="48" viewBox="0 0 48 48" fill="none">
+          <rect x="4" y="12" width="40" height="28" rx="3" stroke="#aaa" stroke-width="2" fill="none"/>
+          <circle cx="16" cy="25" r="5" stroke="#aaa" stroke-width="2" fill="none"/>
+          <path d="M4 34l12-10 9 9 7-6 14 11" stroke="#aaa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M32 4v16M26 8l6-6 6 6" stroke="#aaa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <div class="uz-title">Drop your illustration here</div>
+        <div class="uz-sub">or click to browse your files</div>
+        <div class="uz-spec">PNG · PDF · TIFF · JPG — up to 50MB</div>
+      </div>
+      <div class="upload-preview" id="upload-preview">
+        <div class="up-icon">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M5 11l4 4 8-8" stroke="#3A7A50" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div>
+          <div class="up-name" id="up-name">illustration.png</div>
+          <div class="up-size" id="up-size">4.2 MB · Ready to submit</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-field">
+      <label class="fl">A sketch, rough or work-in-progress</label>
+      <div class="upload-zone" id="upload-zone-2" style="padding:32px">
+        <input type="file" accept="image/*,.pdf" id="file-input-2" onchange="handleFile2(this)">
+        <svg class="uz-icon" width="40" height="40" viewBox="0 0 40 40" fill="none" style="opacity:.35">
+          <path d="M4 32 Q8 24 14 20 Q20 16 26 22 Q30 26 36 18" stroke="#aaa" stroke-width="2" stroke-linecap="round" fill="none"/>
+          <path d="M10 8 Q12 4 16 6 Q18 8 16 12 Q14 16 10 14 Q8 12 10 8z" stroke="#aaa" stroke-width="1.5" fill="none"/>
+          <circle cx="28" cy="10" r="4" stroke="#aaa" stroke-width="1.5" fill="none"/>
+          <path d="M32 10 Q36 8 38 12" stroke="#aaa" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+        </svg>
+        <div class="uz-title" style="font-size:16px">Upload a sketch or rough</div>
+        <div class="uz-sub">A photo of your sketchbook, an early draft, your workspace — anything that shows your process.</div>
+        <div class="uz-spec">JPG · PNG · PDF — up to 20MB</div>
+      </div>
+      <div class="upload-preview" id="upload-preview-2">
+        <div class="up-icon">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M5 11l4 4 8-8" stroke="#3A7A50" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div>
+          <div class="up-name" id="up-name-2">sketch.jpg</div>
+          <div class="up-size" id="up-size-2">Ready to submit</div>
+        </div>
+      </div>
+      <div style="margin-top:10px;font-family:var(--H);font-size:14px;font-style:italic;color:var(--muted);line-height:1.5;padding-left:14px;border-left:2px solid var(--teal-l)">AI illustrations have no process. We look at sketches first — they tell us more than the final piece.</div>
+    </div>
+
+    <div class="form-field">
+      <label class="fl">What does "Drift" mean to you, personally?</label>
+      <textarea class="fta" id="f-drift" placeholder="Not what the dictionary says — what does it bring up for you? A memory, a feeling, a specific moment. Two or three sentences is enough." style="min-height:80px"></textarea>
+      <div style="margin-top:8px;font-family:var(--C);font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted)">This is the most important field on this form.</div>
+    </div>
+
+    <div class="form-field">
+      <label class="fl">Portfolio link (optional)</label>
+      <input class="fi" type="url" id="f-portfolio" placeholder="https://yourportfolio.com">
+    </div>
+
+    <div class="submit-note">We read every submission personally — the illustration, the sketch and your answer about what "Drift" means to you. The selected illustrator will be contacted by 5 June 2026. Their work appears on the cover published 1 July 2026.</div>
+
+    <button class="btn-submit" id="submit-btn" onclick="submitForm()">Submit My Work →</button>
+  </div>
+
+  <div class="success-state" id="success-state">
+    <div class="ss-icon">
+      <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><path d="M6 14l5.5 5.5 10.5-11" stroke="#4A6670" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <div class="ss-title">Submission received. ◆</div>
+    <div class="ss-sub">Thank you for sending your work. We read every submission personally and will be in touch within two weeks of the deadline.</div>
+    <div class="ss-note">Watch your inbox — hello@reedefined.app</div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-logo">Reedefined</div>
+    <div class="footer-links">
+      <span class="footer-link" onclick="location.href='index.html'">Home</span>
+      <span class="footer-link" onclick="location.href='newsstand.html'">The Magazine</span>
+      <span class="footer-link" onclick="location.href='portal.html'">Join Waitlist</span>
+      <span class="footer-link" onclick="location.href='privacy.html'">Privacy</span>
+      <span class="footer-link" onclick="location.href='terms.html'">Terms</span>
+      <span class="footer-link" onclick="location.href='mailto:hello@reedefined.app'">Contact</span>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 Reedefined. All rights reserved.</span>
+    <span>reedefined.app/cover-brief.html</span>
+  </div>
+</footer>
+
+<script>
+const SBU='https://gseuejqqwkdjkhxfxxwy.supabase.co';
+const SBK='sb_publishable_0Nmw1mwGx__b_jJHLHBDKg__1OAsRuy';
+
+// ── COUNTDOWN ──
+function updateCountdown(){
+  const deadline = new Date('2026-05-28T23:59:00');
+  const now = new Date();
+  const diff = deadline - now;
+  if(diff <= 0){
+    document.getElementById('cc-days').textContent = '0';
+    document.getElementById('cc-fill').style.width = '100%';
+    return;
+  }
+  const days = Math.ceil(diff / (1000*60*60*24));
+  document.getElementById('cc-days').textContent = days;
+  // 30 day window
+  const pct = Math.min(100, Math.max(0, ((30-days)/30)*100));
+  document.getElementById('cc-fill').style.width = pct + '%';
+}
+updateCountdown();
+
+// ── FILE UPLOAD ──
+let uploadedFile = null;
+
+function handleFile(input){
+  const file = input.files[0];
+  if(!file) return;
+  uploadedFile = file;
+  document.getElementById('up-name').textContent = file.name;
+  document.getElementById('up-size').textContent = (file.size/1024/1024).toFixed(1) + ' MB · Ready to submit';
+  document.getElementById('upload-preview').style.display = 'flex';
+  document.getElementById('upload-zone').style.opacity = '.5';
+}
+
+// Drag and drop
+const zone = document.getElementById('upload-zone');
+zone.addEventListener('dragover', e=>{ e.preventDefault(); zone.classList.add('drag'); });
+zone.addEventListener('dragleave', ()=>zone.classList.remove('drag'));
+zone.addEventListener('drop', e=>{
+  e.preventDefault(); zone.classList.remove('drag');
+  const file = e.dataTransfer.files[0];
+  if(file){ document.getElementById('file-input').files = e.dataTransfer.files; handleFile(document.getElementById('file-input')); }
+});
+
+// ── FILE 2 (sketch) ──
+let uploadedFile2 = null;
+
+function handleFile2(input){
+  const file = input.files[0];
+  if(!file) return;
+  uploadedFile2 = file;
+  document.getElementById('up-name-2').textContent = file.name;
+  document.getElementById('up-size-2').textContent = (file.size/1024/1024).toFixed(1) + ' MB · Ready to submit';
+  document.getElementById('upload-preview-2').style.display = 'flex';
+  document.getElementById('upload-zone-2').style.opacity = '.5';
+}
+
+// Drag and drop zone 2
+const zone2 = document.getElementById('upload-zone-2');
+zone2.addEventListener('dragover', e=>{ e.preventDefault(); zone2.classList.add('drag'); });
+zone2.addEventListener('dragleave', ()=>zone2.classList.remove('drag'));
+zone2.addEventListener('drop', e=>{
+  e.preventDefault(); zone2.classList.remove('drag');
+  const file = e.dataTransfer.files[0];
+  if(file){ document.getElementById('file-input-2').files = e.dataTransfer.files; handleFile2(document.getElementById('file-input-2')); }
+});
+
+// ── SUBMIT ──
+async function submitForm(){
+  const name     = document.getElementById('f-name').value.trim();
+  const email    = document.getElementById('f-email').value.trim();
+  const bio      = document.getElementById('f-bio').value.trim();
+  const social   = document.getElementById('f-social').value.trim();
+  const location = document.getElementById('f-location').value.trim();
+  const portfolio= document.getElementById('f-portfolio').value.trim();
+
+  if(!name || !email){
+    alert('Please enter your name and email address.');
+    return;
+  }
+  if(!uploadedFile){
+    alert('Please upload your illustration before submitting.');
+    return;
+  }
+  const drift = document.getElementById('f-drift').value.trim();
+  if(!drift){
+    alert('Please answer what "Drift" means to you — it's the most important field.');
+    document.getElementById('f-drift').focus();
+    return;
+  }
+  if(!uploadedFile2){
+    const go = confirm('You haven\'t uploaded a sketch or rough. We strongly recommend including one — it\'s what we look at first. Submit anyway?');
+    if(!go) return;
+  }
+
+  const btn = document.getElementById('submit-btn');
+  btn.textContent = 'Checking…';
+  btn.disabled = true;
+
+  // Run content moderation
+  openModOverlay();
+
+  // Check illustration and drift answer in parallel
+  const [imgResult, textResult] = await Promise.all([
+    checkImageSafety(uploadedFile),
+    moderateText(drift)
+  ]);
+
+  if(!imgResult.passed){
+    btn.textContent = 'Submit My Work →';
+    btn.disabled = false;
+    showModResult(false,
+      'Illustration flagged.',
+      'Your illustration didn't pass our content check.',
+      imgResult.reason
+    );
+    return;
+  }
+  if(!textResult.passed){
+    btn.textContent = 'Submit My Work →';
+    btn.disabled = false;
+    showModResult(false,
+      'Your answer was flagged.',
+      'Please review your response to the "Drift" question.',
+      textResult.reason
+    );
+    return;
+  }
+
+  // All clear — show success confirmation then save
+  showModResult(true,
+    'Submission looks great. ◆',
+    'Your illustration and brief answer passed our content review. Click below to complete your submission.',
+    null,
+    async () => {
+      closeModOverlay();
+      btn.textContent = 'Submitting…';
+      try {
+        await fetch(SBU+'/rest/v1/cover_submissions', {
+      method:'POST',
+      headers:{
+        'Content-Type':'application/json',
+        'apikey':SBK,
+        'Authorization':`Bearer ${SBK}`,
+        'Prefer':'return=minimal'
+      },
+      body:JSON.stringify({
+        name, email, bio, social, location, portfolio,
+        filename: uploadedFile.name,
+        filesize: uploadedFile.size,
+        issue: 'No. 2 · June 2026',
+        submitted_at: new Date().toISOString()
+      })
+    });
+  } catch(e){ console.log('Supabase:', e); }
+
+  document.getElementById('form-wrap').style.display = 'none';
+  document.getElementById('success-state').style.display = 'block';
+  window.scrollTo({top: document.getElementById('submit-anchor').offsetTop - 80, behavior:'smooth'});
+}
+</script>
+
+<!-- MODERATION OVERLAY -->
+<div class="mod-overlay" id="mod-overlay">
+  <div class="mod-card">
+    <div id="mod-top" class="mod-top-ok"></div>
+    <div class="mod-body">
+      <div id="mod-checking">
+        <div class="mod-spinner"></div>
+        <div class="mod-title">Reviewing your submission…</div>
+        <div class="mod-sub">We're checking your illustration and brief answer before saving. This takes just a moment.</div>
+      </div>
+      <div id="mod-result" style="display:none">
+        <div class="mod-icon" id="mod-icon">
+          <svg id="mod-icon-svg" width="24" height="24" viewBox="0 0 24 24" fill="none"></svg>
+        </div>
+        <div class="mod-title" id="mod-title"></div>
+        <div class="mod-sub" id="mod-sub"></div>
+        <div class="mod-detail" id="mod-detail" style="display:none"></div>
+        <div class="mod-acts" id="mod-acts"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

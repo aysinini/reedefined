@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="tiktok-domain-verification" content="hVzFgjsRoBRYSJKXVAYgroBXhxr64tSC">
+<meta name="tiktok-domain-verification" content="4Oo4Nq3DlWoB7f8isxeU4GwMijyr5fcU">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reedefined — Discover</title>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Barlow+Condensed:wght@400;500;600;700&family=Barlow:wght@300;400;500&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0C0C0C;--mid:#3A3A3A;--muted:#777;--light:#AAA;
+  --rule:#E0E0E0;--rule2:#EBEBEB;--bg:#F8F7F4;--bg2:#F0EEE9;--white:#FFF;
+  --teal:#4A6670;--teal-l:#D8E4E8;--teal-ll:#EEF3F5;
+  --red:#C8251A;--green:#3A7A50;--green-l:#D8EEE0;
+  --H:'Libre Baskerville',Georgia,serif;
+  --P:'Playfair Display',Georgia,serif;
+  --C:'Barlow Condensed',sans-serif;
+  --S:'Barlow',sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:var(--S);-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+
+/* ── UTIL ── */
+.util{background:var(--ink);height:34px;display:flex;align-items:center;justify-content:space-between;padding:0 40px;font-family:var(--C);font-size:12px;font-weight:500;letter-spacing:1px;color:rgba(255,255,255,.45)}
+.util a{color:rgba(255,255,255,.45);transition:color .15s}.util a:hover{color:#fff}
+.util-r{display:flex;align-items:center;gap:18px}
+.util-sep{width:1px;height:12px;background:rgba(255,255,255,.15)}
+
+/* ── NAV ── */
+.nav{background:var(--white);border-bottom:3px solid var(--ink);position:sticky;top:0;z-index:200}
+.nav-inner{max-width:1380px;margin:0 auto;padding:0 40px;height:66px;display:flex;align-items:center;justify-content:space-between}
+.nav-logo{font-family:var(--H);font-size:26px;font-weight:700;color:var(--ink);letter-spacing:-.3px;cursor:pointer}
+.nav-links{display:flex;height:66px;align-items:center}
+.nav-link{font-family:var(--C);font-size:13px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--muted);padding:0 18px;height:100%;display:flex;align-items:center;border-bottom:3px solid transparent;margin-bottom:-3px;transition:color .15s,border-color .15s;cursor:pointer}
+.nav-link:hover{color:var(--ink)}.nav-link.on{color:var(--ink);border-bottom-color:var(--ink)}
+.nav-right{display:flex;align-items:center;gap:8px}
+.btn-p{font-family:var(--C);font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;background:var(--ink);color:#fff;padding:11px 24px;border:none;cursor:pointer;transition:opacity .15s}.btn-p:hover{opacity:.85}
+.btn-o{font-family:var(--C);font-size:12px;font-weight:600;letter-spacing:2px;text-transform:uppercase;background:transparent;color:var(--ink);padding:10px 22px;border:1px solid var(--ink);cursor:pointer;transition:all .15s}.btn-o:hover{background:var(--ink);color:#fff}
+.nav-av{width:32px;height:32px;border-radius:50%;background:var(--teal);display:flex;align-items:center;justify-content:center;font-family:var(--H);font-size:12px;font-weight:700;color:#fff;cursor:pointer}
+
+/* ── TICKER ── */
+.ticker{background:var(--teal);height:38px;overflow:hidden;display:flex;align-items:center}
+.ticker-t{display:flex;animation:tick 36s linear infinite;white-space:nowrap}
+.ti{font-family:var(--C);font-size:12px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:#fff;padding:0 40px;opacity:.9}
+.td{color:rgba(255,255,255,.3)}
+@keyframes tick{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* ── HERO ── */
+.hero{background:var(--white);border-bottom:1px solid var(--rule);padding:56px 0 0}
+.hero-inner{max-width:1380px;margin:0 auto;padding:0 40px}
+.hero-top{display:grid;grid-template-columns:1fr auto;align-items:end;gap:40px;margin-bottom:36px}
+.hero-eyebrow{font-family:var(--C);font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--teal);margin-bottom:16px;display:flex;align-items:center;gap:14px}
+.hero-eyebrow::before{content:'';width:28px;height:1px;background:var(--teal)}
+.hero-h1{font-family:var(--H);font-size:clamp(40px,5vw,68px);font-weight:700;line-height:1.0;color:var(--ink);letter-spacing:-2px;margin-bottom:14px}
+.hero-h1 em{font-style:italic;font-weight:400;color:var(--muted)}
+.hero-sub{font-family:var(--H);font-size:18px;font-style:italic;color:var(--mid);line-height:1.7;max-width:540px}
+.hero-stats{display:flex;gap:32px;text-align:right}
+.hs-n{font-family:var(--H);font-size:36px;font-weight:700;color:var(--ink);line-height:1}
+.hs-l{font-family:var(--C);font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-top:4px}
+
+/* ── SEARCH & FILTER ── */
+.search-bar{padding:0 40px;max-width:1380px;margin:0 auto;padding-bottom:0}
+.sb-inner{display:flex;align-items:center;gap:0;border:1px solid var(--rule);background:var(--white);overflow:hidden;margin-bottom:0}
+.sb-icon{padding:0 16px;color:var(--muted);flex-shrink:0;display:flex;align-items:center}
+.sb-input{flex:1;padding:14px 0;font-family:var(--H);font-size:17px;font-style:italic;color:var(--ink);border:none;outline:none;background:transparent}
+.sb-input::placeholder{color:var(--light)}
+.sb-clear{font-family:var(--C);font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);padding:0 18px;cursor:pointer;display:none;transition:color .15s}.sb-clear:hover{color:var(--ink)}
+
+.filters{display:flex;overflow-x:auto;scrollbar-width:none;border-bottom:1px solid var(--rule);background:var(--white)}
+.filters::-webkit-scrollbar{display:none}
+.filter-btn{font-family:var(--C);font-size:12px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);padding:13px 20px;white-space:nowrap;cursor:pointer;border-bottom:2px solid transparent;transition:color .15s,border-color .15s;background:none;border-top:none;border-left:none;border-right:none;flex-shrink:0}
+.filter-btn:hover{color:var(--ink)}.filter-btn.on{color:var(--ink);border-bottom-color:var(--red)}
+
+/* ── PAGE BODY ── */
+.page-body{max-width:1380px;margin:0 auto;padding:0 40px 96px}
+
+/* ── SECTION HEAD ── */
+.sec-head{display:flex;align-items:baseline;justify-content:space-between;padding:44px 0 16px;border-bottom:2px solid var(--ink)}
+.sec-title{font-family:var(--C);font-size:13px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase}
+.sec-sub{font-family:var(--C);font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--muted)}
+.sec-count{font-family:var(--H);font-size:14px;font-style:italic;color:var(--light)}
+
+/* ── FEATURED ISSUES ── */
+.featured-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--rule);margin-top:1px}
+.feat-card{background:var(--white);cursor:pointer;transition:background .15s;position:relative;overflow:hidden}
+.feat-card:hover{background:var(--bg)}
+.fc-cover{height:220px;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.fc-bar{height:3px;position:absolute;top:0;left:0;right:0}
+.fc-initials{font-family:var(--P);font-size:88px;font-weight:900;font-style:italic;opacity:.08;line-height:1;user-select:none;position:absolute}
+.fc-badge{position:absolute;top:14px;right:14px;font-family:var(--C);font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:4px 10px}
+.fc-avatar{position:absolute;bottom:16px;left:16px;width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--H);font-size:18px;font-weight:700;color:#fff;border:2px solid rgba(255,255,255,.3)}
+.fc-body{padding:18px 20px 20px}
+.fc-type{font-family:var(--C);font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--teal);margin-bottom:6px}
+.fc-name{font-family:var(--H);font-size:20px;font-weight:700;color:var(--ink);margin-bottom:4px;line-height:1.2}
+.fc-handle{font-family:var(--C);font-size:11px;font-weight:600;letter-spacing:1px;color:var(--muted);margin-bottom:10px}
+.fc-beats{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:12px}
+.fc-beat{font-family:var(--C);font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:4px 9px;border:1px solid var(--rule);color:var(--muted);background:var(--bg)}
+.fc-quote{font-family:var(--H);font-size:14px;font-style:italic;color:var(--mid);line-height:1.55;margin-bottom:14px;padding-left:12px;border-left:2px solid var(--teal-l)}
+.fc-foot{display:flex;align-items:center;justify-content:space-between;padding-top:12px;border-top:1px solid var(--rule2)}
+.fc-followers{font-family:var(--C);font-size:10px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--muted)}
+.fc-followers strong{font-size:14px;color:var(--ink)}
+.fc-btn{font-family:var(--C);font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:7px 14px;border:1px solid rgba(74,102,112,.35);color:var(--teal);background:none;cursor:pointer;transition:all .15s}
+.fc-btn:hover,.fc-btn.on{background:var(--teal);color:#fff;border-color:var(--teal)}
+.fc-btn.on::after{content:' ✓'}
+
+/* ── CONTRIBUTORS GRID ── */
+.contrib-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--rule);margin-top:1px}
+.cc{background:var(--white);padding:22px 20px;position:relative;transition:background .15s;cursor:default}
+.cc:hover{background:var(--teal-ll)}
+.cc-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:12px}
+.cc-av{width:46px;height:46px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--H);font-size:16px;font-weight:700;color:#fff;flex-shrink:0}
+.cc-follow{font-family:var(--C);font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--teal);border:1px solid rgba(74,102,112,.35);padding:5px 12px;cursor:pointer;transition:all .15s;background:none;white-space:nowrap}
+.cc-follow:hover,.cc-follow.on{background:var(--teal);color:#fff;border-color:var(--teal)}.cc-follow.on::after{content:' ✓'}
+.cc-name{font-family:var(--H);font-size:17px;font-weight:700;color:var(--ink);margin-bottom:3px}
+.cc-beats{font-family:var(--C);font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--teal);margin-bottom:8px}
+.cc-quote{font-family:var(--H);font-size:13px;font-style:italic;color:var(--mid);line-height:1.55;margin-bottom:8px}
+.cc-meta{font-family:var(--C);font-size:10px;letter-spacing:.5px;color:var(--light)}
+.cc-articles{margin-top:10px;padding-top:10px;border-top:1px solid var(--rule2)}
+.cc-art{font-family:var(--H);font-size:12px;color:var(--mid);padding:5px 0;border-bottom:1px solid var(--rule2);line-height:1.3}
+.cc-art:last-child{border:none;padding-bottom:0}
+.cc-art-cat{font-family:var(--C);font-size:8px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--teal);display:block;margin-bottom:2px}
+
+/* ── PUBLIC ISSUES GRID ── */
+.public-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--rule);margin-top:1px}
+.pc{background:var(--white);cursor:pointer;transition:background .15s;overflow:hidden}
+.pc:hover{background:var(--bg)}
+.pc-cover{height:160px;position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.pc-cover-bar{height:2px;position:absolute;top:0;left:0;right:0}
+.pc-cover-init{font-family:var(--P);font-size:72px;font-weight:900;font-style:italic;opacity:.07;user-select:none}
+.pc-cover-av{position:absolute;bottom:12px;left:12px;width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--H);font-size:13px;font-weight:700;color:#fff}
+.pc-cover-lock{position:absolute;top:10px;right:10px;font-family:var(--C);font-size:8px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.5);background:rgba(0,0,0,.3);padding:3px 7px}
+.pc-body{padding:14px 16px 16px}
+.pc-name{font-family:var(--H);font-size:16px;font-weight:700;color:var(--ink);margin-bottom:2px}
+.pc-handle{font-family:var(--C);font-size:10px;font-weight:600;letter-spacing:1px;color:var(--muted);margin-bottom:8px}
+.pc-beats{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:10px}
+.pc-beat{font-family:var(--C);font-size:9px;font-weight:600;letter-spacing:1px;text-transform:uppercase;padding:3px 8px;border:1px solid var(--rule2);color:var(--muted);background:var(--bg2)}
+.pc-foot{display:flex;align-items:center;justify-content:space-between;padding-top:10px;border-top:1px solid var(--rule2)}
+.pc-contribs{font-family:var(--C);font-size:10px;color:var(--muted)}
+.pc-view{font-family:var(--C);font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--teal);transition:opacity .15s}.pc-view:hover{opacity:.7}
+
+/* ── EMPTY STATE ── */
+.empty{padding:64px 0;text-align:center}
+.empty-t{font-family:var(--H);font-size:22px;font-weight:700;color:var(--ink);margin-bottom:8px}
+.empty-d{font-family:var(--H);font-size:16px;font-style:italic;color:var(--muted)}
+
+/* ── OPT-IN BANNER ── */
+.optin-banner{background:var(--ink);padding:28px 40px;display:flex;align-items:center;justify-content:space-between;gap:32px;margin-top:1px}
+.ob-left{display:flex;align-items:center;gap:16px}
+.ob-icon{width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.ob-text{}
+.ob-title{font-family:var(--H);font-size:17px;font-weight:700;color:#fff;margin-bottom:4px}
+.ob-sub{font-family:var(--H);font-size:14px;font-style:italic;color:rgba(255,255,255,.45);line-height:1.5}
+.ob-btn{font-family:var(--C);font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:12px 24px;background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.2);cursor:pointer;transition:all .15s;white-space:nowrap;flex-shrink:0}
+.ob-btn:hover{background:rgba(255,255,255,.2);border-color:rgba(255,255,255,.4)}
+.ob-btn.on{background:var(--teal);border-color:var(--teal)}
+
+/* ── NO RESULTS ── */
+.no-results{display:none;padding:40px;text-align:center;grid-column:1/-1;background:var(--white)}
+.no-results.show{display:block}
+
+/* ── FADE IN ── */
+.fade{opacity:0;transform:translateY(16px);transition:opacity .6s cubic-bezier(.16,1,.3,1),transform .6s cubic-bezier(.16,1,.3,1)}
+.fade.in{opacity:1;transform:none}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar{width:3px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--rule)}
+
+/* ── THREE-TIER RESPONSIVE ── */
+@media(min-width:640px) and (max-width:1024px){
+  .util{display:none}
+  .nav-inner{padding:0 24px}
+  .nav-links{display:none}
+  .hero-inner,.search-bar,.page-body{padding-left:24px;padding-right:24px}
+  .hero-top{grid-template-columns:1fr;gap:20px}
+  .hero-stats{text-align:left}
+  .hero-h1{font-size:44px}
+  .featured-grid{grid-template-columns:repeat(2,1fr)}
+  .contrib-grid{grid-template-columns:repeat(3,1fr)}
+  .public-grid{grid-template-columns:repeat(3,1fr)}
+  .optin-banner{padding:22px 24px;flex-direction:column;align-items:flex-start;gap:16px}
+}
+
+@media(max-width:640px){
+  .util,.ticker{display:none}
+  .nav-inner{padding:0 16px;height:56px}
+  .nav-links{display:none}
+  .nav-logo{font-size:20px}
+  .nav-right .btn-o{display:none}
+  .btn-p{font-size:10px;padding:9px 16px}
+  .hero{padding:32px 0 0}
+  .hero-inner,.search-bar,.page-body{padding-left:16px;padding-right:16px}
+  .hero-top{grid-template-columns:1fr;gap:16px}
+  .hero-stats{display:none}
+  .hero-h1{font-size:32px;letter-spacing:-1.5px}
+  .hero-sub{font-size:15px}
+  .sb-input{font-size:15px;padding:12px 0}
+  .filter-btn{font-size:11px;padding:11px 14px}
+  .sec-head{padding:32px 0 12px;flex-wrap:wrap;gap:4px}
+  .featured-grid{grid-template-columns:1fr}
+  .fc-cover{height:180px}
+  .contrib-grid{grid-template-columns:1fr 1fr}
+  .cc{padding:16px 14px}
+  .cc-name{font-size:14px}
+  .cc-quote{font-size:12px}
+  .cc-articles{display:none}
+  .public-grid{grid-template-columns:1fr 1fr}
+  .pc-cover{height:130px}
+  .pc-name{font-size:14px}
+  .optin-banner{padding:18px 16px;flex-direction:column;align-items:flex-start;gap:14px}
+  .ob-btn{width:100%}
+}
+</style>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%234A6670'/><rect x='30' y='22' width='10' height='56' rx='3' fill='white'/><path d='M40 22 Q68 22 68 40 Q68 58 40 58' fill='none' stroke='white' stroke-width='10' stroke-linecap='round'/><path d='M40 58 Q55 65 68 82' fill='none' stroke='white' stroke-width='9' stroke-linecap='round'/></svg>" type="image/svg+xml">
+
+  <!-- PWA -->
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#0C0C0C">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Reedefined">
+  <meta name="mobile-web-app-capable" content="yes">
+
+<script>
+if('serviceWorker' in navigator){
+  window.addEventListener('load', ()=>{
+    navigator.serviceWorker.register('/sw.js').catch(()=>{});
+  });
+}
+</script>
+</head>
+<body>
+
+<!-- UTIL -->
+<div class="util">
+  <span>Reedefined — Discover contributors & public issues</span>
+  <div class="util-r">
+    <a onclick="location.href='newsstand.html'">The Magazine</a>
+    <div class="util-sep"></div>
+    <a onclick="location.href='portal.html'">Sign In</a>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-inner">
+    <div class="nav-logo" onclick="location.href='index.html'" style="display:flex;align-items:center;gap:10px;"><svg width="28" height="28" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0"><defs><radialGradient id="navG" cx="30%" cy="20%" r="80%"><stop offset="0%" stop-color="#6A8A96"/><stop offset="60%" stop-color="#4A6670"/><stop offset="100%" stop-color="#2A3E48"/></radialGradient></defs><circle cx="50" cy="50" r="48" fill="#EAE6DD"/><circle cx="50" cy="50" r="44" fill="none" stroke="rgba(74,102,112,.18)" stroke-width="1.5"/><circle cx="94" cy="50" r="2.5" fill="rgba(74,102,112,.5)"/><circle cx="6" cy="50" r="2.5" fill="rgba(74,102,112,.5)"/><circle cx="50" cy="6" r="2" fill="rgba(74,102,112,.4)"/><circle cx="50" cy="94" r="2" fill="rgba(74,102,112,.4)"/><rect x="33" y="27" width="7" height="46" rx="2" fill="url(#navG)"/><path d="M40 27 Q63 27 63 39 Q63 51 40 51" fill="none" stroke="url(#navG)" stroke-width="7" stroke-linecap="round"/><path d="M40 51 Q52 57 62 74" fill="none" stroke="url(#navG)" stroke-width="6.5" stroke-linecap="round"/></svg>Reedefined</div>
+    <div class="nav-links">
+      <span class="nav-link" onclick="location.href='newsstand.html'">The Magazine</span>
+      <span class="nav-link on">Discover</span>
+      <span class="nav-link" onclick="location.href='cover-brief.html'">Illustrators</span>
+    </div>
+    <div class="nav-right">
+      <button class="btn-o" onclick="location.href='portal.html'">Sign In</button>
+      <button class="btn-p" onclick="location.href='portal.html'">Join Waitlist →</button>
+      <div class="nav-av" id="nav-av">M</div>
+    </div>
+  </div>
+</nav>
+
+<!-- TICKER -->
+<div class="ticker">
+  <div class="ticker-t">
+    <span class="ti">180 contributors writing this month</span><span class="td"> ◆ </span>
+    <span class="ti">Follow the people whose taste you trust</span><span class="td"> ◆ </span>
+    <span class="ti">See what the people you admire are reading</span><span class="td"> ◆ </span>
+    <span class="ti">Your issue is shaped by who you follow</span><span class="td"> ◆ </span>
+    <span class="ti">No two readers get the same issue</span><span class="td"> ◆ </span>
+    <span class="ti">180 contributors writing this month</span><span class="td"> ◆ </span>
+    <span class="ti">Follow the people whose taste you trust</span><span class="td"> ◆ </span>
+    <span class="ti">See what the people you admire are reading</span><span class="td"> ◆ </span>
+    <span class="ti">Your issue is shaped by who you follow</span><span class="td"> ◆ </span>
+    <span class="ti">No two readers get the same issue</span><span class="td"> ◆ </span>
+  </div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-top">
+      <div>
+        <div class="hero-eyebrow">Issue No. 1 · May 2026</div>
+        <h1 class="hero-h1">Discover<br><em>who to follow.</em></h1>
+        <p class="hero-sub">Browse the contributors who write for Reedefined — and see the public issues of people whose taste you admire. Follow them, and their writing shapes your next issue.</p>
+      </div>
+      <div class="hero-stats">
+        <div>
+          <div class="hs-n">180</div>
+          <div class="hs-l">Contributors</div>
+        </div>
+        <div>
+          <div class="hs-n">14k</div>
+          <div class="hs-l">Readers</div>
+        </div>
+        <div>
+          <div class="hs-n">34</div>
+          <div class="hs-l">Public Issues</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SEARCH -->
+  <div class="search-bar" style="max-width:1380px;margin:0 auto">
+    <div class="sb-inner">
+      <div class="sb-icon">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="7.5" cy="7.5" r="5.5" stroke="#aaa" stroke-width="1.5"/><path d="M13 13l3.5 3.5" stroke="#aaa" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </div>
+      <input class="sb-input" type="text" id="search-input" placeholder="Search contributors, interests, names…" oninput="handleSearch(this.value)">
+      <span class="sb-clear" id="sb-clear" onclick="clearSearch()">Clear ✕</span>
+    </div>
+  </div>
+
+  <!-- FILTERS -->
+  <div class="filters" style="max-width:1380px;margin:0 auto;padding:0 40px">
+    <button class="filter-btn on" onclick="setFilter(this,'all')">All</button>
+    <button class="filter-btn" onclick="setFilter(this,'cinema')">Cinema</button>
+    <button class="filter-btn" onclick="setFilter(this,'music')">Music</button>
+    <button class="filter-btn" onclick="setFilter(this,'fashion')">Fashion</button>
+    <button class="filter-btn" onclick="setFilter(this,'food')">Food</button>
+    <button class="filter-btn" onclick="setFilter(this,'literature')">Literature</button>
+    <button class="filter-btn" onclick="setFilter(this,'travel')">Travel</button>
+    <button class="filter-btn" onclick="setFilter(this,'art')">Art</button>
+    <button class="filter-btn" onclick="setFilter(this,'nightlife')">Nightlife</button>
+    <button class="filter-btn" onclick="setFilter(this,'beauty')">Beauty</button>
+  </div>
+</div>
+
+<!-- PAGE BODY -->
+<div class="page-body">
+
+  <!-- ── FEATURED PUBLIC ISSUES ── -->
+  <div class="sec-head">
+    <span class="sec-title">Featured This Month</span>
+    <span class="sec-sub">Hand-picked public issues</span>
+  </div>
+
+  <div class="featured-grid" id="featured-grid">
+
+    <div class="feat-card fade" onclick="viewIssue('remi')">
+      <div class="fc-cover" style="background:linear-gradient(145deg,#1A1A2E,#2A2040)">
+        <div class="fc-bar" style="background:#3A3A6A"></div>
+        <div class="fc-initials" style="color:rgba(255,255,255,.06)">RD</div>
+        <div class="fc-avatar" style="background:#3A3A6A">R</div>
+        <div class="fc-badge" style="background:rgba(255,255,255,.1);color:rgba(255,255,255,.6)">Public Issue</div>
+      </div>
+      <div class="fc-body">
+        <div class="fc-type">Contributing Editor</div>
+        <div class="fc-name">Remi D.</div>
+        <div class="fc-handle">@remi.drift · Paris</div>
+        <div class="fc-beats"><span class="fc-beat">Nightlife</span><span class="fc-beat">Music</span><span class="fc-beat">Art</span></div>
+        <div class="fc-quote">"What the city sounds like at 2am — and why that matters."</div>
+        <div class="fc-foot">
+          <div class="fc-followers"><strong>650</strong> followers</div>
+          <button class="fc-btn" onclick="event.stopPropagation();toggleFollow(this)">Follow</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="feat-card fade" onclick="viewIssue('chloe')">
+      <div class="fc-cover" style="background:linear-gradient(145deg,#2A1A2E,#3A2040)">
+        <div class="fc-bar" style="background:#8A6A8A"></div>
+        <div class="fc-initials" style="color:rgba(255,255,255,.06)">CM</div>
+        <div class="fc-avatar" style="background:#8A6A8A">C</div>
+        <div class="fc-badge" style="background:rgba(255,255,255,.1);color:rgba(255,255,255,.6)">Public Issue</div>
+      </div>
+      <div class="fc-body">
+        <div class="fc-type">Contributing Editor</div>
+        <div class="fc-name">Chloe M.</div>
+        <div class="fc-handle">@chloe.makes · London</div>
+        <div class="fc-beats"><span class="fc-beat">Fashion</span><span class="fc-beat">Beauty</span><span class="fc-beat">Art</span></div>
+        <div class="fc-quote">"Five pieces from Depop that changed how I think about getting dressed."</div>
+        <div class="fc-foot">
+          <div class="fc-followers"><strong>12.6k</strong> followers</div>
+          <button class="fc-btn on" onclick="event.stopPropagation();toggleFollow(this)">Follow</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="feat-card fade" onclick="viewIssue('marco')">
+      <div class="fc-cover" style="background:linear-gradient(145deg,#1A2830,#2A3848)">
+        <div class="fc-bar" style="background:#4A6670"></div>
+        <div class="fc-initials" style="color:rgba(255,255,255,.06)">MR</div>
+        <div class="fc-avatar" style="background:#4A6670">M</div>
+        <div class="fc-badge" style="background:rgba(255,255,255,.1);color:rgba(255,255,255,.6)">Public Issue</div>
+      </div>
+      <div class="fc-body">
+        <div class="fc-type">Contributing Editor</div>
+        <div class="fc-name">Marco R.</div>
+        <div class="fc-handle">@marco.reels · Milan</div>
+        <div class="fc-beats"><span class="fc-beat">Cinema</span><span class="fc-beat">Music</span><span class="fc-beat">Nightlife</span></div>
+        <div class="fc-quote">"All of Us Strangers changed how I think about grief. Five stars — and I never give five stars."</div>
+        <div class="fc-foot">
+          <div class="fc-followers"><strong>3,100</strong> followers</div>
+          <button class="fc-btn on" onclick="event.stopPropagation();toggleFollow(this)">Follow</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ── CONTRIBUTORS ── -->
+  <div class="sec-head" style="margin-top:0">
+    <span class="sec-title">Contributing Editors</span>
+    <span class="sec-count" id="contrib-count">8 this month</span>
+  </div>
+
+  <div class="contrib-grid" id="contrib-grid">
+    <!-- Populated by JS -->
+  </div>
+  <div class="no-results" id="contrib-no-results">
+    <div class="empty-t">No contributors match.</div>
+    <div class="empty-d">Try a different filter or search term.</div>
+  </div>
+
+  <!-- ── PUBLIC ISSUES ── -->
+  <div class="sec-head" style="margin-top:0">
+    <span class="sec-title">Public Issues</span>
+    <span class="sec-sub">People who've shared what they're reading</span>
+  </div>
+
+  <div class="public-grid" id="public-grid">
+    <!-- Populated by JS -->
+  </div>
+  <div class="no-results" id="public-no-results">
+    <div class="empty-t">No public issues match.</div>
+    <div class="empty-d">Try a different filter or search term.</div>
+  </div>
+
+  <!-- OPT-IN BANNER -->
+  <div class="optin-banner" id="optin-banner">
+    <div class="ob-left">
+      <div class="ob-icon">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+          <circle cx="10" cy="10" r="8" stroke="rgba(255,255,255,.5)" stroke-width="1.5"/>
+          <path d="M10 6v5l3 3" stroke="rgba(255,255,255,.5)" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div class="ob-text">
+        <div class="ob-title">Make your issue public</div>
+        <div class="ob-sub">Let others see what you're reading this month — your contributors, your taste, your issue. You can turn it off at any time.</div>
+      </div>
+    </div>
+    <button class="ob-btn" id="optin-btn" onclick="toggleOptIn()">Share My Issue →</button>
+  </div>
+
+</div>
+
+<!-- SESSION GUARD + SUPABASE -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script>
+const SBU = 'https://gseuejqqwkdjkhxfxxwy.supabase.co';
+const SBK = 'sb_publishable_0Nmw1mwGx__b_jJHLHBDKg__1OAsRuy';
+const sb  = supabase.createClient(SBU, SBK);
+
+// ── DATA ──
+const CONTRIBUTORS = [
+  { id:'marco',  init:'M', color:'#4A6670', name:'Marco R.',  handle:'@marco.reels',  loc:'Milan',   beats:['Cinema','Music','Nightlife'], quote:'"All of Us Strangers changed how I think about grief."', followers:'3,100', articles:['Cinema — All of Us Strangers','Music — May playlist','Nightlife — The city at midnight'], tags:['cinema','music','nightlife'] },
+  { id:'chloe',  init:'C', color:'#8A6A8A', name:'Chloe M.',  handle:'@chloe.makes',  loc:'London',  beats:['Fashion','Beauty','Art'],      quote:'"Five pieces from Depop that changed how I dress."',          followers:'12.6k', articles:['Fashion — Five pieces from Depop','Beauty — The routine I actually kept','Art — What I hung on my wall'], tags:['fashion','beauty','art'] },
+  { id:'jana',   init:'J', color:'#B8953A', name:'Jana K.',   handle:'@jana.kitchen', loc:'Istanbul',beats:['Food','Travel','Culture'],     quote:'"The pasta my grandmother never wrote down."',               followers:'8,400', articles:['Food — The pasta recipe','Travel — Three cities in seven days','Food — What I ate in April'], tags:['food','travel'] },
+  { id:'daria',  init:'D', color:'#B05A38', name:'Daria K.',  handle:'@daria.works',  loc:'Berlin',  beats:['Food','Art','Culture'],       quote:'"Heat: food that burns, art that provokes."',                followers:'5,200', articles:['Art — Heat and provocation','Food — The restaurant I keep going back to'], tags:['food','art'] },
+  { id:'remi',   init:'R', color:'#3A3A6A', name:'Remi D.',   handle:'@remi.drift',   loc:'Paris',   beats:['Nightlife','Music','Art'],    quote:'"What the city sounds like at 2am."',                        followers:'650',   articles:['Nightlife — 2am in Paris','Music — The DJ I can\'t stop thinking about'], tags:['nightlife','music','art'] },
+  { id:'isla',   init:'I', color:'#4A6A4A', name:'Isla T.',   handle:'@isla.tends',   loc:'Edinburgh',beats:['Lifestyle','Food','Nature'], quote:'"Living gently. Growing things — plants, habits, people."',  followers:'1,800', articles:['Lifestyle — Growing tomatoes in an apartment','Food — What I cooked this month'], tags:['food','lifestyle'] },
+  { id:'alex',   init:'A', color:'#8A6A4A', name:'Alex V.',   handle:'@alex.moves',   loc:'Lisbon',  beats:['Music','Culture','Travel'],   quote:'"Writing from hotel rooms and borrowed kitchens."',          followers:'2,300', articles:['Music — What I listened to','Travel — Lisbon in April','Culture — Three things I loved'], tags:['music','travel'] },
+  { id:'lena',   init:'L', color:'#6A4A8A', name:'Lena S.',   handle:'@lena.reads',   loc:'Vienna',  beats:['Literature','Art','Film'],    quote:'"On books and the feeling of finishing something you loved."', followers:'940',   articles:['Literature — The book I read in one sitting','Film — Three films this month'], tags:['literature','art','cinema'] },
+];
+
+const PUBLIC_ISSUES = [
+  { id:'pi1', init:'S',  color:'#4A6670', name:'Sofia E.',      handle:'@sofia.e',    loc:'Rome',    beats:['Cinema','Food','Travel'],    contribs:4, issue:'May 2026' },
+  { id:'pi2', init:'T',  color:'#8A6A8A', name:'Tariq M.',      handle:'@tariqm',     loc:'Beirut',  beats:['Music','Art','Culture'],     contribs:3, issue:'May 2026' },
+  { id:'pi3', init:'Y',  color:'#B8953A', name:'Yuki H.',       handle:'@yuki.h',     loc:'Tokyo',   beats:['Fashion','Beauty','Food'],   contribs:5, issue:'May 2026' },
+  { id:'pi4', init:'A',  color:'#B05A38', name:'Amara D.',      handle:'@amara.d',    loc:'Lagos',   beats:['Literature','Music','Art'],  contribs:3, issue:'May 2026' },
+  { id:'pi5', init:'K',  color:'#3A3A6A', name:'Kai R.',        handle:'@kai.r',      loc:'Seoul',   beats:['Cinema','Nightlife','Music'],contribs:4, issue:'May 2026' },
+  { id:'pi6', init:'N',  color:'#4A6A4A', name:'Nina B.',       handle:'@nina.b',     loc:'Amsterdam',beats:['Food','Travel','Art'],     contribs:3, issue:'May 2026' },
+  { id:'pi7', init:'J',  color:'#6A4A8A', name:'Jules C.',      handle:'@jules.c',    loc:'Montréal',beats:['Literature','Cinema','Art'], contribs:4, issue:'May 2026' },
+  { id:'pi8', init:'P',  color:'#7A5A40', name:'Priya S.',      handle:'@priya.s',    loc:'Mumbai',  beats:['Fashion','Beauty','Travel'], contribs:3, issue:'May 2026' },
+];
+
+let activeFilter = 'all';
+let searchQuery  = '';
+let followed     = new Set(['chloe','marco']);
+let optedIn      = false;
+
+// ── RENDER CONTRIBUTORS ──
+function renderContribs(){
+  const grid = document.getElementById('contrib-grid');
+  const filtered = CONTRIBUTORS.filter(c => {
+    const matchFilter = activeFilter==='all' || c.tags.includes(activeFilter);
+    const matchSearch = !searchQuery || c.name.toLowerCase().includes(searchQuery) || c.beats.join(' ').toLowerCase().includes(searchQuery) || c.quote.toLowerCase().includes(searchQuery);
+    return matchFilter && matchSearch;
+  });
+
+  document.getElementById('contrib-count').textContent = filtered.length + ' this month';
+
+  if(filtered.length===0){
+    grid.innerHTML='';
+    document.getElementById('contrib-no-results').classList.add('show');
+    return;
+  }
+  document.getElementById('contrib-no-results').classList.remove('show');
+
+  grid.innerHTML = filtered.map(c => `
+    <div class="cc fade" data-tags="${c.tags.join(',')}">
+      <div class="cc-top">
+        <div class="cc-av" style="background:${c.color}">${c.init}</div>
+        <button class="cc-follow${followed.has(c.id)?' on':''}" onclick="toggleFollowById('${c.id}',this)">${followed.has(c.id)?'Following':'Follow'}</button>
+      </div>
+      <div class="cc-name">${c.name}</div>
+      <div class="cc-beats">${c.beats.join(' · ')}</div>
+      <div class="cc-quote">${c.quote}</div>
+      <div class="cc-meta">${c.followers} followers · ${c.loc}</div>
+      <div class="cc-articles">
+        ${c.articles.map(a=>`<div class="cc-art"><span class="cc-art-cat">${a.split('—')[0].trim()}</span>${a.split('—')[1]?.trim()||''}</div>`).join('')}
+      </div>
+    </div>
+  `).join('');
+
+  // Animate in
+  requestAnimationFrame(()=>{
+    document.querySelectorAll('.cc.fade').forEach((el,i)=>{
+      setTimeout(()=>el.classList.add('in'), i*40);
+    });
+  });
+}
+
+// ── RENDER PUBLIC ISSUES ──
+function renderPublic(){
+  const grid = document.getElementById('public-grid');
+  const filtered = PUBLIC_ISSUES.filter(p => {
+    const matchFilter = activeFilter==='all' || p.beats.map(b=>b.toLowerCase()).includes(activeFilter);
+    const matchSearch = !searchQuery || p.name.toLowerCase().includes(searchQuery) || p.beats.join(' ').toLowerCase().includes(searchQuery);
+    return matchFilter && matchSearch;
+  });
+
+  if(filtered.length===0){
+    grid.innerHTML='';
+    document.getElementById('public-no-results').classList.add('show');
+    return;
+  }
+  document.getElementById('public-no-results').classList.remove('show');
+
+  grid.innerHTML = filtered.map(p => `
+    <div class="pc fade" onclick="viewPublicIssue('${p.id}')">
+      <div class="pc-cover" style="background:linear-gradient(145deg,${p.color}22,${p.color}44)">
+        <div class="pc-cover-bar" style="background:${p.color}"></div>
+        <div class="pc-cover-init" style="color:${p.color}">${p.init}</div>
+        <div class="pc-cover-av" style="background:${p.color}">${p.init}</div>
+        <div class="pc-cover-lock">Public</div>
+      </div>
+      <div class="pc-body">
+        <div class="pc-name">${p.name}</div>
+        <div class="pc-handle">${p.handle} · ${p.loc}</div>
+        <div class="pc-beats">${p.beats.map(b=>`<span class="pc-beat">${b}</span>`).join('')}</div>
+        <div class="pc-foot">
+          <div class="pc-contribs">${p.contribs} contributors · ${p.issue}</div>
+          <div class="pc-view">View Issue →</div>
+        </div>
+      </div>
+    </div>
+  `).join('');
+
+  requestAnimationFrame(()=>{
+    document.querySelectorAll('.pc.fade').forEach((el,i)=>{
+      setTimeout(()=>el.classList.add('in'), i*30);
+    });
+  });
+}
+
+// ── FEATURED FADE IN ──
+function initFeatured(){
+  requestAnimationFrame(()=>{
+    document.querySelectorAll('.feat-card.fade').forEach((el,i)=>{
+      setTimeout(()=>el.classList.add('in'), i*100);
+    });
+  });
+}
+
+// ── FILTER ──
+function setFilter(btn, filter){
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  activeFilter = filter;
+  renderContribs();
+  renderPublic();
+}
+
+// ── SEARCH ──
+let searchTimer;
+function handleSearch(val){
+  clearTimeout(searchTimer);
+  searchQuery = val.toLowerCase().trim();
+  document.getElementById('sb-clear').style.display = val ? 'block' : 'none';
+  searchTimer = setTimeout(()=>{
+    renderContribs();
+    renderPublic();
+  }, 220);
+}
+
+function clearSearch(){
+  document.getElementById('search-input').value = '';
+  document.getElementById('sb-clear').style.display = 'none';
+  searchQuery = '';
+  renderContribs();
+  renderPublic();
+}
+
+// ── FOLLOW ──
+function toggleFollow(btn){
+  const isOn = btn.classList.contains('on');
+  btn.classList.toggle('on');
+  btn.textContent = isOn ? 'Follow' : 'Following';
+}
+
+function toggleFollowById(id, btn){
+  if(followed.has(id)){
+    followed.delete(id);
+    btn.classList.remove('on');
+    btn.textContent = 'Follow';
+  } else {
+    followed.add(id);
+    btn.classList.add('on');
+    btn.textContent = 'Following';
+    saveSB('follows',{contributor_id:id,followed_at:new Date().toISOString()});
+  }
+}
+
+// ── VIEW ISSUE ──
+function viewIssue(id){
+  location.href = 'magazine-reader.html';
+}
+function viewPublicIssue(id){
+  location.href = 'magazine-reader.html';
+}
+
+// ── OPT IN ──
+function toggleOptIn(){
+  optedIn = !optedIn;
+  const btn = document.getElementById('optin-btn');
+  if(optedIn){
+    btn.textContent = 'My Issue is Public ✓';
+    btn.classList.add('on');
+    saveSB('public_issues',{opted_in:true,updated_at:new Date().toISOString()});
+  } else {
+    btn.textContent = 'Share My Issue →';
+    btn.classList.remove('on');
+    saveSB('public_issues',{opted_in:false,updated_at:new Date().toISOString()});
+  }
+}
+
+// ── SUPABASE SAVE ──
+async function saveSB(table,data){
+  try{
+    await fetch(`${SBU}/rest/v1/${table}`,{
+      method:'POST',
+      headers:{'Content-Type':'application/json','apikey':SBK,'Authorization':`Bearer ${SBK}`,'Prefer':'return=minimal'},
+      body:JSON.stringify(data)
+    });
+  }catch(e){}
+}
+
+// ── SESSION ──
+(async()=>{
+  const {data:{session}} = await sb.auth.getSession();
+  if(session){
+    const name = session.user?.user_metadata?.full_name || session.user?.email || '';
+    const av = document.getElementById('nav-av');
+    if(av && name) av.textContent = name.charAt(0).toUpperCase();
+    window.__sbSignOut = async()=>{ await sb.auth.signOut(); location.href='portal.html'; };
+  }
+})();
+
+// ── INIT ──
+renderContribs();
+renderPublic();
+initFeatured();
+</script>
+
+<!-- PWA Install Banner -->
+<div id="pwa-banner" style="display:none;position:fixed;bottom:0;left:0;right:0;background:var(--ink);padding:14px 20px;display:none;align-items:center;justify-content:space-between;gap:16px;z-index:1000;box-shadow:0 -4px 24px rgba(0,0,0,.3)">
+  <div style="display:flex;align-items:center;gap:12px">
+    <div style="width:36px;height:36px;background:#4A6670;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+      <svg width="20" height="20" viewBox="0 0 100 100" fill="none"><rect x="30" y="22" width="10" height="56" rx="3" fill="white"/><path d="M40 22 Q68 22 68 40 Q68 58 40 58" fill="none" stroke="white" stroke-width="10" stroke-linecap="round"/><path d="M40 58 Q55 65 68 82" fill="none" stroke="white" stroke-width="9" stroke-linecap="round"/></svg>
+    </div>
+    <div>
+      <div style="font-family:'Libre Baskerville',Georgia,serif;font-size:15px;font-weight:700;color:#fff;margin-bottom:2px">Add Reedefined to your home screen</div>
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,.45)">Read your issue like an app</div>
+    </div>
+  </div>
+  <div style="display:flex;gap:8px;flex-shrink:0">
+    <button onclick="dismissPWA()" style="font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:8px 14px;background:none;color:rgba(255,255,255,.4);border:1px solid rgba(255,255,255,.15);cursor:pointer">Not now</button>
+    <button onclick="installPWA()" style="font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:8px 16px;background:#4A6670;color:#fff;border:none;cursor:pointer">Add to Home Screen</button>
+  </div>
+</div>
+
+<script>
+let deferredPrompt;
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault();
+  deferredPrompt = e;
+  // Show banner after 3 seconds if not dismissed
+  if(!localStorage.getItem('pwa-dismissed')){
+    setTimeout(()=>{
+      document.getElementById('pwa-banner').style.display='flex';
+    }, 3000);
+  }
+});
+function installPWA(){
+  document.getElementById('pwa-banner').style.display='none';
+  if(deferredPrompt){
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.then(()=>{ deferredPrompt=null; });
+  }
+}
+function dismissPWA(){
+  document.getElementById('pwa-banner').style.display='none';
+  localStorage.setItem('pwa-dismissed','1');
+}
+// iOS Safari — show manual instructions
+const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent) && !window.MSStream;
+const isInStandalone = window.navigator.standalone;
+if(isIOS && !isInStandalone && !localStorage.getItem('pwa-dismissed')){
+  setTimeout(()=>{
+    const b = document.getElementById('pwa-banner');
+    b.style.display='flex';
+    b.querySelector('[onclick="installPWA()"]').textContent='How to Add';
+    b.querySelector('[onclick="installPWA()"]').onclick = ()=>{
+      alert('To add Reedefined to your home screen:\n\n1. Tap the Share button (□↑) at the bottom of Safari\n2. Scroll down and tap "Add to Home Screen"\n3. Tap "Add"');
+      dismissPWA();
+    };
+  }, 3000);
+}
+</script>
+</body>
+</html>
