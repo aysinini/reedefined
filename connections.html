@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="tiktok-domain-verification" content="hVzFgjsRoBRYSJKXVAYgroBXhxr64tSC">
+<meta name="tiktok-domain-verification" content="4Oo4Nq3DlWoB7f8isxeU4GwMijyr5fcU">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#0C0C0C">
+<title>Reedefined — Connect Your Platforms</title>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Barlow+Condensed:wght@400;500;600;700&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0C0C0C;--mid:#3A3A3A;--muted:#777;--light:#AAA;
+  --rule:#E0E0E0;--rule2:#EBEBEB;--bg:#F8F7F4;--bg2:#F0EEE9;--white:#FFF;
+  --teal:#2C4A52;--teal-l:#C2D4DA;--teal-ll:#DDE8EB;
+  --green:#3A7A50;--green-l:#D8EEE0;--red:#C8251A;
+  --H:'Libre Baskerville',Georgia,serif;
+  --C:'Barlow Condensed',sans-serif;
+  --S:'Barlow',sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--S);-webkit-font-smoothing:antialiased}
+
+/* NAV */
+.nav{background:var(--white);border-bottom:3px solid var(--ink);position:sticky;top:0;z-index:100}
+.nav-inner{max-width:1100px;margin:0 auto;padding:0 40px;height:66px;display:flex;align-items:center;justify-content:space-between}
+.nav-logo{font-family:var(--H);font-size:24px;font-weight:700;color:var(--ink);cursor:pointer;display:flex;align-items:center;gap:10px}
+.nav-links{display:flex;height:66px;align-items:center}
+.nav-link{font-family:var(--C);font-size:13px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--muted);padding:0 16px;height:100%;display:flex;align-items:center;border-bottom:3px solid transparent;margin-bottom:-3px;transition:color .15s;cursor:pointer}
+.nav-link:hover{color:var(--ink)}.nav-link.on{color:var(--ink);border-bottom-color:var(--ink)}
+.nav-right{display:flex;align-items:center;gap:8px}
+.btn-p{font-family:var(--C);font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;background:var(--ink);color:#fff;padding:10px 22px;border:none;cursor:pointer}.btn-p:hover{opacity:.85}
+.nav-av{width:32px;height:32px;border-radius:50%;background:var(--teal);display:flex;align-items:center;justify-content:center;font-family:var(--H);font-size:12px;font-weight:700;color:#fff}
+
+/* HERO */
+.hero{background:var(--white);border-bottom:1px solid var(--rule);padding:60px 0 48px}
+.hero-inner{max-width:1100px;margin:0 auto;padding:0 40px}
+.hero-eyebrow{font-family:var(--C);font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--teal);margin-bottom:16px;display:flex;align-items:center;gap:14px}
+.hero-eyebrow::before{content:'';width:28px;height:1px;background:var(--teal)}
+.hero-h1{font-family:var(--H);font-size:clamp(36px,5vw,64px);font-weight:700;line-height:1.0;color:var(--ink);letter-spacing:-1.5px;margin-bottom:14px}
+.hero-h1 em{font-style:italic;font-weight:400;color:var(--muted)}
+.hero-sub{font-family:var(--H);font-size:18px;font-style:italic;color:var(--muted);line-height:1.7;max-width:560px}
+
+/* SUMMARY */
+.summary{background:var(--ink);padding:16px 40px}
+.summary-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:32px;flex-wrap:wrap}
+.sum-item{display:flex;align-items:center;gap:8px}
+.sum-dot{width:7px;height:7px;border-radius:50%;background:var(--green)}
+.sum-dot.off{background:rgba(255,255,255,.2)}
+.sum-text{font-family:var(--C);font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.5)}
+.sum-text strong{color:#fff}
+
+/* PAGE */
+.page-body{max-width:1100px;margin:0 auto;padding:48px 40px 96px}
+.sec-head{display:flex;align-items:baseline;justify-content:space-between;padding-bottom:14px;border-bottom:2px solid var(--ink);margin-bottom:1px;margin-top:48px}
+.sec-head:first-child{margin-top:0}
+.sec-title{font-family:var(--C);font-size:13px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase}
+.sec-sub{font-family:var(--C);font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--muted)}
+
+/* PLATFORM CARDS */
+.platform-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--rule);margin-bottom:1px}
+.pc{background:var(--white);overflow:hidden}
+.pc-inner{padding:24px 28px}
+.pc-top{display:flex;align-items:flex-start;gap:16px;margin-bottom:16px}
+.pc-logo{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.pc-info{flex:1}
+.pc-name{font-family:var(--H);font-size:20px;font-weight:700;color:var(--ink);margin-bottom:3px}
+.pc-desc{font-family:var(--H);font-size:14px;font-style:italic;color:var(--muted);line-height:1.5}
+.pc-status-wrap{flex-shrink:0}
+.pc-badge{font-family:var(--C);font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:4px 10px}
+.pc-badge.live{background:var(--green-l);color:var(--green)}
+.pc-badge.connected{background:var(--green-l);color:var(--green)}
+.pc-badge.soon{background:var(--bg2);color:var(--muted)}
+.pc-badge.pending{background:#FFF3CD;color:#856404}
+.pc-pulls{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px}
+.pc-pull{font-family:var(--C);font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:4px 10px;border:1px solid var(--rule2);color:var(--muted);background:var(--bg)}
+
+/* Input row */
+.pc-input-row{display:flex;gap:0;margin-bottom:10px}
+.pc-input{flex:1;padding:11px 14px;font-family:var(--S);font-size:14px;color:var(--ink);background:var(--bg);border:1px solid var(--rule);border-right:none;outline:none;transition:border-color .15s}
+.pc-input:focus{border-color:var(--teal);background:var(--white)}
+.pc-input::placeholder{color:var(--light)}
+.pc-input-btn{font-family:var(--C);font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:11px 16px;background:var(--ink);color:#fff;border:none;cursor:pointer;white-space:nowrap;transition:opacity .15s}.pc-input-btn:hover{opacity:.85}
+
+/* Connected state */
+.pc-connected{display:none;align-items:center;gap:10px;padding:10px 14px;background:var(--green-l);border:1px solid rgba(58,122,80,.2);margin-bottom:10px}
+.pc-connected-handle{font-family:var(--H);font-size:14px;font-weight:700;color:var(--ink)}
+.pc-connected-sub{font-family:var(--H);font-size:13px;font-style:italic;color:var(--muted);margin-left:2px}
+.pc-disconnect{font-family:var(--C);font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);background:none;border:none;cursor:pointer;margin-left:auto}.pc-disconnect:hover{color:var(--red)}
+
+/* Content preview */
+.pc-preview{margin-top:12px;border-top:1px solid var(--rule2);padding-top:12px;display:none}
+.pc-preview.show{display:block}
+.pc-preview-label{font-family:var(--C);font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--teal);margin-bottom:10px}
+.pc-preview-items{display:flex;flex-direction:column;gap:0}
+.pc-item{display:flex;align-items:center;gap:12px;padding:8px 0;border-bottom:1px solid var(--rule2)}
+.pc-item:last-child{border:none;padding-bottom:0}
+.pc-item-img{width:36px;height:36px;object-fit:cover;flex-shrink:0;background:var(--bg2)}
+.pc-item-info{}
+.pc-item-title{font-family:var(--H);font-size:13px;font-weight:700;color:var(--ink);line-height:1.3}
+.pc-item-meta{font-family:var(--C);font-size:10px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-top:2px}
+.pc-item-rating{color:#C8251A;font-size:11px}
+
+/* Buttons */
+.pc-btn{width:100%;padding:12px;font-family:var(--C);font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;border:none;cursor:pointer;transition:all .2s;margin-top:2px}
+.pc-btn.connect{background:var(--ink);color:#fff}.pc-btn.connect:hover{opacity:.85}
+.pc-btn.connected{background:var(--green-l);color:var(--green);cursor:default}
+.pc-btn.soon{background:var(--bg2);color:var(--muted);cursor:default}
+.pc-btn.pending-btn{background:#FFF3CD;color:#856404;cursor:default}
+
+/* Loading */
+.pc-loading{display:none;align-items:center;gap:8px;padding:10px 0;font-family:var(--H);font-size:13px;font-style:italic;color:var(--muted)}
+.pc-loading.show{display:flex}
+.spin{width:14px;height:14px;border:2px solid var(--rule);border-top-color:var(--teal);border-radius:50%;animation:spin .8s linear infinite;flex-shrink:0}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* Error */
+.pc-error{display:none;font-family:var(--H);font-size:13px;font-style:italic;color:var(--red);padding:8px 0}
+.pc-error.show{display:block}
+
+/* Privacy note */
+.privacy-note{margin-top:48px;padding:20px 24px;background:var(--white);border-left:3px solid var(--teal-l)}
+.pn-label{font-family:var(--C);font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--teal);margin-bottom:8px}
+.pn-text{font-family:var(--H);font-size:15px;font-style:italic;color:var(--muted);line-height:1.65}
+
+/* Footer */
+.footer{background:var(--ink);padding:48px 40px 32px}
+.footer-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:20px;padding-bottom:24px;border-bottom:1px solid #1a1a1a;margin-bottom:20px}
+.footer-logo{font-family:var(--H);font-size:20px;font-weight:700;font-style:italic;color:#fff}
+.footer-links{display:flex;gap:20px;flex-wrap:wrap}
+.footer-link{font-family:var(--C);font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.3);cursor:pointer;transition:color .15s}.footer-link:hover{color:#fff}
+.footer-bottom{max-width:1100px;margin:0 auto;display:flex;justify-content:space-between;font-family:var(--C);font-size:11px;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,.2)}
+
+@media(max-width:1024px){.platform-grid{grid-template-columns:1fr}.nav-links{display:none}}
+@media(max-width:640px){
+  .nav-inner{padding:0 16px;height:56px}.nav-logo{font-size:20px}
+  .hero{padding:40px 0 32px}.hero-inner,.summary,.page-body{padding-left:16px;padding-right:16px}
+  .footer{padding:36px 16px 24px}.footer-inner{flex-direction:column}.footer-bottom{flex-direction:column;gap:6px}
+}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <div class="nav-logo" onclick="location.href='index.html'">Reedefined</div>
+    <div class="nav-links">
+      <span class="nav-link" onclick="location.href='newsstand.html'">The Magazine</span>
+      <span class="nav-link on">Connections</span>
+      <span class="nav-link" onclick="location.href='editor-portal.html'">Write</span>
+    </div>
+    <div class="nav-right">
+      <button class="btn-p" onclick="location.href='editor-portal.html'">Back to Studio →</button>
+      <div class="nav-av" id="nav-av">R</div>
+    </div>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-eyebrow">Contributing Editor</div>
+    <h1 class="hero-h1">Connect your<br><em>platforms.</em></h1>
+    <p class="hero-sub">Pull your real life into your column. Your Letterboxd diary, your Goodreads shelf, your YouTube channel, your Depop shop — all woven into your monthly issue.</p>
+  </div>
+</div>
+
+<div class="summary">
+  <div class="summary-inner">
+    <div class="sum-item"><div class="sum-dot off" id="sum-dot"></div><span class="sum-text"><strong id="sum-count">0</strong> of 9 connected</span></div>
+    <div class="sum-item"><div class="sum-dot"></div><span class="sum-text">Official APIs only — no scraping</span></div>
+    <div class="sum-item"><div class="sum-dot"></div><span class="sum-text">We never post on your behalf</span></div>
+  </div>
+</div>
+
+<div class="page-body">
+
+  <!-- ── FILM & BOOKS ── -->
+  <div class="sec-head">
+    <span class="sec-title">Film & Books</span>
+    <span class="sec-sub">Works today — no approval needed</span>
+  </div>
+  <div class="platform-grid">
+
+    <!-- LETTERBOXD -->
+    <div class="pc" id="pc-letterboxd">
+      <div class="pc-inner">
+        <div class="pc-top">
+          <div class="pc-logo" style="background:#2C3440">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="white" stroke-width="1.5"/><circle cx="12" cy="12" r="4" stroke="white" stroke-width="1.5"/><circle cx="12" cy="2.5" r="1.5" fill="white" opacity=".8"/><circle cx="12" cy="21.5" r="1.5" fill="white" opacity=".8"/><circle cx="2.5" cy="12" r="1.5" fill="white" opacity=".8"/><circle cx="21.5" cy="12" r="1.5" fill="white" opacity=".8"/></svg>
+          </div>
+          <div class="pc-info">
+            <div class="pc-name">Letterboxd</div>
+            <div class="pc-desc">Your film diary, watchlist and reviews — imported from your public profile.</div>
+          </div>
+          <div class="pc-status-wrap"><span class="pc-badge live" id="badge-letterboxd">Live ✓</span></div>
+        </div>
+        <div class="pc-pulls">
+          <span class="pc-pull">Recent films</span>
+          <span class="pc-pull">Star ratings</span>
+          <span class="pc-pull">Reviews</span>
+          <span class="pc-pull">Watchlist</span>
+        </div>
+        <div class="pc-input-row" id="input-letterboxd">
+          <input class="pc-input" type="text" id="val-letterboxd" placeholder="Your Letterboxd username (e.g. aysegul)">
+          <button class="pc-input-btn" onclick="connect('letterboxd')">Connect →</button>
+        </div>
+        <div class="pc-loading" id="loading-letterboxd"><div class="spin"></div>Fetching your film diary…</div>
+        <div class="pc-error" id="error-letterboxd">Couldn't find that username. Make sure your profile is public.</div>
+        <div class="pc-connected" id="connected-letterboxd">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 8l4 4 8-8" stroke="#3A7A50" stroke-width="1.5" stroke-linecap="round"/></svg>
+          <span class="pc-connected-handle" id="handle-letterboxd"></span>
+          <span class="pc-connected-sub" id="sub-letterboxd"></span>
+          <button class="pc-disconnect" onclick="disconnect('letterboxd')">Disconnect</button>
+        </div>
+        <div class="pc-preview" id="preview-letterboxd">
+          <div class="pc-preview-label">Your recent films</div>
+          <div class="pc-preview-items" id="items-letterboxd"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- GOODREADS -->
+    <div class="pc" id="pc-goodreads">
+      <div class="pc-inner">
+        <div class="pc-top">
+          <div class="pc-logo" style="background:#372213">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><rect x="3" y="2" width="18" height="20" rx="2" stroke="white" stroke-width="1.5" fill="none"/><path d="M7 8h10M7 12h8M7 16h6" stroke="white" stroke-width="1.3" stroke-linecap="round"/></svg>
+          </div>
+          <div class="pc-info">
+            <div class="pc-name">Goodreads</div>
+            <div class="pc-desc">Your reading list, reviews and currently-reading shelf.</div>
+          </div>
+          <div class="pc-status-wrap"><span class="pc-badge live" id="badge-goodreads">Live ✓</span></div>
+        </div>
+        <div class="pc-pulls">
+          <span class="pc-pull">Currently reading</span>
+          <span class="pc-pull">Recent reviews</span>
+          <span class="pc-pull">Reading list</span>
+        </div>
+        <div class="pc-input-row" id="input-goodreads">
+          <input class="pc-input" type="text" id="val-goodreads" placeholder="Your Goodreads profile URL or user ID">
+          <button class="pc-input-btn" onclick="connect('goodreads')">Connect →</button>
+        </div>
+        <div class="pc-loading" id="loading-goodreads"><div class="spin"></div>Fetching your reading shelf…</div>
+        <div class="pc-error" id="error-goodreads">Couldn't fetch your shelf. Make sure your profile is public.</div>
+        <div class="pc-connected" id="connected-goodreads">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 8l4 4 8-8" stroke="#3A7A50" stroke-width="1.5" stroke-linecap="round"/></svg>
+          <span class="pc-connected-handle" id="handle-goodreads"></span>
+          <span class="pc-connected-sub" id="sub-goodreads"></span>
+          <button class="pc-disconnect" onclick="disconnect('goodreads')">Disconnect</button>
+        </div>
+        <div class="pc-preview" id="preview-goodreads">
+          <div class="pc-preview-label">Your recent reads</div>
+          <div class="pc-preview-items" id="items-goodreads"></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ── VIDEO & FASHION ── -->
+  <div class="sec-head">
+    <span class="sec-title">Video & Fashion</span>
+    <span class="sec-sub">Works today — public profile required</span>
+  </div>
+  <div class="platform-grid">
+
+    <!-- YOUTUBE -->
+    <div class="pc" id="pc-youtube">
+      <div class="pc-inner">
+        <div class="pc-top">
+          <div class="pc-logo" style="background:#FF0000">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M21.5 7s-.3-2-1.2-2.8c-1.1-1.2-2.4-1.2-3-1.3C14.8 2.7 12 2.7 12 2.7s-2.8 0-5.3.2c-.6.1-1.9.1-3 1.3C2.8 5 2.5 7 2.5 7S2.2 9.3 2.2 11.5v2.1c0 2.2.3 4.5.3 4.5s.3 2 1.2 2.8c1.1 1.2 2.6 1.1 3.3 1.2C9 22.2 12 22.2 12 22.2s2.8 0 5.3-.2c.6-.1 1.9-.1 3-1.3.9-.8 1.2-2.8 1.2-2.8s.3-2.2.3-4.5v-2.1C21.8 9.3 21.5 7 21.5 7z" fill="#FF0000" stroke="white" stroke-width=".5"/><path d="M9.7 15.5V8.5l6.6 3.5-6.6 3.5z" fill="white"/></svg>
+          </div>
+          <div class="pc-info">
+            <div class="pc-name">YouTube</div>
+            <div class="pc-desc">Your recent videos pulled into your column via your public channel.</div>
+          </div>
+          <div class="pc-status-wrap"><span class="pc-badge live" id="badge-youtube">Live ✓</span></div>
+        </div>
+        <div class="pc-pulls">
+          <span class="pc-pull">Recent videos</span>
+          <span class="pc-pull">Channel info</span>
+          <span class="pc-pull">View counts</span>
+        </div>
+        <div class="pc-input-row" id="input-youtube">
+          <input class="pc-input" type="text" id="val-youtube" placeholder="Your YouTube channel URL or @handle">
+          <button class="pc-input-btn" onclick="connect('youtube')">Connect →</button>
+        </div>
+        <div class="pc-loading" id="loading-youtube"><div class="spin"></div>Fetching your channel…</div>
+        <div class="pc-error" id="error-youtube">Couldn't find that channel. Check the URL and try again.</div>
+        <div class="pc-connected" id="connected-youtube">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 8l4 4 8-8" stroke="#3A7A50" stroke-width="1.5" stroke-linecap="round"/></svg>
+          <span class="pc-connected-handle" id="handle-youtube"></span>
+          <span class="pc-connected-sub" id="sub-youtube"></span>
+          <button class="pc-disconnect" onclick="disconnect('youtube')">Disconnect</button>
+        </div>
+        <div class="pc-preview" id="preview-youtube">
+          <div class="pc-preview-label">Your recent videos</div>
+          <div class="pc-preview-items" id="items-youtube"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DEPOP -->
+    <div class="pc" id="pc-depop">
+      <div class="pc-inner">
+        <div class="pc-top">
+          <div class="pc-logo" style="background:#FF2300">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="16" rx="3" stroke="white" stroke-width="1.5" fill="none"/><path d="M9 9a5 5 0 015 5H9V9z" fill="white" opacity=".9"/></svg>
+          </div>
+          <div class="pc-info">
+            <div class="pc-name">Depop</div>
+            <div class="pc-desc">Your shop and recent listings featured in your fashion column.</div>
+          </div>
+          <div class="pc-status-wrap"><span class="pc-badge live" id="badge-depop">Live ✓</span></div>
+        </div>
+        <div class="pc-pulls">
+          <span class="pc-pull">Shop link</span>
+          <span class="pc-pull">Recent listings</span>
+          <span class="pc-pull">Shop profile</span>
+        </div>
+        <div class="pc-input-row" id="input-depop">
+          <input class="pc-input" type="text" id="val-depop" placeholder="Your Depop username (e.g. aysegul)">
+          <button class="pc-input-btn" onclick="connect('depop')">Connect →</button>
+        </div>
+        <div class="pc-loading" id="loading-depop"><div class="spin"></div>Saving your shop details…</div>
+        <div class="pc-error" id="error-depop">Please enter a valid Depop username.</div>
+        <div class="pc-connected" id="connected-depop">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 8l4 4 8-8" stroke="#3A7A50" stroke-width="1.5" stroke-linecap="round"/></svg>
+          <span class="pc-connected-handle" id="handle-depop"></span>
+          <span class="pc-connected-sub" id="sub-depop"></span>
+          <button class="pc-disconnect" onclick="disconnect('depop')">Disconnect</button>
+        </div>
+        <div class="pc-preview" id="preview-depop">
+          <div class="pc-preview-label">Your Depop shop</div>
+          <div class="pc-preview-items" id="items-depop"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- VINTED -->
+    <div class="pc" id="pc-vinted">
+      <div class="pc-inner">
+        <div class="pc-top">
+          <div class="pc-logo" style="background:#09B1BA">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M7 3h10l-2 6h-6L7 3z" fill="white"/><path d="M9 9h6l-1.5 12h-3L9 9z" fill="white" opacity=".85"/></svg>
+          </div>
+          <div class="pc-info">
+            <div class="pc-name">Vinted</div>
+            <div class="pc-desc">Your second-hand shop and listings featured in your fashion column.</div>
+          </div>
+          <div class="pc-status-wrap"><span class="pc-badge live" id="badge-vinted">Live ✓</span></div>
+        </div>
+        <div class="pc-pulls">
+          <span class="pc-pull">Shop link</span>
+          <span class="pc-pull">Recent listings</span>
+          <span class="pc-pull">Shop profile</span>
+        </div>
+        <div class="pc-input-row" id="input-vinted">
+          <input class="pc-input" type="text" id="val-vinted" placeholder="Your Vinted profile URL or username">
+          <button class="pc-input-btn" onclick="connect('vinted')">Connect →</button>
+        </div>
+        <div class="pc-loading" id="loading-vinted"><div class="spin"></div>Saving your shop details…</div>
+        <div class="pc-error" id="error-vinted">Please enter a valid Vinted username or profile URL.</div>
+        <div class="pc-connected" id="connected-vinted">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 8l4 4 8-8" stroke="#3A7A50" stroke-width="1.5" stroke-linecap="round"/></svg>
+          <span class="pc-connected-handle" id="handle-vinted"></span>
+          <span class="pc-connected-sub" id="sub-vinted"></span>
+          <button class="pc-disconnect" onclick="disconnect('vinted')">Disconnect</button>
+        </div>
+        <div class="pc-preview" id="preview-vinted">
+          <div class="pc-preview-label">Your Vinted shop</div>
+          <div class="pc-preview-items" id="items-vinted"></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ── COMING SOON ── -->
+
+  <div class="sec-head">
+    <span class="sec-title">Coming Soon</span>
+    <span class="sec-sub">Pending platform approval</span>
+  </div>
+  <div class="platform-grid">
+
+    <!-- SPOTIFY -->
+    <div class="pc">
+      <div class="pc-inner">
+        <div class="pc-top">
+          <div class="pc-logo" style="background:#191414">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 14.43c-.19.31-.6.4-.9.21-2.48-1.52-5.6-1.86-9.28-1.02-.35.08-.71-.14-.79-.49-.08-.35.14-.71.49-.79 4.02-.92 7.47-.52 10.27 1.18.31.19.4.6.21.91zm1.24-2.76c-.24.38-.74.5-1.12.26-2.84-1.75-7.17-2.26-10.53-1.23-.42.13-.88-.1-1.01-.53-.13-.42.1-.88.53-1.01 3.84-1.17 8.61-.6 11.88 1.4.38.24.5.74.25 1.11zm.11-2.87c-3.41-2.02-9.03-2.21-12.28-1.22-.52.16-1.07-.14-1.23-.66-.16-.52.14-1.07.66-1.23 3.74-1.13 9.96-.91 13.88 1.42.47.28.62.88.34 1.35-.28.46-.88.62-1.37.34z" fill="#1DB954"/></svg>
+          </div>
+          <div class="pc-info">
+            <div class="pc-name">Spotify</div>
+            <div class="pc-desc">Your playlists and listening history — pending Spotify API approval.</div>
+          </div>
+          <div class="pc-status-wrap"><span class="pc-badge pending">In review</span></div>
+        </div>
+        <div class="pc-pulls"><span class="pc-pull">Monthly playlist</span><span class="pc-pull">Top tracks</span><span class="pc-pull">Recent albums</span></div>
+        <button class="pc-btn pending-btn">Awaiting Spotify Approval</button>
+      </div>
+    </div>
+
+    <!-- APPLE MUSIC -->
+    <div class="pc">
+      <div class="pc-inner">
+        <div class="pc-top">
+          <div class="pc-logo" style="background:linear-gradient(135deg,#fc3c44,#ff6b6b)">
+            <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M16 5.5v9.25a2.75 2.75 0 11-1.5-2.45V8.5L8 10v6.25a2.75 2.75 0 11-1.5-2.45V6.5L16 5.5z" fill="white"/></svg>
+          </div>
+          <div class="pc-info">
+            <div class="pc-name">Apple Music</div>
+            <div class="pc-desc">Your listening history — pending Apple Developer approval.</div>
+          </div>
+          <div class="pc-status-wrap"><span class="pc-badge pending">In review</span></div>
+        </div>
+        <div class="pc-pulls"><span class="pc-pull">Monthly playlist</span><span class="pc-pull">Top tracks</span></div>
+        <button class="pc-btn pending-btn">Awaiting Apple Approval</button>
+      </div>
+    </div>
+
+    <!-- INSTAGRAM -->
+    <div class="pc">
+      <div class="pc-inner">
+        <div class="pc-top">
+          <div class="pc-logo" style="background:linear-gradient(135deg,#f09433,#bc1888)">
+            <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><rect x="2" y="2" width="18" height="18" rx="5" stroke="white" stroke-width="1.5" fill="none"/><circle cx="11" cy="11" r="4.5" stroke="white" stroke-width="1.5" fill="none"/><circle cx="16" cy="6" r="1.5" fill="white"/></svg>
+          </div>
+          <div class="pc-info">
+            <div class="pc-name">Instagram</div>
+            <div class="pc-desc">Your posts and reels — pending Meta Graph API approval.</div>
+          </div>
+          <div class="pc-status-wrap"><span class="pc-badge pending">In review</span></div>
+        </div>
+        <div class="pc-pulls"><span class="pc-pull">Recent posts</span><span class="pc-pull">Reels</span></div>
+        <button class="pc-btn pending-btn">Requires Meta Business Approval</button>
+      </div>
+    </div>
+
+    <!-- TIKTOK -->
+    <div class="pc">
+      <div class="pc-inner">
+        <div class="pc-top">
+          <div class="pc-logo" style="background:#010101">
+            <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M8.5 16c0 1.4-1.1 2.5-2.5 2.5S3.5 17.4 3.5 16c0-1.4 1.1-2.5 2.5-2.5.6 0 1.1.2 1.5.5V5.5L18 3.5v4.5L8.5 10V16z" stroke="white" stroke-width="1.2" fill="none"/></svg>
+          </div>
+          <div class="pc-info">
+            <div class="pc-name">TikTok</div>
+            <div class="pc-desc">Your videos and content — pending TikTok developer approval.</div>
+          </div>
+          <div class="pc-status-wrap"><span class="pc-badge pending">In review</span></div>
+        </div>
+        <div class="pc-pulls"><span class="pc-pull">Recent videos</span><span class="pc-pull">GRWM</span></div>
+        <button class="pc-btn pending-btn">Awaiting TikTok Approval</button>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="privacy-note">
+    <div class="pn-label">Privacy note</div>
+    <div class="pn-text">We only read public data via official APIs and RSS feeds. We never post, like, follow or take any action on your behalf on any platform. You can disconnect at any time and we will stop pulling your content immediately. All connections are stored securely in your Reedefined account.</div>
+  </div>
+
+</div>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-logo">Reedefined</div>
+    <div class="footer-links">
+      <span class="footer-link" onclick="location.href='index.html'">Home</span>
+      <span class="footer-link" onclick="location.href='newsstand.html'">The Magazine</span>
+      <span class="footer-link" onclick="location.href='editor-portal.html'">Write</span>
+      <span class="footer-link" onclick="location.href='privacy.html'">Privacy</span>
+      <span class="footer-link" onclick="location.href='terms.html'">Terms</span>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 Reedefined. All rights reserved.</span>
+    <span>reedefined.app/connections.html</span>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script>
+const SBU = 'https://gseuejqqwkdjkhxfxxwy.supabase.co';
+const SBK = 'sb_publishable_0Nmw1mwGx__b_jJHLHBDKg__1OAsRuy';
+const sb  = supabase.createClient(SBU, SBK);
+
+// Session guard
+let currentUser = null;
+(async()=>{
+  const {data:{session}} = await sb.auth.getSession();
+  if(!session){ location.href='portal.html'; return; }
+  currentUser = session.user;
+  const av = document.getElementById('nav-av');
+  const name = session.user?.user_metadata?.full_name || session.user?.email || '';
+  if(av && name) av.textContent = name.charAt(0).toUpperCase();
+  loadConnections();
+})();
+
+let connected = {};
+
+// ── CONNECT ──
+async function connect(platform) {
+  const input = document.getElementById('val-' + platform);
+  const val = input.value.trim();
+  if(!val) { input.style.borderColor='#C8251A'; input.focus(); return; }
+  input.style.borderColor='';
+
+  show('loading-' + platform);
+  hide('error-' + platform);
+
+  try {
+    let result = null;
+    if(platform === 'letterboxd') result = await fetchLetterboxd(val);
+    if(platform === 'goodreads')  result = await fetchGoodreads(val);
+    if(platform === 'youtube')    result = await fetchYouTube(val);
+    if(platform === 'depop')      result = await connectDepop(val);
+    if(platform === 'vinted')     result = await connectVinted(val);
+
+    if(!result || result.error) {
+      hide('loading-' + platform);
+      show('error-' + platform);
+      return;
+    }
+
+    // Save to Supabase
+    if(currentUser) {
+      await sb.from('platform_connections').upsert({
+        user_id: currentUser.id,
+        platform,
+        username: val,
+        profile_url: result.profileUrl || val,
+        connected_at: new Date().toISOString()
+      }, {onConflict:'user_id,platform'});
+    }
+
+    connected[platform] = { val, result };
+    hide('loading-' + platform);
+    hide('input-' + platform);
+    showConnected(platform, val, result);
+    updateSummary();
+
+  } catch(e) {
+    hide('loading-' + platform);
+    show('error-' + platform);
+  }
+}
+
+// ── LETTERBOXD — RSS feed ──
+async function fetchLetterboxd(username) {
+  const rss = `https://letterboxd.com/${username}/rss/`;
+  const proxy = `https://api.allorigins.win/get?url=${encodeURIComponent(rss)}`;
+  const res = await fetch(proxy);
+  const data = await res.json();
+  if(!data.contents) return {error:true};
+
+  const parser = new DOMParser();
+  const xml = parser.parseFromString(data.contents, 'text/xml');
+  const items = xml.querySelectorAll('item');
+  if(!items.length) return {error:true};
+
+  const films = [];
+  items.forEach((item, i) => {
+    if(i >= 5) return;
+    const title = item.querySelector('title')?.textContent || '';
+    const desc  = item.querySelector('description')?.textContent || '';
+    const link  = item.querySelector('link')?.textContent || '';
+    // Extract rating from description
+    const ratingMatch = desc.match(/★+/);
+    const rating = ratingMatch ? ratingMatch[0] : '';
+    // Extract year
+    const yearMatch = title.match(/\((\d{4})\)/);
+    const year = yearMatch ? yearMatch[1] : '';
+    const cleanTitle = title.replace(/\s*\(\d{4}\)/, '').replace(/★+/,'').trim();
+    // Extract thumbnail
+    const imgMatch = desc.match(/src="([^"]+)"/);
+    const img = imgMatch ? imgMatch[1] : '';
+    films.push({ title: cleanTitle, year, rating, link, img });
+  });
+
+  return { films, profileUrl: `https://letterboxd.com/${username}/`, count: films.length };
+}
+
+// ── GOODREADS — RSS feed ──
+async function fetchGoodreads(input) {
+  // Extract user ID from URL or use directly
+  const idMatch = input.match(/\/(\d+)/) || input.match(/^(\d+)$/);
+  const userId = idMatch ? idMatch[1] : null;
+  if(!userId) return {error:true};
+
+  const rss = `https://www.goodreads.com/review/list_rss/${userId}?shelf=currently-reading`;
+  const proxy = `https://api.allorigins.win/get?url=${encodeURIComponent(rss)}`;
+  const res = await fetch(proxy);
+  const data = await res.json();
+  if(!data.contents) return {error:true};
+
+  const parser = new DOMParser();
+  const xml = parser.parseFromString(data.contents, 'text/xml');
+  const items = xml.querySelectorAll('item');
+
+  const books = [];
+  items.forEach((item, i) => {
+    if(i >= 4) return;
+    const title  = item.querySelector('title')?.textContent || '';
+    const author = item.querySelector('author_name')?.textContent || '';
+    const link   = item.querySelector('link')?.textContent || '';
+    const imgMatch = item.querySelector('description')?.textContent?.match(/src="([^"]+)"/);
+    const img = imgMatch ? imgMatch[1] : '';
+    books.push({ title, author, link, img });
+  });
+
+  return { books, profileUrl: `https://www.goodreads.com/user/show/${userId}`, count: books.length };
+}
+
+// ── YOUTUBE — oEmbed ──
+async function fetchYouTube(input) {
+  // Clean handle
+  const handle = input.replace('https://youtube.com/','').replace('https://www.youtube.com/','').trim();
+  const oembed = `https://www.youtube.com/oembed?url=https://youtube.com/${handle}&format=json`;
+  const proxy = `https://api.allorigins.win/get?url=${encodeURIComponent(oembed)}`;
+  const res = await fetch(proxy);
+  const data = await res.json();
+  if(!data.contents) return {error:true};
+
+  let info;
+  try { info = JSON.parse(data.contents); } catch(e) { return {error:true}; }
+  if(!info.title) return {error:true};
+
+  return {
+    channelName: info.author_name,
+    thumbnail: info.thumbnail_url,
+    profileUrl: `https://youtube.com/${handle}`,
+    count: 1
+  };
+}
+
+// ── DEPOP — link embed (no API) ──
+async function connectDepop(username) {
+  if(!username || username.length < 2) return {error:true};
+  const clean = username.replace('@','').replace('https://www.depop.com/','').replace('/','').trim();
+  if(!clean) return {error:true};
+  return {
+    profileUrl: `https://www.depop.com/${clean}/`,
+    shopName: clean,
+    count: 1
+  };
+}
+
+// ── VINTED — link embed (no API) ──
+async function connectVinted(input) {
+  if(!input || input.length < 2) return {error:true};
+  // Accept either a full profile URL or a plain username
+  let clean = input.trim();
+  let profileUrl;
+  if(clean.includes('vinted.')) {
+    profileUrl = clean.startsWith('http') ? clean : 'https://' + clean;
+    const parts = clean.split('/member/');
+    clean = parts[1] ? parts[1].split('-')[0] : clean;
+  } else {
+    clean = clean.replace('@','').replace('/','');
+    profileUrl = `https://www.vinted.com/member/${clean}`;
+  }
+  if(!clean) return {error:true};
+  return {
+    profileUrl,
+    shopName: clean,
+    count: 1
+  };
+}
+
+// ── SHOW CONNECTED STATE ──
+function showConnected(platform, val, result) {
+  const el = document.getElementById('connected-' + platform);
+  const handleEl = document.getElementById('handle-' + platform);
+  const subEl = document.getElementById('sub-' + platform);
+  const preview = document.getElementById('preview-' + platform);
+  const badge = document.getElementById('badge-' + platform);
+
+  if(el) el.style.display = 'flex';
+  if(badge) { badge.textContent = 'Connected ✓'; badge.className = 'pc-badge connected'; }
+
+  if(platform === 'letterboxd' && result.films) {
+    if(handleEl) handleEl.textContent = '@' + val;
+    if(subEl) subEl.textContent = `· ${result.films.length} recent films`;
+    if(preview) {
+      preview.classList.add('show');
+      document.getElementById('items-letterboxd').innerHTML = result.films.map(f => `
+        <div class="pc-item">
+          ${f.img ? `<img class="pc-item-img" src="${f.img}" onerror="this.style.display='none'">` : ''}
+          <div class="pc-item-info">
+            <div class="pc-item-title">${f.title}${f.year?' ('+f.year+')':''}</div>
+            <div class="pc-item-meta">${f.rating || 'No rating'}</div>
+          </div>
+        </div>`).join('');
+    }
+  }
+
+  if(platform === 'goodreads' && result.books) {
+    if(handleEl) handleEl.textContent = 'Goodreads';
+    if(subEl) subEl.textContent = result.books.length ? `· ${result.books.length} books on shelf` : '· Shelf connected';
+    if(preview && result.books.length) {
+      preview.classList.add('show');
+      document.getElementById('items-goodreads').innerHTML = result.books.map(b => `
+        <div class="pc-item">
+          ${b.img ? `<img class="pc-item-img" src="${b.img}" onerror="this.style.display='none'">` : ''}
+          <div class="pc-item-info">
+            <div class="pc-item-title">${b.title}</div>
+            <div class="pc-item-meta">${b.author}</div>
+          </div>
+        </div>`).join('');
+    }
+  }
+
+  if(platform === 'youtube') {
+    if(handleEl) handleEl.textContent = result.channelName || val;
+    if(subEl) subEl.textContent = '· Channel connected';
+    if(preview) {
+      preview.classList.add('show');
+      document.getElementById('items-youtube').innerHTML = `
+        <div class="pc-item">
+          ${result.thumbnail ? `<img class="pc-item-img" src="${result.thumbnail}" onerror="this.style.display='none'">` : ''}
+          <div class="pc-item-info">
+            <div class="pc-item-title">${result.channelName}</div>
+            <div class="pc-item-meta"><a href="${result.profileUrl}" target="_blank" style="color:var(--teal)">View channel →</a></div>
+          </div>
+        </div>`;
+    }
+  }
+
+  if(platform === 'depop') {
+    if(handleEl) handleEl.textContent = '@' + result.shopName;
+    if(subEl) subEl.textContent = '· Shop connected';
+    if(preview) {
+      preview.classList.add('show');
+      document.getElementById('items-depop').innerHTML = `
+        <div class="pc-item">
+          <div class="pc-item-info">
+            <div class="pc-item-title">depop.com/${result.shopName}</div>
+            <div class="pc-item-meta"><a href="${result.profileUrl}" target="_blank" style="color:var(--teal)">View shop →</a></div>
+          </div>
+        </div>`;
+    }
+  }
+
+  if(platform === 'vinted') {
+    if(handleEl) handleEl.textContent = '@' + result.shopName;
+    if(subEl) subEl.textContent = '· Shop connected';
+    if(preview) {
+      preview.classList.add('show');
+      document.getElementById('items-vinted').innerHTML = `
+        <div class="pc-item">
+          <div class="pc-item-info">
+            <div class="pc-item-title">vinted.com/member/${result.shopName}</div>
+            <div class="pc-item-meta"><a href="${result.profileUrl}" target="_blank" style="color:var(--teal)">View shop →</a></div>
+          </div>
+        </div>`;
+    }
+  }
+}
+
+// ── DISCONNECT ──
+async function disconnect(platform) {
+  if(!confirm('Disconnect this platform?')) return;
+  delete connected[platform];
+
+  hide('connected-' + platform);
+  const preview = document.getElementById('preview-' + platform);
+  if(preview) preview.classList.remove('show');
+  show('input-' + platform);
+
+  const badge = document.getElementById('badge-' + platform);
+  if(badge) { badge.textContent = 'Live ✓'; badge.className = 'pc-badge live'; }
+
+  const input = document.getElementById('val-' + platform);
+  if(input) input.value = '';
+
+  if(currentUser) {
+    await sb.from('platform_connections').delete()
+      .eq('user_id', currentUser.id)
+      .eq('platform', platform);
+  }
+  updateSummary();
+}
+
+// ── LOAD SAVED CONNECTIONS ──
+async function loadConnections() {
+  if(!currentUser) return;
+  try {
+    const {data} = await sb.from('platform_connections').select('*').eq('user_id', currentUser.id);
+    if(!data) return;
+    data.forEach(row => {
+      connected[row.platform] = { val: row.username };
+      // Show as connected without re-fetching content
+      hide('input-' + row.platform);
+      const el = document.getElementById('connected-' + row.platform);
+      const handleEl = document.getElementById('handle-' + row.platform);
+      const badge = document.getElementById('badge-' + row.platform);
+      if(el) el.style.display = 'flex';
+      if(handleEl) handleEl.textContent = row.username;
+      if(badge) { badge.textContent = 'Connected ✓'; badge.className = 'pc-badge connected'; }
+    });
+    updateSummary();
+  } catch(e){}
+}
+
+function updateSummary() {
+  const count = Object.keys(connected).length;
+  document.getElementById('sum-count').textContent = count;
+  const dot = document.getElementById('sum-dot');
+  if(dot) dot.className = 'sum-dot' + (count===0?' off':'');
+}
+
+function show(id){ const el=document.getElementById(id); if(el) el.classList.add('show'); }
+function hide(id){ const el=document.getElementById(id); if(el) el.classList.remove('show'); }
+</script>
+</body>
+</html>

@@ -1,0 +1,22 @@
+{
+  "name": "Reedefined",
+  "short_name": "Reedefined",
+  "description": "The magazine shaped by the people you follow.",
+  "start_url": "/newsstand.html",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#F8F7F4",
+  "theme_color": "#0C0C0C",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%234A6670'/><rect x='30' y='22' width='10' height='56' rx='3' fill='white'/><path d='M40 22 Q68 22 68 40 Q68 58 40 58' fill='none' stroke='white' stroke-width='10' stroke-linecap='round'/><path d='M40 58 Q55 65 68 82' fill='none' stroke='white' stroke-width='9' stroke-linecap='round'/></svg>",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [],
+  "categories": ["news", "magazines", "lifestyle"],
+  "lang": "en",
+  "dir": "ltr"
+}
