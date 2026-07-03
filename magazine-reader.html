@@ -82,7 +82,7 @@ body{font-family:var(--S);-webkit-font-smoothing:antialiased;display:flex;flex-d
 /* ── NAV ARROWS ── */
 .nav-arrow {
   position:fixed;top:50%;transform:translateY(-50%);
-  width:56px;height:56px;border:2px solid rgba(255,255,255,.25);
+  width:56px;height:56px;border:2px solid rgba(255,255,255,.65);
   background:rgba(28,32,42,.85);color:rgba(255,255,255,.9);
   font-size:28px;cursor:pointer;display:flex;align-items:center;justify-content:center;
   transition:all .2s;z-index:200;border-radius:50%;
@@ -96,7 +96,7 @@ body{font-family:var(--S);-webkit-font-smoothing:antialiased;display:flex;flex-d
 .page-counter {
   position:absolute;bottom:16px;left:50%;transform:translateX(-50%);
   font-family:var(--C);font-size:11px;letter-spacing:2px;
-  color:rgba(255,255,255,.35);background:rgba(0,0,0,.5);
+  color:rgba(255,255,255,.75);background:rgba(0,0,0,.5);
   padding:5px 16px;pointer-events:none;border-radius:20px;
 }
 
@@ -159,7 +159,7 @@ body{font-family:var(--S);-webkit-font-smoothing:antialiased;display:flex;flex-d
   padding:8px 28px;background:var(--ink);
   display:flex;align-items:center;justify-content:space-between;
 }
-.mc-foot-l{font-family:var(--C);font-size:9px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.35)}
+.mc-foot-l{font-family:var(--C);font-size:9px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.75)}
 .mc-foot-r{font-family:var(--H);font-size:11pxcolor:rgba(255,255,255,.4)}
 
 /* MONOCLE AD */
@@ -212,7 +212,7 @@ body{font-family:var(--S);-webkit-font-smoothing:antialiased;display:flex;flex-d
 .mcc-pg{font-family:var(--C);font-size:13px;font-weight:700;letter-spacing:1px;color:var(--light);text-align:right}
 .mcc-foot{padding:10px 28px;border-top:2px solid var(--ink);background:var(--ink);display:flex;justify-content:space-between}
 .mcc-foot-t{font-family:var(--H);font-size:13pxcolor:rgba(255,255,255,.5)}
-.mcc-foot-r{font-family:var(--C);font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.25)}
+.mcc-foot-r{font-family:var(--C);font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.65)}
 
 /* MONOCLE ARTICLE */
 .mono-article{width:100%;height:100%;background:#F2F0EB;display:flex;flex-direction:column;overflow:hidden}
@@ -497,10 +497,10 @@ if('serviceWorker' in navigator){
 
 <!-- CLEAR TEXT PAGE CONTROLS -->
 <div style="position:fixed;bottom:0;left:0;right:0;background:rgba(28,32,42,.97);backdrop-filter:blur(10px);border-top:1px solid rgba(255,255,255,.1);padding:14px 24px;display:flex;align-items:center;justify-content:center;gap:24px;z-index:250">
-  <button id="text-prev" onclick="prevPage()" disabled style="display:flex;align-items:center;gap:10px;background:none;border:1px solid rgba(255,255,255,.25);color:rgba(255,255,255,.6);font-family:'Libre Baskerville',Georgia,serif;font-size:14px;font-weight:700;padding:11px 22px;border-radius:6px;cursor:pointer;transition:all .2s">
+  <button id="text-prev" onclick="prevPage()" disabled style="display:flex;align-items:center;gap:10px;background:none;border:1px solid rgba(255,255,255,.65);color:rgba(255,255,255,.6);font-family:'Libre Baskerville',Georgia,serif;font-size:14px;font-weight:700;padding:11px 22px;border-radius:6px;cursor:pointer;transition:all .2s">
     ← Previous
   </button>
-  <div id="text-page-label" style="font-family:'Libre Baskerville',Georgia,serif;font-size:12px;color:rgba(255,255,255,.3);min-width:140px;text-align:center;letter-spacing:.5px"></div>
+  <div id="text-page-label" style="font-family:'Libre Baskerville',Georgia,serif;font-size:12px;color:rgba(255,255,255,.7);min-width:140px;text-align:center;letter-spacing:.5px"></div>
   <button id="text-next" onclick="nextPage()" style="display:flex;align-items:center;gap:10px;background:#4A7C3F;border:1px solid #4A7C3F;color:#fff;font-family:'Libre Baskerville',Georgia,serif;font-size:14px;font-weight:700;padding:11px 22px;border-radius:6px;cursor:pointer;transition:all .2s">
     Next Page →
   </button>
@@ -673,7 +673,7 @@ function buildPage(id){
 
     if(side === 'left') {
       return `<div style="width:100%;height:100%;background:#0C0C0C;display:flex;flex-direction:column;justify-content:flex-end;padding:36px;position:relative;overflow:hidden">
-        <div style="position:absolute;top:28px;right:28px;font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.25)">Issue No. 1</div>
+        <div style="position:absolute;top:28px;right:28px;font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.65)">Issue No. 1</div>
         <div style="font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#4A7C3F;margin-bottom:16px;display:flex;align-items:center;gap:12px"><span style="display:inline-block;width:20px;height:1px;background:#4A7C3F"></span>${'${author}'}</div>
         <div style="font-family:'Libre Baskerville',Georgia,serif;font-size:clamp(24px,3.5vw,40px);font-weight:700;color:#fff;line-height:1.1;letter-spacing:-.5px;margin-bottom:12px">${'${article.title || "Untitled"}'}</div>
         ${'${article.tagline ? `<div style="font-family:\'Libre Baskerville\',Georgia,serif;font-size:15px;color:rgba(255,255,255,.5);line-height:1.5">${article.tagline}</div>` : ""}'}
@@ -1148,7 +1148,7 @@ function shareNative(){
     </div>
   </div>
   <div style="display:flex;gap:8px;flex-shrink:0">
-    <button onclick="dismissPWA()" style="font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:8px 14px;background:none;color:rgba(255,255,255,.4);border:1px solid rgba(255,255,255,.15);cursor:pointer">Not now</button>
+    <button onclick="dismissPWA()" style="font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:8px 14px;background:none;color:rgba(255,255,255,.4);border:1px solid rgba(255,255,255,.5);cursor:pointer">Not now</button>
     <button onclick="installPWA()" style="font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:8px 16px;background:#4A7C3F;color:#fff;border:none;cursor:pointer">Add to Home Screen</button>
   </div>
 </div>

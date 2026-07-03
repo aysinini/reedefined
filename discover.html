@@ -27,25 +27,25 @@ a{color:inherit;text-decoration:none}
 .util{background:var(--ink);height:34px;display:flex;align-items:center;justify-content:space-between;padding:0 40px;font-family:var(--C);font-size:12px;font-weight:500;letter-spacing:1px;color:rgba(255,255,255,.45)}
 .util a{color:rgba(255,255,255,.45);transition:color .15s}.util a:hover{color:#fff}
 .util-r{display:flex;align-items:center;gap:18px}
-.util-sep{width:1px;height:12px;background:rgba(255,255,255,.15)}
+.util-sep{width:1px;height:12px;background:rgba(255,255,255,.5)}
 
 /* ── NAV ── */
 .nav{background:var(--white);border-bottom:3px solid var(--ink);position:sticky;top:0;z-index:200}
 .nav-inner{max-width:1380px;margin:0 auto;padding:0 40px;height:66px;display:flex;align-items:center;justify-content:space-between}
 .nav-logo{font-family:var(--H);font-size:26px;font-weight:700;color:var(--ink);letter-spacing:-.3px;cursor:pointer}
 .nav-links{display:flex;height:66px;align-items:center}
-.nav-link{font-family:var(--C);font-size:13px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--muted);padding:0 18px;height:100%;display:flex;align-items:center;border-bottom:3px solid transparent;margin-bottom:-3px;transition:color .15s,border-color .15s;cursor:pointer}
+.nav-link{font-family:var(--H);font-size:13px;font-weight:600;letter-spacing:0;color:var(--muted);padding:0 18px;height:100%;display:flex;align-items:center;border-bottom:3px solid transparent;margin-bottom:-3px;transition:color .15s,border-color .15s;cursor:pointer}
 .nav-link:hover{color:var(--ink)}.nav-link.on{color:var(--teal);border-bottom-color:var(--teal)}
 .nav-right{display:flex;align-items:center;gap:8px}
-.btn-p{font-family:var(--C);font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;background:var(--ink);color:#fff;padding:11px 24px;border:none;cursor:pointer;transition:opacity .15s}.btn-p:hover{opacity:.85}
-.btn-o{font-family:var(--C);font-size:12px;font-weight:600;letter-spacing:2px;text-transform:uppercase;background:transparent;color:var(--ink);padding:10px 22px;border:1px solid var(--ink);cursor:pointer;transition:all .15s}.btn-o:hover{background:var(--ink);color:#fff}
+.btn-p{font-family:var(--H);font-size:12px;font-weight:700;background:var(--ink);color:#fff;padding:11px 24px;border:none;cursor:pointer;border-radius:20px;transition:opacity .15s}.btn-p:hover{opacity:.85}
+.btn-o{font-family:var(--H);font-size:12px;font-weight:600;background:transparent;color:var(--ink);padding:10px 22px;border:1px solid var(--ink);cursor:pointer;border-radius:20px;transition:all .15s}.btn-o:hover{background:var(--ink);color:#fff}
 .nav-av{width:32px;height:32px;border-radius:50%;background:var(--teal);display:flex;align-items:center;justify-content:center;font-family:var(--H);font-size:12px;font-weight:700;color:#fff;cursor:pointer}
 
 /* ── TICKER ── */
 .ticker{background:var(--teal);height:38px;overflow:hidden;display:flex;align-items:center}
 .ticker-t{display:flex;animation:tick 36s linear infinite;white-space:nowrap}
 .ti{font-family:var(--C);font-size:12px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:#fff;padding:0 40px;opacity:.9}
-.td{color:rgba(255,255,255,.3)}
+.td{color:rgba(255,255,255,.7)}
 @keyframes tick{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 
 /* ── HERO ── */
@@ -91,7 +91,7 @@ a{color:inherit;text-decoration:none}
 .fc-bar{height:3px;position:absolute;top:0;left:0;right:0}
 .fc-initials{font-family:var(--P);font-size:88px;font-weight:900opacity:.08;line-height:1;user-select:none;position:absolute}
 .fc-badge{position:absolute;top:14px;right:14px;font-family:var(--C);font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:4px 10px}
-.fc-avatar{position:absolute;bottom:16px;left:16px;width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--H);font-size:18px;font-weight:700;color:#fff;border:2px solid rgba(255,255,255,.3)}
+.fc-avatar{position:absolute;bottom:16px;left:16px;width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--H);font-size:18px;font-weight:700;color:#fff;border:2px solid rgba(255,255,255,.7)}
 .fc-body{padding:18px 20px 20px}
 .fc-type{font-family:var(--C);font-size:13px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--teal);margin-bottom:6px}
 .fc-name{font-family:var(--H);font-size:20px;font-weight:700;color:var(--ink);margin-bottom:4px;line-height:1.2}
@@ -153,8 +153,8 @@ a{color:inherit;text-decoration:none}
 .ob-text{}
 .ob-title{font-family:var(--H);font-size:17px;font-weight:700;color:#fff;margin-bottom:4px}
 .ob-sub{font-family:var(--H);font-size:14pxcolor:rgba(255,255,255,.45);line-height:1.5}
-.ob-btn{font-family:var(--C);font-size:13px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:12px 24px;background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.2);cursor:pointer;transition:all .15s;white-space:nowrap;flex-shrink:0}
-.ob-btn:hover{background:rgba(255,255,255,.2);border-color:rgba(255,255,255,.4)}
+.ob-btn{font-family:var(--C);font-size:13px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:12px 24px;background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.6);cursor:pointer;transition:all .15s;white-space:nowrap;flex-shrink:0}
+.ob-btn:hover{background:rgba(255,255,255,.6);border-color:rgba(255,255,255,.4)}
 .ob-btn.on{background:var(--teal);border-color:var(--teal)}
 
 /* ── NO RESULTS ── */
@@ -214,7 +214,7 @@ a{color:inherit;text-decoration:none}
 }
 
 <style>
-.lang-btn.on{background:rgba(255,255,255,.15)!important;color:#fff!important}
+.lang-btn.on{background:rgba(255,255,255,.5)!important;color:#fff!important}
 .lang-btn:hover{color:#fff!important;background:rgba(255,255,255,.08)!important}
 </style>
 </style>
@@ -248,9 +248,9 @@ if('serviceWorker' in navigator){
     <div class="util-sep"></div>
     <a onclick="location.href='portal.html'">Sign In</a>
   <div class="lang-switcher" style="display:flex;align-items:center;gap:0;margin-left:8px">
-    <button class="lang-btn" data-lang="en" onclick="setLang('en')" style="font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:4px 8px;background:none;border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.4);cursor:pointer;transition:all .15s;border-right:none">EN</button>
-    <button class="lang-btn" data-lang="tr" onclick="setLang('tr')" style="font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:4px 8px;background:none;border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.4);cursor:pointer;transition:all .15s;border-right:none">TR</button>
-    <button class="lang-btn" data-lang="de" onclick="setLang('de')" style="font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:4px 8px;background:none;border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.4);cursor:pointer;transition:all .15s">DE</button>
+    <button class="lang-btn" data-lang="en" onclick="setLang('en')" style="font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:4px 8px;background:none;border:1px solid rgba(255,255,255,.5);color:rgba(255,255,255,.4);cursor:pointer;transition:all .15s;border-right:none">EN</button>
+    <button class="lang-btn" data-lang="tr" onclick="setLang('tr')" style="font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:4px 8px;background:none;border:1px solid rgba(255,255,255,.5);color:rgba(255,255,255,.4);cursor:pointer;transition:all .15s;border-right:none">TR</button>
+    <button class="lang-btn" data-lang="de" onclick="setLang('de')" style="font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:4px 8px;background:none;border:1px solid rgba(255,255,255,.5);color:rgba(255,255,255,.4);cursor:pointer;transition:all .15s">DE</button>
   </div>
   </div>
 </div>
@@ -623,7 +623,7 @@ initFeatured();
     </div>
   </div>
   <div style="display:flex;gap:8px;flex-shrink:0">
-    <button onclick="dismissPWA()" style="font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:8px 14px;background:none;color:rgba(255,255,255,.4);border:1px solid rgba(255,255,255,.15);cursor:pointer">Not now</button>
+    <button onclick="dismissPWA()" style="font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:8px 14px;background:none;color:rgba(255,255,255,.4);border:1px solid rgba(255,255,255,.5);cursor:pointer">Not now</button>
     <button onclick="installPWA()" style="font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:8px 16px;background:#4A7C3F;color:#fff;border:none;cursor:pointer">Add to Home Screen</button>
   </div>
 </div>
@@ -671,17 +671,17 @@ if(isIOS && !isInStandalone && !localStorage.getItem('pwa-dismissed')){
   <div style="max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:20px;padding-bottom:24px;border-bottom:1px solid #1a1a1a;margin-bottom:20px">
     <div style="font-family:'Libre Baskerville',Georgia,serif;font-size:20px;font-weight:700color:#fff">Reedefined</div>
     <div style="display:flex;gap:20px;flex-wrap:wrap">
-      <span onclick="location.href='index.html'" style="font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.3);cursor:pointer;transition:color .15s">Home</span>
-      <span onclick="location.href='newsstand.html'" style="font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.3);cursor:pointer">The Magazine</span>
-      <span onclick="location.href='discover.html'" style="font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.3);cursor:pointer">Discover</span>
-      <span onclick="location.href='cover-brief.html'" style="font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.3);cursor:pointer">Illustrators</span>
-      <span onclick="location.href='advertise.html'" style="font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.3);cursor:pointer">Advertise</span>
-      <span onclick="location.href='privacy.html'" style="font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.3);cursor:pointer">Privacy</span>
-      <span onclick="location.href='terms.html'" style="font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.3);cursor:pointer">Terms</span>
-      <span onclick="location.href='mailto:hello@reedefined.app'" style="font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.3);cursor:pointer">Contact</span>
+      <span onclick="location.href='index.html'" style="font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.7);cursor:pointer;transition:color .15s">Home</span>
+      <span onclick="location.href='newsstand.html'" style="font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.7);cursor:pointer">The Magazine</span>
+      <span onclick="location.href='discover.html'" style="font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.7);cursor:pointer">Discover</span>
+      <span onclick="location.href='cover-brief.html'" style="font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.7);cursor:pointer">Illustrators</span>
+      <span onclick="location.href='advertise.html'" style="font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.7);cursor:pointer">Advertise</span>
+      <span onclick="location.href='privacy.html'" style="font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.7);cursor:pointer">Privacy</span>
+      <span onclick="location.href='terms.html'" style="font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.7);cursor:pointer">Terms</span>
+      <span onclick="location.href='mailto:hello@reedefined.app'" style="font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.7);cursor:pointer">Contact</span>
     </div>
   </div>
-  <div style="max-width:1200px;margin:0 auto;display:flex;justify-content:space-between;font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,.2);flex-wrap:wrap;gap:8px">
+  <div style="max-width:1200px;margin:0 auto;display:flex;justify-content:space-between;font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,.6);flex-wrap:wrap;gap:8px">
     <span>© 2026 Reedefined. All rights reserved.</span>
     <span>reedefined.app</span>
   </div>
