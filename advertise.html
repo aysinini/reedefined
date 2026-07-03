@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="tiktok-domain-verification" content="hVzFgjsRoBRYSJKXVAYgroBXhxr64tSC">
+<meta name="tiktok-domain-verification" content="4Oo4Nq3DlWoB7f8isxeU4GwMijyr5fcU">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reedefined — Advertise</title>
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#0C0C0C">
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Barlow+Condensed:wght@400;500;600;700;900&family=Barlow:wght@300;400;500&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700;1,900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0C0C0C;--mid:#3A3A3A;--muted:#777;--light:#AAA;
+  --rule:#E0E0E0;--rule2:#EBEBEB;--bg:#F8F7F4;--bg2:#F0EEE9;--white:#FFF;
+  --teal:#2A4A54;--teal-l:#C2D4DA;--teal-ll:#DDE8EB;
+  --H:'Libre Baskerville',Georgia,serif;
+  --P:'Playfair Display',Georgia,serif;
+  --C:'Barlow Condensed',sans-serif;
+  --S:'Barlow',sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:var(--S);-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+
+/* NAV */
+.nav{background:var(--white);border-bottom:3px solid var(--ink);position:sticky;top:0;z-index:100}
+.nav-inner{max-width:1200px;margin:0 auto;padding:0 40px;height:66px;display:flex;align-items:center;justify-content:space-between}
+.nav-logo{font-family:var(--H);font-size:22px;font-weight:700;color:var(--ink);cursor:pointer;display:flex;align-items:center;gap:10px}
+.nav-links{display:flex;height:66px;align-items:center}
+.nav-link{font-family:var(--C);font-size:12px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);padding:0 16px;height:100%;display:flex;align-items:center;border-bottom:3px solid transparent;margin-bottom:-3px;transition:color .15s;cursor:pointer}
+.nav-link:hover{color:var(--ink)}.nav-link.on{color:var(--ink);border-bottom-color:var(--ink)}
+.nav-right{display:flex;align-items:center;gap:8px}
+.btn-p{font-family:var(--C);font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;background:var(--ink);color:#fff;padding:10px 22px;border:none;cursor:pointer}.btn-p:hover{opacity:.85}
+
+/* HERO — light, editorial */
+.hero{background:var(--white);border-bottom:1px solid var(--rule);padding:80px 0 72px}
+.hero-inner{max-width:1200px;margin:0 auto;padding:0 40px;display:grid;grid-template-columns:1fr 380px;gap:80px;align-items:start}
+.hero-eyebrow{font-family:var(--C);font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--teal);margin-bottom:20px;display:flex;align-items:center;gap:14px}
+.hero-eyebrow::before{content:'';width:28px;height:1px;background:var(--teal)}
+.hero-h1{font-family:var(--P);font-size:clamp(40px,5vw,70px);font-weight:900;font-style:italic;line-height:.95;color:var(--ink);letter-spacing:-2px;margin-bottom:20px}
+.hero-sub{font-family:var(--H);font-size:17px;font-style:italic;color:var(--muted);line-height:1.7;max-width:480px;margin-bottom:32px}
+.hero-cta{display:flex;align-items:center;gap:12px}
+.btn-teal{font-family:var(--C);font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;background:var(--teal);color:#fff;padding:14px 28px;border:none;cursor:pointer;transition:opacity .15s}.btn-teal:hover{opacity:.85}
+.btn-out{font-family:var(--C);font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;background:transparent;color:var(--ink);padding:13px 22px;border:1px solid var(--ink);cursor:pointer;transition:all .15s}.btn-out:hover{background:var(--ink);color:#fff}
+
+/* HERO SIDEBAR */
+.hero-side{border:1px solid var(--rule);background:var(--bg);padding:24px}
+.hs-label{font-family:var(--C);font-size:9px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--muted);margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--rule)}
+.hs-item{padding:14px 0;border-bottom:1px solid var(--rule2);display:flex;align-items:baseline;justify-content:space-between;gap:12px}
+.hs-item:last-child{border:none;padding-bottom:0}
+.hs-name{font-family:var(--H);font-size:14px;font-weight:700;color:var(--ink)}
+.hs-desc{font-family:var(--H);font-size:13px;font-style:italic;color:var(--muted)}
+.hs-badge{font-family:var(--C);font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:3px 8px;background:var(--teal-ll);color:var(--teal)}
+
+/* WHY SECTION */
+.why{padding:72px 0;background:var(--bg)}
+.why-inner{max-width:1200px;margin:0 auto;padding:0 40px}
+.sec-eyebrow{font-family:var(--C);font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--teal);margin-bottom:12px;display:flex;align-items:center;gap:14px}
+.sec-eyebrow::before{content:'';width:28px;height:1px;background:var(--teal)}
+.sec-h{font-family:var(--H);font-size:clamp(28px,3.5vw,46px);font-weight:700;line-height:1.1;color:var(--ink);margin-bottom:48px;letter-spacing:-.5px}
+.why-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--rule)}
+.why-card{background:var(--white);padding:32px 28px}
+.wc-n{font-family:var(--P);font-size:48px;font-weight:900;font-style:italic;color:var(--teal-l);line-height:1;margin-bottom:12px}
+.wc-t{font-family:var(--H);font-size:17px;font-weight:700;color:var(--ink);margin-bottom:8px}
+.wc-d{font-family:var(--H);font-size:14px;font-style:italic;color:var(--muted);line-height:1.6}
+
+/* FORMATS */
+.formats{padding:72px 0;background:var(--white);border-top:1px solid var(--rule)}
+.formats-inner{max-width:1200px;margin:0 auto;padding:0 40px}
+.format-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--rule);margin-top:48px}
+.fc{background:var(--bg);padding:32px 28px;cursor:pointer;transition:background .15s}
+.fc:hover{background:var(--teal-ll)}
+.fc-eyebrow{font-family:var(--C);font-size:9px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--teal);margin-bottom:10px}
+.fc-name{font-family:var(--H);font-size:22px;font-weight:700;color:var(--ink);margin-bottom:6px}
+.fc-desc{font-family:var(--H);font-size:14px;font-style:italic;color:var(--muted);line-height:1.6;margin-bottom:14px}
+.fc-price{font-family:var(--C);font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink)}
+
+/* ENQUIRY FORM */
+.enquiry{padding:72px 0;background:var(--bg);border-top:1px solid var(--rule)}
+.enquiry-inner{max-width:720px;margin:0 auto;padding:0 40px}
+.form-field{margin-bottom:18px}
+.form-label{font-family:var(--C);font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--mid);display:block;margin-bottom:6px}
+.form-input{width:100%;padding:12px 16px;font-family:var(--S);font-size:15px;color:var(--ink);background:var(--white);border:1px solid var(--rule);outline:none;transition:border-color .15s}
+.form-input:focus{border-color:var(--teal)}
+.form-select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23777' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.btn-submit{width:100%;padding:16px;font-family:var(--C);font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;background:var(--teal);color:#fff;border:none;cursor:pointer;transition:opacity .15s;margin-top:8px}.btn-submit:hover{opacity:.85}
+.form-note{font-family:var(--H);font-size:13px;font-style:italic;color:var(--muted);text-align:center;margin-top:16px}
+.form-success{display:none;background:var(--teal-ll);border:1px solid var(--teal-l);padding:20px 24px;font-family:var(--H);font-size:15px;font-style:italic;color:var(--teal)}
+
+/* QUOTE STRIP */
+.quote-strip{background:var(--teal);padding:48px 40px;text-align:center}
+.qs-text{font-family:var(--P);font-size:clamp(22px,3vw,36px);font-weight:700;font-style:italic;color:#fff;line-height:1.3;max-width:700px;margin:0 auto 12px}
+.qs-sub{font-family:var(--C);font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.5)}
+
+/* FOOTER */
+.footer{background:var(--ink);padding:48px 40px 32px}
+.footer-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:20px;padding-bottom:24px;border-bottom:1px solid rgba(255,255,255,.08);margin-bottom:20px}
+.footer-logo{font-family:var(--H);font-size:20px;font-weight:700;font-style:italic;color:#fff}
+.footer-links{display:flex;gap:20px;flex-wrap:wrap}
+.footer-link{font-family:var(--C);font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.3);cursor:pointer;transition:color .15s}.footer-link:hover{color:#fff}
+.footer-bottom{max-width:1200px;margin:0 auto;display:flex;justify-content:space-between;font-family:var(--C);font-size:11px;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,.2)}
+
+@media(max-width:1024px){.hero-inner,.format-grid{grid-template-columns:1fr}.hero-side{display:none}.why-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:640px){
+  .nav-inner{padding:0 16px;height:56px}.nav-links{display:none}
+  .hero{padding:48px 0 40px}.hero-inner,.why-inner,.formats-inner,.enquiry-inner{padding-left:16px;padding-right:16px}
+  .why-grid{grid-template-columns:1fr}.format-grid{grid-template-columns:1fr}
+  .form-row{grid-template-columns:1fr}
+  .footer{padding:36px 16px 24px}.footer-inner{flex-direction:column}.footer-bottom{flex-direction:column;gap:6px}
+}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <div class="nav-logo" onclick="location.href='index.html'">Reedefined</div>
+    <div class="nav-links">
+      <span class="nav-link" onclick="location.href='discover.html'">Discover</span>
+      <span class="nav-link on">Advertise</span>
+      <span class="nav-link" onclick="location.href='portal.html'">Sign In</span>
+    </div>
+    <div class="nav-right">
+      <button class="btn-p" onclick="document.getElementById('enquiry').scrollIntoView({behavior:'smooth'})">Get in Touch →</button>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div>
+      <div class="hero-eyebrow">Advertising</div>
+      <h1 class="hero-h1">Reach the people<br>who pay attention.</h1>
+      <p class="hero-sub">Reedefined readers don't scroll past. They choose what they read, who they follow, and what lands in their issue. Your brand appears in a context people actually trust.</p>
+      <div class="hero-cta">
+        <button class="btn-teal" onclick="document.getElementById('enquiry').scrollIntoView({behavior:'smooth'})">Enquire Now →</button>
+        <button class="btn-out" onclick="document.getElementById('formats').scrollIntoView({behavior:'smooth'})">View Formats</button>
+      </div>
+    </div>
+    <div class="hero-side">
+      <div class="hs-label">Current opportunities</div>
+      <div class="hs-item">
+        <div>
+          <div class="hs-name">Issue No. 1</div>
+          <div class="hs-desc">July 2026 · Launch issue</div>
+        </div>
+        <span class="hs-badge">Open</span>
+      </div>
+      <div class="hs-item">
+        <div>
+          <div class="hs-name">Issue No. 2</div>
+          <div class="hs-desc">August 2026 — booking open</div>
+        </div>
+        <span class="hs-badge">Open</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY REEDEFINED -->
+<section class="why">
+  <div class="why-inner">
+    <div class="sec-eyebrow">Why Reedefined</div>
+    <h2 class="sec-h">Editorial context.<br>Personal reach.</h2>
+    <div class="why-grid">
+      <div class="why-card">
+        <div class="wc-n">01</div>
+        <div class="wc-t">Curated, not algorithmic</div>
+        <div class="wc-d">Every reader's issue is assembled from the people they choose to follow. No feed, no noise — only content they've opted into.</div>
+      </div>
+      <div class="why-card">
+        <div class="wc-n">02</div>
+        <div class="wc-t">Editorial placement</div>
+        <div class="wc-d">Your ad appears as a full-page spread inside a magazine — not a banner, not a pop-up. The same context as Monocle or Kinfolk, at early-access pricing.</div>
+      </div>
+      <div class="why-card">
+        <div class="wc-n">03</div>
+        <div class="wc-t">Growing from launch</div>
+        <div class="wc-d">We are in our launch phase. Getting in early means prime placement, personal collaboration, and rates that won't exist once we scale.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FORMATS -->
+<section class="formats" id="formats">
+  <div class="formats-inner">
+    <div class="sec-eyebrow">Ad Formats</div>
+    <h2 class="sec-h">How your brand appears<br>in the magazine.</h2>
+    <div class="format-grid">
+      <div class="fc">
+        <div class="fc-eyebrow">Full Spread</div>
+        <div class="fc-name">Double Page</div>
+        <div class="fc-desc">A full two-page spread inside the reader — the most immersive placement, opposite a contributor's column.</div>
+        <div class="fc-price">Most impactful — enquire for pricing</div>
+      </div>
+      <div class="fc">
+        <div class="fc-eyebrow">Single Page</div>
+        <div class="fc-name">Full Page</div>
+        <div class="fc-desc">A full right-hand page, facing editorial content. Clean, considered, and impossible to skip.</div>
+        <div class="fc-price">Premium placement — enquire for pricing</div>
+      </div>
+      <div class="fc">
+        <div class="fc-eyebrow">Editorial</div>
+        <div class="fc-name">Sponsored Column</div>
+        <div class="fc-desc">A brand-authored column that lives alongside contributor content — written in the Reedefined editorial voice.</div>
+        <div class="fc-price">Content partnership — enquire for pricing</div>
+      </div>
+      <div class="fc">
+        <div class="fc-eyebrow">Cover</div>
+        <div class="fc-name">Cover Partnership</div>
+        <div class="fc-desc">Your brand associated with the cover of an issue — limited availability, maximum visibility.</div>
+        <div class="fc-price">Exclusive — enquire for pricing</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- QUOTE STRIP -->
+<div class="quote-strip">
+  <div class="qs-text">"The magazine shaped by the people you follow."</div>
+  <div class="qs-sub">Reedefined · Issue No. 1 · July 2026</div>
+</div>
+
+<!-- ENQUIRY -->
+<section class="enquiry" id="enquiry">
+  <div class="enquiry-inner">
+    <div class="sec-eyebrow">Get in Touch</div>
+    <h2 class="sec-h" style="margin-bottom:32px">Start the conversation.</h2>
+    <div class="form-success" id="form-success">Thank you — we'll be in touch within 48 hours. For urgent enquiries, write directly to <a href="mailto:advertising@reedefined.app" style="color:var(--teal)">advertising@reedefined.app</a></div>
+    <form id="adform" onsubmit="submitEnquiry(event)">
+      <div class="form-row">
+        <div class="form-field">
+          <label class="form-label">Your Name</label>
+          <input class="form-input" type="text" id="ad-name" placeholder="Full name" required>
+        </div>
+        <div class="form-field">
+          <label class="form-label">Brand / Company</label>
+          <input class="form-input" type="text" id="ad-brand" placeholder="Brand name" required>
+        </div>
+      </div>
+      <div class="form-field">
+        <label class="form-label">Email Address</label>
+        <input class="form-input" type="email" id="ad-email" placeholder="your@email.com" required>
+      </div>
+      <div class="form-row">
+        <div class="form-field">
+          <label class="form-label">Format</label>
+          <select class="form-input form-select" id="ad-format">
+            <option value="">Select a format</option>
+            <option>Double Page Spread</option>
+            <option>Full Page</option>
+            <option>Sponsored Column</option>
+            <option>Cover Partnership</option>
+            <option>Not sure yet</option>
+          </select>
+        </div>
+        <div class="form-field">
+          <label class="form-label">Preferred Issue</label>
+          <select class="form-input form-select" id="ad-issue">
+            <option value="">Select an issue</option>
+            <option>Issue No. 1 · July 2026</option>
+            <option>Issue No. 2 · August 2026</option>
+            <option>Open to discussion</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-field">
+        <label class="form-label">Tell us about your brand</label>
+        <textarea class="form-input" id="ad-msg" rows="4" placeholder="What does your brand do, and why does Reedefined feel like the right fit?" style="resize:vertical"></textarea>
+      </div>
+      <button class="btn-submit" type="submit">Send Enquiry →</button>
+      <p class="form-note">We respond to all enquiries within 48 hours. No commitment required.</p>
+    </form>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-logo">Reedefined</div>
+    <div class="footer-links">
+      <span class="footer-link" onclick="location.href='index.html'">Home</span>
+      <span class="footer-link" onclick="location.href='discover.html'">Discover</span>
+      <span class="footer-link" onclick="location.href='cover-brief.html'">Illustrators</span>
+      <span class="footer-link" onclick="location.href='privacy.html'">Privacy</span>
+      <span class="footer-link" onclick="location.href='terms.html'">Terms</span>
+      <span class="footer-link" onclick="location.href='mailto:advertising@reedefined.app'">advertising@reedefined.app</span>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 Reedefined. All rights reserved.</span>
+    <span>reedefined.app/advertise</span>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/i18n.js"></script>
+<script>
+const SBU = 'https://gseuejqqwkdjkhxfxxwy.supabase.co';
+const SBK = 'sb_publishable_0Nmw1mwGx__b_jJHLHBDKg__1OAsRuy';
+const sb  = supabase.createClient(SBU, SBK);
+
+async function submitEnquiry(e) {
+  e.preventDefault();
+  const btn = e.target.querySelector('.btn-submit');
+  btn.disabled = true;
+  btn.textContent = 'Sending…';
+
+  const { error } = await sb.from('ad_enquiries').insert({
+    name:    document.getElementById('ad-name').value,
+    brand:   document.getElementById('ad-brand').value,
+    email:   document.getElementById('ad-email').value,
+    format:  document.getElementById('ad-format').value,
+    issue:   document.getElementById('ad-issue').value,
+    message: document.getElementById('ad-msg').value,
+    created_at: new Date().toISOString()
+  });
+
+  if(error) {
+    btn.disabled = false;
+    btn.textContent = 'Send Enquiry →';
+    alert('Something went wrong. Please email us directly at advertising@reedefined.app');
+    return;
+  }
+
+  document.getElementById('adform').style.display = 'none';
+  document.getElementById('form-success').style.display = 'block';
+}
+</script>
+</body>
+</html>
