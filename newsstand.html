@@ -228,8 +228,9 @@ footer.site-ft{background:var(--ink);padding:60px 32px 34px}.ft-w{max-width:1400
 (async()=>{
   const sb=supabase.createClient('https://gseuejqqwkdjkhxfxxwy.supabase.co','sb_publishable_0Nmw1mwGx__b_jJHLHBDKg__1OAsRuy');
   const {data:{session}}=await sb.auth.getSession();
-  if(!session) location.href='portal.html';
-  else {
+  if(!session){ location.href='portal.html'; return; }
+
+  function applySignedInUI(){
     const name=session.user?.user_metadata?.full_name||session.user?.email||'';
     const role=session.user?.user_metadata?.role||'reader';
     const av=document.getElementById('nav-av');
@@ -259,6 +260,12 @@ footer.site-ft{background:var(--ink);padding:60px 32px 34px}.ft-w{max-width:1400
     };
 
     window.__sbSignOut=async()=>{await sb.auth.signOut();location.href='portal.html';};
+  }
+
+  if(document.readyState==='loading'){
+    document.addEventListener('DOMContentLoaded', applySignedInUI);
+  } else {
+    applySignedInUI();
   }
 })();
 </script>
