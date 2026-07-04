@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reedefined — Welcome back</title>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Barlow+Condensed:wght@400;500;600;700&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0C0C0C;--mid:#3A3A3A;--muted:#777;--light:#BBB;
+  --rule:#E2E2E2;--bg:#F8F7F4;--white:#FFF;
+  --teal:#4A7C3F;--teal-l:#D4DBCA;--teal-ll:#E8EDE0;--red:#C8251A;
+  --H:'Libre Baskerville',Georgia,serif;
+  --C:'Barlow Condensed',sans-serif;
+  --S:'Barlow',sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--S);-webkit-font-smoothing:antialiased;min-height:100vh;display:flex;flex-direction:column}
+.topbar{border-bottom:3px solid var(--ink);padding:0 48px;height:64px;display:flex;align-items:center;background:var(--white)}
+.tb-logo{font-family:var(--H);font-size:22px;font-weight:700;color:var(--ink)}
+.wrap{flex:1;display:flex;align-items:center;justify-content:center;padding:40px 24px}
+.card{max-width:640px;width:100%;text-align:center}
+.eyebrow{font-family:var(--C);font-size:13px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--teal);margin-bottom:14px}
+.h1{font-family:var(--H);font-size:36px;font-weight:700;letter-spacing:-.5px;margin-bottom:12px}
+.sub{font-family:var(--H);font-size:16px;color:var(--muted);margin-bottom:44px;line-height:1.5}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+@media(max-width:560px){.opts{grid-template-columns:1fr}}
+.opt{background:var(--white);border:1px solid var(--rule);border-radius:14px;padding:32px 24px;cursor:pointer;transition:all .15s;text-align:left}
+.opt:hover{border-color:var(--ink);transform:translateY(-2px)}
+.opt-icon{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin-bottom:18px;font-size:20px}
+.opt-icon.read{background:var(--teal-ll);color:var(--teal)}
+.opt-icon.write{background:#FBEAE8;color:var(--red)}
+.opt-t{font-family:var(--H);font-size:19px;font-weight:700;margin-bottom:6px}
+.opt-d{font-family:var(--S);font-size:14px;color:var(--muted);line-height:1.5}
+.opt-arrow{font-family:var(--C);font-size:13px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink);margin-top:18px;display:flex;align-items:center;gap:6px}
+</style>
+</head>
+<body>
+
+<div class="topbar"><div class="tb-logo">Reedefined</div></div>
+
+<div class="wrap">
+  <div class="card">
+    <div class="eyebrow">— Welcome back</div>
+    <div class="h1">What would you like to do?</div>
+    <div class="sub">You're both a reader and a contributor. Pick where you want to go — you can always switch later.</div>
+    <div class="opts">
+      <div class="opt" onclick="location.href='newsstand.html'">
+        <div class="opt-icon read">📖</div>
+        <div class="opt-t">I want to read</div>
+        <div class="opt-d">Open your personal issue, flip through past issues, and discover new people to follow.</div>
+        <div class="opt-arrow">Go to Newsstand →</div>
+      </div>
+      <div class="opt" onclick="location.href='editor-portal.html'">
+        <div class="opt-icon write">✎</div>
+        <div class="opt-t">I want to contribute</div>
+        <div class="opt-d">Write your column, manage your submissions, and see how your writing is doing.</div>
+        <div class="opt-arrow">Go to Contributor Portal →</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

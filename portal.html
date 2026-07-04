@@ -138,18 +138,24 @@ body{background:var(--white);color:var(--ink);font-family:var(--S);-webkit-font-
     <p class="switch">New here? <a onclick="switchTab('su')">Create an account</a></p>
   </div>
 
-  <!-- SIGN UP -->
-  <div class="pane" id="pane-su">
-    <div class="role-sel">
-      <div class="r-card sel" id="r-reader" onclick="selRole('reader')">
-        <div class="r-t">Reader</div>
-        <div class="r-d">Read my personalised issue</div>
+  <!-- SIGN UP: STEP 1 - ROLE CHOICE -->
+  <div class="pane" id="pane-su-role">
+    <div class="role-sel" style="grid-template-columns:1fr;gap:14px;margin-bottom:8px">
+      <div class="r-card" id="r-reader" onclick="chooseRoleAndContinue('reader')" style="padding:24px 20px;text-align:left">
+        <div class="r-t" style="font-size:18px;margin-bottom:6px">Reader</div>
+        <div class="r-d" style="font-size:14px">Read your personalised issue, follow contributors, flip through past issues.</div>
       </div>
-      <div class="r-card" id="r-contrib" onclick="selRole('contrib')">
-        <div class="r-t">Contributor &amp; Reader</div>
-        <div class="r-d">Write, publish and read</div>
+      <div class="r-card" id="r-contrib" onclick="chooseRoleAndContinue('contrib')" style="padding:24px 20px;text-align:left">
+        <div class="r-t" style="font-size:18px;margin-bottom:6px">Contributor &amp; Reader</div>
+        <div class="r-d" style="font-size:14px">Write and publish your own column, plus everything a Reader gets.</div>
       </div>
     </div>
+    <p class="switch">Already have an account? <a onclick="switchTab('si')">Sign in</a></p>
+  </div>
+
+  <!-- SIGN UP: STEP 2 - DETAILS -->
+  <div class="pane" id="pane-su">
+    <p class="tb-back" style="cursor:pointer;margin-bottom:20px" onclick="backToRoleChoice()">← Change choice</p>
     <div class="field">
       <label class="fl">Full Name</label>
       <input class="fi" type="text" id="su-name" placeholder="Your name" autocomplete="name">
@@ -183,15 +189,16 @@ let suRole='reader';
   const {data:{session}}=await sb.auth.getSession();
   if(session){
     const {data:p}=await sb.from('profiles').select('role').eq('id',session.user.id).single();
-    location.href='newsstand.html';
+    location.href=(p&&p.role==='contrib')?'choose.html':'newsstand.html';
   }
 })();
 
 function switchTab(t){
-  ['si','su'].forEach(x=>{
-    document.getElementById('tab-'+x).classList.toggle('on',x===t);
-    document.getElementById('pane-'+x).classList.toggle('on',x===t);
-  });
+  document.getElementById('tab-si').classList.toggle('on',t==='si');
+  document.getElementById('tab-su').classList.toggle('on',t==='su');
+  document.getElementById('pane-si').classList.toggle('on',t==='si');
+  document.getElementById('pane-su-role').classList.toggle('on',t==='su');
+  document.getElementById('pane-su').classList.remove('on');
   clearMsgs();
   const si=t==='si';
   document.getElementById('eyebrow').textContent=si?'Welcome back':'Join Reedefined';
@@ -199,10 +206,21 @@ function switchTab(t){
   document.getElementById('main-sub').textContent=si?"Everyone reads. Contributors also write.":'Choose how you want to take part.';
 }
 
-function selRole(r){
+function chooseRoleAndContinue(r){
   suRole=r;
-  document.getElementById('r-reader').classList.toggle('sel',r==='reader');
-  document.getElementById('r-contrib').classList.toggle('sel',r==='contrib');
+  document.getElementById('pane-su-role').classList.remove('on');
+  document.getElementById('pane-su').classList.add('on');
+  document.getElementById('eyebrow').textContent = r==='contrib' ? 'Contributor & Reader' : 'Reader';
+  document.getElementById('main-h').textContent='Your details';
+  document.getElementById('main-sub').textContent = r==='contrib' ? "You'll be able to write and read." : "You'll read your personalised issue.";
+}
+
+function backToRoleChoice(){
+  document.getElementById('pane-su').classList.remove('on');
+  document.getElementById('pane-su-role').classList.add('on');
+  document.getElementById('eyebrow').textContent='Join Reedefined';
+  document.getElementById('main-h').textContent='Create account';
+  document.getElementById('main-sub').textContent='Choose how you want to take part.';
 }
 
 function togglePw(id,btn){
@@ -230,7 +248,7 @@ async function doSignIn(){
     return;
   }
   const {data:p}=await sb.from('profiles').select('role').eq('id',data.user.id).single();
-  location.href='newsstand.html';
+  location.href=(p&&p.role==='contrib')?'choose.html':'newsstand.html';
 }
 
 async function doSignUp(){
@@ -266,7 +284,8 @@ async function forgotPw(){
 
 document.addEventListener('keydown',e=>{
   if(e.key==='Enter'){
-    document.getElementById('pane-si').classList.contains('on')?doSignIn():doSignUp();
+    if(document.getElementById('pane-si').classList.contains('on')) doSignIn();
+    else if(document.getElementById('pane-su').classList.contains('on')) doSignUp();
   }
 });
 </script>
