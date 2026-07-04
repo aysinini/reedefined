@@ -289,60 +289,6 @@ body{font-family:var(--S);-webkit-font-smoothing:antialiased;display:flex;flex-d
 ::-webkit-scrollbar-track{background:transparent}
 ::-webkit-scrollbar-thumb{background:rgba(255,255,255,.5)}
 
-/* ── COVER R ANIMATION ── */
-
-
-
-
-
-
-
-
-
-  to{transform:rotate(360deg)} }
-  to{transform:rotate(360deg)} }
-  to{transform:rotate(360deg)} }
-
-/* Breathing glow on the R */
-
-
-  to   { filter: drop-shadow(0 12px 32px rgba(42,62,72,.38)); }
-}
-
-
-  .rb-logo{font-size:17px}
-  .rb-issue{display:none}
-  .rb-page{font-size:12px}
-  .rb-controls{gap:6px}
-  .rb-btn{padding:5px 10px;font-size:9px;letter-spacing:1px}
-  .rb-close{padding:5px 10px;font-size:9px;letter-spacing:1px}
-  .stage{padding:12px 8px}
-  .book{max-height:none;height:calc(100vw * 1.35)}
-  .spine{width:8px}
-  .nav-arrow{width:32px;height:32px;font-size:18px}
-  .nav-prev{left:2px}.nav-next{right:2px}
-  .page-counter{font-size:10px;padding:4px 10px}
-
-  /* Single page mode on mobile — hide left page, show right full width */
-  .page-side-l{display:none}
-  .spine{display:none}
-  .page-side-r{border-radius:8px}
-
-  /* Scale down page content */
-  .mc-logo{font-size:22px}
-  .mc-tease-grid{grid-template-columns:repeat(2,1fr)}
-  .mcc-title{font-size:18px}
-  .mcc-row{padding:11px 16px}
-  .mcc-title2{font-size:14px}
-  .ma2-title{font-size:18px}
-  .ma2-text{font-size:14px;line-height:1.75}
-  .ma2-text p:first-child::first-letter{font-size:42px}
-  .ma2-pull{font-size:16px}
-  .ma2-head{padding:16px 18px 12px}
-  .ma2-body{padding:14px 18px 16px}
-}
-
-
 /* ── TABLET 640–1024px ── */
 @media(min-width:640px) and (max-width:1024px){
   .stage{padding:16px 20px}
@@ -367,12 +313,10 @@ body{font-family:var(--S);-webkit-font-smoothing:antialiased;display:flex;flex-d
   /* Single page on mobile */
   .stage{padding:10px 6px}
   .book{height:calc(100vw * 1.45);max-height:none}
-  .page-side-l{display:none}
+  #page-left{display:none}
   .spine{display:none}
-  .page-side-r{
-    border-radius:10px;
-    flex:unset;
-    width:100%;
+  #page-right{
+    border-radius:10px!important;
   }
   .nav-arrow{width:30px;height:30px;font-size:16px}
   .nav-prev{left:2px}.nav-next{right:2px}

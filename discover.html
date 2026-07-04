@@ -24,8 +24,8 @@ body{background:var(--bg);color:var(--ink);font-family:var(--S);-webkit-font-smo
 a{color:inherit;text-decoration:none}
 
 /* ── UTIL ── */
-.util{background:var(--ink);height:34px;display:flex;align-items:center;justify-content:space-between;padding:0 40px;font-family:var(--C);font-size:12px;font-weight:500;letter-spacing:1px;color:rgba(255,255,255,.45)}
-.util a{color:rgba(255,255,255,.45);transition:color .15s}.util a:hover{color:#fff}
+.util{background:var(--ink);height:38px;display:flex;align-items:center;justify-content:space-between;padding:0 40px;font-family:var(--C);font-size:13px;font-weight:600;letter-spacing:1px;color:rgba(255,255,255,.8)}
+.util a{color:rgba(255,255,255,.8);transition:color .15s}.util a:hover{color:#fff}
 .util-r{display:flex;align-items:center;gap:18px}
 .util-sep{width:1px;height:12px;background:rgba(255,255,255,.5)}
 
@@ -152,7 +152,7 @@ a{color:inherit;text-decoration:none}
 .ob-icon{width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.5);display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .ob-text{}
 .ob-title{font-family:var(--H);font-size:17px;font-weight:700;color:#fff;margin-bottom:4px}
-.ob-sub{font-family:var(--H);font-size:14px;color:rgba(255,255,255,.45);line-height:1.5}
+.ob-sub{font-family:var(--H);font-size:14px;color:rgba(255,255,255,.75);line-height:1.5}
 .ob-btn{font-family:var(--H);font-size:13px;font-weight:700;padding:12px 24px;background:rgba(255,255,255,.5);color:#fff;border:1px solid rgba(255,255,255,.6);border-radius:20px;cursor:pointer;transition:all .15s;white-space:nowrap;flex-shrink:0}
 .ob-btn:hover{background:rgba(255,255,255,.6);border-color:rgba(255,255,255,.4)}
 .ob-btn.on{background:var(--teal);border-color:var(--teal)}
@@ -214,8 +214,6 @@ a{color:inherit;text-decoration:none}
 }
 
 <style>
-.lang-btn.on{background:rgba(255,255,255,.5)!important;color:#fff!important}
-.lang-btn:hover{color:#fff!important;background:rgba(255,255,255,.08)!important}
 </style>
 </style>
 <circle cx='50' cy='50' r='50' fill='%234A6670'/><rect x='30' y='22' width='10' height='56' rx='3' fill='white'/><path d='M40 22 Q68 22 68 40 Q68 58 40 58' fill='none' stroke='white' stroke-width='10' stroke-linecap='round'/><path d='M40 58 Q55 65 68 82' fill='none' stroke='white' stroke-width='9' stroke-linecap='round'/></svg>" type="image/svg+xml">
@@ -247,11 +245,6 @@ if('serviceWorker' in navigator){
     <a onclick="location.href='newsstand.html'" data-i18n="nav.magazine">The Magazine</a>
     <div class="util-sep"></div>
     <a onclick="location.href='portal.html'">Sign In</a>
-  <div class="lang-switcher" style="display:flex;align-items:center;gap:0;margin-left:8px">
-    <button class="lang-btn" data-lang="en" onclick="setLang('en')" style="font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:4px 8px;background:none;border:1px solid rgba(255,255,255,.5);color:rgba(255,255,255,.4);cursor:pointer;transition:all .15s;border-right:none">EN</button>
-    <button class="lang-btn" data-lang="tr" onclick="setLang('tr')" style="font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:4px 8px;background:none;border:1px solid rgba(255,255,255,.5);color:rgba(255,255,255,.4);cursor:pointer;transition:all .15s;border-right:none">TR</button>
-    <button class="lang-btn" data-lang="de" onclick="setLang('de')" style="font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:4px 8px;background:none;border:1px solid rgba(255,255,255,.5);color:rgba(255,255,255,.4);cursor:pointer;transition:all .15s">DE</button>
-  </div>
   </div>
 </div>
 
@@ -669,19 +662,19 @@ if(isIOS && !isInStandalone && !localStorage.getItem('pwa-dismissed')){
 
 <footer style="background:#0C0C0C;padding:48px 40px 32px">
   <div style="max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:20px;padding-bottom:24px;border-bottom:1px solid #1a1a1a;margin-bottom:20px">
-    <div style="font-family:'Libre Baskerville',Georgia,serif;font-size:20px;font-weight:700color:#fff">Reedefined</div>
+    <div style="font-family:'Libre Baskerville',Georgia,serif;font-size:20px;font-weight:700;color:#fff">Reedefined</div>
     <div style="display:flex;gap:20px;flex-wrap:wrap">
-      <span onclick="location.href='index.html'" style="font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.7);cursor:pointer;transition:color .15s">Home</span>
-      <span onclick="location.href='newsstand.html'" style="font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.7);cursor:pointer">The Magazine</span>
-      <span onclick="location.href='discover.html'" style="font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.7);cursor:pointer">Discover</span>
-      <span onclick="location.href='cover-brief.html'" style="font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.7);cursor:pointer">Illustrators</span>
-      <span onclick="location.href='advertise.html'" style="font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.7);cursor:pointer">Advertise</span>
-      <span onclick="location.href='privacy.html'" style="font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.7);cursor:pointer">Privacy</span>
-      <span onclick="location.href='terms.html'" style="font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.7);cursor:pointer">Terms</span>
-      <span onclick="location.href='mailto:hello@reedefined.app'" style="font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.7);cursor:pointer">Contact</span>
+      <span onclick="location.href='index.html'" style="font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.8);cursor:pointer;transition:color .15s">Home</span>
+      <span onclick="location.href='newsstand.html'" style="font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.8);cursor:pointer">The Magazine</span>
+      <span onclick="location.href='discover.html'" style="font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.8);cursor:pointer">Discover</span>
+      <span onclick="location.href='cover-brief.html'" style="font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.8);cursor:pointer">Illustrators</span>
+      <span onclick="location.href='advertise.html'" style="font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.8);cursor:pointer">Advertise</span>
+      <span onclick="location.href='privacy.html'" style="font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.8);cursor:pointer">Privacy</span>
+      <span onclick="location.href='terms.html'" style="font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.8);cursor:pointer">Terms</span>
+      <span onclick="location.href='mailto:hello@reedefined.app'" style="font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.8);cursor:pointer">Contact</span>
     </div>
   </div>
-  <div style="max-width:1200px;margin:0 auto;display:flex;justify-content:space-between;font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,.6);flex-wrap:wrap;gap:8px">
+  <div style="max-width:1200px;margin:0 auto;display:flex;justify-content:space-between;font-family:'Barlow Condensed',sans-serif;font-size:12px;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,.7);flex-wrap:wrap;gap:8px">
     <span>© 2026 Reedefined. All rights reserved.</span>
     <span>reedefined.app</span>
   </div>
