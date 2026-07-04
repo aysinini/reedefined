@@ -469,6 +469,20 @@ if('serviceWorker' in navigator){
     <!-- Tagline -->
     <textarea class="tagline-input" id="col-tagline" placeholder="A single line that earns the read…" rows="1" oninput="autoResize(this)"></textarea>
 
+    <!-- Category -->
+    <select id="col-category" style="font-family:'Libre Baskerville',Georgia,serif;font-size:14px;font-weight:600;color:#3A3A3A;background:#F8F7F4;border:1px solid #E0E0E0;border-radius:20px;padding:9px 18px;margin:10px 0;cursor:pointer">
+      <option value="">Choose a category…</option>
+      <option value="cinema">Cinema</option>
+      <option value="music">Music</option>
+      <option value="fashion">Fashion</option>
+      <option value="food">Food</option>
+      <option value="literature">Literature</option>
+      <option value="travel">Travel</option>
+      <option value="art">Art</option>
+      <option value="nightlife">Nightlife</option>
+      <option value="beauty">Beauty</option>
+    </select>
+
     <div class="editor-rule"></div>
 
     <!-- Body -->
@@ -1058,6 +1072,7 @@ async function saveDraft(){
 
   const title   = document.getElementById('col-title')?.value?.trim() || '';
   const tagline = document.getElementById('col-tagline')?.value?.trim() || '';
+  const category = document.getElementById('col-category')?.value || '';
   const body    = document.getElementById('col-body')?.value?.trim() || '';
 
   // Collect photo blocks
@@ -1089,6 +1104,7 @@ async function saveDraft(){
       user_id:    session.user.id,
       title,
       tagline,
+      category,
       body,
       photos,
       products,
@@ -1263,7 +1279,10 @@ async function doSubmit(){
   closeModOverlay();
   const title   = document.getElementById('col-title')?.value?.trim() || '';
   const tagline = document.getElementById('col-tagline')?.value?.trim() || '';
+  const category = document.getElementById('col-category')?.value || '';
   const body    = document.getElementById('col-body')?.value?.trim() || '';
+
+  if(!category){ alert('Please choose a category before submitting.'); return; }
 
   try {
     const sb = supabase.createClient('https://gseuejqqwkdjkhxfxxwy.supabase.co','sb_publishable_0Nmw1mwGx__b_jJHLHBDKg__1OAsRuy');
@@ -1274,6 +1293,7 @@ async function doSubmit(){
       user_id:    session.user.id,
       title,
       tagline,
+      category,
       body,
       status:     'submitted',
       updated_at: new Date().toISOString()
