@@ -28,7 +28,8 @@ END $$;
 
 -- Likes and comments for the Newsstand/article (blog-style) reading format.
 -- The flip-reader stays a pure magazine with no interaction; these power
--- the alternative "click to read" format only.create table if not exists public.likes (
+-- the alternative "click to read" format only.
+create table if not exists public.likes (
   id bigint generated always as identity primary key,
   contribution_id bigint not null references public.contributions(id) on delete cascade,
   user_id uuid not null references auth.users(id) on delete cascade,
