@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reedefined — Article</title>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Barlow+Condensed:wght@400;500;600;700&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{
+  --ink:#0C0C0C;--mid:#3A3A3A;--muted:#777;--light:#BBB;
+  --rule:#E2E2E2;--bg:#F8F7F4;--white:#FFF;
+  --teal:#4A7C3F;--teal-l:#D4DBCA;
+  --H:'Libre Baskerville',Georgia,serif;
+  --C:'Barlow Condensed',sans-serif;
+  --S:'Barlow',sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--S);min-height:100vh;-webkit-font-smoothing:antialiased}
+.topbar{border-bottom:3px solid var(--ink);padding:0 32px;height:64px;display:flex;align-items:center;justify-content:space-between;background:var(--white)}
+.tb-logo{font-family:var(--H);font-size:20px;font-weight:700;cursor:pointer}
+.tb-actions{display:flex;align-items:center;gap:18px}
+.tb-link{font-family:var(--C);font-size:13px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--mid);cursor:pointer}
+.wrap{max-width:680px;margin:0 auto;padding:56px 24px 100px}
+.a-tag{font-family:var(--C);font-size:13px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--teal);margin-bottom:14px}
+.a-title{font-family:var(--H);font-size:36px;font-weight:700;line-height:1.2;margin-bottom:16px}
+.a-tagline{font-family:var(--H);font-style:italic;font-size:19px;color:var(--mid);line-height:1.5;margin-bottom:28px}
+.a-byline{display:flex;align-items:center;gap:14px;padding:20px 0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);margin-bottom:36px;cursor:pointer}
+.a-avatar{width:44px;height:44px;border-radius:50%;object-fit:cover;background:var(--teal-l);display:flex;align-items:center;justify-content:center;font-family:var(--H);font-size:16px;color:var(--teal);flex-shrink:0}
+.a-byname{font-family:var(--H);font-size:15px;font-weight:700}
+.a-bydate{font-family:var(--C);font-size:12px;letter-spacing:.5px;text-transform:uppercase;color:var(--muted)}
+.a-body{font-family:var(--H);font-size:18px;line-height:1.85;color:var(--ink);white-space:pre-wrap}
+.a-body p{margin-bottom:22px}
+.empty{padding:80px 0;text-align:center;color:var(--muted);font-family:var(--H);font-size:15px}
+
+/* ── LIKE ── */
+.engage-row{display:flex;align-items:center;gap:16px;padding:28px 0;margin-top:8px;border-top:1px solid var(--rule)}
+.like-btn{display:flex;align-items:center;gap:8px;background:none;border:1px solid var(--rule);border-radius:20px;padding:9px 18px;cursor:pointer;font-family:var(--C);font-size:14px;font-weight:600;color:var(--mid);transition:all .15s}
+.like-btn:hover{border-color:var(--ink)}
+.like-btn.on{background:#FBEAE8;border-color:#E4A199;color:#C8251A}
+.like-btn svg{width:16px;height:16px}
+
+/* ── COMMENTS ── */
+.comments-section{margin-top:20px}
+.comments-h{font-family:var(--C);font-size:13px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--ink);margin-bottom:20px}
+.comment-form{display:flex;gap:10px;margin-bottom:32px}
+.comment-input{flex:1;padding:12px 14px;border:1px solid var(--rule);border-radius:20px;font-family:var(--S);font-size:14px;color:var(--ink)}
+.comment-submit{font-family:var(--C);font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;background:var(--ink);color:#fff;border:none;border-radius:20px;padding:0 22px;cursor:pointer}
+.comment-item{display:flex;gap:12px;padding:16px 0;border-top:1px solid var(--rule)}
+.comment-avatar{width:34px;height:34px;border-radius:50%;object-fit:cover;background:var(--teal-l);display:flex;align-items:center;justify-content:center;font-family:var(--H);font-size:13px;color:var(--teal);flex-shrink:0}
+.comment-name{font-family:var(--H);font-size:14px;font-weight:700}
+.comment-date{font-family:var(--C);font-size:11px;letter-spacing:.5px;text-transform:uppercase;color:var(--muted);margin-left:8px}
+.comment-body{font-family:var(--S);font-size:14px;color:var(--mid);line-height:1.5;margin-top:4px}
+.comments-empty{padding:24px 0;color:var(--muted);font-family:var(--H);font-size:14px;text-align:center}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="tb-logo" onclick="location.href='index.html'">Reedefined</div>
+  <div class="tb-actions">
+    <div class="tb-link" onclick="location.href='magazine-reader.html'">Read in flip format ⇄</div>
+    <div class="tb-link" onclick="location.href='newsstand.html'">← Back</div>
+  </div>
+</div>
+
+<div class="wrap" id="wrap">
+  <div class="empty">Loading article…</div>
+</div>
+
+<script>
+const sb = supabase.createClient('https://gseuejqqwkdjkhxfxxwy.supabase.co','sb_publishable_0Nmw1mwGx__b_jJHLHBDKg__1OAsRuy');
+
+function esc(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+async function loadArticle(){
+  const params = new URLSearchParams(location.search);
+  const id = params.get('id');
+  const wrap = document.getElementById('wrap');
+
+  if(!id){ wrap.innerHTML = '<div class="empty">No article specified.</div>'; return; }
+
+  const { data:a, error } = await sb.from('contributions')
+    .select('id,title,tagline,category,body,updated_at,user_id,profiles:user_id(full_name,avatar)')
+    .eq('id', id).eq('status','submitted').single();
+
+  if(error || !a){ wrap.innerHTML = '<div class="empty">This article could not be found.</div>'; return; }
+
+  const { data:{ session } } = await sb.auth.getSession();
+
+  const name = a.profiles?.full_name || 'Contributor';
+  const initial = name.charAt(0).toUpperCase();
+  const avatarHtml = a.profiles?.avatar
+    ? `<img class="a-avatar" src="${a.profiles.avatar}" alt="${esc(name)}">`
+    : `<div class="a-avatar">${initial}</div>`;
+  const date = a.updated_at ? new Date(a.updated_at).toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'}) : '';
+  const paragraphs = (a.body || '').split(/\n\s*\n/).map(p => `<p>${esc(p)}</p>`).join('');
+
+  wrap.innerHTML = `
+    <div class="a-tag">${esc(a.category || 'Column')}</div>
+    <div class="a-title">${esc(a.title || 'Untitled')}</div>
+    ${a.tagline ? `<div class="a-tagline">"${esc(a.tagline)}"</div>` : ''}
+    <div class="a-byline" onclick="location.href='profile.html?id=${a.user_id}'">
+      ${avatarHtml}
+      <div>
+        <div class="a-byname">${esc(name)}</div>
+        <div class="a-bydate">${date}</div>
+      </div>
+    </div>
+    <div class="a-body">${paragraphs}</div>
+
+    <div class="engage-row">
+      <button class="like-btn" id="like-btn" onclick="toggleLike(${a.id})">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.8 1-1a5.5 5.5 0 0 0 0-7.6z"/></svg>
+        <span id="like-count">–</span>
+      </button>
+    </div>
+
+    <div class="comments-section">
+      <div class="comments-h">Comments</div>
+      <div id="comment-form-wrap"></div>
+      <div id="comments-list"><div class="comments-empty">Loading comments…</div></div>
+    </div>
+  `;
+
+  loadLikes(a.id, session);
+  loadComments(a.id);
+  renderCommentForm(a.id, session);
+}
+
+async function loadLikes(contributionId, session){
+  const { count } = await sb.from('likes').select('id',{count:'exact',head:true}).eq('contribution_id', contributionId);
+  document.getElementById('like-count').textContent = count || 0;
+
+  if(session){
+    const { data:mine } = await sb.from('likes').select('id').eq('contribution_id', contributionId).eq('user_id', session.user.id).maybeSingle();
+    if(mine) document.getElementById('like-btn').classList.add('on');
+  }
+}
+
+async function toggleLike(contributionId){
+  const { data:{ session } } = await sb.auth.getSession();
+  if(!session){ location.href='portal.html'; return; }
+
+  const btn = document.getElementById('like-btn');
+  const countEl = document.getElementById('like-count');
+  const isOn = btn.classList.contains('on');
+
+  if(isOn){
+    await sb.from('likes').delete().eq('contribution_id', contributionId).eq('user_id', session.user.id);
+    btn.classList.remove('on');
+    countEl.textContent = Math.max(0, parseInt(countEl.textContent||'0') - 1);
+  } else {
+    await sb.from('likes').insert({ contribution_id: contributionId, user_id: session.user.id });
+    btn.classList.add('on');
+    countEl.textContent = parseInt(countEl.textContent||'0') + 1;
+  }
+}
+
+async function loadComments(contributionId){
+  const { data:comments } = await sb.from('comments')
+    .select('id,body,created_at,user_id,profiles:user_id(full_name,avatar)')
+    .eq('contribution_id', contributionId).order('created_at',{ascending:true});
+
+  const list = document.getElementById('comments-list');
+  if(!comments || comments.length===0){ list.innerHTML = '<div class="comments-empty">No comments yet — be the first.</div>'; return; }
+
+  list.innerHTML = comments.map(c => {
+    const name = c.profiles?.full_name || 'Reader';
+    const initial = name.charAt(0).toUpperCase();
+    const avatarHtml = c.profiles?.avatar
+      ? `<img class="comment-avatar" src="${c.profiles.avatar}" alt="${esc(name)}">`
+      : `<div class="comment-avatar">${initial}</div>`;
+    const date = c.created_at ? new Date(c.created_at).toLocaleDateString('en-US',{month:'short',day:'numeric'}) : '';
+    return `
+      <div class="comment-item">
+        ${avatarHtml}
+        <div>
+          <span class="comment-name">${esc(name)}</span><span class="comment-date">${date}</span>
+          <div class="comment-body">${esc(c.body)}</div>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+function renderCommentForm(contributionId, session){
+  const wrap = document.getElementById('comment-form-wrap');
+  if(!session){
+    wrap.innerHTML = `<div class="comments-empty" style="cursor:pointer" onclick="location.href='portal.html'">Sign in to leave a comment →</div>`;
+    return;
+  }
+  wrap.innerHTML = `
+    <div class="comment-form">
+      <input class="comment-input" id="new-comment-input" placeholder="Add a comment…" maxlength="500">
+      <button class="comment-submit" onclick="submitComment(${contributionId})">Post</button>
+    </div>`;
+  document.getElementById('new-comment-input').addEventListener('keydown', e=>{
+    if(e.key==='Enter') submitComment(contributionId);
+  });
+}
+
+async function submitComment(contributionId){
+  const input = document.getElementById('new-comment-input');
+  const body = input.value.trim();
+  if(!body) return;
+
+  const { data:{ session } } = await sb.auth.getSession();
+  if(!session){ location.href='portal.html'; return; }
+
+  const { error } = await sb.from('comments').insert({ contribution_id: contributionId, user_id: session.user.id, body });
+  if(!error){
+    input.value = '';
+    loadComments(contributionId);
+  }
+}
+
+loadArticle();
+</script>
+
+</body>
+</html>

@@ -260,6 +260,27 @@ footer.site-ft{background:var(--ink);padding:60px 32px 34px}.ft-w{max-width:1400
     };
 
     window.__sbSignOut=async()=>{await sb.auth.signOut();location.href='portal.html';};
+
+    // Load real articles for "From This Issue"
+    loadIssueArticles();
+  }
+
+  async function loadIssueArticles(){
+    const { data:arts } = await sb.from('contributions')
+      .select('id,title,tagline,category,updated_at,profiles:user_id(full_name)')
+      .eq('status','submitted').order('updated_at',{ascending:false}).limit(10);
+
+    if(!arts || arts.length===0) return; // keep the honest empty state
+
+    const esc = s => (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    const list = document.getElementById('issue-articles-list');
+    list.innerHTML = arts.map(a => `
+      <div style="padding:20px 0;border-top:1px solid var(--rule);cursor:pointer" onclick="location.href='article.html?id=${a.id}'">
+        <div style="font-family:var(--C);font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--teal);margin-bottom:6px">${esc(a.category||'Column')}</div>
+        <div style="font-family:var(--H);font-size:19px;font-weight:700;margin-bottom:4px">${esc(a.title||'Untitled')}</div>
+        ${a.tagline ? `<div style="font-family:var(--H);font-size:14px;color:var(--mid)">${esc(a.tagline)}</div>` : ''}
+        <div style="font-family:var(--C);font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--light);margin-top:8px">By ${esc(a.profiles?.full_name || 'Contributor')}</div>
+      </div>`).join('');
   }
 
   if(document.readyState==='loading'){
@@ -330,9 +351,11 @@ if('serviceWorker' in navigator){
 
   <div style="margin:48px 0 0">
     <div class="sh" style="margin-bottom:0"><span class="sh-t">From This Issue</span></div>
-    <div style="padding:48px 24px;text-align:center;border-top:1px solid var(--rule)">
-      <div style="font-family:var(--H);font-size:16px;color:var(--mid);margin-bottom:8px">No articles published yet.</div>
-      <div style="font-family:var(--H);font-size:14px;color:var(--light)">Once contributors you follow publish, their columns will appear here.</div>
+    <div id="issue-articles-list">
+      <div style="padding:48px 24px;text-align:center;border-top:1px solid var(--rule)">
+        <div style="font-family:var(--H);font-size:16px;color:var(--mid);margin-bottom:8px">No articles published yet.</div>
+        <div style="font-family:var(--H);font-size:14px;color:var(--light)">Once contributors you follow publish, their columns will appear here.</div>
+      </div>
     </div>
   </div>
   <div style="margin:60px 0 0">

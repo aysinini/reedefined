@@ -383,16 +383,38 @@ a{color:inherit;text-decoration:none}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script>
+let currentDraftId = null;
 (async()=>{
   const sb=supabase.createClient('https://gseuejqqwkdjkhxfxxwy.supabase.co','sb_publishable_0Nmw1mwGx__b_jJHLHBDKg__1OAsRuy');
   const {data:{session}}=await sb.auth.getSession();
-  if(!session){ window.__sbSignOut?window.__sbSignOut():location.href='portal.html'; return; }
-  const name=session.user?.user_metadata?.full_name||session.user?.email||'';
-  const av=document.getElementById('tb-av-text');
-  if(av&&name) av.textContent=name.charAt(0).toUpperCase();
-  const avName=document.getElementById('av-menu-name');
-  if(avName) avName.textContent=name||session.user?.email||'';
-  window.__sbSignOut=async()=>{await sb.auth.signOut();location.href='portal.html';};
+  if(!session){ location.href='portal.html'; return; }
+
+  function applyEditorUI(){
+    const name=session.user?.user_metadata?.full_name||session.user?.email||'';
+    const av=document.getElementById('tb-av-text');
+    if(av&&name) av.textContent=name.charAt(0).toUpperCase();
+    const avName=document.getElementById('av-menu-name');
+    if(avName) avName.textContent=name||session.user?.email||'';
+    window.__sbSignOut=async()=>{await sb.auth.signOut();location.href='portal.html';};
+  }
+
+  async function loadExistingDraft(){
+    const { data:d } = await sb.from('contributions').select('id,title,tagline,category,body').eq('user_id', session.user.id).eq('status','draft').order('updated_at',{ascending:false}).limit(1).maybeSingle();
+    if(d){
+      currentDraftId = d.id;
+      const t=document.getElementById('col-title'); if(t && d.title) t.value = d.title;
+      const tl=document.getElementById('col-tagline'); if(tl && d.tagline) tl.value = d.tagline;
+      const c=document.getElementById('col-category'); if(c && d.category) c.value = d.category;
+      const b=document.getElementById('col-body'); if(b && d.body) b.value = d.body;
+      [t,tl,b].forEach(el=>{ if(el && el.value) autoResize(el); });
+    }
+  }
+
+  if(document.readyState==='loading'){
+    document.addEventListener('DOMContentLoaded', ()=>{ applyEditorUI(); loadExistingDraft(); });
+  } else {
+    applyEditorUI(); loadExistingDraft();
+  }
 })();
 
 function toggleAvMenu(){
@@ -444,6 +466,7 @@ if('serviceWorker' in navigator){
       <div class="tb-av" id="tb-av-text" onclick="toggleAvMenu()"> </div>
       <div id="av-menu" style="display:none;position:absolute;top:40px;right:0;background:#fff;border:1px solid #E0E0E0;border-radius:8px;box-shadow:0 8px 24px rgba(0,0,0,.15);min-width:160px;z-index:300;overflow:hidden">
         <div id="av-menu-name" style="padding:12px 16px;font-family:var(--H);font-size:14px;font-weight:700;color:var(--ink);border-bottom:1px solid #EEE"></div>
+        <button onclick="location.href='profile-edit.html'" style="width:100%;text-align:left;padding:10px 16px;background:none;border:none;cursor:pointer;font-family:var(--C);font-size:12px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--mid)">Edit Profile</button>
         <button onclick="location.href='newsstand.html'" style="width:100%;text-align:left;padding:10px 16px;background:none;border:none;cursor:pointer;font-family:var(--C);font-size:12px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--mid)">My Portal</button>
         <button onclick="window.__sbSignOut && window.__sbSignOut()" style="width:100%;text-align:left;padding:10px 16px;background:none;border:none;cursor:pointer;font-family:var(--C);font-size:12px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:#C8251A">Sign Out</button>
       </div>
@@ -1099,17 +1122,21 @@ async function saveDraft(){
     const { data:{ session } } = await sb.auth.getSession();
     if(!session){ status.textContent = 'Not signed in'; return; }
 
-    const { error } = await sb.from('contributions').upsert({
-      user_id:    session.user.id,
-      title,
-      tagline,
-      category,
-      body,
-      photos,
-      products,
-      status:     'draft',
+    const payload = {
+      user_id: session.user.id,
+      title, tagline, category, body, photos, products,
+      status: 'draft',
       updated_at: new Date().toISOString()
-    }, { onConflict: 'user_id' });
+    };
+
+    if(currentDraftId){
+      // Update the same draft row we've been working on
+      var { error } = await sb.from('contributions').update(payload).eq('id', currentDraftId);
+    } else {
+      // No draft in progress yet — create a fresh row (keeps past submitted articles intact)
+      var { data: inserted, error } = await sb.from('contributions').insert(payload).select('id').single();
+      if(!error && inserted) currentDraftId = inserted.id;
+    }
 
     if(error) throw error;
     status.textContent = 'Draft saved ✓';
@@ -1288,17 +1315,22 @@ async function doSubmit(){
     const { data:{ session } } = await sb.auth.getSession();
     if(!session) { alert('Please sign in again.'); return; }
 
-    const { error } = await sb.from('contributions').upsert({
-      user_id:    session.user.id,
-      title,
-      tagline,
-      category,
-      body,
-      status:     'submitted',
+    const payload = {
+      user_id: session.user.id,
+      title, tagline, category, body,
+      status: 'submitted',
       updated_at: new Date().toISOString()
-    }, { onConflict: 'user_id' });
+    };
+
+    let error;
+    if(currentDraftId){
+      ({ error } = await sb.from('contributions').update(payload).eq('id', currentDraftId));
+    } else {
+      ({ error } = await sb.from('contributions').insert(payload));
+    }
 
     if(error) throw error;
+    currentDraftId = null; // next column the contributor writes starts as a brand new article
     alert('Column submitted. Your readers will see it in their issue.');
   } catch(e) {
     console.error(e);
