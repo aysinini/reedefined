@@ -312,6 +312,20 @@ footer.site-ft{background:var(--ink);padding:60px 32px 34px}.ft-w{max-width:1400
 
     if(!arts || arts.length===0) return; // keep the honest empty state
 
+    const ids = arts.map(a => a.id);
+    const [{ data:likeRows }, { data:commentRows }, { data:{ session } }] = await Promise.all([
+      sb.from('likes').select('contribution_id,user_id').in('contribution_id', ids),
+      sb.from('comments').select('contribution_id').in('contribution_id', ids),
+      sb.auth.getSession()
+    ]);
+
+    const likeCounts = {}, commentCounts = {}, myLikes = new Set();
+    (likeRows||[]).forEach(l => {
+      likeCounts[l.contribution_id] = (likeCounts[l.contribution_id]||0) + 1;
+      if(session && l.user_id === session.user.id) myLikes.add(l.contribution_id);
+    });
+    (commentRows||[]).forEach(c => { commentCounts[c.contribution_id] = (commentCounts[c.contribution_id]||0) + 1; });
+
     const esc = s => (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
     const list = document.getElementById('issue-articles-list');
     list.innerHTML = arts.map(a => {
@@ -320,18 +334,54 @@ footer.site-ft{background:var(--ink);padding:60px 32px 34px}.ft-w{max-width:1400
       const avatarHtml = a.profiles?.avatar
         ? `<img src="${a.profiles.avatar}" style="width:28px;height:28px;border-radius:50%;object-fit:cover">`
         : `<div style="width:28px;height:28px;border-radius:50%;background:var(--teal-l);display:flex;align-items:center;justify-content:center;font-family:var(--H);font-size:11px;color:var(--teal)">${initial}</div>`;
+      const liked = myLikes.has(a.id);
       return `
       <div style="padding:20px 0;border-top:1px solid var(--rule);cursor:pointer" onclick="location.href='article.html?id=${a.id}'">
         <div style="font-family:var(--C);font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--teal);margin-bottom:6px">${esc(a.category||'Column')}</div>
         <div style="font-family:var(--H);font-size:19px;font-weight:700;margin-bottom:4px">${esc(a.title||'Untitled')}</div>
         ${a.tagline ? `<div style="font-family:var(--H);font-size:14px;color:var(--mid)">${esc(a.tagline)}</div>` : ''}
-        <div style="display:flex;align-items:center;gap:8px;margin-top:10px">
-          ${avatarHtml}
-          <span style="font-family:var(--C);font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--mid)">${esc(authorName)}</span>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-top:10px">
+          <div style="display:flex;align-items:center;gap:8px">
+            ${avatarHtml}
+            <span style="font-family:var(--C);font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--mid)">${esc(authorName)}</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:14px">
+            <span onclick="event.stopPropagation();toggleNewsstandLike(${a.id}, this)" data-liked="${liked}" style="display:flex;align-items:center;gap:5px;cursor:pointer;font-family:var(--C);font-size:12px;color:${liked ? '#C8251A' : 'var(--muted)'}">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="${liked ? '#C8251A' : 'none'}" stroke="${liked ? '#C8251A' : 'currentColor'}" stroke-width="2"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.8 1-1a5.5 5.5 0 0 0 0-7.6z"/></svg>
+              <span class="like-count-label">${likeCounts[a.id]||0}</span>
+            </span>
+            <span style="display:flex;align-items:center;gap:5px;font-family:var(--C);font-size:12px;color:var(--muted)">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-8.5 8.5 8.38 8.38 0 0 1-4-1L3 20l1-5.5a8.38 8.38 0 0 1-1-4A8.38 8.38 0 0 1 11.5 2a8.5 8.5 0 0 1 8.5 8.5z"/></svg>
+              ${commentCounts[a.id]||0}
+            </span>
+          </div>
         </div>
       </div>`;
     }).join('');
   }
+
+  window.toggleNewsstandLike = async function(id, el){
+    const { data:{ session } } = await sb.auth.getSession();
+    if(!session){ location.href='portal.html'; return; }
+
+    const isLiked = el.dataset.liked === 'true';
+    const countLabel = el.querySelector('.like-count-label');
+    const svg = el.querySelector('svg');
+
+    if(isLiked){
+      await sb.from('likes').delete().eq('contribution_id', id).eq('user_id', session.user.id);
+      el.dataset.liked = 'false';
+      el.style.color = 'var(--muted)';
+      svg.setAttribute('fill','none'); svg.setAttribute('stroke','currentColor');
+      countLabel.textContent = Math.max(0, parseInt(countLabel.textContent||'0') - 1);
+    } else {
+      await sb.from('likes').insert({ contribution_id: id, user_id: session.user.id });
+      el.dataset.liked = 'true';
+      el.style.color = '#C8251A';
+      svg.setAttribute('fill','#C8251A'); svg.setAttribute('stroke','#C8251A');
+      countLabel.textContent = parseInt(countLabel.textContent||'0') + 1;
+    }
+  };
 
   if(document.readyState==='loading'){
     document.addEventListener('DOMContentLoaded', applySignedInUI);
