@@ -129,7 +129,7 @@ async function saveProfile(){
 
   btn.disabled = false;
   btn.textContent = 'Save Profile';
-  if(error){ showStatus('Something went wrong. Please try again.', 'err'); }
+  if(error){ console.error('Save profile error:', error); showStatus('Error: ' + (error.message || 'unknown error'), 'err'); }
   else { showStatus('Profile saved ✓', 'ok'); }
 }
 
