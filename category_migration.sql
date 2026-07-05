@@ -28,8 +28,7 @@ END $$;
 
 -- Likes and comments for the Newsstand/article (blog-style) reading format.
 -- The flip-reader stays a pure magazine with no interaction; these power
--- the alternative "click to read" format only.
-create table if not exists public.likes (
+-- the alternative "click to read" format only.create table if not exists public.likes (
   id bigint generated always as identity primary key,
   contribution_id bigint not null references public.contributions(id) on delete cascade,
   user_id uuid not null references auth.users(id) on delete cascade,
@@ -61,3 +60,17 @@ drop policy if exists "Users can comment" on public.comments;
 create policy "Users can comment" on public.comments for insert with check (auth.uid() = user_id);
 drop policy if exists "Users can delete own comments" on public.comments;
 create policy "Users can delete own comments" on public.comments for delete using (auth.uid() = user_id);
+
+-- IMPORTANT FIX: the original setup only let users view their OWN profile
+-- (using auth.uid() = id). That breaks every public-facing feature: viewing
+-- another contributor's profile page, seeing their name/avatar on articles
+-- and in the newsstand/discover contributor cards, etc. Profiles need to be
+-- publicly readable (bio/avatar/name are meant to be public); only editing
+-- your own profile should stay restricted.
+drop policy if exists "Users can view own profile" on public.profiles;
+create policy "Profiles are publicly readable"
+  on public.profiles for select
+  using (true);
+
+-- Add a public "location" field to profiles, shown on the profile page.
+alter table public.profiles add column if not exists location text;

@@ -271,7 +271,7 @@ footer.site-ft{background:var(--ink);padding:60px 32px 34px}.ft-w{max-width:1400
 
   async function loadContributorsGrid(){
     const { data:subs } = await sb.from('contributions')
-      .select('user_id,category,profiles:user_id(full_name,avatar,bio)')
+      .select('user_id,category,profiles:user_id(name,avatar,bio)')
       .eq('status','submitted');
 
     const grid = document.getElementById('contributors-grid');
@@ -283,7 +283,7 @@ footer.site-ft{background:var(--ink);padding:60px 32px 34px}.ft-w{max-width:1400
     const esc = s => (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
     const byUser = {};
     subs.forEach(s => {
-      if(!byUser[s.user_id]) byUser[s.user_id] = { count:0, name:s.profiles?.full_name||'Contributor', avatar:s.profiles?.avatar, bio:s.profiles?.bio||'' };
+      if(!byUser[s.user_id]) byUser[s.user_id] = { count:0, name:s.profiles?.name||'Contributor', avatar:s.profiles?.avatar, bio:s.profiles?.bio||'' };
       byUser[s.user_id].count++;
     });
 
@@ -305,7 +305,7 @@ footer.site-ft{background:var(--ink);padding:60px 32px 34px}.ft-w{max-width:1400
 
   async function loadIssueArticles(){
     const { data:arts } = await sb.from('contributions')
-      .select('id,title,tagline,category,updated_at,profiles:user_id(full_name,avatar)')
+      .select('id,title,tagline,category,updated_at,profiles:user_id(name,avatar)')
       .eq('status','submitted').order('updated_at',{ascending:false}).limit(10);
 
     if(!arts || arts.length===0) return; // keep the honest empty state
@@ -313,7 +313,7 @@ footer.site-ft{background:var(--ink);padding:60px 32px 34px}.ft-w{max-width:1400
     const esc = s => (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
     const list = document.getElementById('issue-articles-list');
     list.innerHTML = arts.map(a => {
-      const authorName = a.profiles?.full_name || 'Contributor';
+      const authorName = a.profiles?.name || 'Contributor';
       const initial = authorName.charAt(0).toUpperCase();
       const avatarHtml = a.profiles?.avatar
         ? `<img src="${a.profiles.avatar}" style="width:28px;height:28px;border-radius:50%;object-fit:cover">`

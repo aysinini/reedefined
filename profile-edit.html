@@ -60,6 +60,11 @@ textarea.fi{resize:vertical;min-height:100px;line-height:1.5}
   </div>
 
   <div class="field">
+    <label class="fl">Location</label>
+    <input class="fi" id="location-input" placeholder="e.g. Istanbul, Turkey">
+  </div>
+
+  <div class="field">
     <label class="fl">Bio</label>
     <textarea class="fi" id="bio-input" placeholder="A line or two about you — what you write about, your taste, your background."></textarea>
   </div>
@@ -76,8 +81,8 @@ async function init(){
   const { data:{ session } } = await sb.auth.getSession();
   if(!session){ location.href='portal.html'; return; }
 
-  const { data:p } = await sb.from('profiles').select('avatar,bio,full_name').eq('id', session.user.id).single();
-  const name = p?.full_name || session.user.user_metadata?.full_name || session.user.email || '';
+  const { data:p } = await sb.from('profiles').select('avatar,bio,name,location').eq('id', session.user.id).single();
+  const name = p?.name || session.user.user_metadata?.full_name || session.user.email || '';
   const initial = name.charAt(0).toUpperCase();
 
   const preview = document.getElementById('avatar-preview');
@@ -88,6 +93,7 @@ async function init(){
     preview.textContent = initial;
   }
   document.getElementById('bio-input').value = p?.bio || '';
+  document.getElementById('location-input').value = p?.location || '';
 }
 
 async function handleAvatarUpload(file){
@@ -118,7 +124,8 @@ async function saveProfile(){
   btn.textContent = 'Saving…';
 
   const bio = document.getElementById('bio-input').value.trim();
-  const { error } = await sb.from('profiles').update({ avatar: currentAvatarUrl, bio }).eq('id', session.user.id);
+  const location = document.getElementById('location-input').value.trim();
+  const { error } = await sb.from('profiles').update({ avatar: currentAvatarUrl, bio, location }).eq('id', session.user.id);
 
   btn.disabled = false;
   btn.textContent = 'Save Profile';

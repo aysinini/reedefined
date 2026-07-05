@@ -586,7 +586,7 @@ async function loadRealContributors(){
   try {
     const { data: subs, error } = await sb
       .from('contributions')
-      .select('user_id, title, category, tagline, profiles:user_id(full_name)')
+      .select('user_id, title, category, tagline, profiles:user_id(name)')
       .eq('status', 'submitted');
 
     if(error || !subs) return;
@@ -595,7 +595,7 @@ async function loadRealContributors(){
     const byUser = {};
     subs.forEach(s => {
       const uid = s.user_id;
-      if(!byUser[uid]) byUser[uid] = { articles: [], cats: new Set(), name: s.profiles?.full_name || 'Contributor' };
+      if(!byUser[uid]) byUser[uid] = { articles: [], cats: new Set(), name: s.profiles?.name || 'Contributor' };
       if(s.category) byUser[uid].cats.add(s.category.toLowerCase());
       byUser[uid].articles.push(`${s.category ? s.category[0].toUpperCase()+s.category.slice(1) : 'Column'} — ${s.title}`);
     });

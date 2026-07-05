@@ -499,7 +499,7 @@ async function loadContributions() {
     const { data: { session } } = await sb.auth.getSession();
 
     let query = sb.from('contributions')
-      .select('*, profiles:user_id(full_name, role)')
+      .select('*, profiles:user_id(name, role)')
       .eq('status', 'submitted')
       .order('updated_at', { ascending: false });
 
@@ -513,7 +513,7 @@ async function loadContributions() {
         const followIds = follows.map(f => f.following_id);
         // Include editor's own posts + followed contributors
         query = sb.from('contributions')
-          .select('*, profiles:user_id(full_name, role)')
+          .select('*, profiles:user_id(name, role)')
           .eq('status', 'submitted')
           .in('user_id', [...followIds, session.user.id])
           .order('updated_at', { ascending: false });
@@ -535,7 +535,7 @@ async function loadContributions() {
     // Build pages from articles — two pages per article (left + right)
     DYNAMIC_PAGES = articles.map((article, i) => ({
       id: `m-article-${i}`,
-      label: article.profiles?.full_name || 'Contributor',
+      label: article.profiles?.name || 'Contributor',
       left: `article-left-${i}`,
       right: `article-right-${i}`,
       article
@@ -610,7 +610,7 @@ function buildPage(id){
     const article = CONTRIBUTIONS[idx];
     if(!article) return `<div style="width:100%;height:100%;background:#F8F7F4"></div>`;
 
-    const author = (article.profiles && article.profiles.full_name) ? article.profiles.full_name : 'Contributor';
+    const author = (article.profiles && article.profiles.name) ? article.profiles.name : 'Contributor';
     const initial = author.charAt(0).toUpperCase();
     const bodyHtml = article.body ? '<p>' + article.body.replace(/\n\n/g,'</p><p>').replace(/\n/g,'<br>') + '</p>' : '';
 

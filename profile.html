@@ -57,12 +57,12 @@ async function loadProfile(){
 
   if(!uid){ wrap.innerHTML = '<div class="empty">No profile specified.</div>'; return; }
 
-  const { data:p, error } = await sb.from('profiles').select('full_name,avatar,bio,interests').eq('id', uid).single();
+  const { data:p, error } = await sb.from('profiles').select('name,avatar,bio,interests,location').eq('id', uid).single();
   if(error || !p){ wrap.innerHTML = '<div class="empty">This profile could not be found.</div>'; return; }
 
   const { data:subs } = await sb.from('contributions').select('id,title,tagline,category,updated_at').eq('user_id', uid).eq('status','submitted').order('updated_at', { ascending:false });
 
-  const name = p.full_name || 'Contributor';
+  const name = p.name || 'Contributor';
   const initial = name.charAt(0).toUpperCase();
   const avatarHtml = p.avatar
     ? `<img class="avatar" src="${p.avatar}" alt="${esc(name)}">`
@@ -71,6 +71,10 @@ async function loadProfile(){
   const beats = (p.interests || (subs||[]).map(s=>s.category).filter(Boolean).join(','))
     .split(',').map(s=>s.trim()).filter(Boolean);
   const beatsHtml = beats.length ? beats.slice(0,4).join(' · ') : '';
+  const metaParts = [];
+  if(beatsHtml) metaParts.push(beatsHtml);
+  if(p.location) metaParts.push(esc(p.location));
+  const metaHtml = metaParts.join(' &nbsp;·&nbsp; ');
 
   const archiveHtml = (subs && subs.length)
     ? subs.map(s => `
@@ -86,7 +90,7 @@ async function loadProfile(){
       ${avatarHtml}
       <div>
         <div class="p-name">${esc(name)}</div>
-        ${beatsHtml ? `<div class="p-beats">${esc(beatsHtml)}</div>` : ''}
+        ${metaHtml ? `<div class="p-beats">${metaHtml}</div>` : ''}
       </div>
     </div>
     ${p.bio ? `<div class="p-bio">${esc(p.bio)}</div>` : ''}

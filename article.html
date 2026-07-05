@@ -81,14 +81,14 @@ async function loadArticle(){
   if(!id){ wrap.innerHTML = '<div class="empty">No article specified.</div>'; return; }
 
   const { data:a, error } = await sb.from('contributions')
-    .select('id,title,tagline,category,body,updated_at,user_id,profiles:user_id(full_name,avatar)')
+    .select('id,title,tagline,category,body,updated_at,user_id,profiles:user_id(name,avatar)')
     .eq('id', id).eq('status','submitted').single();
 
   if(error || !a){ wrap.innerHTML = '<div class="empty">This article could not be found.</div>'; return; }
 
   const { data:{ session } } = await sb.auth.getSession();
 
-  const name = a.profiles?.full_name || 'Contributor';
+  const name = a.profiles?.name || 'Contributor';
   const initial = name.charAt(0).toUpperCase();
   const avatarHtml = a.profiles?.avatar
     ? `<img class="a-avatar" src="${a.profiles.avatar}" alt="${esc(name)}">`
@@ -159,14 +159,14 @@ async function toggleLike(contributionId){
 
 async function loadComments(contributionId){
   const { data:comments } = await sb.from('comments')
-    .select('id,body,created_at,user_id,profiles:user_id(full_name,avatar)')
+    .select('id,body,created_at,user_id,profiles:user_id(name,avatar)')
     .eq('contribution_id', contributionId).order('created_at',{ascending:true});
 
   const list = document.getElementById('comments-list');
   if(!comments || comments.length===0){ list.innerHTML = '<div class="comments-empty">No comments yet — be the first.</div>'; return; }
 
   list.innerHTML = comments.map(c => {
-    const name = c.profiles?.full_name || 'Reader';
+    const name = c.profiles?.name || 'Reader';
     const initial = name.charAt(0).toUpperCase();
     const avatarHtml = c.profiles?.avatar
       ? `<img class="comment-avatar" src="${c.profiles.avatar}" alt="${esc(name)}">`
