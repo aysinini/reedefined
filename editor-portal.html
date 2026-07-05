@@ -42,7 +42,7 @@ a{color:inherit;text-decoration:none}
 .tb-av{width:30px;height:30px;border-radius:50%;background:var(--teal);display:flex;align-items:center;justify-content:center;font-family:var(--H);font-size:12px;font-weight:700;color:#fff;cursor:pointer;flex-shrink:0}
 
 /* ── LAYOUT ── */
-.layout{display:block;flex:1;max-width:760px;margin:0 auto;width:100%;padding:0 24px}
+.layout{display:block;flex:1;max-width:760px;margin:0 auto;width:100%;padding:0 24px 0 64px}
 
 /* ── EDITOR AREA ── */
 .editor-area{padding:48px 56px 96px 0;border-right:1px solid var(--rule);min-width:0}
@@ -72,41 +72,51 @@ a{color:inherit;text-decoration:none}
 .tagline-input::placeholder{color:rgba(12,12,12,.3)}
 
 /* Divider */
-.editor-rule{height:2px;background:var(--ink);margin-bottom:32px}
+.editor-rule{height:0;margin-bottom:8px}
 
 /* Body editor */
+.body-wrap{position:relative}
 .body-area{
-  width:100%;min-height:420px;border:none;outline:none;background:transparent;
+  width:100%;min-height:420px;outline:none;background:transparent;
   font-family:var(--H);font-size:21px;line-height:1.9;color:var(--mid);
-  resize:none;caret-color:var(--teal);
+  caret-color:var(--teal);
 }
-.body-area::placeholder{color:rgba(12,12,12,.28)}
+.body-area div{margin:0 0 1.1em}
+.body-area:empty:before{content:attr(data-placeholder);color:rgba(12,12,12,.28)}
+.body-plus-wrap{position:absolute;left:-42px;top:2px;z-index:5}
+.body-plus{
+  width:28px;height:28px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  color:#999;background:var(--white);border:1px solid #E0E0E0;cursor:pointer;
+  transition:all .15s;
+}
+.body-plus:hover{border-color:var(--teal);color:var(--teal)}
+@media(max-width:900px){.body-plus-wrap{position:static;margin-bottom:12px}}
 
 /* ── BLOCKS ── */
 .blocks-list{display:flex;flex-direction:column;gap:12px;margin-top:32px}
 
 /* Add block toolbar */
-.add-toolbar{margin-top:32px;position:relative}
+.add-toolbar{margin-top:12px;position:relative}
 .add-plus{
-  display:flex;align-items:center;gap:8px;
-  font-family:var(--H);font-size:14px;font-weight:700;color:var(--muted);
-  background:none;border:1px solid var(--rule);border-radius:24px;
-  padding:10px 20px;cursor:pointer;transition:all .15s;
+  display:flex;align-items:center;justify-content:center;
+  width:30px;height:30px;border-radius:50%;
+  color:#999;background:none;border:1px solid #E0E0E0;
+  cursor:pointer;transition:all .15s;
 }
 .add-plus:hover{border-color:var(--teal);color:var(--teal)}
 .add-menu{
-  display:none;position:absolute;top:calc(100% + 8px);left:0;
-  background:var(--white);border:1px solid var(--rule);border-radius:10px;
-  box-shadow:0 8px 24px rgba(0,0,0,.08);overflow:hidden;z-index:20;min-width:180px;
+  display:none;position:absolute;top:calc(100% + 6px);left:0;
+  background:var(--white);border:1px solid var(--rule);border-radius:8px;
+  box-shadow:0 6px 20px rgba(0,0,0,.1);overflow:hidden;z-index:20;min-width:160px;
 }
 .add-menu.open{display:block}
 .add-menu button{
-  display:block;width:100%;text-align:left;padding:12px 18px;
-  font-family:var(--H);font-size:14px;color:var(--ink);
-  background:none;border:none;border-bottom:1px solid var(--rule);cursor:pointer;transition:background .15s;
+  display:block;width:100%;text-align:left;padding:10px 16px;
+  font-family:var(--S);font-size:14px;color:var(--ink);
+  background:none;border:none;cursor:pointer;transition:background .15s;
 }
-.add-menu button:last-child{border-bottom:none}
-.add-menu button:hover{background:var(--teal-ll)}
+.add-menu button:hover{background:#F5F5F3}
 
 /* ── MEDIA BLOCKS ── */
 .block{
@@ -374,7 +384,7 @@ let currentDraftId = null;
       const t=document.getElementById('col-title'); if(t && d.title) t.value = d.title;
       const tl=document.getElementById('col-tagline'); if(tl && d.tagline) tl.value = d.tagline;
       const c=document.getElementById('col-category'); if(c && d.category) c.value = d.category;
-      const b=document.getElementById('col-body'); if(b && d.body) b.value = d.body;
+      if(d.body) setBodyPlainText(d.body);
       [t,tl,b].forEach(el=>{ if(el && el.value) autoResize(el); });
     }
   }
@@ -385,6 +395,45 @@ let currentDraftId = null;
     applyEditorUI(); loadExistingDraft();
   }
 })();
+
+function updateBodyPlusPosition(){
+  const bodyEl = document.getElementById('col-body');
+  const wrap = document.getElementById('body-plus-wrap');
+  if(!bodyEl || !wrap) return;
+  const sel = window.getSelection();
+  if(!sel.rangeCount || !bodyEl.contains(sel.anchorNode)) return;
+
+  let node = sel.anchorNode;
+  while(node && node.parentNode !== bodyEl && node !== bodyEl){
+    node = node.parentNode;
+  }
+  if(!node || node === bodyEl || !node.getBoundingClientRect) return;
+
+  const rect = node.getBoundingClientRect();
+  const wrapParentRect = bodyEl.getBoundingClientRect();
+  wrap.style.top = Math.max(0, rect.top - wrapParentRect.top) + 'px';
+}
+
+function getBodyPlainText(){
+  const el = document.getElementById('col-body');
+  if(!el) return '';
+  const blocks = Array.from(el.childNodes).filter(n =>
+    n.nodeType===1 || (n.nodeType===3 && n.textContent.trim())
+  );
+  if(blocks.length === 0) return (el.textContent || '').trim();
+  return blocks.map(b => b.textContent || '').join('\n\n').trim();
+}
+
+function setBodyPlainText(text){
+  const el = document.getElementById('col-body');
+  if(!el) return;
+  el.innerHTML = '';
+  (text || '').split(/\n\s*\n/).forEach(para => {
+    const div = document.createElement('div');
+    div.textContent = para;
+    el.appendChild(div);
+  });
+}
 
 function toggleAddMenu(){
   document.getElementById('add-menu').classList.toggle('open');
@@ -472,7 +521,7 @@ if('serviceWorker' in navigator){
     <textarea class="tagline-input" id="col-tagline" placeholder="A single line that earns the read…" rows="1" oninput="autoResize(this)"></textarea>
 
     <!-- Category -->
-    <select id="col-category" style="font-family:'Libre Baskerville',Georgia,serif;font-size:14px;font-weight:600;color:#3A3A3A;background:#F8F7F4;border:1px solid #E0E0E0;border-radius:20px;padding:9px 18px;margin:10px 0;cursor:pointer">
+    <select id="col-category" style="font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:#777;background:none;border:none;border-bottom:1px solid #E0E0E0;padding:6px 0;margin:8px 0 28px;cursor:pointer;appearance:none;-webkit-appearance:none">
       <option value="">Choose a category…</option>
       <option value="cinema">Cinema</option>
       <option value="music">Music</option>
@@ -488,25 +537,24 @@ if('serviceWorker' in navigator){
     <div class="editor-rule"></div>
 
     <!-- Body -->
-    <textarea class="body-area" id="col-body" placeholder="Start writing. This is your column — your voice is the whole point." oninput="autoResize(this)"></textarea>
+    <div class="body-wrap">
+      <div class="body-plus-wrap" id="body-plus-wrap">
+        <button class="body-plus" id="body-plus" onclick="toggleAddMenu()" title="Add to your column">
+          <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M8 2v12M2 8h12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+        </button>
+        <div class="add-menu" id="add-menu">
+          <button onclick="openModal('spotify')">Spotify</button>
+          <button onclick="openModal('video')">Video</button>
+          <button onclick="openModal('photo')">Photo/GIF</button>
+          <button onclick="openModal('product')">Product</button>
+          <button onclick="openModal('link')">Link</button>
+        </div>
+      </div>
+      <div class="body-area" id="col-body" contenteditable="true" data-placeholder="Start writing. This is your column — your voice is the whole point."></div>
+    </div>
 
     <!-- BLOCKS LIST -->
     <div class="blocks-list" id="blocks-list">
-    </div>
-
-    <!-- ADD -->
-    <div class="add-toolbar" id="add-toolbar">
-      <button class="add-plus" onclick="toggleAddMenu()">
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 2v12M2 8h12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
-        Add to your column
-      </button>
-      <div class="add-menu" id="add-menu">
-        <button onclick="openModal('spotify')">Spotify</button>
-        <button onclick="openModal('video')">Video</button>
-        <button onclick="openModal('photo')">Photo/GIF</button>
-        <button onclick="openModal('product')">Product</button>
-        <button onclick="openModal('link')">Link</button>
-      </div>
     </div>
 
   </div>
@@ -1033,6 +1081,10 @@ let draftTimer;
   });
 });
 
+['keyup','click','focus'].forEach(evt=>{
+  document.getElementById('col-body').addEventListener(evt, updateBodyPlusPosition);
+});
+
 async function saveDraft(){
   const status = document.getElementById('draft-status');
   status.textContent = 'Saving…';
@@ -1040,7 +1092,7 @@ async function saveDraft(){
   const title   = document.getElementById('col-title')?.value?.trim() || '';
   const tagline = document.getElementById('col-tagline')?.value?.trim() || '';
   const category = document.getElementById('col-category')?.value || '';
-  const body    = document.getElementById('col-body')?.value?.trim() || '';
+  const body    = getBodyPlainText();
 
   // Collect photo blocks
   const photoBlocks = Array.from(document.querySelectorAll('.photo-block')).map(b => ({
@@ -1235,7 +1287,7 @@ async function confirmSubmit(){
   openModOverlay();
 
   const title = document.getElementById('col-title').value;
-  const body  = document.getElementById('col-body').value;
+  const body  = getBodyPlainText();
 
   // Run text moderation via Claude
   const result = await moderateText(title, body);
@@ -1259,7 +1311,7 @@ async function doSubmit(){
   const title   = document.getElementById('col-title')?.value?.trim() || '';
   const tagline = document.getElementById('col-tagline')?.value?.trim() || '';
   const category = document.getElementById('col-category')?.value || '';
-  const body    = document.getElementById('col-body')?.value?.trim() || '';
+  const body    = getBodyPlainText();
 
   if(!category){ alert('Please choose a category before submitting.'); return; }
 
