@@ -670,7 +670,7 @@ function vogCover(){
         ${ARTICLES.map(a=>`<div class="vc-art"><span class="vc-art-cat">${a.cat}</span><span class="vc-art-title">${a.title}</span></div>`).join('')}
       </div>
     </div>
-    <div class="vc-price">reedefined.app — Issue No. 1 — July 2026</div>
+    <div class="vc-price">reedefinedmag.com — Issue No. 1 — July 2026</div>
   </div>`;
 }
 
@@ -702,7 +702,7 @@ function vogContents(){
           <div class="vcc-pg">${(i+1)*2+2}</div>
         </div>`).join('')}
       </div>
-      <div class="vcc-foot">reedefined.app · Issue No. 1 · July 2026</div>
+      <div class="vcc-foot">reedefinedmag.com · Issue No. 1 · July 2026</div>
     </div>
   </div>`;
 }
@@ -759,7 +759,7 @@ function monoCover(){
       <line x1="60" y1="740" x2="620" y2="740" stroke="#0C0C0C" stroke-width="0.8" opacity="0.3"/>
       <text x="340" y="796" font-family="'Libre Baskerville',Georgia,serif" font-size="58" font-weight="700" fill="#0C0C0C" text-anchor="middle" letter-spacing="-2">Reedefined</text>
       <text x="340" y="830" font-family="'Barlow Condensed',sans-serif" font-size="11" font-weight="700" fill="#4A7C3F" text-anchor="middle" letter-spacing="5">ISSUE NO. 1  ·  JULY 2026</text>
-      <text x="340" y="868" font-family="'Barlow Condensed',sans-serif" font-size="10" fill="#0C0C0C" text-anchor="middle" letter-spacing="2" opacity="0.25">reedefined.app</text>
+      <text x="340" y="868" font-family="'Barlow Condensed',sans-serif" font-size="10" fill="#0C0C0C" text-anchor="middle" letter-spacing="2" opacity="0.25">reedefinedmag.com</text>
     </svg>
   </div>`;
 }
@@ -774,7 +774,7 @@ function monoEditorPhoto(){
       <div style="width:48px;height:3px;background:#4A7C3F;margin-bottom:24px"></div>
       <div style="font-family:var(--H);font-size:17px;color:#555;line-height:1.7;max-width:280px">"The magazine shaped by the people you follow."</div>
     </div>
-    <div style="padding:20px 24px;border-top:1px solid #E0E0E0;font-family:var(--C);font-size:9px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:#4A4A4A">reedefined.app</div>
+    <div style="padding:20px 24px;border-top:1px solid #E0E0E0;font-family:var(--C);font-size:9px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:#4A4A4A">reedefinedmag.com</div>
   </div>`;
 }
 
@@ -818,7 +818,7 @@ function monoAd(){
     </div>
     <div class="ma-foot">
       <span class="ma-foot-l">Reedefined · July 2026</span>
-      <span class="ma-foot-r">Advertising enquiries: advertising@reedefined.app</span>
+      <span class="ma-foot-r">Advertising enquiries: advertising@reedefinedmag.com</span>
     </div>
   </div>`;
 }
@@ -843,7 +843,7 @@ function monoContents(){
     </div>
     <div class="mcc-foot">
       <span class="mcc-foot-t">"The magazine shaped by the people you follow."</span>
-      <span class="mcc-foot-r">reedefined.app</span>
+      <span class="mcc-foot-r">reedefinedmag.com</span>
     </div>
   </div>`;
 }
@@ -989,7 +989,7 @@ function copyLink(){
 }
 
 const SHARE_TEXT = 'My Reedefined Issue No. 1 — Cinema, Music, Food, Fashion. Every month a personalised magazine shaped by the people I follow.';
-const SHARE_URL  = 'https://reedefined.app/i/may2026';
+const SHARE_URL  = 'https://reedefinedmag.com/i/may2026';
 
 function shareToX(){
   window.open('https://twitter.com/intent/tweet?text='+encodeURIComponent(SHARE_TEXT)+'&url='+encodeURIComponent(SHARE_URL), '_blank');
@@ -1040,7 +1040,7 @@ function shareNative(){
 
       <!-- URL copy -->
       <div class="share-url">
-        <input class="su-input" type="text" id="share-url-input" value="https://reedefined.app/i/may2026" readonly onclick="this.select()">
+        <input class="su-input" type="text" id="share-url-input" value="https://reedefinedmag.com/i/may2026" readonly onclick="this.select()">
         <button class="su-copy" onclick="copyLink()">Copy Link</button>
       </div>
       <div class="share-copied" id="share-copied">Link copied to clipboard ✓</div>
