@@ -307,7 +307,10 @@ function applyLang(lang) {
 
 function updateSwitcher(lang) {
   document.querySelectorAll('.lang-btn').forEach(btn => {
-    btn.classList.toggle('on', btn.getAttribute('data-lang') === lang);
+    const isOn = btn.getAttribute('data-lang') === lang;
+    btn.classList.toggle('on', isOn);
+    btn.style.color = isOn ? '#fff' : 'rgba(255,255,255,.5)';
+    btn.style.fontWeight = isOn ? '700' : '400';
   });
 }
 
@@ -319,93 +322,16 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // ══════════════════════════════════════════════
-// CONTENT TRANSLATION — Claude API
-// Translates article body text on language switch
-// Caches in sessionStorage to avoid re-translating
+// NOTE: Automatic AI translation of article content (via a direct
+// browser call to the Anthropic API) used to live here. It has been
+// removed: it had no API key, would be blocked by the browser for
+// security reasons even with one, and an API key must never be placed
+// in client-side code where anyone can read and reuse it. Real content
+// translation needs a small backend/serverless endpoint that holds the
+// key safely — a separate project, not a client-side fix.
+// The static UI translation (menus, buttons, labels) below is unaffected
+// and works entirely client-side with no API calls.
 // ══════════════════════════════════════════════
-
-const CONTENT_LANG_NAMES = { en: 'English', tr: 'Turkish', de: 'German' };
-
-async function translateContent(lang) {
-  if (lang === 'en') {
-    // Restore original English content
-    document.querySelectorAll('[data-original]').forEach(el => {
-      el.innerHTML = el.getAttribute('data-original');
-    });
-    return;
-  }
-
-  const elements = document.querySelectorAll('[data-translatable]');
-  if (!elements.length) return;
-
-  for (const el of elements) {
-    // Save original English if not already saved
-    if (!el.getAttribute('data-original')) {
-      el.getAttribute('data-original') || el.setAttribute('data-original', el.innerHTML);
-    }
-
-    const original = el.getAttribute('data-original') || el.innerHTML;
-    const cacheKey = `rd-trans-${lang}-${btoa(unescape(encodeURIComponent(original.slice(0, 60)))).slice(0, 40)}`;
-
-    // Check cache first
-    const cached = sessionStorage.getItem(cacheKey);
-    if (cached) {
-      el.innerHTML = cached;
-      continue;
-    }
-
-    // Show loading state
-    el.style.opacity = '0.4';
-
-    try {
-      const response = await fetch('https://api.anthropic.com/v1/messages', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          model: 'claude-sonnet-4-20250514',
-          max_tokens: 1000,
-          messages: [{
-            role: 'user',
-            content: `Translate the following editorial magazine content from English to ${CONTENT_LANG_NAMES[lang]}. 
-Preserve all HTML tags exactly as they are. Only translate the visible text content between tags.
-Keep the editorial, literary tone — this is a quality magazine, not a news site.
-Do not add any explanation or preamble. Return only the translated HTML.
-
-${original}`
-          }]
-        })
-      });
-
-      const data = await response.json();
-      const translated = data.content?.[0]?.text?.trim();
-
-      if (translated) {
-        el.innerHTML = translated;
-        sessionStorage.setItem(cacheKey, translated);
-      }
-    } catch(e) {
-      console.log('Translation error:', e);
-      // Silently fail — keep original
-    }
-
-    el.style.opacity = '1';
-  }
-}
-
-// Override setLang to also translate content
-const _setLangOriginal = setLang;
-window.setLang = function(lang) {
-  _setLangOriginal(lang);
-  translateContent(lang);
-};
-
-// Translate on initial load if not English
-document.addEventListener('DOMContentLoaded', () => {
-  const lang = getLang();
-  if (lang !== 'en') {
-    translateContent(lang);
-  }
-});
 
 // ══════════════════════════════════════════════
 // AUTO DATE — Issue month/year auto-updates
