@@ -28,32 +28,42 @@ p{font-family:var(--S);font-size:16px;line-height:1.75;color:var(--mid);margin-b
 .sig-role{font-family:var(--C);font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--teal);margin-top:4px}
 .cta{display:inline-block;margin-top:28px;font-family:var(--C);font-size:14px;font-weight:700;letter-spacing:1px;text-transform:uppercase;background:var(--ink);color:#fff;border-radius:24px;padding:12px 26px;cursor:pointer;text-decoration:none}
 </style>
+<script src="i18n.js"></script>
 </head>
 <body>
 
 <div class="topbar">
   <div class="tb-logo" onclick="location.href='index.html'">Reedefined</div>
-  <div class="tb-link" onclick="location.href='newsstand.html'">← Back</div>
+  <div style="display:flex;align-items:center;gap:16px">
+    <div style="display:flex;gap:6px;align-items:center">
+      <button class="lang-btn" data-lang="en" onclick="setLang('en')" style="background:none;border:none;font-family:var(--C);font-size:12px;font-weight:600;cursor:pointer;padding:0;color:var(--mid)">EN</button>
+      <span style="color:var(--rule)">/</span>
+      <button class="lang-btn" data-lang="tr" onclick="setLang('tr')" style="background:none;border:none;font-family:var(--C);font-size:12px;font-weight:600;cursor:pointer;padding:0;color:var(--mid)">TR</button>
+      <span style="color:var(--rule)">/</span>
+      <button class="lang-btn" data-lang="de" onclick="setLang('de')" style="background:none;border:none;font-family:var(--C);font-size:12px;font-weight:600;cursor:pointer;padding:0;color:var(--mid)">DE</button>
+    </div>
+    <div class="tb-link" data-i18n="art.back" onclick="location.href='newsstand.html'">← Back</div>
+  </div>
 </div>
 
 <div class="wrap">
-  <div class="eyebrow">— About</div>
-  <div class="h1">Why Reedefined exists</div>
+  <div class="eyebrow" data-i18n="about.eyebrow">— About</div>
+  <div class="h1" data-i18n="about.h1">Why Reedefined exists</div>
 
-  <p>I've always loved reading magazines, not any single one, but the specific joy each one gives you. A film column here, a way of writing about food there, someone's taste in music somewhere else entirely. I never wanted to choose just one. I wanted all of it, in one place, shaped by people rather than an algorithm.</p>
+  <p data-i18n="about.p1">I've always loved reading magazines, not any single one, but the specific joy each one gives you. A film column here, a way of writing about food there, someone's taste in music somewhere else entirely. I never wanted to choose just one. I wanted all of it, in one place, shaped by people rather than an algorithm.</p>
 
-  <p>At the same time, we're living through the richest moment there's ever been for people sharing what they love, everyone has a playlist, a way of seeing a film, an opinion on a restaurant worth writing down. Social media gave everyone a voice, but scattered it across a hundred platforms with no real home. Reedefined is my attempt to bring that back into something that reads like a magazine again.</p>
+  <p data-i18n="about.p2">At the same time, we're living through the richest moment there's ever been for people sharing what they love, everyone has a playlist, a way of seeing a film, an opinion on a restaurant worth writing down. Social media gave everyone a voice, but scattered it across a hundred platforms with no real home. Reedefined is my attempt to bring that back into something that reads like a magazine again.</p>
 
-  <p>I believe everyone has something worth contributing to someone else, a perspective, a taste, a way of noticing things. Put enough of those together, issue by issue, and you get something no single editor could ever plan: a genuinely valuable, genuinely different magazine, built by the people reading it.</p>
+  <p data-i18n="about.p3">I believe everyone has something worth contributing to someone else, a perspective, a taste, a way of noticing things. Put enough of those together, issue by issue, and you get something no single editor could ever plan: a genuinely valuable, genuinely different magazine, built by the people reading it.</p>
 
-  <p>That's what we're building here, together.</p>
+  <p data-i18n="about.p4">That's what we're building here, together.</p>
 
   <div class="signature">
     <div class="sig-name">Ayşegül</div>
-    <div class="sig-role">Founder & Editor in Chief, Reedefined</div>
+    <div class="sig-role" data-i18n="about.role">Founder &amp; Editor in Chief, Reedefined</div>
   </div>
 
-  <a class="cta" href="discover.html">Meet the Contributors →</a>
+  <a class="cta" href="discover.html" data-i18n="about.cta">Meet the Contributors →</a>
 </div>
 
 </body>

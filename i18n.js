@@ -93,8 +93,101 @@ const TRANSLATIONS = {
     'adv.formats': 'See Ad Formats',
     'adv.send': 'Send Enquiry →',
 
+    // Dashboard
+    'dash.eyebrow': 'My Dashboard',
+    'dash.h1': "Your writer's desk",
+    'dash.published': 'Published',
+    'dash.drafts': 'Drafts',
+    'dash.followers': 'Followers',
+    'dash.following': 'Following',
+    'dash.your_columns': 'Your columns',
+    'dash.write_new': 'Write a new one →',
+    'dash.follow_h': 'Contributors you follow',
+    'dash.discover_more': 'Discover more →',
+    'dash.empty_published': 'Nothing published yet.',
+    'dash.empty_drafts': 'No drafts in progress.',
+    'dash.empty_followers': 'No followers yet.',
+    'dash.empty_following': 'Not following anyone yet.',
+
+    // Profile
+    'profile.archive': 'Archive',
+    'profile.empty': 'No published columns yet.',
+
+    // Profile edit
+    'pe.eyebrow': 'Your Profile',
+    'pe.h1': 'Edit your profile',
+    'pe.upload': 'Upload Photo',
+    'pe.hint': 'Square photos work best. Max 8MB.',
+    'pe.location': 'Location',
+    'pe.location_ph': 'e.g. Istanbul, Turkey',
+    'pe.bio': 'Bio',
+    'pe.bio_ph': 'A line or two about you — what you write about, your taste, your background.',
+    'pe.save': 'Save Profile',
+
+    // Article
+    'art.flip': 'Read in flip format ⇄',
+    'art.back': '← Back',
+    'art.comments': 'Comments',
+    'art.post': 'Post',
+    'art.sign_comment': 'Sign in to leave a comment →',
+    'art.no_comments': 'No comments yet — be the first.',
+    'art.add_comment': 'Add a comment…',
+
+    // Choose screen
+    'choose.welcome': 'Welcome back',
+    'choose.h1': 'What would you like to do?',
+    'choose.sub': "You're both a reader and a contributor. Pick where you want to go — you can always switch later.",
+    'choose.read_t': 'I want to read',
+    'choose.read_d': 'Open your personal issue, flip through past issues, and discover new people to follow.',
+    'choose.read_cta': 'Go to Newsstand →',
+    'choose.write_t': 'I want to contribute',
+    'choose.write_d': 'Write your column, manage your submissions, and see how your writing is doing.',
+    'choose.write_cta': 'Go to Contributor Portal →',
+
+    // Guidelines
+    'gl.eyebrow': 'Contributor Info',
+    'gl.h1': 'How to contribute',
+    'gl.intro': "Reedefined is written entirely by its readers. Anyone can become a contributor — there's no application, no pitch process. You choose your topic, you write, you publish.",
+    'gl.start_h': 'Getting started',
+    'gl.rules_h': 'Guidelines',
+    'gl.cta': 'Start Writing →',
+
+    // Why contribute
+    'why.eyebrow': 'For Contributors',
+    'why.h1': 'Why write for Reedefined?',
+    'why.intro': "Reedefined exists because magazine publishing became too generic — algorithm-chasing, ad-stuffed, written for everyone and no one. We're building the opposite: a magazine shaped entirely by the people who write it and the people who follow them. That only works if real people show up with real taste.",
+    'why.paid_h': 'Is it paid?',
+    'why.paid_p': "Right now, contributing is unpaid. Reedefined is early — this issue is one of our first — and we're not yet running the kind of advertising that would let us pay writers.",
+    'why.note': "That's expected to change. As Reedefined grows, part of our advertising revenue is intended to go back to the contributors whose columns bring readers in. Nothing is guaranteed or scheduled yet — but revenue-sharing with contributors is a direction we're actively building toward, not an afterthought.",
+    'why.now_h': 'So why write now, before that exists?',
+    'why.now_p': "Because being early means shaping what this becomes. The contributors writing today are the reason Reedefined can stay niche and personal instead of turning into another feed optimized for clicks. That's rare, and it's worth something on its own — a real audience, a real byline, and a real say in what this magazine is, before it's a finished thing.",
+    'why.cta': 'Start Writing →',
+
+    // About
+    'about.eyebrow': 'About',
+    'about.h1': 'Why Reedefined exists',
+    'about.p1': "I've always loved reading magazines, not any single one, but the specific joy each one gives you. A film column here, a way of writing about food there, someone's taste in music somewhere else entirely. I never wanted to choose just one. I wanted all of it, in one place, shaped by people rather than an algorithm.",
+    'about.p2': "At the same time, we're living through the richest moment there's ever been for people sharing what they love, everyone has a playlist, a way of seeing a film, an opinion on a restaurant worth writing down. Social media gave everyone a voice, but scattered it across a hundred platforms with no real home. Reedefined is my attempt to bring that back into something that reads like a magazine again.",
+    'about.p3': "I believe everyone has something worth contributing to someone else, a perspective, a taste, a way of noticing things. Put enough of those together, issue by issue, and you get something no single editor could ever plan: a genuinely valuable, genuinely different magazine, built by the people reading it.",
+    'about.p4': "That's what we're building here, together.",
+    'about.role': 'Founder & Editor in Chief, Reedefined',
+    'about.cta': 'Meet the Contributors →',
+
     // Footer
-    'footer.rights': '© 2026 Reedefined. All rights reserved.',
+        'gl.step1': 'Sign up (or upgrade your existing account) as a Contributor.',
+    'gl.step2': 'Open the Contributor Portal and start a new column.',
+    'gl.step3': 'Write your title, tagline, and body text — save as a draft any time.',
+    'gl.step4': 'Choose a category so readers can find your writing.',
+    'gl.step5': "Submit. Your column appears in the Newsstand as soon as it's published.",
+    'gl.rule1': 'Write about something you genuinely care about — culture, taste, and everything in between.',
+    'gl.rule2': 'Be honest. Personal opinion is welcome; plagiarism and fabricated claims are not.',
+    'gl.rule3': 'No hate speech, harassment, or content that could put someone at risk.',
+    'gl.rule4': 'Photos and links you include should be your own or properly credited.',
+    'gl.rule5': "Keep it readable — a strong column is usually a few paragraphs, not a wall of text.",
+    'pe.uploading': 'Uploading…',
+    'pe.saving': 'Saving…',
+    'pe.saved': 'Profile saved ✓',
+'footer.rights': '© 2026 Reedefined. All rights reserved.',
   },
 
   tr: {
@@ -183,7 +276,100 @@ const TRANSLATIONS = {
     'adv.formats': 'Reklam Formatlarını Gör',
     'adv.send': 'Talep Gönder →',
 
-    'footer.rights': '© 2026 Reedefined. Tüm hakları saklıdır.',
+    // Dashboard
+    'dash.eyebrow': 'Panelim',
+    'dash.h1': 'Yazar masan',
+    'dash.published': 'Yayınlanan',
+    'dash.drafts': 'Taslaklar',
+    'dash.followers': 'Takipçiler',
+    'dash.following': 'Takip Edilen',
+    'dash.your_columns': 'Yazıların',
+    'dash.write_new': 'Yeni bir tane yaz →',
+    'dash.follow_h': 'Takip ettiğin kişiler',
+    'dash.discover_more': 'Daha fazla keşfet →',
+    'dash.empty_published': 'Henüz yayınlanan bir şey yok.',
+    'dash.empty_drafts': 'Devam eden taslak yok.',
+    'dash.empty_followers': 'Henüz takipçin yok.',
+    'dash.empty_following': 'Henüz kimseyi takip etmiyorsun.',
+
+    // Profile
+    'profile.archive': 'Arşiv',
+    'profile.empty': 'Henüz yayınlanan bir yazı yok.',
+
+    // Profile edit
+    'pe.eyebrow': 'Profilin',
+    'pe.h1': 'Profilini düzenle',
+    'pe.upload': 'Fotoğraf Yükle',
+    'pe.hint': 'Kare fotoğraflar en iyi sonucu verir. En fazla 8MB.',
+    'pe.location': 'Konum',
+    'pe.location_ph': 'örn. İstanbul, Türkiye',
+    'pe.bio': 'Bio',
+    'pe.bio_ph': 'Kendin hakkında bir iki cümle, ne yazıyorsun, zevkin ne, geçmişin nasıl.',
+    'pe.save': 'Profili Kaydet',
+
+    // Article
+    'art.flip': 'Dergi formatında oku ⇄',
+    'art.back': '← Geri',
+    'art.comments': 'Yorumlar',
+    'art.post': 'Gönder',
+    'art.sign_comment': 'Yorum yapmak için giriş yap →',
+    'art.no_comments': 'Henüz yorum yok, ilk sen ol.',
+    'art.add_comment': 'Bir yorum ekle…',
+
+    // Choose screen
+    'choose.welcome': 'Tekrar hoş geldin',
+    'choose.h1': 'Ne yapmak istersin?',
+    'choose.sub': 'Hem okuyucu hem contributorsun. Nereye gitmek istediğini seç, istediğin zaman değiştirebilirsin.',
+    'choose.read_t': 'Okumak istiyorum',
+    'choose.read_d': 'Kişisel sayını aç, geçmiş sayılara göz at, takip edecek yeni kişiler keşfet.',
+    'choose.read_cta': 'Newsstande Git →',
+    'choose.write_t': 'Katkıda bulunmak istiyorum',
+    'choose.write_d': 'Yazını yaz, gönderilerini yönet, yazının nasıl gittiğini gör.',
+    'choose.write_cta': 'Contributor Portala Git →',
+
+    // Guidelines
+    'gl.eyebrow': 'Contributor Bilgisi',
+    'gl.h1': 'Nasıl katkıda bulunulur',
+    'gl.intro': 'Reedefined tamamen okuyucuları tarafından yazılıyor. Herkes contributor olabilir, başvuru yok, sunum süreci yok. Konunu seç, yaz, yayınla.',
+    'gl.start_h': 'Başlarken',
+    'gl.rules_h': 'Kurallar',
+    'gl.cta': 'Yazmaya Başla →',
+
+    // Why contribute
+    'why.eyebrow': 'Contributorlar İçin',
+    'why.h1': 'Neden Reedefined için yazmalısın?',
+    'why.intro': 'Reedefined, dergiciliğin fazla genel hale gelmesi yüzünden var, algoritma kovalayan, reklam dolu, herkes için ve kimse için yazılmayan bir hal aldı. Biz tam tersini kuruyoruz: tamamen onu yazanlar ve onları takip edenler tarafından şekillenen bir dergi. Bu ancak gerçek insanlar gerçek zevkleriyle ortaya çıkarsa işe yarıyor.',
+    'why.paid_h': 'Ücretli mi?',
+    'why.paid_p': 'Şu an katkı ücretsiz. Reedefined henüz çok yeni, bu sayı ilk sayılarımızdan biri, ve henüz yazarlara ödeme yapmamızı sağlayacak reklam gelirimiz yok.',
+    'why.note': 'Bunun değişmesi bekleniyor. Reedefined büyüdükçe, reklam gelirinin bir kısmının okuyucu getiren contributorlara geri dönmesi hedefleniyor. Henüz hiçbir şey garanti ya da planlanmış değil, ama contributorlarla gelir paylaşımı, sonradan akla gelen bir fikir değil, aktif olarak inşa ettiğimiz bir yön.',
+    'why.now_h': 'Peki bu daha yokken neden şimdi yazmalı?',
+    'why.now_p': 'Çünkü erken olmak, bunun ne olacağını şekillendirmek demek. Bugün yazan contributorlar, Reedefinedın tıklama odaklı bir akışa dönüşmek yerine niş ve kişisel kalabilmesinin sebebi. Bu nadir bir şey ve tek başına bir değeri var, gerçek bir okuyucu kitlesi, gerçek bir imza, ve bu dergi bitmiş bir şey olmadan önce onun ne olacağı üzerinde gerçek bir söz hakkı.',
+    'why.cta': 'Yazmaya Başla →',
+
+    // About
+    'about.eyebrow': 'Hakkımızda',
+    'about.h1': 'Reedefined neden var',
+    'about.p1': 'Dergi okumayı hep sevmişimdir, tek bir dergiyi değil, her birinin sana verdiği o kendine özgü keyfi. Burada bir sinema yazısı, orada yemek hakkında yazma şekli, bir başka yerde birinin müzik zevki. Hiçbir zaman sadece birini seçmek istemedim. Hepsini, tek bir yerde, bir algoritma değil insanlar tarafından şekillenmiş olarak istedim.',
+    'about.p2': 'Aynı zamanda, insanların sevdiklerini paylaşması için şimdiye kadarki en zengin dönemi yaşıyoruz, herkesin bir playlisti, bir filmi görme şekli, yazılmaya değer bir restoran fikri var. Sosyal medya herkese bir ses verdi, ama bunu gerçek bir evi olmayan yüzlerce platforma dağıttı. Reedefined, bunu tekrar bir dergi gibi okunan bir şeye geri getirme çabam.',
+    'about.p3': 'Herkesin başka birine katabileceği bir şey olduğuna inanıyorum, bir bakış açısı, bir zevk, bir fark ediş şekli. Bunlardan yeterince bir araya getirince, sayı sayı, tek bir editörün asla planlayamayacağı bir şey ortaya çıkıyor: gerçekten değerli, gerçekten farklı, onu okuyanlar tarafından inşa edilmiş bir dergi.',
+    'about.p4': 'Burada birlikte inşa ettiğimiz şey bu.',
+    'about.role': 'Kurucu & Editor in Chief, Reedefined',
+    'about.cta': 'Contributorlarla Tanış →',
+
+        'gl.step1': 'Contributor olarak kaydol (ya da mevcut hesabını yükselt).',
+    'gl.step2': 'Contributor Portal\'ı aç ve yeni bir yazı başlat.',
+    'gl.step3': 'Başlığını, alt başlığını ve metnini yaz, istediğin zaman taslak olarak kaydet.',
+    'gl.step4': 'Okuyucuların yazını bulabilmesi için bir kategori seç.',
+    'gl.step5': 'Gönder. Yazın yayınlandığı anda Newsstand\'de görünür.',
+    'gl.rule1': 'Gerçekten önemsediğin bir şey hakkında yaz, kültür, zevk ve arasındaki her şey.',
+    'gl.rule2': 'Dürüst ol. Kişisel görüş memnuniyetle karşılanır; intihal ve uydurma iddialar karşılanmaz.',
+    'gl.rule3': 'Nefret söylemi, taciz ya da birini riske atabilecek içerik yok.',
+    'gl.rule4': 'Eklediğin fotoğraf ve linkler ya senin olmalı ya da doğru şekilde kaynak gösterilmeli.',
+    'gl.rule5': 'Okunabilir tut, güçlü bir yazı genelde birkaç paragraftır, uzun bir metin duvarı değil.',
+    'pe.uploading': 'Yükleniyor…',
+    'pe.saving': 'Kaydediliyor…',
+    'pe.saved': 'Profil kaydedildi ✓',
+'footer.rights': '© 2026 Reedefined. Tüm hakları saklıdır.',
   },
 
   de: {
@@ -272,7 +458,100 @@ const TRANSLATIONS = {
     'adv.formats': 'Anzeigenformate ansehen',
     'adv.send': 'Anfrage senden →',
 
-    'footer.rights': '© 2026 Reedefined. Alle Rechte vorbehalten.',
+    // Dashboard
+    'dash.eyebrow': 'Mein Dashboard',
+    'dash.h1': 'Dein Schreibtisch',
+    'dash.published': 'Veröffentlicht',
+    'dash.drafts': 'Entwürfe',
+    'dash.followers': 'Follower',
+    'dash.following': 'Folgt',
+    'dash.your_columns': 'Deine Kolumnen',
+    'dash.write_new': 'Neue schreiben →',
+    'dash.follow_h': 'Contributors, denen du folgst',
+    'dash.discover_more': 'Mehr entdecken →',
+    'dash.empty_published': 'Noch nichts veröffentlicht.',
+    'dash.empty_drafts': 'Keine Entwürfe in Arbeit.',
+    'dash.empty_followers': 'Noch keine Follower.',
+    'dash.empty_following': 'Du folgst noch niemandem.',
+
+    // Profile
+    'profile.archive': 'Archiv',
+    'profile.empty': 'Noch keine veröffentlichten Kolumnen.',
+
+    // Profile edit
+    'pe.eyebrow': 'Dein Profil',
+    'pe.h1': 'Profil bearbeiten',
+    'pe.upload': 'Foto hochladen',
+    'pe.hint': 'Quadratische Fotos funktionieren am besten. Max. 8MB.',
+    'pe.location': 'Standort',
+    'pe.location_ph': 'z.B. Istanbul, Türkei',
+    'pe.bio': 'Bio',
+    'pe.bio_ph': 'Ein, zwei Sätze über dich, worüber du schreibst, dein Geschmack, dein Hintergrund.',
+    'pe.save': 'Profil speichern',
+
+    // Article
+    'art.flip': 'Im Magazin-Format lesen ⇄',
+    'art.back': '← Zurück',
+    'art.comments': 'Kommentare',
+    'art.post': 'Senden',
+    'art.sign_comment': 'Anmelden, um zu kommentieren →',
+    'art.no_comments': 'Noch keine Kommentare, sei der Erste.',
+    'art.add_comment': 'Kommentar hinzufügen…',
+
+    // Choose screen
+    'choose.welcome': 'Willkommen zurück',
+    'choose.h1': 'Was möchtest du tun?',
+    'choose.sub': 'Du bist Leser und Contributor zugleich. Wähle, wohin du möchtest, du kannst später jederzeit wechseln.',
+    'choose.read_t': 'Ich möchte lesen',
+    'choose.read_d': 'Öffne deine persönliche Ausgabe, blättere durch frühere Ausgaben und entdecke neue Leute.',
+    'choose.read_cta': 'Zum Newsstand →',
+    'choose.write_t': 'Ich möchte mitwirken',
+    'choose.write_d': 'Schreibe deine Kolumne, verwalte deine Einreichungen und sieh, wie sie ankommt.',
+    'choose.write_cta': 'Zum Contributor-Portal →',
+
+    // Guidelines
+    'gl.eyebrow': 'Contributor-Info',
+    'gl.h1': 'Wie man mitwirkt',
+    'gl.intro': 'Reedefined wird komplett von seinen Lesern geschrieben. Jeder kann Contributor werden, keine Bewerbung, kein Pitch-Prozess. Du wählst dein Thema, du schreibst, du veröffentlichst.',
+    'gl.start_h': 'Erste Schritte',
+    'gl.rules_h': 'Richtlinien',
+    'gl.cta': 'Jetzt schreiben →',
+
+    // Why contribute
+    'why.eyebrow': 'Für Contributors',
+    'why.h1': 'Warum für Reedefined schreiben?',
+    'why.intro': 'Reedefined existiert, weil Magazine zu generisch geworden sind, algorithmusgetrieben, vollgestopft mit Werbung, geschrieben für alle und niemanden. Wir bauen das Gegenteil: ein Magazin, das komplett von den Menschen geprägt wird, die es schreiben und denen, die ihnen folgen. Das funktioniert nur, wenn echte Menschen mit echtem Geschmack mitmachen.',
+    'why.paid_h': 'Wird das bezahlt?',
+    'why.paid_p': 'Im Moment ist die Mitarbeit unbezahlt. Reedefined steht noch am Anfang, diese Ausgabe ist eine unserer ersten, und wir haben noch keine Werbung, mit der wir Autoren bezahlen könnten.',
+    'why.note': 'Das soll sich ändern. Mit dem Wachstum von Reedefined soll ein Teil unserer Werbeeinnahmen an die Contributors zurückfließen, deren Kolumnen Leser bringen. Nichts davon ist garantiert oder terminiert, aber Umsatzbeteiligung für Contributors ist eine Richtung, auf die wir aktiv hinarbeiten, kein nachträglicher Gedanke.',
+    'why.now_h': 'Warum also jetzt schreiben, bevor es das gibt?',
+    'why.now_p': 'Weil früh dabei zu sein bedeutet, mitzugestalten, was daraus wird. Die Contributors, die heute schreiben, sind der Grund, warum Reedefined nischig und persönlich bleiben kann, statt zu einem weiteren klickoptimierten Feed zu werden. Das ist selten und für sich schon wertvoll, ein echtes Publikum, eine echte Signatur und ein echtes Mitspracherecht, bevor dieses Magazin fertig ist.',
+    'why.cta': 'Jetzt schreiben →',
+
+    // About
+    'about.eyebrow': 'Über uns',
+    'about.h1': 'Warum es Reedefined gibt',
+    'about.p1': 'Ich habe es immer geliebt, Magazine zu lesen, nicht ein einzelnes, sondern die besondere Freude, die jedes einzelne gibt. Hier eine Filmkolumne, dort eine Art, über Essen zu schreiben, woanders der Musikgeschmack von jemandem. Ich wollte mich nie für nur eines entscheiden. Ich wollte alles davon, an einem Ort, geprägt von Menschen statt von einem Algorithmus.',
+    'about.p2': 'Gleichzeitig erleben wir den reichsten Moment aller Zeiten dafür, dass Menschen teilen, was sie lieben, jeder hat eine Playlist, eine Art, einen Film zu sehen, eine Meinung zu einem Restaurant, die es wert ist, aufgeschrieben zu werden. Soziale Medien haben jedem eine Stimme gegeben, sie aber auf hundert Plattformen ohne echtes Zuhause verstreut. Reedefined ist mein Versuch, das wieder zu etwas zu machen, das sich wie ein Magazin liest.',
+    'about.p3': 'Ich glaube, dass jeder etwas hat, das es wert ist, mit jemand anderem geteilt zu werden, eine Perspektive, einen Geschmack, eine Art, Dinge wahrzunehmen. Genug davon zusammengebracht, Ausgabe für Ausgabe, ergibt etwas, das kein einzelner Redakteur je hätte planen können: ein wirklich wertvolles, wirklich anderes Magazin, gebaut von den Menschen, die es lesen.',
+    'about.p4': 'Das bauen wir hier gemeinsam auf.',
+    'about.role': 'Gründerin & Chefredakteurin, Reedefined',
+    'about.cta': 'Die Contributors kennenlernen →',
+
+        'gl.step1': 'Melde dich als Contributor an (oder upgrade dein bestehendes Konto).',
+    'gl.step2': 'Öffne das Contributor-Portal und starte eine neue Kolumne.',
+    'gl.step3': 'Schreibe Titel, Untertitel und Text, speichere jederzeit als Entwurf.',
+    'gl.step4': 'Wähle eine Kategorie, damit Leser deinen Text finden.',
+    'gl.step5': 'Absenden. Deine Kolumne erscheint im Newsstand, sobald sie veröffentlicht ist.',
+    'gl.rule1': 'Schreibe über etwas, das dir wirklich wichtig ist, Kultur, Geschmack und alles dazwischen.',
+    'gl.rule2': 'Sei ehrlich. Persönliche Meinung ist willkommen; Plagiate und erfundene Behauptungen nicht.',
+    'gl.rule3': 'Keine Hassrede, Belästigung oder Inhalte, die jemanden gefährden könnten.',
+    'gl.rule4': 'Fotos und Links sollten deine eigenen sein oder korrekt mit Quelle versehen werden.',
+    'gl.rule5': 'Halte es lesbar, eine gute Kolumne sind meist ein paar Absätze, keine Textwand.',
+    'pe.uploading': 'Wird hochgeladen…',
+    'pe.saving': 'Wird gespeichert…',
+    'pe.saved': 'Profil gespeichert ✓',
+'footer.rights': '© 2026 Reedefined. Alle Rechte vorbehalten.',
   }
 };
 

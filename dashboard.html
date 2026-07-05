@@ -46,26 +46,34 @@ body{background:var(--bg);color:var(--ink);font-family:var(--S);min-height:100vh
 .follow-name{font-family:var(--H);font-size:16px;font-weight:700}
 .empty{padding:32px 0;text-align:center;color:var(--muted);font-family:var(--H);font-size:15px}
 </style>
+<script src="i18n.js"></script>
 </head>
 <body>
 
 <div class="topbar">
   <div class="tb-logo" onclick="location.href='index.html'">Reedefined</div>
   <div class="tb-links">
+    <div style="display:flex;gap:6px;align-items:center">
+      <button class="lang-btn" data-lang="en" onclick="setLang('en')" style="background:none;border:none;font-family:var(--C);font-size:12px;font-weight:600;cursor:pointer;padding:0;color:var(--mid)">EN</button>
+      <span style="color:var(--rule)">/</span>
+      <button class="lang-btn" data-lang="tr" onclick="setLang('tr')" style="background:none;border:none;font-family:var(--C);font-size:12px;font-weight:600;cursor:pointer;padding:0;color:var(--mid)">TR</button>
+      <span style="color:var(--rule)">/</span>
+      <button class="lang-btn" data-lang="de" onclick="setLang('de')" style="background:none;border:none;font-family:var(--C);font-size:12px;font-weight:600;cursor:pointer;padding:0;color:var(--mid)">DE</button>
+    </div>
     <span class="tb-link" onclick="location.href='newsstand.html'">Newsstand</span>
-    <span class="tb-link" onclick="location.href='editor-portal.html'">Write →</span>
+    <span class="tb-link" data-i18n="gl.cta" onclick="location.href='editor-portal.html'">Write →</span>
   </div>
 </div>
 
 <div class="wrap">
-  <div class="eyebrow">— My Dashboard</div>
-  <div class="h1">Your writer's desk</div>
+  <div class="eyebrow" data-i18n="dash.eyebrow">— My Dashboard</div>
+  <div class="h1" data-i18n="dash.h1">Your writer's desk</div>
 
   <div class="stats-row">
-    <div class="stat-card on" id="tab-published" onclick="showTab('published')"><div class="stat-n" id="stat-published">—</div><div class="stat-l">Published</div></div>
-    <div class="stat-card" id="tab-drafts" onclick="showTab('drafts')"><div class="stat-n" id="stat-drafts">—</div><div class="stat-l">Drafts</div></div>
-    <div class="stat-card" id="tab-followers" onclick="showTab('followers')"><div class="stat-n" id="stat-followers">—</div><div class="stat-l">Followers</div></div>
-    <div class="stat-card" id="tab-following" onclick="showTab('following')"><div class="stat-n" id="stat-following">—</div><div class="stat-l">Following</div></div>
+    <div class="stat-card on" id="tab-published" onclick="showTab('published')"><div class="stat-n" id="stat-published">—</div><div class="stat-l" data-i18n="dash.published">Published</div></div>
+    <div class="stat-card" id="tab-drafts" onclick="showTab('drafts')"><div class="stat-n" id="stat-drafts">—</div><div class="stat-l" data-i18n="dash.drafts">Drafts</div></div>
+    <div class="stat-card" id="tab-followers" onclick="showTab('followers')"><div class="stat-n" id="stat-followers">—</div><div class="stat-l" data-i18n="dash.followers">Followers</div></div>
+    <div class="stat-card" id="tab-following" onclick="showTab('following')"><div class="stat-n" id="stat-following">—</div><div class="stat-l" data-i18n="dash.following">Following</div></div>
   </div>
   <div class="tab-panel-wrap">
     <div id="tab-content"><div class="empty">Loading…</div></div>
@@ -132,7 +140,7 @@ function showTab(tab){
 
   if(tab==='published' || tab==='drafts'){
     const list = DATA[tab];
-    if(list.length===0){ el.innerHTML = `<div class="empty">${tab==='published' ? 'Nothing published yet.' : 'No drafts in progress.'}</div>`; return; }
+    if(list.length===0){ el.innerHTML = `<div class="empty">${tab==='published' ? t('dash.empty_published') : t('dash.empty_drafts')}</div>`; return; }
     el.innerHTML = list.map(a => `
       <div class="art-row" onclick="${a.status==='submitted' ? `location.href='article.html?id=${a.id}'` : `location.href='editor-portal.html'`}">
         <span class="art-status ${a.status}">${a.status==='submitted' ? 'Published' : 'Draft'}</span>
@@ -150,7 +158,7 @@ function showTab(tab){
   }
 
   const list = DATA[tab];
-  if(list.length===0){ el.innerHTML = `<div class="empty">${tab==='followers' ? 'No followers yet.' : 'Not following anyone yet.'}</div>`; return; }
+  if(list.length===0){ el.innerHTML = `<div class="empty">${tab==='followers' ? t('dash.empty_followers') : t('dash.empty_following')}</div>`; return; }
   el.innerHTML = list.map(p => {
     const name = p.name || 'Contributor';
     const initial = name.charAt(0).toUpperCase();

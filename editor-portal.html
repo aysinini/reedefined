@@ -488,6 +488,13 @@ if('serviceWorker' in navigator){
     <span class="tb-draft" id="draft-status">Draft saved</span>
   </div>
   <div class="tb-right">
+    <div style="display:flex;gap:6px;align-items:center">
+      <button class="lang-btn" data-lang="en" onclick="setLang('en')" style="background:none;border:none;font-family:inherit;font-size:12px;font-weight:600;cursor:pointer;padding:0">EN</button>
+      <span style="opacity:.3">/</span>
+      <button class="lang-btn" data-lang="tr" onclick="setLang('tr')" style="background:none;border:none;font-family:inherit;font-size:12px;font-weight:600;cursor:pointer;padding:0">TR</button>
+      <span style="opacity:.3">/</span>
+      <button class="lang-btn" data-lang="de" onclick="setLang('de')" style="background:none;border:none;font-family:inherit;font-size:12px;font-weight:600;cursor:pointer;padding:0">DE</button>
+    </div>
     <button class="tb-btn" onclick="saveDraft()">Save</button>
     <button class="tb-btn" onclick="location.href='magazine-reader.html'">Preview ↗</button>
     <button class="tb-btn tb-submit" onclick="openSubmit()">Submit Column →</button>

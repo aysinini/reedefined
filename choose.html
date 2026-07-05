@@ -34,28 +34,35 @@ body{background:var(--bg);color:var(--ink);font-family:var(--S);-webkit-font-smo
 .opt-d{font-family:var(--S);font-size:14px;color:var(--mid);line-height:1.5}
 .opt-arrow{font-family:var(--C);font-size:13px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink);margin-top:18px;display:flex;align-items:center;gap:6px}
 </style>
+<script src="i18n.js"></script>
 </head>
 <body>
 
-<div class="topbar"><div class="tb-logo">Reedefined</div></div>
+<div class="topbar"><div class="tb-logo">Reedefined</div><div style="display:flex;gap:6px;align-items:center">
+      <button class="lang-btn" data-lang="en" onclick="setLang('en')" style="background:none;border:none;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:600;cursor:pointer;padding:0;color:var(--muted)">EN</button>
+      <span style="color:var(--rule)">/</span>
+      <button class="lang-btn" data-lang="tr" onclick="setLang('tr')" style="background:none;border:none;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:600;cursor:pointer;padding:0;color:var(--muted)">TR</button>
+      <span style="color:var(--rule)">/</span>
+      <button class="lang-btn" data-lang="de" onclick="setLang('de')" style="background:none;border:none;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:600;cursor:pointer;padding:0;color:var(--muted)">DE</button>
+    </div></div>
 
 <div class="wrap">
   <div class="card">
-    <div class="eyebrow">— Welcome back</div>
-    <div class="h1">What would you like to do?</div>
-    <div class="sub">You're both a reader and a contributor. Pick where you want to go — you can always switch later.</div>
+    <div class="eyebrow" data-i18n="choose.welcome">— Welcome back</div>
+    <div class="h1" data-i18n="choose.h1">What would you like to do?</div>
+    <div class="sub" data-i18n="choose.sub">You're both a reader and a contributor. Pick where you want to go, you can always switch later.</div>
     <div class="opts">
       <div class="opt" onclick="location.href='newsstand.html'">
         <div class="opt-icon read">📖</div>
-        <div class="opt-t">I want to read</div>
-        <div class="opt-d">Open your personal issue, flip through past issues, and discover new people to follow.</div>
-        <div class="opt-arrow">Go to Newsstand →</div>
+        <div class="opt-t" data-i18n="choose.read_t">I want to read</div>
+        <div class="opt-d" data-i18n="choose.read_d">Open your personal issue, flip through past issues, and discover new people to follow.</div>
+        <div class="opt-arrow" data-i18n="choose.read_cta">Go to Newsstand →</div>
       </div>
       <div class="opt" onclick="location.href='editor-portal.html'">
         <div class="opt-icon write">✎</div>
-        <div class="opt-t">I want to contribute</div>
-        <div class="opt-d">Write your column, manage your submissions, and see how your writing is doing.</div>
-        <div class="opt-arrow">Go to Contributor Portal →</div>
+        <div class="opt-t" data-i18n="choose.write_t">I want to contribute</div>
+        <div class="opt-d" data-i18n="choose.write_d">Write your column, manage your submissions, and see how your writing is doing.</div>
+        <div class="opt-arrow" data-i18n="choose.write_cta">Go to Contributor Portal →</div>
       </div>
     </div>
   </div>

@@ -7,6 +7,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Barlow+Condensed:wght@400;500;600;700&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="session-storage.js"></script>
+<script src="i18n.js"></script>
 <style>
 :root{
   --ink:#0C0C0C;--mid:#3A3A3A;--muted:#4A4A4A;--light:#6B6B6B;
@@ -39,7 +40,16 @@ body{background:var(--bg);color:var(--ink);font-family:var(--S);min-height:100vh
 
 <div class="topbar">
   <div class="tb-logo" onclick="location.href='index.html'">Reedefined</div>
-  <div class="tb-back" onclick="location.href='discover.html'">← Back to Discover</div>
+  <div style="display:flex;align-items:center;gap:16px">
+    <div style="display:flex;gap:6px;align-items:center">
+      <button class="lang-btn" data-lang="en" onclick="setLang('en')" style="background:none;border:none;font-family:var(--C);font-size:12px;font-weight:600;cursor:pointer;padding:0;color:var(--mid)">EN</button>
+      <span style="color:var(--rule)">/</span>
+      <button class="lang-btn" data-lang="tr" onclick="setLang('tr')" style="background:none;border:none;font-family:var(--C);font-size:12px;font-weight:600;cursor:pointer;padding:0;color:var(--mid)">TR</button>
+      <span style="color:var(--rule)">/</span>
+      <button class="lang-btn" data-lang="de" onclick="setLang('de')" style="background:none;border:none;font-family:var(--C);font-size:12px;font-weight:600;cursor:pointer;padding:0;color:var(--mid)">DE</button>
+    </div>
+    <div class="tb-back" onclick="location.href='discover.html'">← Back to Discover</div>
+  </div>
 </div>
 
 <div class="wrap" id="wrap">
@@ -84,7 +94,7 @@ async function loadProfile(){
           <div class="arch-t">${esc(s.title||'Untitled')}</div>
           ${s.tagline ? `<div class="arch-dek">${esc(s.tagline)}</div>` : ''}
         </div>`).join('')
-    : `<div class="empty">No published columns yet.</div>`;
+    : `<div class="empty">${t('profile.empty')}</div>`;
 
   wrap.innerHTML = `
     <div class="profile-hd">
@@ -95,7 +105,7 @@ async function loadProfile(){
       </div>
     </div>
     ${p.bio ? `<div class="p-bio">${esc(p.bio)}</div>` : ''}
-    <div class="arch-h">Archive</div>
+    <div class="arch-h">${t('profile.archive')}</div>
     ${archiveHtml}
   `;
 }
