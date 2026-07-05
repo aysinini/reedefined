@@ -500,10 +500,11 @@ body{background:var(--bg);color:var(--ink);font-family:var(--S);-webkit-font-smo
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="session-storage.js"></script>
 <script>
 const SBU = 'https://gseuejqqwkdjkhxfxxwy.supabase.co';
 const SBK = 'sb_publishable_0Nmw1mwGx__b_jJHLHBDKg__1OAsRuy';
-const sb  = supabase.createClient(SBU, SBK);
+const sb  = supabase.createClient(SBU, SBK, {auth:{storage:window.REEDEFINED_AUTH_STORAGE}});
 
 // Session guard
 let currentUser = null;

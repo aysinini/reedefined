@@ -493,7 +493,7 @@ const SBK_MR = 'sb_publishable_0Nmw1mwGx__b_jJHLHBDKg__1OAsRuy';
 
 async function loadContributions() {
   try {
-    const sb = supabase.createClient(SBU_MR, SBK_MR);
+    const sb = supabase.createClient(SBU_MR, SBK_MR, {auth:{storage:window.REEDEFINED_AUTH_STORAGE}});
 
     // Get current user's session to check follows
     const { data: { session } } = await sb.auth.getSession();
@@ -1136,6 +1136,7 @@ if(isIOS && !isInStandalone && !localStorage.getItem('pwa-dismissed')){
 }
 </script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="session-storage.js"></script>
 <script src="/i18n.js"></script>
 </body>
 </html>

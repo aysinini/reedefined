@@ -300,11 +300,12 @@ a{color:inherit;text-decoration:none}
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="session-storage.js"></script>
 <script src="/i18n.js"></script>
 <script>
 const SBU = 'https://gseuejqqwkdjkhxfxxwy.supabase.co';
 const SBK = 'sb_publishable_0Nmw1mwGx__b_jJHLHBDKg__1OAsRuy';
-const sb  = supabase.createClient(SBU, SBK);
+const sb  = supabase.createClient(SBU, SBK, {auth:{storage:window.REEDEFINED_AUTH_STORAGE}});
 
 async function submitEnquiry(e) {
   e.preventDefault();

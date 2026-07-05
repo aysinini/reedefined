@@ -133,7 +133,13 @@ body{background:var(--white);color:var(--ink);font-family:var(--S);-webkit-font-
         <button class="pw-toggle" type="button" onclick="togglePw('si-pw',this)">Show</button>
       </div>
     </div>
-    <div class="forgot"><button type="button" onclick="forgotPw()">Forgot password?</button></div>
+    <div class="forgot" style="display:flex;align-items:center;justify-content:space-between;text-align:left">
+      <label style="display:flex;align-items:center;gap:7px;font-family:var(--S);font-size:14px;color:var(--mid);cursor:pointer">
+        <input type="checkbox" id="si-remember" checked style="width:15px;height:15px;cursor:pointer">
+        Remember me
+      </label>
+      <button type="button" onclick="forgotPw()">Forgot password?</button>
+    </div>
     <button class="btn-submit" id="btn-si" onclick="doSignIn()">Sign In →</button>
     <p class="switch">New here? <a onclick="switchTab('su')">Create an account</a></p>
   </div>
@@ -178,11 +184,12 @@ body{background:var(--white);color:var(--ink);font-family:var(--S);-webkit-font-
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="session-storage.js"></script>
 <script src="/i18n.js"></script>
 <script>
 const SBU='https://gseuejqqwkdjkhxfxxwy.supabase.co';
 const SBK='sb_publishable_0Nmw1mwGx__b_jJHLHBDKg__1OAsRuy';
-const sb=supabase.createClient(SBU,SBK);
+const sb=supabase.createClient(SBU,SBK,{auth:{storage:window.REEDEFINED_AUTH_STORAGE}});
 let suRole='reader';
 
 (async()=>{
@@ -237,6 +244,8 @@ async function doSignIn(){
   const email=document.getElementById('si-email').value.trim();
   const pw=document.getElementById('si-pw').value;
   if(!email||!pw){showErr('Please enter your email and password.');return;}
+  const remember=document.getElementById('si-remember')?.checked ?? true;
+  localStorage.setItem('reedefined_remember', remember ? 'true' : 'false');
   const btn=document.getElementById('btn-si');
   btn.disabled=true;btn.innerHTML='<span class="spin"></span>Signing in…';clearMsgs();
   const {data,error}=await sb.auth.signInWithPassword({email,password:pw});
