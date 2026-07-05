@@ -75,3 +75,6 @@ create policy "Profiles are publicly readable"
 
 -- Add a public "location" field to profiles, shown on the profile page.
 alter table public.profiles add column if not exists location text;
+
+-- Video embeds (YouTube/Vimeo links) attached to a column, alongside photos/products.
+alter table public.contributions add column if not exists videos text;

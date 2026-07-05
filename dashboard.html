@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reedefined — My Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Barlow+Condensed:wght@400;500;600;700&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{
+  --ink:#0C0C0C;--mid:#3A3A3A;--muted:#777;--light:#BBB;
+  --rule:#E2E2E2;--bg:#F8F7F4;--white:#FFF;
+  --teal:#4A7C3F;--teal-l:#D4DBCA;--red:#C8251A;
+  --H:'Libre Baskerville',Georgia,serif;
+  --C:'Barlow Condensed',sans-serif;
+  --S:'Barlow',sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--S);min-height:100vh;-webkit-font-smoothing:antialiased}
+.topbar{border-bottom:3px solid var(--ink);padding:0 32px;height:64px;display:flex;align-items:center;justify-content:space-between;background:var(--white)}
+.tb-logo{font-family:var(--H);font-size:20px;font-weight:700;cursor:pointer}
+.tb-links{display:flex;align-items:center;gap:22px}
+.tb-link{font-family:var(--C);font-size:13px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--mid);cursor:pointer}
+.wrap{max-width:920px;margin:0 auto;padding:48px 24px 100px}
+.eyebrow{font-family:var(--C);font-size:13px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--teal);margin-bottom:10px}
+.h1{font-family:var(--H);font-size:34px;font-weight:700;margin-bottom:36px}
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--rule);border:1px solid var(--rule);margin-bottom:48px}
+.stat-card{background:var(--white);padding:22px 20px}
+.stat-n{font-family:var(--H);font-size:30px;font-weight:700;color:var(--ink)}
+.stat-l{font-family:var(--C);font-size:12px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-top:4px}
+.sec-h{display:flex;align-items:baseline;justify-content:space-between;padding-bottom:14px;border-bottom:2px solid var(--ink);margin-bottom:4px}
+.sec-t{font-family:var(--C);font-size:13px;font-weight:700;letter-spacing:2px;text-transform:uppercase}
+.sec-l{font-family:var(--C);font-size:13px;font-weight:600;color:var(--teal);cursor:pointer}
+section{margin-bottom:52px}
+.art-row{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:18px 0;border-bottom:1px solid var(--rule);cursor:pointer}
+.art-status{font-family:var(--C);font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:3px 9px;border-radius:10px;flex-shrink:0}
+.art-status.draft{background:#FAEEDA;color:#854F0B}
+.art-status.submitted{background:var(--teal-l);color:var(--teal)}
+.art-t{font-family:var(--H);font-size:17px;font-weight:700;flex:1}
+.art-cat{font-family:var(--C);font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);flex-shrink:0}
+.follow-row{display:flex;align-items:center;gap:14px;padding:16px 0;border-bottom:1px solid var(--rule);cursor:pointer}
+.follow-avatar{width:40px;height:40px;border-radius:50%;object-fit:cover;background:var(--teal-l);display:flex;align-items:center;justify-content:center;font-family:var(--H);font-size:15px;color:var(--teal);flex-shrink:0}
+.follow-name{font-family:var(--H);font-size:16px;font-weight:700}
+.empty{padding:32px 0;text-align:center;color:var(--muted);font-family:var(--H);font-size:15px}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="tb-logo" onclick="location.href='index.html'">Reedefined</div>
+  <div class="tb-links">
+    <span class="tb-link" onclick="location.href='newsstand.html'">Newsstand</span>
+    <span class="tb-link" onclick="location.href='editor-portal.html'">Write →</span>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="eyebrow">— My Dashboard</div>
+  <div class="h1">Your writer's desk</div>
+
+  <div class="stats-row">
+    <div class="stat-card"><div class="stat-n" id="stat-published">—</div><div class="stat-l">Published</div></div>
+    <div class="stat-card"><div class="stat-n" id="stat-drafts">—</div><div class="stat-l">Drafts</div></div>
+    <div class="stat-card"><div class="stat-n" id="stat-followers">—</div><div class="stat-l">Followers</div></div>
+    <div class="stat-card"><div class="stat-n" id="stat-following">—</div><div class="stat-l">Following</div></div>
+  </div>
+
+  <section>
+    <div class="sec-h"><span class="sec-t">Your columns</span><span class="sec-l" onclick="location.href='editor-portal.html'">Write a new one →</span></div>
+    <div id="my-articles"><div class="empty">Loading…</div></div>
+  </section>
+
+  <section>
+    <div class="sec-h"><span class="sec-t">Contributors you follow</span><span class="sec-l" onclick="location.href='discover.html'">Discover more →</span></div>
+    <div id="my-follows"><div class="empty">Loading…</div></div>
+  </section>
+</div>
+
+<script>
+const sb = supabase.createClient('https://gseuejqqwkdjkhxfxxwy.supabase.co','sb_publishable_0Nmw1mwGx__b_jJHLHBDKg__1OAsRuy');
+
+function esc(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+async function init(){
+  const { data:{ session } } = await sb.auth.getSession();
+  if(!session){ location.href='portal.html'; return; }
+  const uid = session.user.id;
+
+  const [{ data:articles }, { data:followers }, { data:followingRows }] = await Promise.all([
+    sb.from('contributions').select('id,title,category,status,updated_at').eq('user_id', uid).order('updated_at',{ascending:false}),
+    sb.from('follows').select('id').eq('contributor_id', uid),
+    sb.from('follows').select('contributor_id').eq('user_id', uid)
+  ]);
+
+  const published = (articles||[]).filter(a => a.status==='submitted');
+  const drafts = (articles||[]).filter(a => a.status==='draft');
+
+  document.getElementById('stat-published').textContent = published.length;
+  document.getElementById('stat-drafts').textContent = drafts.length;
+  document.getElementById('stat-followers').textContent = (followers||[]).length;
+  document.getElementById('stat-following').textContent = (followingRows||[]).length;
+
+  renderArticles(articles||[]);
+  renderFollowing(followingRows||[]);
+}
+
+function renderArticles(articles){
+  const el = document.getElementById('my-articles');
+  if(articles.length===0){ el.innerHTML = '<div class="empty">You have not written anything yet.</div>'; return; }
+
+  el.innerHTML = articles.map(a => `
+    <div class="art-row" onclick="${a.status==='submitted' ? `location.href='article.html?id=${a.id}'` : `location.href='editor-portal.html'`}">
+      <span class="art-status ${a.status}">${a.status==='submitted' ? 'Published' : 'Draft'}</span>
+      <span class="art-t">${esc(a.title || 'Untitled')}</span>
+      <span class="art-cat">${esc(a.category || '')}</span>
+    </div>`).join('');
+}
+
+async function renderFollowing(rows){
+  const el = document.getElementById('my-follows');
+  if(rows.length===0){ el.innerHTML = '<div class="empty">You are not following anyone yet.</div>'; return; }
+
+  const ids = rows.map(r => r.contributor_id);
+  const { data:profiles } = await sb.from('profiles').select('id,name,avatar').in('id', ids);
+
+  if(!profiles || profiles.length===0){ el.innerHTML = '<div class="empty">You are not following anyone yet.</div>'; return; }
+
+  el.innerHTML = profiles.map(p => {
+    const name = p.name || 'Contributor';
+    const initial = name.charAt(0).toUpperCase();
+    const avatarHtml = p.avatar
+      ? `<img class="follow-avatar" src="${p.avatar}" alt="${esc(name)}">`
+      : `<div class="follow-avatar">${initial}</div>`;
+    return `
+      <div class="follow-row" onclick="location.href='profile.html?id=${p.id}'">
+        ${avatarHtml}
+        <span class="follow-name">${esc(name)}</span>
+      </div>`;
+  }).join('');
+}
+
+init();
+</script>
+
+</body>
+</html>

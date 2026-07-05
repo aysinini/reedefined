@@ -390,7 +390,7 @@ const PUBLIC_ISSUES = [];
 
 let activeFilter = 'all';
 let searchQuery  = '';
-let followed     = new Set(['chloe','marco']);
+let followed     = new Set();
 let optedIn      = false;
 
 // ── RENDER CONTRIBUTORS ──
@@ -523,17 +523,29 @@ function toggleFollow(btn){
   btn.textContent = isOn ? 'Follow' : 'Following';
 }
 
-function toggleFollowById(id, btn){
+async function toggleFollowById(id, btn){
+  const { data:{ session } } = await sb.auth.getSession();
+  if(!session){ location.href='portal.html'; return; }
+
   if(followed.has(id)){
     followed.delete(id);
     btn.classList.remove('on');
     btn.textContent = 'Follow';
+    await sb.from('follows').delete().eq('user_id', session.user.id).eq('contributor_id', id);
   } else {
     followed.add(id);
     btn.classList.add('on');
     btn.textContent = 'Following';
-    saveSB('follows',{contributor_id:id,followed_at:new Date().toISOString()});
+    await sb.from('follows').insert({ user_id: session.user.id, contributor_id: id });
   }
+}
+
+async function loadFollowedState(){
+  const { data:{ session } } = await sb.auth.getSession();
+  if(!session) return;
+  const { data } = await sb.from('follows').select('contributor_id').eq('user_id', session.user.id);
+  if(data) followed = new Set(data.map(f => f.contributor_id));
+  renderContribs();
 }
 
 // ── VIEW ISSUE ──
@@ -545,29 +557,20 @@ function viewPublicIssue(id){
 }
 
 // ── OPT IN ──
-function toggleOptIn(){
+async function toggleOptIn(){
+  const { data:{ session } } = await sb.auth.getSession();
+  if(!session){ location.href='portal.html'; return; }
+
   optedIn = !optedIn;
   const btn = document.getElementById('optin-btn');
   if(optedIn){
     btn.textContent = 'My Issue is Public ✓';
     btn.classList.add('on');
-    saveSB('public_issues',{opted_in:true,updated_at:new Date().toISOString()});
   } else {
     btn.textContent = 'Share My Issue →';
     btn.classList.remove('on');
-    saveSB('public_issues',{opted_in:false,updated_at:new Date().toISOString()});
   }
-}
-
-// ── SUPABASE SAVE ──
-async function saveSB(table,data){
-  try{
-    await fetch(`${SBU}/rest/v1/${table}`,{
-      method:'POST',
-      headers:{'Content-Type':'application/json','apikey':SBK,'Authorization':`Bearer ${SBK}`,'Prefer':'return=minimal'},
-      body:JSON.stringify(data)
-    });
-  }catch(e){}
+  await sb.from('public_issues').upsert({ user_id: session.user.id, opted_in: optedIn, updated_at: new Date().toISOString() }, { onConflict: 'user_id' });
 }
 
 // ── SESSION ──
@@ -632,6 +635,7 @@ renderContribs();
 renderPublic();
 initFeatured();
 loadRealContributors();
+loadFollowedState();
 </script>
 
 <!-- PWA Install Banner -->
