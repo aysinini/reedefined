@@ -675,8 +675,8 @@ function updateSwitcher(lang) {
   document.querySelectorAll('.lang-btn').forEach(btn => {
     const isOn = btn.getAttribute('data-lang') === lang;
     btn.classList.toggle('on', isOn);
-    btn.style.color = isOn ? '#fff' : 'rgba(255,255,255,.5)';
-    btn.style.fontWeight = isOn ? '700' : '400';
+    btn.style.opacity = isOn ? '1' : '.55';
+    btn.style.fontWeight = isOn ? '700' : '600';
   });
 }
 
