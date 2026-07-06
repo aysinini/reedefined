@@ -116,14 +116,14 @@ body{background:var(--white);color:var(--ink);font-family:var(--S);-webkit-font-
 
 <div class="main">
 
-  <div class="eyebrow" id="eyebrow">Welcome back</div>
-  <h1 class="main-h" id="main-h">Sign in</h1>
-  <p class="main-sub" id="main-sub">Everyone reads. Contributors also write.</p>
+  <div class="eyebrow" id="eyebrow" data-i18n="p.welcome_back">Welcome back</div>
+  <h1 class="main-h" id="main-h" data-i18n="p.signin_h">Sign in</h1>
+  <p class="main-sub" id="main-sub" data-i18n="p.signin_sub">Everyone reads. Contributors also write.</p>
   <div class="rule"></div>
 
   <div class="tabs">
-    <button class="tab on" id="tab-si" onclick="switchTab('si')">Sign In</button>
-    <button class="tab" id="tab-su" onclick="switchTab('su')">Create Account</button>
+    <button class="tab on" id="tab-si" onclick="switchTab('si')" data-i18n="p.tab_signin">Sign In</button>
+    <button class="tab" id="tab-su" onclick="switchTab('su')" data-i18n="p.tab_create">Create Account</button>
   </div>
 
   <div class="msg err" id="msg-err"></div>
@@ -132,62 +132,62 @@ body{background:var(--white);color:var(--ink);font-family:var(--S);-webkit-font-
   <!-- SIGN IN -->
   <div class="pane on" id="pane-si">
     <div class="field">
-      <label class="fl">Email</label>
+      <label class="fl" data-i18n="p.email">Email</label>
       <input class="fi" type="email" id="si-email" placeholder="your@email.com" autocomplete="email">
     </div>
     <div class="field">
-      <label class="fl">Password</label>
+      <label class="fl" data-i18n="p.password">Password</label>
       <div class="pw-wrap">
         <input class="fi" type="password" id="si-pw" placeholder="••••••••" autocomplete="current-password">
-        <button class="pw-toggle" type="button" onclick="togglePw('si-pw',this)">Show</button>
+        <button class="pw-toggle" type="button" onclick="togglePw('si-pw',this)" data-i18n="p.show">Show</button>
       </div>
     </div>
     <div class="forgot" style="display:flex;align-items:center;justify-content:space-between;text-align:left">
       <label style="display:flex;align-items:center;gap:7px;font-family:var(--S);font-size:14px;color:var(--mid);cursor:pointer">
         <input type="checkbox" id="si-remember" checked style="width:15px;height:15px;cursor:pointer">
-        Remember me
+        <span data-i18n="p.remember_me">Remember me</span>
       </label>
-      <button type="button" onclick="forgotPw()">Forgot password?</button>
+      <button type="button" onclick="forgotPw()" data-i18n="p.forgot">Forgot password?</button>
     </div>
-    <button class="btn-submit" id="btn-si" onclick="doSignIn()">Sign In →</button>
-    <p class="switch">New here? <a onclick="switchTab('su')">Create an account</a></p>
+    <button class="btn-submit" id="btn-si" onclick="doSignIn()" data-i18n="p.signin_btn">Sign In →</button>
+    <p class="switch"><span data-i18n="p.new_here">New here?</span> <a onclick="switchTab('su')" data-i18n="p.create_account_link">Create an account</a></p>
   </div>
 
   <!-- SIGN UP: STEP 1 - ROLE CHOICE -->
   <div class="pane" id="pane-su-role">
     <div class="role-sel" style="grid-template-columns:1fr;gap:14px;margin-bottom:8px">
       <div class="r-card" id="r-reader" onclick="chooseRoleAndContinue('reader')" style="padding:24px 20px;text-align:left">
-        <div class="r-t" style="font-size:18px;margin-bottom:6px">Reader</div>
-        <div class="r-d" style="font-size:14px">Read your personalised issue, follow contributors, flip through past issues.</div>
+        <div class="r-t" style="font-size:18px;margin-bottom:6px" data-i18n="p.reader_t">Reader</div>
+        <div class="r-d" style="font-size:14px" data-i18n="p.reader_d">Read your personalised issue, follow contributors, flip through past issues.</div>
       </div>
       <div class="r-card" id="r-contrib" onclick="chooseRoleAndContinue('contrib')" style="padding:24px 20px;text-align:left">
-        <div class="r-t" style="font-size:18px;margin-bottom:6px">Contributor &amp; Reader</div>
-        <div class="r-d" style="font-size:14px">Write and publish your own column, plus everything a Reader gets.</div>
+        <div class="r-t" style="font-size:18px;margin-bottom:6px" data-i18n="p.contrib_t">Contributor &amp; Reader</div>
+        <div class="r-d" style="font-size:14px" data-i18n="p.contrib_d">Write and publish your own column, plus everything a Reader gets.</div>
       </div>
     </div>
-    <p class="switch">Already have an account? <a onclick="switchTab('si')">Sign in</a></p>
+    <p class="switch"><span data-i18n="p.already_have">Already have an account?</span> <a onclick="switchTab('si')" data-i18n="p.signin_link">Sign in</a></p>
   </div>
 
   <!-- SIGN UP: STEP 2 - DETAILS -->
   <div class="pane" id="pane-su">
-    <p class="tb-back" style="cursor:pointer;margin-bottom:20px" onclick="backToRoleChoice()">← Change choice</p>
+    <p class="tb-back" style="cursor:pointer;margin-bottom:20px" onclick="backToRoleChoice()" data-i18n="p.change_choice">← Change choice</p>
     <div class="field">
-      <label class="fl">Full Name</label>
+      <label class="fl" data-i18n="p.full_name">Full Name</label>
       <input class="fi" type="text" id="su-name" placeholder="Your name" autocomplete="name">
     </div>
     <div class="field">
-      <label class="fl">Email</label>
+      <label class="fl" data-i18n="p.email">Email</label>
       <input class="fi" type="email" id="su-email" placeholder="your@email.com" autocomplete="email">
     </div>
     <div class="field">
-      <label class="fl">Password</label>
+      <label class="fl" data-i18n="p.password">Password</label>
       <div class="pw-wrap">
         <input class="fi" type="password" id="su-pw" placeholder="At least 6 characters" autocomplete="new-password">
-        <button class="pw-toggle" type="button" onclick="togglePw('su-pw',this)">Show</button>
+        <button class="pw-toggle" type="button" onclick="togglePw('su-pw',this)" data-i18n="p.show">Show</button>
       </div>
     </div>
-    <button class="btn-submit" id="btn-su" onclick="doSignUp()">Create Account →</button>
-    <p class="switch">Already have an account? <a onclick="switchTab('si')">Sign in</a></p>
+    <button class="btn-submit" id="btn-su" onclick="doSignUp()" data-i18n="p.create_btn">Create Account →</button>
+    <p class="switch"><span data-i18n="p.already_have">Already have an account?</span> <a onclick="switchTab('si')" data-i18n="p.signin_link">Sign in</a></p>
   </div>
 
 </div>
@@ -217,9 +217,9 @@ function switchTab(t){
   document.getElementById('pane-su').classList.remove('on');
   clearMsgs();
   const si=t==='si';
-  document.getElementById('eyebrow').textContent=si?'Welcome back':'Join Reedefined';
-  document.getElementById('main-h').textContent=si?'Sign in':'Create account';
-  document.getElementById('main-sub').textContent=si?"Everyone reads. Contributors also write.":'Choose how you want to take part.';
+  document.getElementById('eyebrow').textContent=si?t('p.welcome_back'):t('p.join');
+  document.getElementById('main-h').textContent=si?t('p.signin_h'):t('p.create_h');
+  document.getElementById('main-sub').textContent=si?t('p.signin_sub'):t('p.create_sub');
 }
 
 function chooseRoleAndContinue(r){
@@ -227,22 +227,22 @@ function chooseRoleAndContinue(r){
   document.getElementById('pane-su-role').classList.remove('on');
   document.getElementById('pane-su').classList.add('on');
   document.getElementById('eyebrow').textContent = r==='contrib' ? 'Contributor & Reader' : 'Reader';
-  document.getElementById('main-h').textContent='Your details';
+  document.getElementById('main-h').textContent=t('p.your_details_h');
   document.getElementById('main-sub').textContent = r==='contrib' ? "You'll be able to write and read." : "You'll read your personalised issue.";
 }
 
 function backToRoleChoice(){
   document.getElementById('pane-su').classList.remove('on');
   document.getElementById('pane-su-role').classList.add('on');
-  document.getElementById('eyebrow').textContent='Join Reedefined';
-  document.getElementById('main-h').textContent='Create account';
-  document.getElementById('main-sub').textContent='Choose how you want to take part.';
+  document.getElementById('eyebrow').textContent=t('p.join');
+  document.getElementById('main-h').textContent=t('p.create_h');
+  document.getElementById('main-sub').textContent=t('p.create_sub');
 }
 
 function togglePw(id,btn){
   const el=document.getElementById(id);
   el.type=el.type==='password'?'text':'password';
-  btn.textContent=el.type==='password'?'Show':'Hide';
+  btn.textContent=el.type==='password'?t('p.show'):t('p.hide');
 }
 
 function showErr(m){const e=document.getElementById('msg-err');e.textContent=m;e.classList.add('show');document.getElementById('msg-ok').classList.remove('show');}
@@ -252,16 +252,16 @@ function clearMsgs(){document.getElementById('msg-err').classList.remove('show')
 async function doSignIn(){
   const email=document.getElementById('si-email').value.trim();
   const pw=document.getElementById('si-pw').value;
-  if(!email||!pw){showErr('Please enter your email and password.');return;}
+  if(!email||!pw){showErr(t('p.err_fill_email_pw'));return;}
   const remember=document.getElementById('si-remember')?.checked ?? true;
   localStorage.setItem('reedefined_remember', remember ? 'true' : 'false');
   const btn=document.getElementById('btn-si');
   btn.disabled=true;btn.innerHTML='<span class="spin"></span>Signing in…';clearMsgs();
   const {data,error}=await sb.auth.signInWithPassword({email,password:pw});
-  btn.disabled=false;btn.textContent='Sign In →';
+  btn.disabled=false;btn.textContent=t('p.signin_btn');
   if(error){
-    if(error.message.includes('Email not confirmed'))showErr('Please confirm your email first. Check your inbox.');
-    else if(error.message.includes('Invalid login'))showErr('Incorrect email or password.');
+    if(error.message.includes('Email not confirmed'))showErr(t('p.err_confirm_email'));
+    else if(error.message.includes('Invalid login'))showErr(t('p.err_incorrect'));
     else showErr(error.message);
     return;
   }
@@ -273,31 +273,31 @@ async function doSignUp(){
   const name=document.getElementById('su-name').value.trim();
   const email=document.getElementById('su-email').value.trim();
   const pw=document.getElementById('su-pw').value;
-  if(!name||!email||!pw){showErr('Please fill in all fields.');return;}
-  if(pw.length<6){showErr('Password must be at least 6 characters.');return;}
+  if(!name||!email||!pw){showErr(t('p.err_fill_all'));return;}
+  if(pw.length<6){showErr(t('p.err_pw_length'));return;}
   const btn=document.getElementById('btn-su');
   btn.disabled=true;btn.innerHTML='<span class="spin"></span>Creating account…';clearMsgs();
   const {error}=await sb.auth.signUp({
     email,password:pw,
     options:{data:{full_name:name,role:suRole},emailRedirectTo:'https://reedefinedmag.com/portal.html'}
   });
-  btn.disabled=false;btn.textContent='Create Account →';
+  btn.disabled=false;btn.textContent=t('p.create_btn');
   if(error){
-    if(error.message.includes('already registered'))showErr('An account with this email already exists. Try signing in.');
+    if(error.message.includes('already registered'))showErr(t('p.err_already_registered'));
     else showErr(error.message);
     return;
   }
-  showOk('Account created. Please check your email to confirm before signing in.');
+  showOk(t('p.ok_account_created'));
   ['su-name','su-email','su-pw'].forEach(id=>document.getElementById(id).value='');
 }
 
 async function forgotPw(){
   const email=document.getElementById('si-email').value.trim();
-  if(!email){showErr('Please enter your email address first.');return;}
+  if(!email){showErr(t('p.err_enter_email'));return;}
   clearMsgs();
   const {error}=await sb.auth.resetPasswordForEmail(email,{redirectTo:'https://reedefinedmag.com/portal.html'});
   if(error){showErr(error.message);return;}
-  showOk('Password reset link sent. Please check your email.');
+  showOk(t('p.ok_reset_sent'));
 }
 
 document.addEventListener('keydown',e=>{
