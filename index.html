@@ -143,9 +143,9 @@ body{background:var(--white);color:var(--ink);font-family:var(--S);-webkit-font-
   <div class="nav-inner">
     <div class="nav-logo" onclick="location.href='index.html'">Reedefined</div>
     <div class="nav-links">
-      <span class="nav-link" onclick="location.href='discover.html'">Discover</span>
-      <span class="nav-link" onclick="location.href='advertise.html'">Advertise</span>
-      <span class="nav-link" onclick="location.href='cover-brief.html'">Illustrators</span>
+      <span class="nav-link" onclick="location.href='discover.html'" data-i18n="idx.nav_discover">Discover</span>
+      <span class="nav-link" onclick="location.href='advertise.html'" data-i18n="idx.nav_advertise">Advertise</span>
+      <span class="nav-link" onclick="location.href='cover-brief.html'" data-i18n="idx.nav_illustrators">Illustrators</span>
     </div>
     <div class="nav-right">
       <div style="display:flex;gap:6px;align-items:center;margin-right:8px">
@@ -155,8 +155,8 @@ body{background:var(--white);color:var(--ink);font-family:var(--S);-webkit-font-
         <span style="opacity:.3">/</span>
         <button class="lang-btn" data-lang="de" onclick="setLang('de')" style="background:none;border:none;font-family:inherit;font-size:12px;font-weight:600;cursor:pointer;padding:0;color:#3A3A3A">DE</button>
       </div>
-      <button class="btn-si" onclick="location.href='portal.html'">Sign In</button>
-      <button class="btn-su" onclick="location.href='portal.html'">Sign Up →</button>
+      <button class="btn-si" onclick="location.href='portal.html'" data-i18n="idx.signin">Sign In</button>
+      <button class="btn-su" onclick="location.href='portal.html'" data-i18n="idx.signup">Sign Up →</button>
     </div>
   </div>
 </nav>
@@ -164,15 +164,15 @@ body{background:var(--white);color:var(--ink);font-family:var(--S);-webkit-font-
 <!-- HERO -->
 <section class="hero">
   <div class="hero-inner">
-    <div class="hero-eyebrow">Issue No. 1 · July 2026</div>
-    <h1 class="hero-h1">The magazine<br>shaped by the<br><span style="color:var(--olive)">people you follow.</span></h1>
+    <div class="hero-eyebrow" data-i18n="idx.hero_eyebrow">Issue No. 1 · July 2026</div>
+    <h1 class="hero-h1"><span data-i18n="idx.hero_h1_1">The magazine</span><br><span data-i18n="idx.hero_h1_2">shaped by the</span><br><span style="color:var(--olive)" data-i18n="idx.hero_h1_3">people you follow.</span></h1>
     <div class="hero-bottom">
-      <p class="hero-sub">Every month, a personalised issue assembled from the writers, critics and creators you choose to follow. No algorithm. No feed. Just the people whose taste you trust — in one place, once a month.</p>
+      <p class="hero-sub" data-i18n="idx.hero_sub">Every month, a personalised issue assembled from the writers, critics and creators you choose to follow. No algorithm. No feed. Just the people whose taste you trust, in one place, once a month.</p>
       <div class="hero-cta-side">
-        <div class="hero-cta-label">Join the first issue</div>
+        <div class="hero-cta-label" data-i18n="idx.cta_label">Join the first issue</div>
         <div class="hero-cta-btns">
-          <button class="btn-hero-p" onclick="location.href='portal.html'">Start Reading →</button>
-          <button class="btn-hero-s" onclick="location.href='portal.html'">Become a Contributor</button>
+          <button class="btn-hero-p" onclick="location.href='portal.html'" data-i18n="idx.start_reading">Start Reading →</button>
+          <button class="btn-hero-s" onclick="location.href='portal.html'" data-i18n="idx.become_contributor">Become a Contributor</button>
         </div>
       </div>
     </div>
@@ -182,30 +182,30 @@ body{background:var(--white);color:var(--ink);font-family:var(--S);-webkit-font-
 <!-- MANIFESTO -->
 <section class="manifesto">
   <div class="manifesto-inner">
-    <div class="m-label">What we believe</div>
-    <p class="m-text">The internet gave everyone a voice. Algorithms decided who would be heard. <strong>Reedefined puts that choice back in your hands.</strong> You choose who writes for your magazine. You choose whose taste shapes your monthly issue. No two readers receive the same magazine — because no two readers are the same person.</p>
+    <div class="m-label" data-i18n="idx.manifesto_label">What we believe</div>
+    <p class="m-text" data-i18n="idx.manifesto_text">The internet gave everyone a voice. Algorithms decided who would be heard. <strong>Reedefined puts that choice back in your hands.</strong> You choose who writes for your magazine. You choose whose taste shapes your monthly issue. No two readers receive the same magazine, because no two readers are the same person.</p>
   </div>
 </section>
 
 <!-- HOW IT WORKS -->
 <section class="how">
   <div class="how-inner">
-    <div class="sec-label">How it works</div>
+    <div class="sec-label" data-i18n="idx.how_label">How it works</div>
     <div class="how-grid">
       <div class="how-item">
         <div class="how-n">01</div>
-        <div class="how-t">Follow your contributors</div>
-        <div class="how-d">Browse writers, critics, photographers and creators. Follow the ones whose perspective you want in your life.</div>
+        <div class="how-t" data-i18n="idx.how1_t">Follow your contributors</div>
+        <div class="how-d" data-i18n="idx.how1_d">Browse writers, critics, photographers and creators. Follow the ones whose perspective you want in your life.</div>
       </div>
       <div class="how-item">
         <div class="how-n">02</div>
-        <div class="how-t">They write. You read.</div>
-        <div class="how-d">Every month, your contributors publish their column — essays, reviews, playlists, picks. It all arrives in your issue.</div>
+        <div class="how-t" data-i18n="idx.how2_t">They write. You read.</div>
+        <div class="how-d" data-i18n="idx.how2_d">Every month, your contributors publish their column, essays, reviews, playlists, picks. It all arrives in your issue.</div>
       </div>
       <div class="how-item">
         <div class="how-n">03</div>
-        <div class="how-t">Your issue. No one else's.</div>
-        <div class="how-d">On the first of every month, your personalised magazine drops. Every reader's issue is different. Yours is shaped entirely by you.</div>
+        <div class="how-t" data-i18n="idx.how3_t">Your issue. No one else's.</div>
+        <div class="how-d" data-i18n="idx.how3_d">On the first of every month, your personalised magazine drops. Every reader's issue is different. Yours is shaped entirely by you.</div>
       </div>
     </div>
   </div>
@@ -214,27 +214,27 @@ body{background:var(--white);color:var(--ink);font-family:var(--S);-webkit-font-
 <section class="contrib">
   <div class="contrib-inner">
     <div class="contrib-left">
-      <h2 class="contrib-h">Have something worth reading? Write for Reedefined.</h2>
-      <p class="contrib-d">Reedefined is built by its contributors. If you write, photograph, review, curate or create — this is your platform. Your column, your voice, your readers.</p>
+      <h2 class="contrib-h" data-i18n="idx.contrib_h">Have something worth reading? Write for Reedefined.</h2>
+      <p class="contrib-d" data-i18n="idx.contrib_d">Reedefined is built by its contributors. If you write, photograph, review, curate or create, this is your platform. Your column, your voice, your readers.</p>
       <div class="contrib-tags">
-        <span class="tag">Film</span>
-        <span class="tag">Literature</span>
-        <span class="tag">Fashion</span>
-        <span class="tag">Music</span>
-        <span class="tag">Food</span>
-        <span class="tag">Travel</span>
-        <span class="tag">Photography</span>
-        <span class="tag">Culture</span>
-        <span class="tag">Design</span>
-        <span class="tag">Everything</span>
+        <span class="tag" data-i18n="idx.tag_film">Film</span>
+        <span class="tag" data-i18n="cat.literature">Literature</span>
+        <span class="tag" data-i18n="cat.fashion">Fashion</span>
+        <span class="tag" data-i18n="cat.music">Music</span>
+        <span class="tag" data-i18n="cat.food">Food</span>
+        <span class="tag" data-i18n="cat.travel">Travel</span>
+        <span class="tag" data-i18n="idx.tag_photography">Photography</span>
+        <span class="tag" data-i18n="idx.tag_culture">Culture</span>
+        <span class="tag" data-i18n="idx.tag_design">Design</span>
+        <span class="tag" data-i18n="idx.tag_everything">Everything</span>
       </div>
     </div>
     <div class="contrib-right">
       <div class="contrib-card">
-        <div class="cc-label">Editor in Chief</div>
+        <div class="cc-label" data-i18n="idx.editor_label">Editor in Chief</div>
         <div class="cc-name">Aysegül</div>
-        <div class="cc-role">Culture · Everything</div>
-        <div class="cc-quote">"A magazine made of everyone who makes it. Every month, assembled just for you."</div>
+        <div class="cc-role" data-i18n="idx.editor_role">Culture · Everything</div>
+        <div class="cc-quote" data-i18n="idx.editor_quote">"A magazine made of everyone who makes it. Every month, assembled just for you."</div>
       </div>
     </div>
   </div>
@@ -243,12 +243,12 @@ body{background:var(--white);color:var(--ink);font-family:var(--S);-webkit-font-
 <!-- CTA -->
 <section class="cta">
   <div class="cta-inner">
-    <div class="cta-eyebrow">Issue No. 1 · July 2026</div>
-    <h2 class="cta-h">Read differently.</h2>
-    <p class="cta-sub">Join Reedefined. Follow the people whose work matters to you. Receive your personalised issue every month.</p>
+    <div class="cta-eyebrow" data-i18n="idx.hero_eyebrow">Issue No. 1 · July 2026</div>
+    <h2 class="cta-h" data-i18n="idx.cta2_h">Read differently.</h2>
+    <p class="cta-sub" data-i18n="idx.cta2_sub">Join Reedefined. Follow the people whose work matters to you. Receive your personalised issue every month.</p>
     <div class="cta-btns">
-      <button class="btn-hero-p" onclick="location.href='portal.html'">Start Reading →</button>
-      <button class="btn-hero-s" onclick="location.href='portal.html'">Become a Contributor</button>
+      <button class="btn-hero-p" onclick="location.href='portal.html'" data-i18n="idx.start_reading">Start Reading →</button>
+      <button class="btn-hero-s" onclick="location.href='portal.html'" data-i18n="idx.become_contributor">Become a Contributor</button>
     </div>
   </div>
 </section>
@@ -259,38 +259,38 @@ body{background:var(--white);color:var(--ink);font-family:var(--S);-webkit-font-
     <div class="footer-top">
       <div>
         <div class="footer-logo">Reedefined</div>
-        <div class="footer-dek">A personalised digital magazine. The people you follow, assembled into your own issue. Every month.</div>
+        <div class="footer-dek" data-i18n="idx.footer_dek">A personalised digital magazine. The people you follow, assembled into your own issue. Every month.</div>
       </div>
       <div>
-        <div class="footer-col-head">Read</div>
+        <div class="footer-col-head" data-i18n="idx.footer_read">Read</div>
         <div class="footer-links">
-          <span class="footer-link" onclick="location.href='portal.html'">Sign In</span>
-          <span class="footer-link" onclick="location.href='portal.html'">Create Account</span>
-          <span class="footer-link" onclick="location.href='discover.html'">Discover Contributors</span>
-          <span class="footer-link" onclick="location.href='newsstand.html'">The Newsstand</span>
+          <span class="footer-link" onclick="location.href='portal.html'" data-i18n="idx.signin">Sign In</span>
+          <span class="footer-link" onclick="location.href='portal.html'" data-i18n="idx.footer_create_account">Create Account</span>
+          <span class="footer-link" onclick="location.href='discover.html'" data-i18n="idx.footer_discover_contributors">Discover Contributors</span>
+          <span class="footer-link" onclick="location.href='newsstand.html'" data-i18n="idx.footer_newsstand">The Newsstand</span>
         </div>
       </div>
       <div>
-        <div class="footer-col-head">Create</div>
+        <div class="footer-col-head" data-i18n="idx.footer_create">Create</div>
         <div class="footer-links">
-          <span class="footer-link" onclick="location.href='portal.html'">Become a Contributor</span>
-          <span class="footer-link" onclick="location.href='editor-portal.html'">Write</span>
-          <span class="footer-link" onclick="location.href='cover-brief.html'">Illustrate</span>
-          <span class="footer-link" onclick="location.href='advertise.html'">Advertise</span>
+          <span class="footer-link" onclick="location.href='portal.html'" data-i18n="idx.become_contributor">Become a Contributor</span>
+          <span class="footer-link" onclick="location.href='editor-portal.html'" data-i18n="idx.footer_write">Write</span>
+          <span class="footer-link" onclick="location.href='cover-brief.html'" data-i18n="idx.footer_illustrate">Illustrate</span>
+          <span class="footer-link" onclick="location.href='advertise.html'" data-i18n="idx.nav_advertise">Advertise</span>
         </div>
       </div>
       <div>
-        <div class="footer-col-head">Info</div>
+        <div class="footer-col-head" data-i18n="idx.footer_info">Info</div>
         <div class="footer-links">
-          <span class="footer-link" onclick="location.href='privacy.html'">Privacy</span>
-          <span class="footer-link" onclick="location.href='terms.html'">Terms</span>
-          <span class="footer-link" onclick="location.href='legal.html'">Legal</span>
+          <span class="footer-link" onclick="location.href='privacy.html'" data-i18n="idx.footer_privacy">Privacy</span>
+          <span class="footer-link" onclick="location.href='terms.html'" data-i18n="idx.footer_terms">Terms</span>
+          <span class="footer-link" onclick="location.href='legal.html'" data-i18n="idx.footer_legal">Legal</span>
           <span class="footer-link" onclick="location.href='mailto:hello@reedefinedmag.com'">hello@reedefinedmag.com</span>
         </div>
       </div>
     </div>
     <div class="footer-bottom">
-      <span class="footer-copy">© 2026 Reedefined. All rights reserved.</span>
+      <span class="footer-copy" data-i18n="footer.rights">© 2026 Reedefined. All rights reserved.</span>
       <span class="footer-copy">reedefinedmag.com</span>
     </div>
   </div>
