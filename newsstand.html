@@ -279,7 +279,7 @@ footer.site-ft{background:var(--ink);padding:60px 32px 34px}.ft-w{max-width:1400
 
     const grid = document.getElementById('contributors-grid');
     if(!subs || subs.length===0){
-      grid.innerHTML = `<div style="grid-column:1/-1;padding:40px 24px;text-align:center;font-family:var(--H);font-size:15px;color:var(--muted)">No contributors have published yet.</div>`;
+      grid.innerHTML = `<div style="grid-column:1/-1;padding:40px 24px;text-align:center;font-family:var(--H);font-size:15px;color:var(--muted)">${t('ns.empty_contributors')}</div>`;
       return;
     }
 
@@ -418,24 +418,24 @@ if('serviceWorker' in navigator){
     <button onclick="location.href='profile-edit.html'" style="width:100%;text-align:left;padding:12px 16px;background:none;border:none;cursor:pointer;font-family:var(--C);font-size:12px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--mid);border-top:1px solid #EEE">Edit Profile</button>
     <button onclick="window.__sbSignOut&&window.__sbSignOut()" style="width:100%;text-align:left;padding:12px 16px;background:none;border:none;cursor:pointer;font-family:var(--C);font-size:12px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:#C8251A;border-top:1px solid #EEE">Sign Out</button>
   </div>
-</div></div></nav><div class="sec-strip"><div class="ss  on" onclick="ssel(this)">All</div><div class="ss" onclick="ssel(this)">Cinema</div><div class="ss" onclick="ssel(this)">Fashion</div><div class="ss" onclick="ssel(this)">Music</div><div class="ss" onclick="ssel(this)">Food</div><div class="ss" onclick="ssel(this)">Literature</div><div class="ss" onclick="ssel(this)">Travel</div><div class="ss" onclick="ssel(this)">Art</div><div class="ss" onclick="ssel(this)">Nightlife</div><div class="ss" onclick="ssel(this)">Beauty</div></div>
+</div></div></nav><div class="sec-strip"><div class="ss  on" onclick="ssel(this)" data-i18n="cat.all">All</div><div class="ss" onclick="ssel(this)" data-i18n="cat.cinema">Cinema</div><div class="ss" onclick="ssel(this)" data-i18n="cat.fashion">Fashion</div><div class="ss" onclick="ssel(this)" data-i18n="cat.music">Music</div><div class="ss" onclick="ssel(this)" data-i18n="cat.food">Food</div><div class="ss" onclick="ssel(this)" data-i18n="cat.literature">Literature</div><div class="ss" onclick="ssel(this)" data-i18n="cat.travel">Travel</div><div class="ss" onclick="ssel(this)" data-i18n="cat.art">Art</div><div class="ss" onclick="ssel(this)" data-i18n="cat.nightlife">Nightlife</div><div class="ss" onclick="ssel(this)" data-i18n="cat.beauty">Beauty</div></div>
 <div class="page">
   <div class="ih">
     <div class="ih-g">
       <div>
         <div class="ey">Reedefined · July 2026</div>
-        <h1 class="ih1">Issue No. 1<br><em>The personal magazine.</em></h1>
-        <p class="ih-dek">Every article here was written by a real person about something they genuinely love. Follow the contributors whose taste speaks to you — and your next issue will be shaped entirely by them.</p>
+        <h1 class="ih1"><span data-i18n="ns.issue_h1">Issue No. 1</span><br><em data-i18n="ns.issue_sub">The personal magazine.</em></h1>
+        <p class="ih-dek" data-i18n="ns.issue_dek">Every article here was written by a real person about something they genuinely love. Follow the contributors whose taste speaks to you, and your next issue will be shaped entirely by them.</p>
         <div class="ih-meta">
-          <div class="ihm"><strong>1</strong> Contributor</div><div class="ihsep"></div>
-          <div class="ihm"><strong>New</strong> Readers</div><div class="ihsep"></div>
-          <div class="ihm"><strong>July 1</strong> Published</div><div class="ihsep"></div>
-          <div class="ihm"><strong>August 1</strong> Next Issue</div>
+          <div class="ihm"><strong>1</strong> <span data-i18n="ns.stat_contributor">Contributor</span></div><div class="ihsep"></div>
+          <div class="ihm"><strong>New</strong> <span data-i18n="ns.stat_readers">Readers</span></div><div class="ihsep"></div>
+          <div class="ihm"><strong>July 1</strong> <span data-i18n="ns.stat_published">Published</span></div><div class="ihsep"></div>
+          <div class="ihm"><strong>August 1</strong> <span data-i18n="ns.stat_next">Next Issue</span></div>
         </div>
       </div>
       <div class="yib">
-        <div class="yib-hd"><span class="yib-l">Your Issue</span><span class="yib-r">July 2026</span></div>
-        <div style="padding:24px 20px;text-align:center;color:var(--light);font-family:var(--H);font-size:13px;line-height:1.6">No articles yet — follow contributors on the Discover page and your issue will fill up here.</div>
+        <div class="yib-hd"><span class="yib-l" data-i18n="ns.your_issue">Your Issue</span><span class="yib-r">July 2026</span></div>
+        <div style="padding:24px 20px;text-align:center;color:var(--light);font-family:var(--H);font-size:13px;line-height:1.6" data-i18n="ns.your_issue_empty">No articles yet, follow contributors on the Discover page and your issue will fill up here.</div>
       </div>
     </div>
   </div>
@@ -451,19 +451,19 @@ if('serviceWorker' in navigator){
         <rect x="21" y="9" width="7" height="1.2" rx=".6" fill="rgba(12,12,12,.75)"/>
       </svg>
       <div>
-        <div style="font-family:var(--H);font-size:17px;font-weight:700;color:var(--ink);margin-bottom:3px">Read in magazine format</div>
-        <div style="font-family:var(--H);font-size:14px;color:rgba(12,12,12,.7)">Flip through Issue No. 1 like a real magazine — spread by spread.</div>
+        <div style="font-family:var(--H);font-size:17px;font-weight:700;color:var(--ink);margin-bottom:3px" data-i18n="ns.flip_title">Read in magazine format</div>
+        <div style="font-family:var(--H);font-size:14px;color:rgba(12,12,12,.7)" data-i18n="ns.flip_sub">Flip through Issue No. 1 like a real magazine, spread by spread.</div>
       </div>
     </div>
     <button onclick="location.href='magazine-reader.html'" style="font-family:var(--C);font-size:13px;font-weight:700;letter-spacing:2px;text-transform:uppercase;background:var(--ink);color:#fff;border:none;border-radius:20px;padding:12px 24px;cursor:pointer;white-space:nowrap;transition:all .15s;flex-shrink:0" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'" data-i18n="newsstand.open">Open Flip Reader →</button>
   </div>
 
   <div style="margin:48px 0 0">
-    <div class="sh" style="margin-bottom:0"><span class="sh-t">From This Issue</span></div>
+    <div class="sh" style="margin-bottom:0"><span class="sh-t" data-i18n="ns.from_issue">From This Issue</span></div>
     <div id="issue-articles-list">
       <div style="padding:48px 24px;text-align:center;border-top:1px solid var(--rule)">
-        <div style="font-family:var(--H);font-size:16px;color:var(--mid);margin-bottom:8px">No articles published yet.</div>
-        <div style="font-family:var(--H);font-size:14px;color:var(--light)">Once contributors you follow publish, their columns will appear here.</div>
+        <div style="font-family:var(--H);font-size:16px;color:var(--mid);margin-bottom:8px" data-i18n="ns.empty_articles">No articles published yet.</div>
+        <div style="font-family:var(--H);font-size:14px;color:var(--light)" data-i18n="ns.empty_articles_sub">Once contributors you follow publish, their columns will appear here.</div>
       </div>
     </div>
   </div>
@@ -473,7 +473,7 @@ if('serviceWorker' in navigator){
   </div>
 </div><footer class="site-ft"><div class="ft-w"><div class="ft-g"><div><div class="ft-logo">Reedefined</div><p class="ft-dek">The magazine shaped by the people you follow. Personal essays, playlists, film reviews — from writers and taste-makers you trust. Every month, assembled just for you.</p></div><div><div class="ft-ch">Read</div><div class="ft-links"><span class="ft-l" onclick="location.href='newsstand.html'">The Magazine</span>
       <span class="nav-link" onclick="location.href='discover.html'" data-i18n="nav.discover">Discover</span>
-      <span class="nav-link" onclick="location.href='cover-brief.html'">Illustrators</span><span class="ft-l" onclick="location.href='why-contribute.html'">Contributors</span><span class="ft-l">Cinema</span><span class="ft-l">Fashion</span><span class="ft-l">Music</span><span class="ft-l">Food</span></div></div><div><div class="ft-ch">Write</div><div class="ft-links"><span class="ft-l" onclick="location.href='editor-portal.html'">Contributor Portal</span><span class="ft-l" onclick="location.href='connections.html'">Connect Platforms</span><span class="ft-l" onclick="location.href='guidelines.html'">How to Contribute</span><span class="ft-l" onclick="location.href='guidelines.html#guidelines'">Guidelines</span></div></div><div><div class="ft-ch">Reedefined</div><div class="ft-links"><span class="ft-l" onclick="location.href='about.html'">About</span><span class="ft-l" onclick="location.href='portal.html'">Sign Up</span><span class="ft-l" onclick="window.__sbSignOut?window.__sbSignOut():location.href='portal.html'">Sign In</span><span class="ft-l" onclick="location.href='legal.html'">Legal</span>
+      <span class="nav-link" onclick="location.href='cover-brief.html'">Illustrators</span><span class="ft-l" onclick="location.href='why-contribute.html'">Contributors</span><span class="ft-l" data-i18n="cat.cinema" onclick="location.href='discover.html'">Cinema</span><span class="ft-l" data-i18n="cat.fashion" onclick="location.href='discover.html'">Fashion</span><span class="ft-l" data-i18n="cat.music" onclick="location.href='discover.html'">Music</span><span class="ft-l" data-i18n="cat.food" onclick="location.href='discover.html'">Food</span></div></div><div><div class="ft-ch">Write</div><div class="ft-links"><span class="ft-l" onclick="location.href='editor-portal.html'">Contributor Portal</span><span class="ft-l" onclick="location.href='connections.html'">Connect Platforms</span><span class="ft-l" onclick="location.href='guidelines.html'">How to Contribute</span><span class="ft-l" onclick="location.href='guidelines.html#guidelines'">Guidelines</span></div></div><div><div class="ft-ch">Reedefined</div><div class="ft-links"><span class="ft-l" onclick="location.href='about.html'">About</span><span class="ft-l" onclick="location.href='portal.html'">Sign Up</span><span class="ft-l" onclick="window.__sbSignOut?window.__sbSignOut():location.href='portal.html'">Sign In</span><span class="ft-l" onclick="location.href='legal.html'">Legal</span>
 <span class="ft-l" onclick="location.href='advertise.html'">Advertise</span>
       <span class="footer-link" onclick="location.href='advertise.html'">Advertise</span></div></div></div><div class="ft-b"><span>© 2026 Reedefined. All rights reserved.</span><span>The magazine shaped by the people you follow.</span></div></div></footer><script>function ssel(el){document.querySelectorAll(".ss").forEach(s=>s.classList.remove("on"));el.classList.add("on");}const _o=new IntersectionObserver(es=>{es.forEach((e,i)=>{if(e.isIntersecting)setTimeout(()=>e.target.classList.add('in'),i*80)});},{threshold:.08});document.querySelectorAll('.fade').forEach(e=>_o.observe(e));
 function toggleNavAvMenu(){
