@@ -124,3 +124,42 @@ BEGIN
       FOREIGN KEY (user_id) REFERENCES public.profiles(id) ON DELETE SET NULL;
   END IF;
 END $$;
+
+-- ══════════════════════════════════════════════
+-- NOTIFICATIONS: likes and comments can notify the
+-- contribution's author, in-app and/or by email,
+-- based on each user's own preference.
+-- ══════════════════════════════════════════════
+
+alter table public.profiles add column if not exists notify_comments_inapp boolean default true;
+alter table public.profiles add column if not exists notify_comments_email boolean default true;
+alter table public.profiles add column if not exists notify_likes_inapp boolean default true;
+alter table public.profiles add column if not exists notify_likes_email boolean default false;
+
+create table if not exists public.notifications (
+  id bigint generated always as identity primary key,
+  user_id uuid not null references auth.users(id) on delete cascade,
+  actor_id uuid references auth.users(id) on delete set null,
+  type text not null check (type in ('like','comment')),
+  contribution_id bigint references public.contributions(id) on delete cascade,
+  comment_body text,
+  read boolean default false,
+  created_at timestamptz default now()
+);
+
+alter table public.notifications enable row level security;
+
+drop policy if exists "Users can view own notifications" on public.notifications;
+create policy "Users can view own notifications"
+  on public.notifications for select
+  using (auth.uid() = user_id);
+
+drop policy if exists "Users can insert notifications for others" on public.notifications;
+create policy "Users can insert notifications for others"
+  on public.notifications for insert
+  with check (true);
+
+drop policy if exists "Users can update own notifications" on public.notifications;
+create policy "Users can update own notifications"
+  on public.notifications for update
+  using (auth.uid() = user_id);

@@ -368,6 +368,11 @@ const TRANSLATIONS = {
     'disc.pwa_add': 'Add to Home Screen',
     'disc.footer_home': 'Home',
     'disc.footer_contact': 'Contact',
+    'pe.notif_h': 'Notifications',
+    'pe.notif_comments_inapp': 'Notify me in-app when someone comments',
+    'pe.notif_comments_email': 'Email me when someone comments',
+    'pe.notif_likes_inapp': 'Notify me in-app when someone likes my column',
+    'pe.notif_likes_email': 'Email me when someone likes my column',
 'footer.rights': '© 2026 Reedefined. All rights reserved.',
   },
 
@@ -731,6 +736,11 @@ const TRANSLATIONS = {
     'disc.pwa_add': 'Ana Ekrana Ekle',
     'disc.footer_home': 'Ana Sayfa',
     'disc.footer_contact': 'İletişim',
+    'pe.notif_h': 'Bildirimler',
+    'pe.notif_comments_inapp': 'Biri yorum yapınca site içinde bildir',
+    'pe.notif_comments_email': 'Biri yorum yapınca e-posta gönder',
+    'pe.notif_likes_inapp': 'Biri yazımı beğenince site içinde bildir',
+    'pe.notif_likes_email': 'Biri yazımı beğenince e-posta gönder',
 'footer.rights': '© 2026 Reedefined. Tüm hakları saklıdır.',
   },
 
@@ -1094,6 +1104,11 @@ const TRANSLATIONS = {
     'disc.pwa_add': 'Zum Startbildschirm hinzufügen',
     'disc.footer_home': 'Startseite',
     'disc.footer_contact': 'Kontakt',
+    'pe.notif_h': 'Benachrichtigungen',
+    'pe.notif_comments_inapp': 'In der App benachrichtigen, wenn jemand kommentiert',
+    'pe.notif_comments_email': 'Per E-Mail benachrichtigen, wenn jemand kommentiert',
+    'pe.notif_likes_inapp': 'In der App benachrichtigen, wenn jemand meine Kolumne mag',
+    'pe.notif_likes_email': 'Per E-Mail benachrichtigen, wenn jemand meine Kolumne mag',
 'footer.rights': '© 2026 Reedefined. Alle Rechte vorbehalten.',
   }
 };

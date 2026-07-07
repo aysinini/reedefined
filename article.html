@@ -169,6 +169,45 @@ async function loadLikes(contributionId, session){
   }
 }
 
+async function notifyAuthor(contributionId, type, commentBody){
+  const { data:{ session } } = await sb.auth.getSession();
+  if(!session) return;
+
+  const { data:contrib } = await sb.from('contributions').select('user_id,title').eq('id', contributionId).single();
+  if(!contrib || contrib.user_id === session.user.id) return; // don't notify yourself
+
+  const { data:authorProfile } = await sb.from('profiles')
+    .select('notify_likes_inapp,notify_likes_email,notify_comments_inapp,notify_comments_email')
+    .eq('id', contrib.user_id).single();
+  if(!authorProfile) return;
+
+  const wantsInapp = type === 'like' ? authorProfile.notify_likes_inapp !== false : authorProfile.notify_comments_inapp !== false;
+  const wantsEmail = type === 'like' ? authorProfile.notify_likes_email === true : authorProfile.notify_comments_email === true;
+
+  if(wantsInapp){
+    await sb.from('notifications').insert({
+      user_id: contrib.user_id,
+      actor_id: session.user.id,
+      type,
+      contribution_id: contributionId,
+      comment_body: type === 'comment' ? commentBody : null
+    });
+  }
+
+  if(wantsEmail){
+    const actorName = session.user.user_metadata?.full_name || 'A reader';
+    const subject = type === 'like'
+      ? `${actorName} liked your column "${contrib.title}"`
+      : `${actorName} commented on your column "${contrib.title}"`;
+    const message = type === 'like'
+      ? `${actorName} liked your column, <strong>${esc(contrib.title)}</strong>, on Reedefined.`
+      : `${actorName} commented on your column, <strong>${esc(contrib.title)}</strong>:<br><br>"${esc(commentBody)}"`;
+    try{
+      await sb.functions.invoke('send-notification', { body: { userId: contrib.user_id, subject, message } });
+    }catch(e){ console.error('Notification email failed:', e); }
+  }
+}
+
 async function toggleLike(contributionId){
   const { data:{ session } } = await sb.auth.getSession();
   if(!session){ location.href='portal.html'; return; }
@@ -185,6 +224,7 @@ async function toggleLike(contributionId){
     await sb.from('likes').insert({ contribution_id: contributionId, user_id: session.user.id });
     btn.classList.add('on');
     countEl.textContent = parseInt(countEl.textContent||'0') + 1;
+    notifyAuthor(contributionId, 'like');
   }
 }
 
@@ -242,6 +282,7 @@ async function submitComment(contributionId){
   if(!error){
     input.value = '';
     loadComments(contributionId);
+    notifyAuthor(contributionId, 'comment', body);
   }
 }
 

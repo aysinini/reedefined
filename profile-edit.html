@@ -80,6 +80,28 @@ textarea.fi{resize:vertical;min-height:100px;line-height:1.5}
     <textarea class="fi" id="bio-input" data-i18n-placeholder="pe.bio_ph" placeholder="A line or two about you, what you write about, your taste, your background."></textarea>
   </div>
 
+  <div class="field">
+    <label class="fl" data-i18n="pe.notif_h">Notifications</label>
+    <div style="display:flex;flex-direction:column;gap:10px;margin-top:8px">
+      <label style="display:flex;align-items:center;gap:8px;font-family:'Barlow',sans-serif;font-size:14px;color:#3A3A3A;cursor:pointer">
+        <input type="checkbox" id="notif-comments-inapp" style="width:15px;height:15px;cursor:pointer">
+        <span data-i18n="pe.notif_comments_inapp">Notify me in-app when someone comments</span>
+      </label>
+      <label style="display:flex;align-items:center;gap:8px;font-family:'Barlow',sans-serif;font-size:14px;color:#3A3A3A;cursor:pointer">
+        <input type="checkbox" id="notif-comments-email" style="width:15px;height:15px;cursor:pointer">
+        <span data-i18n="pe.notif_comments_email">Email me when someone comments</span>
+      </label>
+      <label style="display:flex;align-items:center;gap:8px;font-family:'Barlow',sans-serif;font-size:14px;color:#3A3A3A;cursor:pointer">
+        <input type="checkbox" id="notif-likes-inapp" style="width:15px;height:15px;cursor:pointer">
+        <span data-i18n="pe.notif_likes_inapp">Notify me in-app when someone likes my column</span>
+      </label>
+      <label style="display:flex;align-items:center;gap:8px;font-family:'Barlow',sans-serif;font-size:14px;color:#3A3A3A;cursor:pointer">
+        <input type="checkbox" id="notif-likes-email" style="width:15px;height:15px;cursor:pointer">
+        <span data-i18n="pe.notif_likes_email">Email me when someone likes my column</span>
+      </label>
+    </div>
+  </div>
+
   <button class="btn-save" id="save-btn" data-i18n="pe.save" onclick="saveProfile()">Save Profile</button>
   <div class="status-msg" id="status-msg"></div>
 </div>
@@ -92,7 +114,7 @@ async function init(){
   const { data:{ session } } = await sb.auth.getSession();
   if(!session){ location.href='portal.html'; return; }
 
-  const { data:p } = await sb.from('profiles').select('avatar,bio,name,location').eq('id', session.user.id).single();
+  const { data:p } = await sb.from('profiles').select('avatar,bio,name,location,notify_comments_inapp,notify_comments_email,notify_likes_inapp,notify_likes_email').eq('id', session.user.id).single();
   const name = p?.name || session.user.user_metadata?.full_name || session.user.email || '';
   const initial = name.charAt(0).toUpperCase();
 
@@ -105,6 +127,10 @@ async function init(){
   }
   document.getElementById('bio-input').value = p?.bio || '';
   document.getElementById('location-input').value = p?.location || '';
+  document.getElementById('notif-comments-inapp').checked = p?.notify_comments_inapp !== false;
+  document.getElementById('notif-comments-email').checked = p?.notify_comments_email !== false;
+  document.getElementById('notif-likes-inapp').checked = p?.notify_likes_inapp !== false;
+  document.getElementById('notif-likes-email').checked = p?.notify_likes_email === true;
 }
 
 async function handleAvatarUpload(file){
@@ -136,7 +162,14 @@ async function saveProfile(){
 
   const bio = document.getElementById('bio-input').value.trim();
   const location = document.getElementById('location-input').value.trim();
-  const { error } = await sb.from('profiles').update({ avatar: currentAvatarUrl, bio, location }).eq('id', session.user.id);
+  const notify_comments_inapp = document.getElementById('notif-comments-inapp').checked;
+  const notify_comments_email = document.getElementById('notif-comments-email').checked;
+  const notify_likes_inapp = document.getElementById('notif-likes-inapp').checked;
+  const notify_likes_email = document.getElementById('notif-likes-email').checked;
+  const { error } = await sb.from('profiles').update({
+    avatar: currentAvatarUrl, bio, location,
+    notify_comments_inapp, notify_comments_email, notify_likes_inapp, notify_likes_email
+  }).eq('id', session.user.id);
 
   btn.disabled = false;
   btn.textContent = t('pe.save');
