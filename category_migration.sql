@@ -163,3 +163,31 @@ drop policy if exists "Users can update own notifications" on public.notificatio
 create policy "Users can update own notifications"
   on public.notifications for update
   using (auth.uid() = user_id);
+
+-- Same missing-relationship fix as contributions: comments.user_id only
+-- linked to auth.users, not to public.profiles, so joining comments to
+-- profiles (to show the commenter's name/avatar) had no relationship to
+-- follow and could fail silently.
+DO $$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_constraint WHERE conname = 'comments_user_id_profiles_fkey'
+  ) THEN
+    ALTER TABLE public.comments
+      ADD CONSTRAINT comments_user_id_profiles_fkey
+      FOREIGN KEY (user_id) REFERENCES public.profiles(id) ON DELETE CASCADE;
+  END IF;
+END $$;
+
+-- Same fix again: notifications.actor_id needs a direct link to profiles
+-- so the dashboard can show who liked/commented (name, avatar).
+DO $$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_constraint WHERE conname = 'notifications_actor_id_profiles_fkey'
+  ) THEN
+    ALTER TABLE public.notifications
+      ADD CONSTRAINT notifications_actor_id_profiles_fkey
+      FOREIGN KEY (actor_id) REFERENCES public.profiles(id) ON DELETE SET NULL;
+  END IF;
+END $$;
