@@ -101,14 +101,14 @@ body{background:var(--white);color:var(--ink);font-family:var(--S);-webkit-font-
 <body>
 
 <div class="topbar">
-  <div class="tb-logo" onclick="location.href='index.html'">Reedefined</div>
+  <div class="tb-logo" onclick="goHome()">Reedefined</div>
   <div style="display:flex;align-items:center;gap:16px">
     <div style="display:flex;gap:6px;align-items:center">
       <button class="lang-btn" data-lang="en" onclick="setLang('en')" style="background:none;border:none;font-family:inherit;font-size:12px;font-weight:600;cursor:pointer;padding:0;color:#3A3A3A">EN</button>
       <span style="opacity:.3">/</span>
       <button class="lang-btn" data-lang="de" onclick="setLang('de')" style="background:none;border:none;font-family:inherit;font-size:12px;font-weight:600;cursor:pointer;padding:0;color:#3A3A3A">DE</button>
     </div>
-    <span class="tb-back" onclick="location.href='index.html'">← Back to home</span>
+    <span class="tb-back" onclick="goHome()">← Back to home</span>
   </div>
 </div>
 

@@ -24,3 +24,15 @@ window.REEDEFINED_AUTH_STORAGE = {
     sessionStorage.removeItem(key);
   }
 };
+
+// Logo click: if signed in, go to the reading home (Newsstand); if signed
+// out, go to the public marketing home (index.html). Relies on whatever
+// Supabase client ("sb") the current page has already created.
+async function goHome(){
+  try{
+    const { data:{ session } } = await sb.auth.getSession();
+    location.href = session ? 'newsstand.html' : 'index.html';
+  }catch(e){
+    location.href = 'index.html';
+  }
+}
