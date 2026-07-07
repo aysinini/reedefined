@@ -78,3 +78,33 @@ alter table public.profiles add column if not exists location text;
 
 -- Video embeds (YouTube/Vimeo links) attached to a column, alongside photos/products.
 alter table public.contributions add column if not exists videos text;
+
+-- Auto-follow: every user (new and existing) automatically follows the
+-- founder by default. They can unfollow anytime from Discover or their
+-- Dashboard, exactly like any other follow.
+-- Aysegul's real user ID (from auth.users), confirmed via the Supabase dashboard.
+DO $$
+DECLARE
+  founder_id uuid := 'dfa18b13-a201-4012-8449-7356b3ef2c69';
+BEGIN
+  -- Backfill existing users
+  INSERT INTO public.follows (user_id, contributor_id)
+  SELECT id, founder_id::text FROM auth.users
+  WHERE id != founder_id
+  ON CONFLICT (user_id, contributor_id) DO NOTHING;
+END $$;
+
+-- Make sure every future signup also auto-follows the founder.
+create or replace function public.handle_new_user()
+returns trigger as $$
+begin
+  insert into public.profiles (id, name, role)
+  values (new.id, new.raw_user_meta_data->>'full_name', coalesce(new.raw_user_meta_data->>'role','reader'));
+
+  insert into public.follows (user_id, contributor_id)
+  values (new.id, 'dfa18b13-a201-4012-8449-7356b3ef2c69')
+  on conflict (user_id, contributor_id) do nothing;
+
+  return new;
+end;
+$$ language plpgsql security definer;
