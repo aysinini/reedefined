@@ -237,8 +237,9 @@ async function loadComments(contributionId){
   list.innerHTML = comments.map(c => {
     const name = c.profiles?.name || 'Reader';
     const initial = name.charAt(0).toUpperCase();
-    const avatarHtml = c.profiles?.avatar
-      ? `<img class="comment-avatar" src="${c.profiles.avatar}" alt="${esc(name)}">`
+    const hasAvatar = c.profiles?.avatar && c.profiles.avatar.trim().length > 0;
+    const avatarHtml = hasAvatar
+      ? `<img class="comment-avatar" src="${c.profiles.avatar}" alt="${esc(name)}" onerror="this.outerHTML='<div class=\\'comment-avatar\\'>${initial}</div>'">`
       : `<div class="comment-avatar">${initial}</div>`;
     const date = c.created_at ? new Date(c.created_at).toLocaleDateString('en-US',{month:'short',day:'numeric'}) : '';
     return `
