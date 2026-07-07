@@ -152,6 +152,8 @@ async function loadArticle(){
     </div>
   `;
 
+  applyLang(getLang());
+
   loadLikes(a.id, session);
   loadComments(a.id);
   renderCommentForm(a.id, session);
