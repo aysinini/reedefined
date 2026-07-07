@@ -108,3 +108,19 @@ begin
   return new;
 end;
 $$ language plpgsql security definer;
+
+-- CRITICAL FIX: contributions.user_id only had a foreign key to auth.users,
+-- not to public.profiles. That meant every query joining contributions to
+-- profiles (to show the author's name/avatar/bio) had no relationship to
+-- follow, and silently failed or returned incomplete data. This adds the
+-- missing link so those joins actually work.
+DO $$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_constraint WHERE conname = 'contributions_user_id_profiles_fkey'
+  ) THEN
+    ALTER TABLE public.contributions
+      ADD CONSTRAINT contributions_user_id_profiles_fkey
+      FOREIGN KEY (user_id) REFERENCES public.profiles(id) ON DELETE SET NULL;
+  END IF;
+END $$;

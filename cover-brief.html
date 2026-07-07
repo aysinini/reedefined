@@ -156,8 +156,8 @@ a:hover{text-decoration:underline;text-underline-offset:3px}
 <div class="body">
 
   <!-- Theme -->
-  <div class="theme-word" data-i18n="brief.theme">Drift.</div>
-  <p class="theme-dek" data-i18n="brief.theme_dek">The feeling of a month that moved without you noticing. Long evenings, slow mornings, the sense of being between things. We want something warm, human, slightly unhurried. A figure, a room, a city, something that suggests a life being lived.</p>
+  <div class="theme-word" data-i18n="brief.theme">Haze.</div>
+  <p class="theme-dek" data-i18n="brief.theme_dek">The feeling of a summer afternoon too warm to think clearly in. Slow hours, bright light, the sense of time moving differently. We want something warm, human, slightly unhurried. A figure, a room, a city, something that suggests a life being lived.</p>
 
   <!-- Specs -->
   <div class="specs">
@@ -231,7 +231,7 @@ a:hover{text-decoration:underline;text-underline-offset:3px}
       </div>
 
       <div class="field">
-        <label class="fl" data-i18n="brief.f_drift">What does "Drift" mean to you personally?</label>
+        <label class="fl" data-i18n="brief.f_drift">What does "Haze" mean to you personally?</label>
         <textarea class="fta" id="f-drift" placeholder="Not the dictionary definition, a memory, a feeling, something specific. Two or three sentences." data-i18n-placeholder="brief.drift_ph" required></textarea>
         <div style="font-family:var(--C);font-size:13px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-top:6px"><span data-i18n="brief.most_important">This is the most important field.</span></div>
       </div>
@@ -303,7 +303,7 @@ async function submitForm(){
 
   if(!name||!email){alert('Please enter your name and email.');return;}
   if(!file1){alert('Please upload your illustration.');return;}
-  if(!drift){alert('Please answer what "Drift" means to you.');document.getElementById('f-drift').focus();return;}
+  if(!drift){alert('Please answer what "Haze" means to you.');document.getElementById('f-drift').focus();return;}
   if(!file2){if(!confirm('No sketch uploaded. We strongly recommend including one. Submit anyway?'))return;}
 
   const btn=document.getElementById('submit-btn');
