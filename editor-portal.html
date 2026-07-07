@@ -1369,7 +1369,7 @@ async function doSubmit(){
     alert('Column submitted. Your readers will see it in their issue.');
   } catch(e) {
     console.error(e);
-    alert('Submission failed. Please try again.');
+    alert('Submission failed: ' + (e.message || 'unknown error') + '\n\nPlease send this exact message so it can be fixed.');
   }
 }
 
