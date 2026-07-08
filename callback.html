@@ -590,7 +590,7 @@ if('serviceWorker' in navigator){
           </svg>
         </div>
         <h1 class="title" style="color:var(--green)">TikTok<br><em>connected.</em></h1>
-        <p class="subtitle">Your TikTok content will be pulled automatically into your next Reedefined issue.</p>
+        <p class="subtitle">Your TikTok profile is now linked. We won't pull any content from your account unless you choose to add it to one of your columns yourself.</p>
         <div class="user-card" id="user-card">
           <div class="user-avatar">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -603,6 +603,7 @@ if('serviceWorker' in navigator){
           </div>
         </div>
         <button class="btn visible" onclick="goToPortal()">Go to Contributor Portal →</button>
+        <button class="btn visible" onclick="disconnectNow()" style="background:none;border:1px solid #D8D8D8;color:#7A3A3A;margin-top:10px">Disconnect TikTok</button>
       </div>
 
       <!-- ── ERROR STATE ── -->
@@ -773,21 +774,43 @@ if('serviceWorker' in navigator){
     if (msg) document.getElementById('error-msg').textContent = msg;
   }
 
+  let lastConnectionId = null;
+
   async function saveToSupabase(data) {
     try {
-      await fetch(`${SUPABASE_URL}/rest/v1/platform_connections`, {
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/platform_connections`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'apikey': SUPABASE_KEY,
           'Authorization': `Bearer ${SUPABASE_KEY}`,
-          'Prefer': 'return=minimal'
+          'Prefer': 'return=representation'
         },
         body: JSON.stringify(data)
       });
+      const rows = await res.json();
+      if(Array.isArray(rows) && rows[0] && rows[0].id) lastConnectionId = rows[0].id;
     } catch(e) {
       console.log('Supabase save error:', e);
     }
+  }
+
+  async function disconnectNow() {
+    if(!confirm('Disconnect TikTok? Nothing will be pulled from your account.')) return;
+    try {
+      if(lastConnectionId) {
+        await fetch(`${SUPABASE_URL}/rest/v1/platform_connections?id=eq.${lastConnectionId}`, {
+          method: 'DELETE',
+          headers: {
+            'apikey': SUPABASE_KEY,
+            'Authorization': `Bearer ${SUPABASE_KEY}`
+          }
+        });
+      }
+    } catch(e) {
+      console.log('Disconnect error:', e);
+    }
+    window.location.href = 'connections.html';
   }
 
   function goToPortal() {
