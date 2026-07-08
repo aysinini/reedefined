@@ -272,6 +272,22 @@ footer.site-ft{background:var(--ink);padding:60px 32px 34px}.ft-w{max-width:1400
     loadContributorsGrid();
   }
 
+  async function toggleFollowNewsstand(contributorId, btn){
+    const { data:{ session } } = await sb.auth.getSession();
+    if(!session){ location.href='portal.html'; return; }
+
+    const isOn = btn.classList.contains('on');
+    if(isOn){
+      btn.classList.remove('on'); btn.textContent = t('disc.follow');
+      const { error } = await sb.from('follows').delete().eq('user_id', session.user.id).eq('contributor_id', contributorId);
+      if(error){ console.error('Unfollow failed:', error); btn.classList.add('on'); btn.textContent = t('disc.following'); alert('Could not unfollow: ' + error.message); }
+    } else {
+      btn.classList.add('on'); btn.textContent = t('disc.following');
+      const { error } = await sb.from('follows').insert({ user_id: session.user.id, contributor_id: contributorId });
+      if(error){ console.error('Follow failed:', error); btn.classList.remove('on'); btn.textContent = t('disc.follow'); alert('Could not follow: ' + error.message); }
+    }
+  }
+
   async function loadContributorsGrid(){
     const { data:subs } = await sb.from('contributions')
       .select('user_id,category,profiles:user_id(name,avatar,bio)')
@@ -281,6 +297,13 @@ footer.site-ft{background:var(--ink);padding:60px 32px 34px}.ft-w{max-width:1400
     if(!subs || subs.length===0){
       grid.innerHTML = `<div style="grid-column:1/-1;padding:40px 24px;text-align:center;font-family:var(--H);font-size:15px;color:var(--muted)">${t('ns.empty_contributors')}</div>`;
       return;
+    }
+
+    const { data:{ session:followSession } } = await sb.auth.getSession();
+    let myFollows = new Set();
+    if(followSession){
+      const { data:followRows } = await sb.from('follows').select('contributor_id').eq('user_id', followSession.user.id);
+      myFollows = new Set((followRows||[]).map(f => f.contributor_id));
     }
 
     const esc = s => (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
@@ -295,10 +318,11 @@ footer.site-ft{background:var(--ink);padding:60px 32px 34px}.ft-w{max-width:1400
       const avatarHtml = u.avatar
         ? `<img src="${u.avatar}" style="width:46px;height:46px;border-radius:50%;object-fit:cover;border:2px solid #D4DBCA" onerror="this.outerHTML='<div style=&quot;width:46px;height:46px;border-radius:50%;background:var(--teal-l);display:flex;align-items:center;justify-content:center;font-family:var(--H);font-size:16px;color:var(--teal)&quot;>${initial}</div>'">`
         : `<div style="width:46px;height:46px;border-radius:50%;background:var(--teal-l);display:flex;align-items:center;justify-content:center;font-family:var(--H);font-size:16px;color:var(--teal)">${initial}</div>`;
+      const isFollowing = myFollows.has(uid);
       return `
         <div class="c-c" onclick="location.href='profile.html?id=${uid}'">
           ${avatarHtml}
-          <button class="fol c-f" onclick="event.stopPropagation();this.classList.toggle('on')">Follow</button>
+          <button class="fol c-f${isFollowing ? ' on' : ''}" onclick="event.stopPropagation();toggleFollowNewsstand('${uid}',this)">${isFollowing ? t('disc.following') : t('disc.follow')}</button>
           <div class="c-n">${esc(u.name)}</div>
           ${u.bio ? `<div class="c-bio">"${esc(u.bio)}"</div>` : ''}
           <div class="c-m">${u.count} article${u.count>1?'s':''}</div>
