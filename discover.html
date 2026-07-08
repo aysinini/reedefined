@@ -111,8 +111,8 @@ a{color:inherit;text-decoration:none}
 .cc{background:var(--white);padding:22px 20px;position:relative;transition:background .15s;cursor:default}
 .cc:hover{background:var(--teal-ll)}
 .cc-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:12px}
-.cc-av{width:46px;height:46px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--H);font-size:16px;font-weight:700;color:#fff;flex-shrink:0}
-.cc-follow{font-family:var(--C);font-size:13px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--teal);border:1px solid rgba(74,102,112,.35);padding:5px 12px;cursor:pointer;transition:all .15s;background:none;white-space:nowrap}
+.cc-av{width:46px;height:46px;border-radius:50%;object-fit:cover;display:flex;align-items:center;justify-content:center;font-family:var(--H);font-size:16px;font-weight:700;color:#fff;flex-shrink:0}
+.cc-follow{font-family:var(--C);font-size:13px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--teal);border:1px solid rgba(74,102,112,.35);border-radius:20px;padding:5px 12px;cursor:pointer;transition:all .15s;background:none;white-space:nowrap}
 .cc-follow:hover,.cc-follow.on{background:var(--teal);color:#fff;border-color:var(--teal)}.cc-follow.on::after{content:' ✓'}
 .cc-name{font-family:var(--H);font-size:17px;font-weight:700;color:var(--ink);margin-bottom:3px}
 .cc-beats{font-family:var(--C);font-size:13px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--teal);margin-bottom:8px}
@@ -416,7 +416,7 @@ function renderContribs(){
   grid.innerHTML = filtered.map(c => `
     <div class="cc fade" data-tags="${c.tags.join(',')}" onclick="location.href='profile.html?id=${c.id}'" style="cursor:pointer">
       <div class="cc-top">
-        <div class="cc-av" style="background:${c.color}">${c.init}</div>
+        ${c.photo ? `<img class="cc-av" src="${c.photo}" alt="${c.name}" onerror="this.outerHTML='<div class=&quot;cc-av&quot; style=&quot;background:${c.color}&quot;>${c.init}</div>'">` : `<div class="cc-av" style="background:${c.color}">${c.init}</div>`}
         <button class="cc-follow${followed.has(c.id)?' on':''}" onclick="event.stopPropagation();toggleFollowById('${c.id}',this)">${followed.has(c.id)?t('disc.following'):t('disc.follow')}</button>
       </div>
       <div class="cc-name">${c.name}</div>
@@ -661,7 +661,7 @@ async function loadRealContributors(){
   try {
     const { data: subs, error } = await sb
       .from('contributions')
-      .select('user_id, title, category, tagline, profiles:user_id(name)')
+      .select('user_id, title, category, tagline, profiles:user_id(name,avatar)')
       .eq('status', 'submitted');
 
     if(error || !subs) return;
@@ -670,7 +670,7 @@ async function loadRealContributors(){
     const byUser = {};
     subs.forEach(s => {
       const uid = s.user_id;
-      if(!byUser[uid]) byUser[uid] = { articles: [], cats: new Set(), name: s.profiles?.name || 'Contributor' };
+      if(!byUser[uid]) byUser[uid] = { articles: [], cats: new Set(), name: s.profiles?.name || 'Contributor', avatar: s.profiles?.avatar || '' };
       if(s.category) byUser[uid].cats.add(s.category.toLowerCase());
       byUser[uid].articles.push(`${s.category ? s.category[0].toUpperCase()+s.category.slice(1) : 'Column'} — ${s.title}`);
     });
@@ -692,7 +692,7 @@ async function loadRealContributors(){
         followers: '—',
         articles: u.articles,
         tags: [...u.cats],
-        photo: ''
+        photo: u.avatar
       });
     });
 
