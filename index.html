@@ -43,8 +43,11 @@ body{background:var(--white);color:var(--ink);font-family:var(--S);-webkit-font-
 .hero-inner{max-width:1200px;margin:0 auto;padding:0 48px}
 .hero-eyebrow{font-family:var(--H);font-size:13px;font-weight:700;letter-spacing:0;text-transform:none;color:var(--teal);margin-bottom:28px;display:flex;align-items:center;gap:14px}
 .hero-eyebrow::before{content:'';width:28px;height:1px;background:var(--teal)}
-.hero-h1{font-family:var(--P);font-size:clamp(52px,7vw,96px);font-weight:400;line-height:.95;color:var(--ink);letter-spacing:.06em;margin-bottom:0;max-width:900px}
+.hero-h1{font-family:var(--P);font-size:clamp(52px,7vw,96px);font-weight:400;line-height:.95;color:var(--ink);letter-spacing:.06em;margin-bottom:0}
 .hero-h1 span{color:var(--mid)}
+.hero-grid{display:grid;grid-template-columns:1.2fr 1fr;gap:64px;align-items:start}
+.hero-photo{width:100%;aspect-ratio:3/4;overflow:hidden;background:var(--bg2)}
+.hero-photo img{width:100%;height:100%;object-fit:cover;display:block}
 .hero-bottom{margin-top:56px;display:grid;grid-template-columns:1fr 1fr;gap:0;border-top:1px solid var(--rule);padding-top:32px}
 .hero-sub{font-family:var(--H);font-size:18px;color:var(--ink);line-height:1.75;max-width:480px;padding-right:64px;border-right:1px solid var(--rule)}
 .hero-cta-side{padding-left:64px;display:flex;flex-direction:column;justify-content:center;gap:16px}
@@ -116,6 +119,8 @@ body{background:var(--white);color:var(--ink);font-family:var(--S);-webkit-font-
 
 @media(max-width:1024px){
   .hero-h1{font-size:clamp(40px,8vw,72px)}
+  .hero-grid{grid-template-columns:1fr;gap:32px}
+  .hero-photo{aspect-ratio:16/9;max-height:420px}
   .hero-bottom{grid-template-columns:1fr}
   .hero-sub{border-right:none;padding-right:0;border-bottom:1px solid var(--rule);padding-bottom:32px}
   .hero-cta-side{padding-left:0;padding-top:32px}
@@ -162,16 +167,23 @@ body{background:var(--white);color:var(--ink);font-family:var(--S);-webkit-font-
 <!-- HERO -->
 <section class="hero">
   <div class="hero-inner">
-    <div class="hero-eyebrow" data-i18n="idx.hero_eyebrow">Issue No. 1 · July 2026</div>
-    <h1 class="hero-h1"><span data-i18n="idx.hero_h1_1">The magazine</span><br><span data-i18n="idx.hero_h1_2">shaped by the</span><br><span style="color:var(--teal)" data-i18n="idx.hero_h1_3">people you follow.</span></h1>
-    <div class="hero-bottom">
-      <p class="hero-sub" data-i18n="idx.hero_sub">Every month, a personalised issue assembled from the writers, critics and creators you choose to follow. No algorithm. No feed. Just the people whose taste you trust, in one place, once a month.</p>
-      <div class="hero-cta-side">
-        <div class="hero-cta-label" data-i18n="idx.cta_label">Join the first issue</div>
-        <div class="hero-cta-btns">
-          <button class="btn-hero-p" onclick="location.href='portal.html'" data-i18n="idx.start_reading">Start Reading →</button>
-          <button class="btn-hero-s" onclick="location.href='portal.html'" data-i18n="idx.become_contributor">Become a Contributor</button>
+    <div class="hero-grid">
+      <div class="hero-text">
+        <div class="hero-eyebrow" data-i18n="idx.hero_eyebrow">Issue No. 1 · July 2026</div>
+        <h1 class="hero-h1"><span data-i18n="idx.hero_h1_1">The magazine</span><br><span data-i18n="idx.hero_h1_2">shaped by the</span><br><span style="color:var(--teal)" data-i18n="idx.hero_h1_3">people you follow.</span></h1>
+        <div class="hero-bottom">
+          <p class="hero-sub" data-i18n="idx.hero_sub">Every month, a personalised issue assembled from the writers, critics and creators you choose to follow. No algorithm. No feed. Just the people whose taste you trust, in one place, once a month.</p>
+          <div class="hero-cta-side">
+            <div class="hero-cta-label" data-i18n="idx.cta_label">Join the first issue</div>
+            <div class="hero-cta-btns">
+              <button class="btn-hero-p" onclick="location.href='portal.html'" data-i18n="idx.start_reading">Start Reading →</button>
+              <button class="btn-hero-s" onclick="location.href='portal.html'" data-i18n="idx.become_contributor">Become a Contributor</button>
+            </div>
+          </div>
         </div>
+      </div>
+      <div class="hero-photo">
+        <img src="images/hero-aysegul.jpg" alt="Ayşegül Sınmaz, founding editor of Reedefined">
       </div>
     </div>
   </div>
