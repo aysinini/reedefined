@@ -39,6 +39,23 @@ textarea.fi{resize:vertical;min-height:100px;line-height:1.5}
 .status-msg{font-family:var(--H);font-size:14px;margin-top:14px;text-align:center}
 .status-msg.ok{color:var(--teal)}
 .status-msg.err{color:var(--red)}
+
+.danger-zone{margin-top:48px;padding:24px;border:1px solid rgba(200,37,26,.3);border-radius:8px}
+.dz-title{font-family:var(--C);font-size:13px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--red);margin-bottom:8px}
+.dz-desc{font-family:var(--S);font-size:14px;color:var(--muted);line-height:1.6;margin-bottom:18px}
+.btn-delete{font-family:var(--C);font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;background:none;color:var(--red);border:1px solid var(--red);border-radius:24px;padding:11px 22px;cursor:pointer;transition:all .15s}
+.btn-delete:hover{background:var(--red);color:#fff}
+
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(12,12,12,.55);align-items:center;justify-content:center;z-index:1000;padding:20px}
+.modal-overlay.show{display:flex}
+.modal-box{background:var(--white);max-width:420px;width:100%;padding:32px;border-radius:8px}
+.modal-title{font-family:var(--H);font-size:20px;font-weight:700;color:var(--ink);margin-bottom:12px}
+.modal-text{font-family:var(--S);font-size:14px;color:var(--mid);line-height:1.6;margin-bottom:20px}
+.modal-input{width:100%;padding:12px 14px;border:1px solid var(--rule);border-radius:6px;font-family:var(--S);font-size:15px;margin-bottom:20px}
+.modal-actions{display:flex;gap:12px}
+.btn-cancel{flex:1;font-family:var(--C);font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;background:none;color:var(--mid);border:1px solid var(--rule);border-radius:24px;padding:12px;cursor:pointer}
+.btn-confirm-delete{flex:1;font-family:var(--C);font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;background:var(--red);color:#fff;border:none;border-radius:24px;padding:12px;cursor:pointer}
+.btn-confirm-delete:disabled{opacity:.4;cursor:default}
 </style>
 </head>
 <body>
@@ -102,6 +119,24 @@ textarea.fi{resize:vertical;min-height:100px;line-height:1.5}
 
   <button class="btn-save" id="save-btn" data-i18n="pe.save" onclick="saveProfile()">Save Profile</button>
   <div class="status-msg" id="status-msg"></div>
+
+  <div class="danger-zone">
+    <div class="dz-title">Danger Zone</div>
+    <div class="dz-desc">Deleting your account permanently removes your profile, columns, comments, likes, follows, and connected platforms. This cannot be undone.</div>
+    <button class="btn-delete" onclick="openDeleteModal()">Delete My Account</button>
+  </div>
+</div>
+
+<div class="modal-overlay" id="delete-modal">
+  <div class="modal-box">
+    <div class="modal-title">Delete your account?</div>
+    <div class="modal-text">This permanently deletes your profile, columns, comments, likes, follows, and connected platforms. Type <strong>DELETE</strong> below to confirm — this cannot be undone.</div>
+    <input class="modal-input" id="delete-confirm-input" placeholder="Type DELETE to confirm" oninput="document.getElementById('delete-confirm-btn').disabled = this.value.trim().toUpperCase() !== 'DELETE'">
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeDeleteModal()">Cancel</button>
+      <button class="btn-confirm-delete" id="delete-confirm-btn" disabled onclick="confirmDeleteAccount()">Delete Account</button>
+    </div>
+  </div>
 </div>
 
 <script>
@@ -179,6 +214,48 @@ function showStatus(msg, type){
   const el = document.getElementById('status-msg');
   el.textContent = msg;
   el.className = 'status-msg ' + type;
+}
+
+function openDeleteModal(){
+  document.getElementById('delete-modal').classList.add('show');
+}
+
+function closeDeleteModal(){
+  document.getElementById('delete-modal').classList.remove('show');
+  document.getElementById('delete-confirm-input').value = '';
+  document.getElementById('delete-confirm-btn').disabled = true;
+}
+
+async function confirmDeleteAccount(){
+  const btn = document.getElementById('delete-confirm-btn');
+  btn.disabled = true;
+  btn.textContent = 'Deleting…';
+
+  const { data:{ session } } = await sb.auth.getSession();
+  if(!session){ location.href='portal.html'; return; }
+
+  try {
+    const res = await fetch('https://gseuejqqwkdjkhxfxxwy.supabase.co/functions/v1/delete-account', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${session.access_token}`,
+        'apikey': 'sb_publishable_0Nmw1mwGx__b_jJHLHBDKg__1OAsRuy'
+      }
+    });
+    const result = await res.json();
+    if(!res.ok || result.error){
+      alert('Could not delete account: ' + (result.error || 'Unknown error'));
+      btn.disabled = false;
+      btn.textContent = 'Delete Account';
+      return;
+    }
+    await sb.auth.signOut();
+    location.href = 'index.html';
+  } catch(e){
+    alert('Could not delete account: ' + e.message);
+    btn.disabled = false;
+    btn.textContent = 'Delete Account';
+  }
 }
 
 init();
