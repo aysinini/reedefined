@@ -633,6 +633,8 @@ if('serviceWorker' in navigator){
   const SUPABASE_URL = 'https://gseuejqqwkdjkhxfxxwy.supabase.co';
   const SUPABASE_KEY = 'sb_publishable_0Nmw1mwGx__b_jJHLHBDKg__1OAsRuy';
   const TIKTOK_CLIENT_KEY = 'awh23d4pdwzy16in';
+  const TIKTOK_CLIENT_SECRET = '0ZIPtXxipa3UTAWNmqQQrVXThv1XPslw';
+  const TIKTOK_REDIRECT = 'https://reedefined.app/callback.html';
   const SPOTIFY_CLIENT_ID = 'd33757ab353347b4b0d78b8834ff18e2';
   const SPOTIFY_CLIENT_SECRET = '3244e386972c459492a64fdeaf46712b';
   const SPOTIFY_REDIRECT = 'https://reedefinedmag.com/callback.html';
@@ -641,6 +643,46 @@ if('serviceWorker' in navigator){
   const code  = params.get('code');
   const state = params.get('state');
   const error = params.get('error');
+
+  // ── Handle TikTok callback ──
+  async function handleTikTok() {
+    const savedState = localStorage.getItem('tiktok_state');
+    if(state !== savedState) return false;
+
+    document.title = 'Reedefined — Connecting TikTok';
+
+    if(error) {
+      window.location.href = 'connections.html?tiktok_error=1';
+      return true;
+    }
+    if(!code) return false;
+
+    try {
+      const tokenRes = await fetch('https://open.tiktokapis.com/v2/oauth/token/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams({
+          client_key: TIKTOK_CLIENT_KEY,
+          client_secret: TIKTOK_CLIENT_SECRET,
+          code: code,
+          grant_type: 'authorization_code',
+          redirect_uri: TIKTOK_REDIRECT
+        })
+      });
+
+      if(!tokenRes.ok) throw new Error('TikTok token exchange failed');
+      const tokenData = await tokenRes.json();
+
+      localStorage.removeItem('tiktok_state');
+
+      window.location.href = 'connections.html?tiktok_token=' + encodeURIComponent(tokenData.access_token) +
+        '&tiktok_open_id=' + encodeURIComponent(tokenData.open_id || '');
+      return true;
+    } catch(e) {
+      window.location.href = 'connections.html?tiktok_error=1';
+      return true;
+    }
+  }
 
   // ── Handle Spotify callback ──
   async function handleSpotify() {
@@ -679,8 +721,10 @@ if('serviceWorker' in navigator){
     }
   }
 
-  // Check if this is a Spotify callback (has code + state, no error for TikTok)
-  if(state && code && localStorage.getItem('spotify_state') === state) {
+  // Route this callback to the right handler based on which state was saved
+  if(state && localStorage.getItem('tiktok_state') === state) {
+    handleTikTok();
+  } else if(state && code && localStorage.getItem('spotify_state') === state) {
     handleSpotify();
   } else {
 
