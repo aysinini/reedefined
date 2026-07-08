@@ -902,7 +902,7 @@ window.addEventListener('load', () => {
   }
 });
 
-function disconnect(platform) {
+async function disconnect(platform) {
   if(!confirm('Disconnect this platform?')) return;
   delete connected[platform];
 
