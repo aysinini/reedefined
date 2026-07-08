@@ -512,11 +512,11 @@ async function loadContributions() {
     // If logged in and following people, filter to followed contributors
     if(session) {
       const { data: follows } = await sb.from('follows')
-        .select('following_id')
-        .eq('follower_id', session.user.id);
+        .select('contributor_id')
+        .eq('user_id', session.user.id);
 
       if(follows && follows.length > 0) {
-        const followIds = follows.map(f => f.following_id);
+        const followIds = follows.map(f => f.contributor_id);
         // Include editor's own posts + followed contributors
         query = sb.from('contributions')
           .select('*, profiles:user_id(name, role)')
@@ -652,7 +652,7 @@ function buildPage(id){
   if(id.startsWith('ad-')) return monoAd();
   if(id.startsWith('contents-')) return monoContents();
   if(id.startsWith('img-')){ const i=parseInt(id.split('-')[1]); return monoImg(i); }
-  if(id.startsWith('article-')){ const i=parseInt(id.split('-')[1]); return monoArticle(i); }
+  if(id.startsWith('article-')){ const i=parseInt(id.split('-').pop()); return monoArticle(i); }
   return '<div style="width:100%;height:100%;background:#fff"></div>';
 }
 
@@ -854,9 +854,35 @@ function monoContents(){
   </div>`;
 }
 
+function escMR(s){ return (s||'').toString().replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
 function monoArticle(i){
-  const a = ARTICLES[i%ARTICLES.length];
   const side = i%2===0?'l':'r';
+
+  // Prefer real, submitted contributions; fall back to demo content only
+  // if nothing real has been loaded yet.
+  if(typeof CONTRIBUTIONS !== 'undefined' && CONTRIBUTIONS && CONTRIBUTIONS.length > 0){
+    const c = CONTRIBUTIONS[i % CONTRIBUTIONS.length];
+    const authorName = c.profiles?.name || 'Contributor';
+    const dateLabel = c.updated_at ? new Date(c.updated_at).toLocaleDateString('en-US',{month:'long',year:'numeric'}) : '';
+    const bodyParagraphs = (c.body || '').split(/\n\s*\n/).map(p => `<p>${escMR(p)}</p>`).join('');
+    return `<div class="mono-article">
+    <div class="ma2-top"></div>
+    <div class="ma2-head">
+      <div class="ma2-eyebrow">${escMR(c.category || 'Column')}</div>
+      <div class="ma2-title">${escMR(c.title || 'Untitled')}</div>
+      <div class="ma2-dek">${escMR(c.tagline || '')}</div>
+      <div class="ma2-byline">${escMR(authorName)}${dateLabel ? ' · ' + escMR(dateLabel) : ''}</div>
+    </div>
+    <div class="ma2-body">
+      <div class="ma2-rule"></div>
+      <div class="ma2-text">${bodyParagraphs}</div>
+      <div class="ma2-pgn ${side}">${(i+1)*2+3}</div>
+    </div>
+  </div>`;
+  }
+
+  const a = ARTICLES[i%ARTICLES.length];
   return `<div class="mono-article">
     <div class="ma2-top"></div>
     <div class="ma2-head">
