@@ -466,6 +466,9 @@ if('serviceWorker' in navigator){
 }
 </style>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="session-storage.js"></script>
+<script src="/i18n.js"></script>
 <script>
 // ════════════════════════════════════════════
 // DATA
@@ -1167,8 +1170,5 @@ if(isIOS && !isInStandalone && !localStorage.getItem('pwa-dismissed')){
   }, 3000);
 }
 </script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-<script src="session-storage.js"></script>
-<script src="/i18n.js"></script>
 </body>
 </html>
