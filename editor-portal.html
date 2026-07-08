@@ -1092,6 +1092,14 @@ let draftTimer;
   document.getElementById('col-body').addEventListener(evt, updateBodyPlusPosition);
 });
 
+// Strip formatting on paste so pasted text always matches the editor's
+// own style, instead of carrying colors/fonts from wherever it was copied.
+document.getElementById('col-body').addEventListener('paste', (e) => {
+  e.preventDefault();
+  const text = (e.clipboardData || window.clipboardData).getData('text/plain');
+  document.execCommand('insertText', false, text);
+});
+
 async function saveDraft(){
   const status = document.getElementById('draft-status');
   status.textContent = 'Saving…';
