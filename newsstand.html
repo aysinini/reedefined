@@ -272,7 +272,7 @@ footer.site-ft{background:var(--ink);padding:60px 32px 34px}.ft-w{max-width:1400
     loadContributorsGrid();
   }
 
-  async function toggleFollowNewsstand(contributorId, btn){
+  window.toggleFollowNewsstand = async function(contributorId, btn){
     const { data:{ session } } = await sb.auth.getSession();
     if(!session){ location.href='portal.html'; return; }
 
@@ -286,7 +286,7 @@ footer.site-ft{background:var(--ink);padding:60px 32px 34px}.ft-w{max-width:1400
       const { error } = await sb.from('follows').insert({ user_id: session.user.id, contributor_id: contributorId });
       if(error){ console.error('Follow failed:', error); btn.classList.remove('on'); btn.textContent = t('disc.follow'); alert('Could not follow: ' + error.message); }
     }
-  }
+  };
 
   async function loadContributorsGrid(){
     const { data:subs } = await sb.from('contributions')
