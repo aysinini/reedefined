@@ -15,7 +15,7 @@
 :root{
   --ink:#0C0C0C;--mid:#3A3A3A;--muted:#4A4A4A;--light:#6B6B6B;
   --rule:#E0E0E0;--bg:#F8F7F4;--bg2:#F0EEE9;--white:#FFF;
-  --olive:#4A7C3F;--olive-l:#C5DBC2;--olive-ll:#E2EEE1;
+  --teal:#4A7C3F;--teal-l:#C5DBC2;--teal-ll:#E2EEE1;
   --H:'Libre Baskerville',Georgia,serif;
   --P:'Playfair Display',Georgia,serif;
   --C:'Barlow Condensed',sans-serif;
@@ -41,8 +41,8 @@ body{background:var(--white);color:var(--ink);font-family:var(--S);-webkit-font-
 /* HERO */
 .hero{padding:96px 0 80px;border-bottom:1px solid var(--rule);position:relative;overflow:hidden}
 .hero-inner{max-width:1200px;margin:0 auto;padding:0 48px}
-.hero-eyebrow{font-family:var(--H);font-size:13px;font-weight:700;letter-spacing:0;text-transform:none;color:var(--olive);margin-bottom:28px;display:flex;align-items:center;gap:14px}
-.hero-eyebrow::before{content:'';width:28px;height:1px;background:var(--olive)}
+.hero-eyebrow{font-family:var(--H);font-size:13px;font-weight:700;letter-spacing:0;text-transform:none;color:var(--teal);margin-bottom:28px;display:flex;align-items:center;gap:14px}
+.hero-eyebrow::before{content:'';width:28px;height:1px;background:var(--teal)}
 .hero-h1{font-family:var(--P);font-size:clamp(52px,7vw,96px);font-weight:400;line-height:.95;color:var(--ink);letter-spacing:.06em;margin-bottom:0;max-width:900px}
 .hero-h1 span{color:var(--mid)}
 .hero-bottom{margin-top:56px;display:grid;grid-template-columns:1fr 1fr;gap:0;border-top:1px solid var(--rule);padding-top:32px}
@@ -58,20 +58,20 @@ body{background:var(--white);color:var(--ink);font-family:var(--S);-webkit-font-
 /* MANIFESTO */
 .manifesto{padding:96px 0;background:var(--bg);border-bottom:1px solid var(--rule)}
 .manifesto-inner{max-width:1200px;margin:0 auto;padding:0 48px;display:grid;grid-template-columns:1fr 2fr;gap:80px;align-items:start}
-.m-label{font-family:var(--C);font-size:13px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--olive);padding-top:6px}
+.m-label{font-family:var(--C);font-size:13px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--teal);padding-top:6px}
 .m-text{font-family:var(--H);font-size:clamp(22px,2.5vw,30px);font-weight:400;line-height:1.6;color:var(--ink)}
 .m-text strong{font-weight:700;font-style:normal}
 
 /* HOW IT WORKS */
 .how{padding:96px 0;border-bottom:1px solid var(--rule)}
 .how-inner{max-width:1200px;margin:0 auto;padding:0 48px}
-.sec-label{font-family:var(--C);font-size:13px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--olive);margin-bottom:48px;display:flex;align-items:center;gap:14px}
-.sec-label::before{content:'';width:28px;height:1px;background:var(--olive)}
+.sec-label{font-family:var(--C);font-size:13px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--teal);margin-bottom:48px;display:flex;align-items:center;gap:14px}
+.sec-label::before{content:'';width:28px;height:1px;background:var(--teal)}
 .how-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border-top:2px solid var(--ink)}
 .how-item{padding:40px 40px 40px 0;border-right:1px solid var(--rule)}
 .how-item:last-child{border-right:none;padding-right:0;padding-left:40px}
 .how-item:nth-child(2){padding-left:40px}
-.how-n{font-family:var(--P);font-size:64px;font-weight:900;color:var(--olive);line-height:1;margin-bottom:16px}
+.how-n{font-family:var(--P);font-size:64px;font-weight:900;color:var(--teal);line-height:1;margin-bottom:16px}
 .how-t{font-family:var(--H);font-size:20px;font-weight:700;color:var(--ink);margin-bottom:10px}
 .how-d{font-family:var(--H);font-size:15px;color:var(--mid);line-height:1.7}
 
@@ -87,16 +87,16 @@ body{background:var(--white);color:var(--ink);font-family:var(--S);-webkit-font-
 .tag{font-family:var(--H);font-size:13px;font-weight:700;padding:7px 14px;border:1px solid var(--rule);color:var(--ink);border-radius:20px}
 .contrib-right{padding-top:8px}
 .contrib-card{border:1px solid var(--rule);padding:28px;background:var(--bg)}
-.cc-label{font-family:var(--C);font-size:12px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--olive);margin-bottom:16px}
+.cc-label{font-family:var(--C);font-size:12px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--teal);margin-bottom:16px}
 .cc-name{font-family:var(--H);font-size:22px;font-weight:700;color:var(--ink);margin-bottom:4px}
 .cc-role{font-family:var(--H);font-size:14px;color:var(--mid);margin-bottom:16px}
-.cc-quote{font-family:var(--H);font-size:15px;color:var(--mid);line-height:1.65;padding-left:14px;border-left:2px solid var(--olive-l)}
+.cc-quote{font-family:var(--H);font-size:15px;color:var(--mid);line-height:1.65;padding-left:14px;border-left:2px solid var(--teal-l)}
 
 /* CTA */
 .cta{padding:96px 0;background:var(--bg);border-bottom:1px solid var(--rule);text-align:center}
 .cta-inner{max-width:640px;margin:0 auto;padding:0 48px}
-.cta-eyebrow{font-family:var(--C);font-size:13px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--olive);margin-bottom:24px;display:flex;align-items:center;justify-content:center;gap:14px}
-.cta-eyebrow::before,.cta-eyebrow::after{content:'';width:28px;height:1px;background:var(--olive)}
+.cta-eyebrow{font-family:var(--C);font-size:13px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--teal);margin-bottom:24px;display:flex;align-items:center;justify-content:center;gap:14px}
+.cta-eyebrow::before,.cta-eyebrow::after{content:'';width:28px;height:1px;background:var(--teal)}
 .cta-h{font-family:var(--P);font-size:clamp(36px,5vw,60px);font-weight:400;color:var(--ink);line-height:1.0;letter-spacing:.06em;margin-bottom:16px}
 .cta-sub{font-family:var(--H);font-size:16px;color:var(--mid);line-height:1.7;margin-bottom:40px}
 .cta-btns{display:flex;align-items:center;justify-content:center;gap:12px}
@@ -163,7 +163,7 @@ body{background:var(--white);color:var(--ink);font-family:var(--S);-webkit-font-
 <section class="hero">
   <div class="hero-inner">
     <div class="hero-eyebrow" data-i18n="idx.hero_eyebrow">Issue No. 1 · July 2026</div>
-    <h1 class="hero-h1"><span data-i18n="idx.hero_h1_1">The magazine</span><br><span data-i18n="idx.hero_h1_2">shaped by the</span><br><span style="color:var(--olive)" data-i18n="idx.hero_h1_3">people you follow.</span></h1>
+    <h1 class="hero-h1"><span data-i18n="idx.hero_h1_1">The magazine</span><br><span data-i18n="idx.hero_h1_2">shaped by the</span><br><span style="color:var(--teal)" data-i18n="idx.hero_h1_3">people you follow.</span></h1>
     <div class="hero-bottom">
       <p class="hero-sub" data-i18n="idx.hero_sub">Every month, a personalised issue assembled from the writers, critics and creators you choose to follow. No algorithm. No feed. Just the people whose taste you trust, in one place, once a month.</p>
       <div class="hero-cta-side">

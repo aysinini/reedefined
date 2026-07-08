@@ -14,7 +14,7 @@
   --ink:#0C0C0C;--mid:#3A3A3A;--muted:#4A4A4A;--light:#6B6B6B;
   --rule:#E0E0E0;--rule2:#EBEBEB;--bg:#F8F7F4;--bg2:#F0EEE9;--white:#FFF;
   --teal:#4A7C3F;--teal-l:#D4DBCA;--teal-ll:#E8EDE0;
-  --green:#3A7A50;--green-l:#D8EEE0;--red:#C8251A;
+  --red:#C8251A;
   --H:'Libre Baskerville',Georgia,serif;
   --C:'Barlow Condensed',sans-serif;
   --S:'Barlow',sans-serif;
@@ -46,7 +46,7 @@ body{background:var(--bg);color:var(--ink);font-family:var(--S);-webkit-font-smo
 .summary{background:var(--ink);padding:16px 40px}
 .summary-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:32px;flex-wrap:wrap}
 .sum-item{display:flex;align-items:center;gap:8px}
-.sum-dot{width:7px;height:7px;border-radius:50%;background:var(--green)}
+.sum-dot{width:7px;height:7px;border-radius:50%;background:var(--teal)}
 .sum-dot.off{background:rgba(255,255,255,.6)}
 .sum-text{font-family:var(--C);font-size:13px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.5)}
 .sum-text strong{color:#fff}
@@ -59,9 +59,9 @@ body{background:var(--bg);color:var(--ink);font-family:var(--S);-webkit-font-smo
 .sec-sub{font-family:var(--C);font-size:13px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--muted)}
 
 /* PLATFORM CARDS */
-.platform-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--rule);margin-bottom:1px}
-.pc{background:var(--white);overflow:hidden}
-.pc-inner{padding:24px 28px}
+.platform-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:24px}
+.pc{background:var(--white);border:1px solid var(--rule);overflow:hidden}
+.pc-inner{padding:32px 36px}
 .pc-top{display:flex;align-items:flex-start;gap:16px;margin-bottom:16px}
 .pc-logo{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .pc-info{flex:1}
@@ -69,8 +69,8 @@ body{background:var(--bg);color:var(--ink);font-family:var(--S);-webkit-font-smo
 .pc-desc{font-family:var(--H);font-size:14px;color:var(--muted);line-height:1.5}
 .pc-status-wrap{flex-shrink:0}
 .pc-badge{font-family:var(--H);font-size:12px;font-weight:700;padding:4px 10px;border-radius:20px}
-.pc-badge.live{background:var(--green-l);color:var(--green)}
-.pc-badge.connected{background:var(--green-l);color:var(--green)}
+.pc-badge.live{background:var(--teal-l);color:var(--teal)}
+.pc-badge.connected{background:var(--teal-l);color:var(--teal)}
 .pc-badge.soon{background:var(--bg2);color:var(--muted)}
 .pc-badge.pending{background:#FFF3CD;color:#856404}
 .pc-pulls{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px}
@@ -84,7 +84,7 @@ body{background:var(--bg);color:var(--ink);font-family:var(--S);-webkit-font-smo
 .pc-input-btn{font-family:var(--H);font-size:13px;font-weight:700;padding:11px 16px;background:var(--ink);color:#fff;border:none;border-radius:20px;cursor:pointer;white-space:nowrap;transition:opacity .15s}.pc-input-btn:hover{opacity:.85}
 
 /* Connected state */
-.pc-connected{display:none;align-items:center;gap:10px;padding:10px 14px;background:var(--green-l);border:1px solid rgba(58,122,80,.2);border-radius:10px;margin-bottom:10px}
+.pc-connected{display:none;align-items:center;gap:10px;padding:10px 14px;background:var(--teal-l);border:1px solid rgba(58,122,80,.2);border-radius:10px;margin-bottom:10px}
 .pc-connected-handle{font-family:var(--H);font-size:14px;font-weight:700;color:var(--ink)}
 .pc-connected-sub{font-family:var(--H);font-size:13px;color:var(--muted);margin-left:2px}
 .pc-disconnect{font-family:var(--C);font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);background:none;border:none;cursor:pointer;margin-left:auto}.pc-disconnect:hover{color:var(--red)}
@@ -105,7 +105,7 @@ body{background:var(--bg);color:var(--ink);font-family:var(--S);-webkit-font-smo
 /* Buttons */
 .pc-btn{width:100%;padding:12px;font-family:var(--H);font-size:13px;font-weight:700;border:none;cursor:pointer;border-radius:20px;transition:all .2s;margin-top:2px}
 .pc-btn.connect{background:var(--ink);color:#fff}.pc-btn.connect:hover{opacity:.85}
-.pc-btn.connected{background:var(--green-l);color:var(--green);cursor:default}
+.pc-btn.connected{background:var(--teal-l);color:var(--teal);cursor:default}
 .pc-btn.soon{background:var(--bg2);color:var(--muted);cursor:default}
 .pc-btn.pending-btn{background:#FFF3CD;color:#856404;cursor:default}
 
