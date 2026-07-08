@@ -293,7 +293,7 @@ footer.site-ft{background:var(--ink);padding:60px 32px 34px}.ft-w{max-width:1400
     grid.innerHTML = Object.entries(byUser).map(([uid,u]) => {
       const initial = u.name.charAt(0).toUpperCase();
       const avatarHtml = u.avatar
-        ? `<img src="${u.avatar}" style="width:46px;height:46px;border-radius:50%;object-fit:cover;border:2px solid #D4DBCA">`
+        ? `<img src="${u.avatar}" style="width:46px;height:46px;border-radius:50%;object-fit:cover;border:2px solid #D4DBCA" onerror="this.outerHTML='<div style=&quot;width:46px;height:46px;border-radius:50%;background:var(--teal-l);display:flex;align-items:center;justify-content:center;font-family:var(--H);font-size:16px;color:var(--teal)&quot;>${initial}</div>'">`
         : `<div style="width:46px;height:46px;border-radius:50%;background:var(--teal-l);display:flex;align-items:center;justify-content:center;font-family:var(--H);font-size:16px;color:var(--teal)">${initial}</div>`;
       return `
         <div class="c-c" onclick="location.href='profile.html?id=${uid}'">
@@ -333,7 +333,7 @@ footer.site-ft{background:var(--ink);padding:60px 32px 34px}.ft-w{max-width:1400
       const authorName = a.profiles?.name || 'Contributor';
       const initial = authorName.charAt(0).toUpperCase();
       const avatarHtml = a.profiles?.avatar
-        ? `<img src="${a.profiles.avatar}" style="width:28px;height:28px;border-radius:50%;object-fit:cover">`
+        ? `<img src="${a.profiles.avatar}" style="width:28px;height:28px;border-radius:50%;object-fit:cover" onerror="this.outerHTML='<div style=&quot;width:28px;height:28px;border-radius:50%;background:var(--teal-l);display:flex;align-items:center;justify-content:center;font-family:var(--H);font-size:11px;color:var(--teal)&quot;>${initial}</div>'">`
         : `<div style="width:28px;height:28px;border-radius:50%;background:var(--teal-l);display:flex;align-items:center;justify-content:center;font-family:var(--H);font-size:11px;color:var(--teal)">${initial}</div>`;
       const liked = myLikes.has(a.id);
       return `

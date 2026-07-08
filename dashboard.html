@@ -207,7 +207,7 @@ async function loadNotifications(){
     const name = n.profiles?.name || 'Someone';
     const initial = name.charAt(0).toUpperCase();
     const avatarHtml = n.profiles?.avatar
-      ? `<img src="${n.profiles.avatar}" style="width:32px;height:32px;border-radius:50%;object-fit:cover">`
+      ? `<img src="${n.profiles.avatar}" style="width:32px;height:32px;border-radius:50%;object-fit:cover" onerror="this.outerHTML='<div style=&quot;width:32px;height:32px;border-radius:50%;background:#D4DBCA;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-size:12px;color:#4A7C3F&quot;>${initial}</div>'">`
       : `<div style="width:32px;height:32px;border-radius:50%;background:var(--teal-l);display:flex;align-items:center;justify-content:center;font-family:var(--H);font-size:12px;color:var(--teal)">${initial}</div>`;
     const actionText = n.type === 'like'
       ? `liked your column "${esc(n.contributions?.title || '')}"`

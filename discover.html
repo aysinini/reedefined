@@ -523,7 +523,7 @@ async function liveSearchSuggest(query){
     const name = p.name || 'Contributor';
     const initial = name.charAt(0).toUpperCase();
     const avatarHtml = p.avatar
-      ? `<img src="${p.avatar}" style="width:34px;height:34px;border-radius:50%;object-fit:cover">`
+      ? `<img src="${p.avatar}" style="width:34px;height:34px;border-radius:50%;object-fit:cover" onerror="this.outerHTML='<div style=&quot;width:34px;height:34px;border-radius:50%;background:#D4DBCA;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-size:13px;color:#4A7C3F&quot;>${initial}</div>'">`
       : `<div style="width:34px;height:34px;border-radius:50%;background:#D4DBCA;display:flex;align-items:center;justify-content:center;font-family:'Libre Baskerville',Georgia,serif;font-size:13px;color:#4A7C3F">${initial}</div>`;
     return `
       <div style="display:flex;align-items:center;gap:12px;padding:12px 16px;cursor:pointer;border-bottom:1px solid #F0F0EE" onmouseover="this.style.background='#FAFAF8'" onmouseout="this.style.background='none'" onclick="location.href='profile.html?id=${p.id}'">
@@ -569,12 +569,22 @@ async function toggleFollowById(id, btn){
     followed.delete(id);
     btn.classList.remove('on');
     btn.textContent = t('disc.follow');
-    await sb.from('follows').delete().eq('user_id', session.user.id).eq('contributor_id', id);
+    const { error } = await sb.from('follows').delete().eq('user_id', session.user.id).eq('contributor_id', id);
+    if(error){
+      console.error('Unfollow failed:', error);
+      followed.add(id); btn.classList.add('on'); btn.textContent = t('disc.following');
+      alert('Could not unfollow: ' + error.message);
+    }
   } else {
     followed.add(id);
     btn.classList.add('on');
     btn.textContent = t('disc.following');
-    await sb.from('follows').insert({ user_id: session.user.id, contributor_id: id });
+    const { error } = await sb.from('follows').insert({ user_id: session.user.id, contributor_id: id });
+    if(error){
+      console.error('Follow failed:', error);
+      followed.delete(id); btn.classList.remove('on'); btn.textContent = t('disc.follow');
+      alert('Could not follow: ' + error.message);
+    }
   }
 }
 

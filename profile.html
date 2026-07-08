@@ -74,7 +74,7 @@ async function loadProfile(){
   const name = p.name || 'Contributor';
   const initial = name.charAt(0).toUpperCase();
   const avatarHtml = p.avatar
-    ? `<img class="avatar" src="${p.avatar}" alt="${esc(name)}">`
+    ? `<img class="avatar" src="${p.avatar}" alt="${esc(name)}" onerror="this.outerHTML='<div class=&quot;avatar&quot;>${initial}</div>'">`
     : `<div class="avatar">${initial}</div>`;
 
   const beats = (p.interests || (subs||[]).map(s=>s.category).filter(Boolean).join(','))
