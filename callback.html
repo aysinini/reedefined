@@ -580,32 +580,6 @@ if('serviceWorker' in navigator){
         </div>
       </div>
 
-      <!-- ── SUCCESS STATE ── -->
-      <div id="state-success" style="display:none">
-        <div class="status-icon">
-          <svg width="56" height="56" viewBox="0 0 56 56" fill="none">
-            <circle cx="28" cy="28" r="27" stroke="#3A7A50" stroke-width="1"/>
-            <circle cx="28" cy="28" r="20" fill="#D8EEE0" opacity=".6"/>
-            <path d="M18 28l7 7 13-14" stroke="#3A7A50" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </div>
-        <h1 class="title" style="color:var(--green)">TikTok<br><em>connected.</em></h1>
-        <p class="subtitle">Your TikTok profile is now linked. We won't pull any content from your account unless you choose to add it to one of your columns yourself.</p>
-        <div class="user-card" id="user-card">
-          <div class="user-avatar">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-              <path d="M9 17.5c0 1.5-.9 2.3-2.2 2.3S4.5 18.8 4.5 17.5c0-1.2.9-2 2.5-2 .7 0 1.2.2 2 .5V9.2l9.5-2v7.2c0 1.2-.9 1.9-2.3 1.9-1.4 0-2-.7-2-1.8s.9-1.7 2.3-1.7c.6 0 1 .1 2 .4" stroke="#4A7C3F" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-            </svg>
-          </div>
-          <div>
-            <div class="user-name" id="user-name">TikTok Connected</div>
-            <div class="user-handle" id="user-handle">Account linked ✦</div>
-          </div>
-        </div>
-        <button class="btn visible" onclick="goToPortal()">Go to Contributor Portal →</button>
-        <button class="btn visible" onclick="disconnectNow()" style="background:none;border:1px solid #D8D8D8;color:#7A3A3A;margin-top:10px">Disconnect TikTok</button>
-      </div>
-
       <!-- ── ERROR STATE ── -->
       <div id="state-error" style="display:none">
         <div class="status-icon">
@@ -633,11 +607,7 @@ if('serviceWorker' in navigator){
 <script>
   const SUPABASE_URL = 'https://gseuejqqwkdjkhxfxxwy.supabase.co';
   const SUPABASE_KEY = 'sb_publishable_0Nmw1mwGx__b_jJHLHBDKg__1OAsRuy';
-  const TIKTOK_CLIENT_KEY = 'awh23d4pdwzy16in';
-  const TIKTOK_CLIENT_SECRET = '0ZIPtXxipa3UTAWNmqQQrVXThv1XPslw';
-  const TIKTOK_REDIRECT = 'https://reedefined.app/callback.html';
-  const SPOTIFY_CLIENT_ID = 'd33757ab353347b4b0d78b8834ff18e2';
-  const SPOTIFY_CLIENT_SECRET = '3244e386972c459492a64fdeaf46712b';
+  const TIKTOK_REDIRECT = 'https://reedefinedmag.com/callback.html';
   const SPOTIFY_REDIRECT = 'https://reedefinedmag.com/callback.html';
 
   const params = new URLSearchParams(window.location.search);
@@ -656,17 +626,22 @@ if('serviceWorker' in navigator){
       window.location.href = 'connections.html?tiktok_error=1';
       return true;
     }
-    if(!code) return false;
+    if(!code) {
+      showError('No authorisation code received from TikTok. Please try again.');
+      return true;
+    }
 
     try {
-      const tokenRes = await fetch('https://open.tiktokapis.com/v2/oauth/token/', {
+      const tokenRes = await fetch(`${SUPABASE_URL}/functions/v1/oauth-token-exchange`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: new URLSearchParams({
-          client_key: TIKTOK_CLIENT_KEY,
-          client_secret: TIKTOK_CLIENT_SECRET,
+        headers: {
+          'Content-Type': 'application/json',
+          'apikey': SUPABASE_KEY,
+          'Authorization': `Bearer ${SUPABASE_KEY}`
+        },
+        body: JSON.stringify({
+          provider: 'tiktok',
           code: code,
-          grant_type: 'authorization_code',
           redirect_uri: TIKTOK_REDIRECT
         })
       });
@@ -695,14 +670,15 @@ if('serviceWorker' in navigator){
 
     try {
       // Exchange code for access token
-      const tokenRes = await fetch('https://accounts.spotify.com/api/token', {
+      const tokenRes = await fetch(`${SUPABASE_URL}/functions/v1/oauth-token-exchange`, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-          'Authorization': 'Basic ' + btoa(SPOTIFY_CLIENT_ID + ':' + SPOTIFY_CLIENT_SECRET)
+          'Content-Type': 'application/json',
+          'apikey': SUPABASE_KEY,
+          'Authorization': `Bearer ${SUPABASE_KEY}`
         },
-        body: new URLSearchParams({
-          grant_type: 'authorization_code',
+        body: JSON.stringify({
+          provider: 'spotify',
           code: code,
           redirect_uri: SPOTIFY_REDIRECT
         })
@@ -722,148 +698,25 @@ if('serviceWorker' in navigator){
     }
   }
 
-  // Route this callback to the right handler based on which state was saved
-  if(state && localStorage.getItem('tiktok_state') === state) {
-    handleTikTok();
-  } else if(state && code && localStorage.getItem('spotify_state') === state) {
-    handleSpotify();
-  } else {
-
-  function markStep(id, status) {
-    const el = document.getElementById(id);
-    const spin = document.getElementById(id + '-spin');
-    if (spin) spin.remove();
-
-    el.classList.remove('active', 'done', 'err');
-
-    const icon = el.querySelector('.step-icon');
-
-    if (status === 'loading') {
-      el.classList.add('active');
-      const mini = document.createElement('div');
-      mini.className = 'mini-spin';
-      mini.id = id + '-spin';
-      icon.innerHTML = '';
-      icon.appendChild(mini);
-    } else if (status === 'done') {
-      el.classList.add('done');
-      icon.innerHTML = `<svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-        <circle cx="7" cy="7" r="6" stroke="#3A7A50" stroke-width="1"/>
-        <path d="M4 7l2.5 2.5 4-4" stroke="#3A7A50" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>`;
-    } else if (status === 'error') {
-      el.classList.add('err');
-      icon.innerHTML = `<svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-        <circle cx="7" cy="7" r="6" stroke="#7A3A3A" stroke-width="1"/>
-        <path d="M5 5l4 4M9 5l-4 4" stroke="#7A3A3A" stroke-width="1.3" stroke-linecap="round"/>
-      </svg>`;
-    }
-  }
-
-  function showSuccess(displayName, handle) {
-    document.getElementById('state-loading').style.display = 'none';
-    document.getElementById('state-success').style.display = 'block';
-    document.getElementById('user-name').textContent = displayName || 'TikTok User';
-    document.getElementById('user-handle').textContent = handle ? '@' + handle + ' · Linked ✦' : 'Account linked ✦';
-    document.getElementById('user-card').classList.add('visible');
-  }
-
   function showError(msg) {
     document.getElementById('state-loading').style.display = 'none';
     document.getElementById('state-error').style.display = 'block';
     if (msg) document.getElementById('error-msg').textContent = msg;
   }
 
-  let lastConnectionId = null;
-
-  async function saveToSupabase(data) {
-    try {
-      const res = await fetch(`${SUPABASE_URL}/rest/v1/platform_connections`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'apikey': SUPABASE_KEY,
-          'Authorization': `Bearer ${SUPABASE_KEY}`,
-          'Prefer': 'return=representation'
-        },
-        body: JSON.stringify(data)
-      });
-      const rows = await res.json();
-      if(Array.isArray(rows) && rows[0] && rows[0].id) lastConnectionId = rows[0].id;
-    } catch(e) {
-      console.log('Supabase save error:', e);
-    }
+  // Route this callback to the right handler based on which state was saved.
+  // Neither branch matching means the code was never verified against the
+  // provider (expired/mismatched state, stale link, etc.) — show a real
+  // error instead of a fabricated success.
+  if(state && localStorage.getItem('tiktok_state') === state) {
+    handleTikTok();
+  } else if(state && code && localStorage.getItem('spotify_state') === state) {
+    handleSpotify();
+  } else if(error) {
+    showError('Authorisation was denied or cancelled. Please try again.');
+  } else {
+    showError('This connection could not be verified — the request may have expired. Please try again from the connections page.');
   }
-
-  async function disconnectNow() {
-    if(!confirm('Disconnect TikTok? Nothing will be pulled from your account.')) return;
-    try {
-      if(lastConnectionId) {
-        await fetch(`${SUPABASE_URL}/rest/v1/platform_connections?id=eq.${lastConnectionId}`, {
-          method: 'DELETE',
-          headers: {
-            'apikey': SUPABASE_KEY,
-            'Authorization': `Bearer ${SUPABASE_KEY}`
-          }
-        });
-      }
-    } catch(e) {
-      console.log('Disconnect error:', e);
-    }
-    window.location.href = 'connections.html';
-  }
-
-  function goToPortal() {
-    window.location.href = 'editor-portal.html';
-  }
-
-  function delay(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-  }
-
-  async function handleCallback() {
-    if (error) {
-      showError('TikTok authorisation was denied or cancelled. Please try again.');
-      return;
-    }
-    if (!code) {
-      showError('No authorisation code received from TikTok.');
-      return;
-    }
-
-    // Step 1
-    await delay(400);
-    markStep('step-1', 'done');
-    await delay(300);
-
-    // Step 2
-    markStep('step-2', 'loading');
-    await delay(900);
-    markStep('step-2', 'done');
-    await delay(200);
-
-    // Step 3
-    markStep('step-3', 'loading');
-    await delay(1000);
-    markStep('step-3', 'done');
-    await delay(200);
-
-    // Step 4
-    markStep('step-4', 'loading');
-    await saveToSupabase({
-      platform: 'tiktok',
-      auth_code: code,
-      connected_at: new Date().toISOString()
-    });
-    await delay(700);
-    markStep('step-4', 'done');
-
-    await delay(500);
-    showSuccess('TikTok User', null);
-  }
-
-  handleCallback();
-  } // end else (not Spotify)
 </script>
 
 <footer style="background:#0C0C0C;padding:48px 40px 32px">

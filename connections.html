@@ -798,14 +798,39 @@ function showConnected(platform, val, result) {
   }
 }
 
-// ── DISCONNECT ──
+// ── OAuth helpers (shared) ──
+// crypto.getRandomValues is cryptographically strong, unlike Math.random —
+// this is a CSRF token, so it must not be guessable.
+function randomState() {
+  if (window.crypto && crypto.getRandomValues) {
+    const bytes = crypto.getRandomValues(new Uint8Array(16));
+    return Array.from(bytes, b => b.toString(16).padStart(2, '0')).join('');
+  }
+  return Math.random().toString(36).substring(2) + Date.now().toString(36);
+}
+
+function escapeHtml(str) {
+  return String(str ?? '').replace(/[&<>"']/g, c => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+  }[c]));
+}
+
+// Strip one-time callback params (which can include raw access tokens) from
+// the address bar once they've been consumed, so they don't linger in
+// browser history.
+function clearCallbackParams(...keys) {
+  const url = new URL(window.location.href);
+  keys.forEach(k => url.searchParams.delete(k));
+  history.replaceState(null, '', url.pathname + url.search + url.hash);
+}
+
 // ── TIKTOK OAuth ──
 const TIKTOK_CLIENT_KEY = 'awh23d4pdwzy16in';
-const TIKTOK_REDIRECT    = 'https://reedefined.app/callback.html';
-const TIKTOK_SCOPES      = 'user.info.basic';
+const TIKTOK_REDIRECT    = 'https://reedefinedmag.com/callback.html';
+const TIKTOK_SCOPES      = 'user.info.basic,user.info.profile,video.list';
 
 function connectTikTok() {
-  const state = Math.random().toString(36).substring(2);
+  const state = randomState();
   localStorage.setItem('tiktok_state', state);
   const params = new URLSearchParams({
     client_key:    TIKTOK_CLIENT_KEY,
@@ -824,11 +849,14 @@ async function handleTikTokCallback() {
   const err    = params.get('tiktok_error');
 
   if(err) {
+    clearCallbackParams('tiktok_error');
     hide('loading-tiktok');
     show('error-tiktok');
     return;
   }
   if(!token) return;
+
+  clearCallbackParams('tiktok_token', 'tiktok_open_id');
 
   show('loading-tiktok');
   hide('btn-tiktok');
@@ -893,9 +921,9 @@ async function loadTikTokProfile(token, openId) {
     preview.classList.add('show');
     document.getElementById('items-tiktok').innerHTML = videos.map(v => `
       <div class="pc-item">
-        ${v.cover_image_url ? `<img class="pc-item-img" src="${v.cover_image_url}" onerror="this.style.display='none'">` : ''}
+        ${v.cover_image_url ? `<img class="pc-item-img" src="${escapeHtml(v.cover_image_url)}" onerror="this.style.display='none'">` : ''}
         <div class="pc-item-info">
-          <div class="pc-item-title">${v.title || 'Untitled video'}</div>
+          <div class="pc-item-title">${escapeHtml(v.title || 'Untitled video')}</div>
           <div class="pc-item-meta">${(v.view_count || 0).toLocaleString()} views</div>
         </div>
       </div>
@@ -907,6 +935,16 @@ async function loadTikTokProfile(token, openId) {
 
 async function disconnectTikTok() {
   if(!confirm('Disconnect TikTok?')) return;
+
+  if(currentUser) {
+    const { error } = await sb.from('platform_connections').delete()
+      .eq('user_id', currentUser.id).eq('platform', 'tiktok');
+    if(error) {
+      alert('Could not disconnect TikTok — please try again.');
+      return;
+    }
+  }
+
   delete connected['tiktok'];
   const connEl = document.getElementById('connected-tiktok');
   if(connEl) connEl.style.display = 'none';
@@ -914,10 +952,6 @@ async function disconnectTikTok() {
   document.getElementById('btn-tiktok').style.display = '';
   const badge = document.getElementById('badge-tiktok');
   if(badge) { badge.textContent = 'Live ✓'; badge.className = 'pc-badge live'; }
-  if(currentUser) {
-    await sb.from('platform_connections').delete()
-      .eq('user_id', currentUser.id).eq('platform', 'tiktok');
-  }
 }
 
 // ── SPOTIFY OAuth ──
@@ -926,7 +960,7 @@ const SPOTIFY_REDIRECT   = 'https://reedefinedmag.com/callback.html';
 const SPOTIFY_SCOPES     = 'user-read-private user-read-email user-top-read playlist-read-private';
 
 function connectSpotify() {
-  const state = Math.random().toString(36).substring(2);
+  const state = randomState();
   localStorage.setItem('spotify_state', state);
   const params = new URLSearchParams({
     client_id:     SPOTIFY_CLIENT_ID,
@@ -942,7 +976,17 @@ async function handleSpotifyCallback() {
   const params = new URLSearchParams(window.location.search);
   const code  = params.get('spotify_code');
   const token = params.get('spotify_token');
+  const err   = params.get('spotify_error');
+
+  if(err) {
+    clearCallbackParams('spotify_error');
+    hide('loading-spotify');
+    show('error-spotify');
+    return;
+  }
   if(!code && !token) return;
+
+  clearCallbackParams('spotify_code', 'spotify_token');
 
   show('loading-spotify');
   hide('btn-spotify');
@@ -1002,10 +1046,10 @@ async function loadSpotifyProfile(token) {
     preview.classList.add('show');
     document.getElementById('items-spotify').innerHTML = tracksData.items.map(t => `
       <div class="pc-item">
-        ${t.album?.images?.[0]?.url ? `<img class="pc-item-img" src="${t.album.images[0].url}">` : ''}
+        ${t.album?.images?.[0]?.url ? `<img class="pc-item-img" src="${escapeHtml(t.album.images[0].url)}">` : ''}
         <div class="pc-item-info">
-          <div class="pc-item-title">${t.name}</div>
-          <div class="pc-item-meta">${t.artists?.map(a=>a.name).join(', ')}</div>
+          <div class="pc-item-title">${escapeHtml(t.name)}</div>
+          <div class="pc-item-meta">${escapeHtml(t.artists?.map(a=>a.name).join(', '))}</div>
         </div>
       </div>`).join('');
   }
@@ -1016,6 +1060,16 @@ async function loadSpotifyProfile(token) {
 
 async function disconnectSpotify() {
   if(!confirm('Disconnect Spotify?')) return;
+
+  if(currentUser) {
+    const { error } = await sb.from('platform_connections').delete()
+      .eq('user_id', currentUser.id).eq('platform', 'spotify');
+    if(error) {
+      alert('Could not disconnect Spotify — please try again.');
+      return;
+    }
+  }
+
   delete connected['spotify'];
   const connEl = document.getElementById('connected-spotify');
   if(connEl) connEl.style.display = 'none';
@@ -1023,17 +1077,13 @@ async function disconnectSpotify() {
   document.getElementById('btn-spotify').style.display = '';
   const badge = document.getElementById('badge-spotify');
   if(badge) { badge.textContent = 'Live ✓'; badge.className = 'pc-badge live'; }
-  if(currentUser) {
-    await sb.from('platform_connections').delete()
-      .eq('user_id', currentUser.id).eq('platform', 'spotify');
-  }
   updateSummary();
 }
 
 // Check for Spotify callback on page load
 window.addEventListener('load', () => {
   const params = new URLSearchParams(window.location.search);
-  if(params.get('spotify_code') || params.get('spotify_token')) {
+  if(params.get('spotify_code') || params.get('spotify_token') || params.get('spotify_error')) {
     handleSpotifyCallback();
   }
   if(params.get('tiktok_token') || params.get('tiktok_error')) {
