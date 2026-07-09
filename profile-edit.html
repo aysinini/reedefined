@@ -64,6 +64,12 @@ textarea.fi{resize:vertical;min-height:100px;line-height:1.5}
 .btn-cancel{flex:1;font-family:var(--C);font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;background:none;color:var(--mid);border:1px solid var(--rule);border-radius:24px;padding:12px;cursor:pointer}
 .btn-confirm-delete{flex:1;font-family:var(--C);font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;background:var(--red);color:#fff;border:none;border-radius:24px;padding:12px;cursor:pointer}
 .btn-confirm-delete:disabled{opacity:.4;cursor:default}
+
+.rotate-preview-wrap{width:200px;height:200px;margin:0 auto 20px;border-radius:50%;overflow:hidden;border:1px solid var(--rule);display:flex;align-items:center;justify-content:center;background:var(--bg)}
+.rotate-preview-wrap img{max-width:100%;max-height:100%;transition:transform .2s}
+.btn-rotate{width:100%;font-family:var(--C);font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;background:none;color:var(--ink);border:1px solid var(--rule);border-radius:24px;padding:12px;cursor:pointer;margin-bottom:20px}
+.btn-rotate:hover{border-color:var(--ink)}
+.btn-use-photo{flex:1;font-family:var(--C);font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;background:var(--teal);color:#fff;border:none;border-radius:24px;padding:12px;cursor:pointer}
 </style>
 </head>
 <body>
@@ -88,7 +94,7 @@ textarea.fi{resize:vertical;min-height:100px;line-height:1.5}
     <div class="avatar-preview" id="avatar-preview">…</div>
     <div class="avatar-actions">
       <button class="btn-upload" data-i18n="pe.upload" onclick="document.getElementById('avatar-input').click()">Upload Photo</button>
-      <input type="file" id="avatar-input" accept="image/*" style="display:none" onchange="handleAvatarUpload(this.files[0])">
+      <input type="file" id="avatar-input" accept="image/*" style="display:none" onchange="onAvatarFileSelected(this.files[0])">
       <div class="upload-hint" id="avatar-hint" data-i18n="pe.hint">Square photos work best. Max 8MB.</div>
     </div>
   </div>
@@ -153,6 +159,20 @@ textarea.fi{resize:vertical;min-height:100px;line-height:1.5}
   </div>
 </div>
 
+<div class="modal-overlay" id="rotate-modal">
+  <div class="modal-box" style="text-align:center">
+    <div class="modal-title">Adjust your photo</div>
+    <div class="rotate-preview-wrap">
+      <img id="rotate-preview-img" src="" alt="">
+    </div>
+    <button type="button" class="btn-rotate" onclick="rotatePreview()">↻ Rotate</button>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="cancelRotate()">Cancel</button>
+      <button class="btn-use-photo" onclick="confirmRotateAndUpload()">Use This Photo</button>
+    </div>
+  </div>
+</div>
+
 <div class="modal-overlay" id="delete-modal">
   <div class="modal-box">
     <div class="modal-title">Delete your account?</div>
@@ -203,16 +223,63 @@ async function init(){
   document.getElementById('notif-likes-email').checked = p?.notify_likes_email === true;
 }
 
-async function handleAvatarUpload(file){
+let rotateState = { file: null, rotation: 0, dataUrl: null };
+
+function onAvatarFileSelected(file){
   if(!file) return;
   if(file.size > 8*1024*1024){ showStatus('Photo is too large (max 8MB).', 'err'); return; }
+
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    rotateState = { file, rotation: 0, dataUrl: e.target.result };
+    const img = document.getElementById('rotate-preview-img');
+    img.src = e.target.result;
+    img.style.transform = 'rotate(0deg)';
+    document.getElementById('rotate-modal').classList.add('show');
+  };
+  reader.readAsDataURL(file);
+}
+
+function rotatePreview(){
+  rotateState.rotation = (rotateState.rotation + 90) % 360;
+  document.getElementById('rotate-preview-img').style.transform = `rotate(${rotateState.rotation}deg)`;
+}
+
+function cancelRotate(){
+  document.getElementById('rotate-modal').classList.remove('show');
+  document.getElementById('avatar-input').value = '';
+  rotateState = { file: null, rotation: 0, dataUrl: null };
+}
+
+function confirmRotateAndUpload(){
+  const img = new Image();
+  img.onload = () => {
+    const swap = rotateState.rotation % 180 !== 0;
+    const canvas = document.createElement('canvas');
+    canvas.width = swap ? img.height : img.width;
+    canvas.height = swap ? img.width : img.height;
+    const ctx = canvas.getContext('2d');
+    ctx.translate(canvas.width / 2, canvas.height / 2);
+    ctx.rotate(rotateState.rotation * Math.PI / 180);
+    ctx.drawImage(img, -img.width / 2, -img.height / 2);
+    canvas.toBlob((blob) => {
+      document.getElementById('rotate-modal').classList.remove('show');
+      handleAvatarUpload(blob, rotateState.file.name);
+    }, rotateState.file.type || 'image/jpeg', 0.92);
+  };
+  img.src = rotateState.dataUrl;
+}
+
+async function handleAvatarUpload(file, filename){
+  if(!file) return;
+  filename = filename || file.name || 'photo.jpg';
 
   const { data:{ session } } = await sb.auth.getSession();
   if(!session) return;
 
   document.getElementById('avatar-hint').textContent = t('pe.uploading');
 
-  const ext = file.name.split('.').pop();
+  const ext = filename.split('.').pop();
   const path = `avatars/${session.user.id}_${Date.now()}.${ext}`;
   const { error: upErr } = await sb.storage.from('media').upload(path, file, { upsert: true });
   if(upErr){ showStatus('Upload failed. Please try again.', 'err'); document.getElementById('avatar-hint').textContent=t('pe.hint'); return; }
