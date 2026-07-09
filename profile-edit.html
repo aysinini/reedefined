@@ -41,7 +41,7 @@ textarea.fi{resize:vertical;min-height:100px;line-height:1.5}
 .status-msg.err{color:var(--red)}
 
 .danger-zone{margin-top:48px;padding:24px;border:1px solid rgba(200,37,26,.3);border-radius:8px}
-.dz-title{font-family:var(--C);font-size:13px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--red);margin-bottom:8px}
+.dz-title{font-family:var(--C);font-size:13px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--mid);margin-bottom:8px}
 .dz-desc{font-family:var(--S);font-size:14px;color:var(--muted);line-height:1.6;margin-bottom:18px}
 .btn-delete{font-family:var(--C);font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;background:none;color:var(--red);border:1px solid var(--red);border-radius:24px;padding:11px 22px;cursor:pointer;transition:all .15s}
 .btn-delete:hover{background:var(--red);color:#fff}
@@ -121,8 +121,8 @@ textarea.fi{resize:vertical;min-height:100px;line-height:1.5}
   <div class="status-msg" id="status-msg"></div>
 
   <div class="danger-zone">
-    <div class="dz-title">Danger Zone</div>
-    <div class="dz-desc">Deleting your account permanently removes your profile, columns, comments, likes, follows, and connected platforms. This cannot be undone.</div>
+    <div class="dz-title">Account Deletion</div>
+    <div class="dz-desc">Deleting your account permanently removes your profile, your published articles and columns, along with your comments, likes, follows, and connected platforms. This cannot be undone.</div>
     <button class="btn-delete" onclick="openDeleteModal()">Delete My Account</button>
   </div>
 </div>
@@ -130,7 +130,7 @@ textarea.fi{resize:vertical;min-height:100px;line-height:1.5}
 <div class="modal-overlay" id="delete-modal">
   <div class="modal-box">
     <div class="modal-title">Delete your account?</div>
-    <div class="modal-text">This permanently deletes your profile, columns, comments, likes, follows, and connected platforms. Type <strong>DELETE</strong> below to confirm — this cannot be undone.</div>
+    <div class="modal-text">This permanently deletes your profile, your published articles and columns, along with your comments, likes, follows, and connected platforms. Type <strong>DELETE</strong> below to confirm — this cannot be undone.</div>
     <input class="modal-input" id="delete-confirm-input" placeholder="Type DELETE to confirm" oninput="document.getElementById('delete-confirm-btn').disabled = this.value.trim().toUpperCase() !== 'DELETE'">
     <div class="modal-actions">
       <button class="btn-cancel" onclick="closeDeleteModal()">Cancel</button>
