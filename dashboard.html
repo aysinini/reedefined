@@ -140,6 +140,42 @@ async function init(){
   showTab('published');
 }
 
+const ISSUE_DEADLINE = new Date('2026-07-16T00:00:00');
+
+function renderArtRow(a){
+  const isPublished = a.status === 'submitted';
+  const editable = !isPublished && new Date() < ISSUE_DEADLINE;
+  const onclick = isPublished
+    ? `location.href='article.html?id=${a.id}'`
+    : (editable ? `location.href='editor-portal.html'` : '');
+
+  let rightMeta;
+  if(isPublished){
+    rightMeta = `
+        <span style="display:flex;align-items:center;gap:4px;font-family:var(--C);font-size:12px;color:var(--muted);flex-shrink:0">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.8 1-1a5.5 5.5 0 0 0 0-7.6z"/></svg>${a.likeCount||0}
+        </span>
+        <span style="display:flex;align-items:center;gap:4px;font-family:var(--C);font-size:12px;color:var(--muted);flex-shrink:0">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-8.5 8.5 8.38 8.38 0 0 1-4-1L3 20l1-5.5a8.38 8.38 0 0 1-1-4A8.38 8.38 0 0 1 11.5 2a8.5 8.5 0 0 1 8.5 8.5z"/></svg>${a.commentCount||0}
+        </span>`;
+  } else if(editable){
+    rightMeta = `
+        <span style="font-family:var(--C);font-size:11px;color:var(--muted);flex-shrink:0">Editable until July 15</span>
+        <span style="font-family:var(--C);font-size:12px;font-weight:700;letter-spacing:.5px;color:var(--teal);flex-shrink:0">Edit ↗</span>`;
+  } else {
+    rightMeta = `
+        <span style="font-family:var(--C);font-size:11px;color:var(--light);flex-shrink:0">Editing closed</span>`;
+  }
+
+  return `
+      <div class="art-row" ${onclick ? `onclick="${onclick}"` : ''} style="${onclick ? '' : 'cursor:default'}">
+        <span class="art-status ${a.status}">${isPublished ? 'Published' : 'Draft'}</span>
+        <span class="art-t">${esc(a.title || 'Untitled')}</span>
+        ${rightMeta}
+        <span class="art-cat">${esc(a.category || '')}</span>
+      </div>`;
+}
+
 function showTab(tab){
   document.querySelectorAll('.stat-card').forEach(c => c.classList.remove('on'));
   document.getElementById('tab-'+tab).classList.add('on');
@@ -149,19 +185,7 @@ function showTab(tab){
   if(tab==='published' || tab==='drafts'){
     const list = DATA[tab];
     if(list.length===0){ el.innerHTML = `<div class="empty">${tab==='published' ? t('dash.empty_published') : t('dash.empty_drafts')}</div>`; return; }
-    el.innerHTML = list.map(a => `
-      <div class="art-row" onclick="${a.status==='submitted' ? `location.href='article.html?id=${a.id}'` : `location.href='editor-portal.html'`}">
-        <span class="art-status ${a.status}">${a.status==='submitted' ? 'Published' : 'Draft'}</span>
-        <span class="art-t">${esc(a.title || 'Untitled')}</span>
-        ${a.status==='submitted' ? `
-        <span style="display:flex;align-items:center;gap:4px;font-family:var(--C);font-size:12px;color:var(--muted);flex-shrink:0">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.8 1-1a5.5 5.5 0 0 0 0-7.6z"/></svg>${a.likeCount||0}
-        </span>
-        <span style="display:flex;align-items:center;gap:4px;font-family:var(--C);font-size:12px;color:var(--muted);flex-shrink:0">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-8.5 8.5 8.38 8.38 0 0 1-4-1L3 20l1-5.5a8.38 8.38 0 0 1-1-4A8.38 8.38 0 0 1 11.5 2a8.5 8.5 0 0 1 8.5 8.5z"/></svg>${a.commentCount||0}
-        </span>` : ''}
-        <span class="art-cat">${esc(a.category || '')}</span>
-      </div>`).join('');
+    el.innerHTML = list.map(renderArtRow).join('');
     return;
   }
 
