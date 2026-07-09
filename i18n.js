@@ -233,6 +233,9 @@ const TRANSLATIONS = {
     'cat.art': 'Art',
     'cat.nightlife': 'Nightlife',
     'cat.beauty': 'Beauty',
+    'cat.astrology': 'Astrology',
+    'cat.design': 'Design',
+    'cat.tech': 'Tech',
 
     // Newsstand body
     'ns.issue_h1': 'Issue No. 1',
@@ -619,6 +622,9 @@ const TRANSLATIONS = {
     'cat.art': 'Kunst',
     'cat.nightlife': 'Nachtleben',
     'cat.beauty': 'Beauty',
+    'cat.astrology': 'Astrologie',
+    'cat.design': 'Design',
+    'cat.tech': 'Technik',
 
     // Newsstand body
     'ns.issue_h1': 'Ausgabe Nr. 1',
