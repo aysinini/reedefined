@@ -23,16 +23,15 @@ body{background:var(--bg);color:var(--ink);font-family:var(--S);-webkit-font-smo
 .eyebrow{font-family:var(--C);font-size:13px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--teal);margin-bottom:14px}
 .h1{font-family:var(--H);font-size:36px;font-weight:400;letter-spacing:.06em;margin-bottom:12px}
 .sub{font-family:var(--H);font-size:16px;color:var(--mid);margin-bottom:44px;line-height:1.5}
-.opts{display:grid;grid-template-columns:1fr 1fr;gap:20px}
-@media(max-width:560px){.opts{grid-template-columns:1fr}}
-.opt{background:var(--white);border:1px solid var(--rule);border-radius:14px;padding:32px 24px;cursor:pointer;transition:all .15s;text-align:left}
-.opt:hover{border-color:var(--ink);transform:translateY(-2px)}
-.opt-icon{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin-bottom:18px;font-size:20px}
-.opt-icon.read{background:var(--teal-ll);color:var(--teal)}
-.opt-icon.write{background:#FBEAE8;color:var(--red)}
-.opt-t{font-family:var(--H);font-size:19px;font-weight:700;margin-bottom:6px}
+.opts{display:grid;grid-template-columns:1fr auto 1fr;gap:36px;align-items:stretch}
+@media(max-width:560px){.opts{grid-template-columns:1fr}.opts-divider{display:none}}
+.opts-divider{width:1px;background:var(--rule)}
+.opt{background:var(--white);border:1px solid var(--rule);border-radius:6px;padding:40px 32px;cursor:pointer;transition:border-color .15s;text-align:left}
+.opt:hover{border-color:var(--ink)}
+.opt-icon{width:30px;height:30px;margin-bottom:22px}
+.opt-t{font-family:var(--H);font-style:italic;font-weight:400;font-size:27px;margin-bottom:10px}
 .opt-d{font-family:var(--S);font-size:14px;color:var(--mid);line-height:1.5}
-.opt-arrow{font-family:var(--C);font-size:13px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink);margin-top:18px;display:flex;align-items:center;gap:6px}
+.opt-arrow{font-family:var(--C);font-size:13px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink);margin-top:20px;display:flex;align-items:center;gap:6px}
 </style>
 <script src="i18n.js"></script>
 </head>
@@ -51,13 +50,20 @@ body{background:var(--bg);color:var(--ink);font-family:var(--S);-webkit-font-smo
     <div class="sub" data-i18n="choose.sub">You're both a reader and a contributor. Pick where you want to go, you can always switch later.</div>
     <div class="opts">
       <div class="opt" onclick="location.href='newsstand.html'">
-        <div class="opt-icon read">📖</div>
+        <svg class="opt-icon" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="1.2">
+          <path d="M12 5.5c-2.2-1.4-5-1.9-9-1.3v14.6c4-.6 6.8-.1 9 1.3 2.2-1.4 5-1.9 9-1.3V4.2c-4-.6-6.8-.1-9 1.3z"/>
+          <path d="M12 5.5v14.6"/>
+        </svg>
         <div class="opt-t" data-i18n="choose.read_t">I want to read</div>
         <div class="opt-d" data-i18n="choose.read_d">Open your personal issue, flip through past issues, and discover new people to follow.</div>
         <div class="opt-arrow" data-i18n="choose.read_cta">Go to Newsstand →</div>
       </div>
+      <div class="opts-divider"></div>
       <div class="opt" onclick="location.href='editor-portal.html'">
-        <div class="opt-icon write">✎</div>
+        <svg class="opt-icon" viewBox="0 0 24 24" fill="none" stroke="var(--ink)" stroke-width="1.2">
+          <path d="M4 20l1-4L16 5l3 3L8 19l-4 1z"/>
+          <path d="M14 7l3 3"/>
+        </svg>
         <div class="opt-t" data-i18n="choose.write_t">I want to contribute</div>
         <div class="opt-d" data-i18n="choose.write_d">Write your column, manage your submissions, and see how your writing is doing.</div>
         <div class="opt-arrow" data-i18n="choose.write_cta">Go to Contributor Portal →</div>
