@@ -140,7 +140,7 @@ async function init(){
   showTab('published');
 }
 
-const ISSUE_DEADLINE = new Date('2026-07-16T00:00:00');
+const ISSUE_DEADLINE = new Date('2026-07-26T00:00:00');
 
 function renderArtRow(a){
   const isPublished = a.status === 'submitted';
@@ -160,7 +160,7 @@ function renderArtRow(a){
         </span>`;
   } else if(editable){
     rightMeta = `
-        <span style="font-family:var(--C);font-size:11px;color:var(--muted);flex-shrink:0">Editable until July 15</span>
+        <span style="font-family:var(--C);font-size:11px;color:var(--muted);flex-shrink:0">Editable until July 25</span>
         <span style="font-family:var(--C);font-size:12px;font-weight:700;letter-spacing:.5px;color:var(--teal);flex-shrink:0">Edit ↗</span>`;
   } else {
     rightMeta = `

@@ -139,13 +139,13 @@ a:hover{text-decoration:underline;text-underline-offset:3px}
 
 <!-- HERO -->
 <div class="hero" style="position:relative;overflow:hidden">
-  <div class="eyebrow" data-i18n="brief.eyebrow">Open Call · Issue No. 2 · August 2026</div>
+  <div class="eyebrow" data-i18n="brief.eyebrow">Open Call · Issue No. 2 · September 2026</div>
   <h1 data-i18n="brief.h1">Cover<br>Brief.</h1>
   <p class="hero-sub" data-i18n="brief.sub">We are looking for an illustrator for the cover of Issue No. 2. Open call. Voluntary, full credit on the cover, in the issue and across our platforms. Your work will be seen by our readers.</p>
   <div class="hero-meta">
     <div class="hm-item"><div class="hm-label" data-i18n="brief.commission">Commission</div><div class="hm-val" data-i18n="brief.full_credit">Full Credit</div></div>
     <div class="hm-item"><div class="hm-label" data-i18n="brief.deadline">Deadline</div><div class="hm-val">15 <span data-issue-date="month">July 2026</span></div></div>
-    <div class="hm-item"><div class="hm-label" data-i18n="brief.issue">Issue</div><div class="hm-val">No. 2 · August 2026</div></div>
+    <div class="hm-item"><div class="hm-label" data-i18n="brief.issue">Issue</div><div class="hm-val">No. 2 · September 2026</div></div>
     <div class="hm-item"><div class="hm-label" data-i18n="brief.questions">Questions</div><div class="hm-val"><a href="mailto:illustrators@reedefinedmag.com" style="color:var(--teal)">illustrators@reedefinedmag.com</a></div></div>
   </div>
 </div>
@@ -311,7 +311,7 @@ async function submitForm(){
     await fetch(SBU+'/rest/v1/cover_submissions',{
       method:'POST',
       headers:{'Content-Type':'application/json','apikey':SBK,'Authorization':'Bearer '+SBK,'Prefer':'return=minimal'},
-      body:JSON.stringify({name,email,social,location,drift_answer:drift,filename:file1.name,sketch_filename:file2?file2.name:null,issue:'No. 2 · August 2026',submitted_at:new Date().toISOString()})
+      body:JSON.stringify({name,email,social,location,drift_answer:drift,filename:file1.name,sketch_filename:file2?file2.name:null,issue:'No. 2 · September 2026',submitted_at:new Date().toISOString()})
     });
   }catch(e){}
 
