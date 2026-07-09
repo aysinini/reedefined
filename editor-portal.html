@@ -500,9 +500,9 @@ if('serviceWorker' in navigator){
       <span style="opacity:.3">/</span>
       <button class="lang-btn" data-lang="de" onclick="setLang('de')" style="background:none;border:none;font-family:inherit;font-size:12px;font-weight:600;cursor:pointer;padding:0;color:rgba(255,255,255,.8)">DE</button>
     </div>
-    <button class="tb-btn" onclick="saveDraft()" data-i18n="ep.save">Save Draft</button>
+    <button class="tb-btn" onclick="saveDraft()" data-i18n="ep.save" title="Keep editing until the deadline">Save Draft</button>
     <button class="tb-btn" onclick="previewDraft()" data-i18n="ep.preview">Preview ↗</button>
-    <button class="tb-btn tb-submit" onclick="openSubmit()" data-i18n="ep.submit">Submit Column →</button>
+    <button class="tb-btn tb-submit" onclick="openSubmit()" data-i18n="ep.submit" title="Publish to Issue No. 1 · August 2026">Submit Column →</button>
     <div style="position:relative">
       <div class="tb-av" id="tb-av-text" onclick="toggleAvMenu()"> </div>
       <div id="av-menu" style="display:none;position:absolute;top:40px;right:0;background:#fff;border:1px solid #E0E0E0;border-radius:8px;box-shadow:0 8px 24px rgba(0,0,0,.15);min-width:160px;z-index:300;overflow:hidden">
@@ -703,7 +703,7 @@ if('serviceWorker' in navigator){
           <label class="m-label">Product photo</label>
           <div style="border:1px dashed var(--rule);padding:16px;text-align:center;border-radius:6px;cursor:pointer;background:var(--bg)" onclick="document.getElementById('prod-img-input').click()">
             <input type="file" id="prod-img-input" accept="image/*" style="display:none" onchange="handleProductImage(this.files[0])">
-            <div id="prod-img-preview" style="display:none;margin-bottom:8px"><img id="prod-img-el" style="max-height:120px;max-width:100%;object-fit:contain;border-radius:4px"></div>
+            <div id="prod-img-preview" style="display:none;margin-bottom:8px"><img id="prod-img-el" alt="Product photo preview" style="max-height:120px;max-width:100%;object-fit:contain;border-radius:4px"></div>
             <div id="prod-img-placeholder" style="font-family:var(--H);font-size:13px;color:var(--muted)">Click to upload product photo</div>
           </div>
           <div id="prod-img-status" style="font-family:var(--H);font-size:12px;color:var(--teal);margin-top:4px;display:none">Checking image…</div>
@@ -718,7 +718,7 @@ if('serviceWorker' in navigator){
           <div class="url-block">
             <div class="url-thumb"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M8 12l4-4M6.5 10.5l-1.5 1.5a3 3 0 004.2 4.2l1.5-1.5M12.5 9.5l1.5-1.5a3 3 0 00-4.2-4.2l-1.5 1.5" stroke="#aaa" stroke-width="1.3" stroke-linecap="round"/></svg></div>
             <div>
-              <div class="url-domain" id="link-domain">reedefinedmag.com</div>
+              <div class="url-domain" id="link-domain">reedefined.app</div>
               <div class="url-title" id="link-title">Link title will appear here</div>
             </div>
           </div>
@@ -860,7 +860,7 @@ async function handlePhotoFiles(files) {
     const imgDiv = document.createElement('div');
     imgDiv.style.cssText = 'position:relative;border:1px solid var(--rule);overflow:hidden;border-radius:4px';
     imgDiv.innerHTML = `
-      <img src="${publicUrl}" style="width:100%;max-height:200px;object-fit:cover;display:block">
+      <img src="${publicUrl}" alt="Uploaded photo" style="width:100%;max-height:200px;object-fit:cover;display:block">
       <div style="padding:6px 10px;display:flex;align-items:center;gap:6px">
         <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M1 6l3 3 7-7" stroke="#3A7A50" stroke-width="1.5" stroke-linecap="round"/></svg>
         <span style="font-family:var(--H);font-size:12px;color:#3A7A50">Approved</span>
@@ -925,7 +925,7 @@ function buildPhotoBlockEl(url, caption){
       <button class="bh-del" onclick="this.closest('.block').remove()">✕</button>
     </div>
     <div style="padding:8px 0">
-      <img src="${url}" style="width:100%;max-height:320px;object-fit:cover;border-radius:4px;display:block">
+      <img src="${url}" alt="${caption || 'Photo'}" style="width:100%;max-height:320px;object-fit:cover;border-radius:4px;display:block">
       ${caption ? `<div style="font-family:var(--H);font-size:13px;color:var(--muted);margin-top:6px">${caption}</div>` : ''}
     </div>`;
   return div;
@@ -1023,7 +1023,7 @@ function buildProductBlockEl({name, brand, price, platform, url, img}){
       <button class="bh-del" onclick="this.closest('.block').remove()">✕</button>
     </div>
     <div style="display:flex;gap:14px;padding:8px 0;align-items:center">
-      ${imgUrl ? `<img src="${imgUrl}" style="width:72px;height:72px;object-fit:cover;border-radius:4px;flex-shrink:0">` : `<div style="width:72px;height:72px;background:var(--bg2);border-radius:4px;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><rect x="2" y="5" width="20" height="16" rx="2" stroke="#ccc" stroke-width="1.5" fill="none"/><path d="M8 5v-.5a4 4 0 018 0V5" stroke="#ccc" stroke-width="1.5" stroke-linecap="round"/></svg></div>`}
+      ${imgUrl ? `<img src="${imgUrl}" alt="${name || 'Product photo'}" style="width:72px;height:72px;object-fit:cover;border-radius:4px;flex-shrink:0">` : `<div style="width:72px;height:72px;background:var(--bg2);border-radius:4px;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><rect x="2" y="5" width="20" height="16" rx="2" stroke="#ccc" stroke-width="1.5" fill="none"/><path d="M8 5v-.5a4 4 0 018 0V5" stroke="#ccc" stroke-width="1.5" stroke-linecap="round"/></svg></div>`}
       <div style="flex:1;min-width:0">
         <div style="font-family:var(--H);font-size:15px;font-weight:700;color:var(--ink);margin-bottom:2px">${name || 'Product'}</div>
         ${brand ? `<div style="font-family:var(--H);font-size:13px;color:var(--muted);margin-bottom:4px">${brand}</div>` : ''}

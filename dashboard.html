@@ -194,6 +194,7 @@ function renderCurrentIssueSection(){
     <div class="section-block">
       <div class="section-h">Current Issue</div>
       <div class="section-sub">Issue No. 1 · August 2026</div>
+      <div style="font-family:var(--S);font-size:13px;color:var(--muted);line-height:1.5;margin-bottom:16px">Submit before 25 July to be included in this issue. Drafts not submitted by the deadline won't appear in the magazine.</div>
       ${body}
     </div>`;
 }
@@ -325,7 +326,7 @@ async function loadNotifications(){
     const name = n.profiles?.name || 'Someone';
     const initial = name.charAt(0).toUpperCase();
     const avatarHtml = n.profiles?.avatar
-      ? `<img src="${n.profiles.avatar}" style="width:32px;height:32px;border-radius:50%;object-fit:cover" onerror="this.outerHTML='<div style=&quot;width:32px;height:32px;border-radius:50%;background:#D4DBCA;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-size:12px;color:#4A7C3F&quot;>${initial}</div>'">`
+      ? `<img src="${n.profiles.avatar}" alt="${esc(name)}" style="width:32px;height:32px;border-radius:50%;object-fit:cover" onerror="this.outerHTML='<div style=&quot;width:32px;height:32px;border-radius:50%;background:#D4DBCA;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-size:12px;color:#4A7C3F&quot;>${initial}</div>'">`
       : `<div style="width:32px;height:32px;border-radius:50%;background:var(--teal-l);display:flex;align-items:center;justify-content:center;font-family:var(--H);font-size:12px;color:var(--teal)">${initial}</div>`;
     const actionText = n.type === 'like'
       ? `liked your column "${esc(n.contributions?.title || '')}"`

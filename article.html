@@ -134,7 +134,7 @@ async function loadArticle(){
 
   const photosHtml = photoArr.map(p => `
     <figure style="margin:28px 0">
-      <img src="${p.url}" style="width:100%;border-radius:8px;display:block">
+      <img src="${p.url}" alt="${esc(p.caption || 'Article photo')}" style="width:100%;border-radius:8px;display:block">
       ${p.caption ? `<figcaption style="font-family:var(--S);font-size:13px;color:var(--muted);margin-top:8px">${esc(p.caption)}</figcaption>` : ''}
     </figure>`).join('');
 
