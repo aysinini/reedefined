@@ -540,6 +540,9 @@ if('serviceWorker' in navigator){
       <option value="art">Art</option>
       <option value="nightlife">Nightlife</option>
       <option value="beauty">Beauty</option>
+      <option value="astrology">Astrology</option>
+      <option value="design">Design</option>
+      <option value="tech">Tech</option>
     </select>
 
     <div class="editor-rule"></div>
@@ -894,7 +897,7 @@ function insertVideoBlock(){
   const parsed = parseVideoEmbedUrl(url);
   if(!parsed){ errEl.textContent = "That doesn't look like a YouTube or Vimeo link."; errEl.style.display = 'block'; return; }
 
-  const blocks = document.getElementById('blocks');
+  const blocks = document.getElementById('blocks-list');
   const div = document.createElement('div');
   div.className = 'block video-block';
   div.dataset.type = 'video';
@@ -919,7 +922,7 @@ function insertVideoBlock(){
 function insertPhotoBlock() {
   if(uploadedPhotoUrls.length === 0) return;
   const caption = document.getElementById('photo-caption').value.trim();
-  const blocks = document.getElementById('blocks');
+  const blocks = document.getElementById('blocks-list');
 
   uploadedPhotoUrls.forEach(url => {
     const div = document.createElement('div');
@@ -996,7 +999,7 @@ function insertProductBlock() {
 
   if(!name && !url) { alert('Please add at least a product name or link.'); return; }
 
-  const blocks = document.getElementById('blocks');
+  const blocks = document.getElementById('blocks-list');
   const div = document.createElement('div');
   div.className = 'block product-block';
   div.dataset.type = 'product';
