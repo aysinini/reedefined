@@ -97,19 +97,28 @@ let CURRENT_ARTICLE = null;
 async function loadArticle(){
   const params = new URLSearchParams(location.search);
   const id = params.get('id');
+  const isPreview = params.get('preview') === '1';
   const wrap = document.getElementById('wrap');
 
   if(!id){ wrap.innerHTML = '<div class="empty">No article specified.</div>'; return; }
 
-  const { data:a, error } = await sb.from('contributions')
+  let query = sb.from('contributions')
     .select('id,title,tagline,category,body,photos,videos,updated_at,user_id,profiles:user_id(name,avatar)')
-    .eq('id', id).eq('status','submitted').single();
+    .eq('id', id);
+  if(!isPreview) query = query.eq('status','submitted');
+
+  const { data:a, error } = await query.single();
 
   if(error || !a){ wrap.innerHTML = '<div class="empty">This article could not be found.</div>'; return; }
 
-  CURRENT_ARTICLE = a;
-
   const { data:{ session } } = await sb.auth.getSession();
+
+  if(isPreview && (!session || a.user_id !== session.user.id)){
+    wrap.innerHTML = '<div class="empty">You do not have permission to preview this draft.</div>';
+    return;
+  }
+
+  CURRENT_ARTICLE = a;
 
   const name = a.profiles?.name || 'Contributor';
   const initial = name.charAt(0).toUpperCase();

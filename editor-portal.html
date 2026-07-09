@@ -378,14 +378,21 @@ let currentDraftId = null;
   }
 
   async function loadExistingDraft(){
-    const { data:d } = await sb.from('contributions').select('id,title,tagline,category,body').eq('user_id', session.user.id).eq('status','draft').order('updated_at',{ascending:false}).limit(1).maybeSingle();
+    const { data:d } = await sb.from('contributions').select('id,title,tagline,category,body,photos,products,videos').eq('user_id', session.user.id).eq('status','draft').order('updated_at',{ascending:false}).limit(1).maybeSingle();
     if(d){
       currentDraftId = d.id;
       const t=document.getElementById('col-title'); if(t && d.title) t.value = d.title;
       const tl=document.getElementById('col-tagline'); if(tl && d.tagline) tl.value = d.tagline;
       const c=document.getElementById('col-category'); if(c && d.category) c.value = d.category;
       if(d.body) setBodyPlainText(d.body);
-      [t,tl,b].forEach(el=>{ if(el && el.value) autoResize(el); });
+      [t,tl].forEach(el=>{ if(el && el.value) autoResize(el); });
+
+      const blocksList = document.getElementById('blocks-list');
+      if(blocksList){
+        try{ JSON.parse(d.photos || '[]').forEach(p => blocksList.appendChild(buildPhotoBlockEl(p.url, p.caption))); }catch(e){}
+        try{ JSON.parse(d.videos || '[]').forEach(v => blocksList.appendChild(buildVideoBlockEl(v.embedUrl))); }catch(e){}
+        try{ JSON.parse(d.products || '[]').forEach(p => blocksList.appendChild(buildProductBlockEl(p))); }catch(e){}
+      }
     }
   }
 
@@ -494,7 +501,7 @@ if('serviceWorker' in navigator){
       <button class="lang-btn" data-lang="de" onclick="setLang('de')" style="background:none;border:none;font-family:inherit;font-size:12px;font-weight:600;cursor:pointer;padding:0;color:rgba(255,255,255,.8)">DE</button>
     </div>
     <button class="tb-btn" onclick="saveDraft()" data-i18n="ep.save">Save</button>
-    <button class="tb-btn" onclick="location.href='magazine-reader.html'" data-i18n="ep.preview">Preview ↗</button>
+    <button class="tb-btn" onclick="previewDraft()" data-i18n="ep.preview">Preview ↗</button>
     <button class="tb-btn tb-submit" onclick="openSubmit()" data-i18n="ep.submit">Submit Column →</button>
     <div style="position:relative">
       <div class="tb-av" id="tb-av-text" onclick="toggleAvMenu()"> </div>
@@ -886,6 +893,44 @@ function parseVideoEmbedUrl(url){
   return null;
 }
 
+function buildVideoBlockEl(embedUrl, provider){
+  const div = document.createElement('div');
+  div.className = 'block video-block';
+  div.dataset.type = 'video';
+  div.dataset.embedUrl = embedUrl;
+  div.innerHTML = `
+    <div class="block-header">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="1" y="4" width="11" height="10" rx="1.5" stroke="#4A7C3F" stroke-width="1.2" fill="none"/><path d="M12 7l5-3v10l-5-3z" stroke="#4A7C3F" stroke-width="1.2" fill="none" stroke-linejoin="round"/></svg>
+      <span class="bh-label">${provider || 'Video'}${provider ? ' video' : ''}</span>
+      <button class="bh-del" onclick="this.closest('.block').remove()">✕</button>
+    </div>
+    <div style="padding:8px 0">
+      <div style="position:relative;padding-top:56.25%;border-radius:4px;overflow:hidden;background:#000">
+        <iframe src="${embedUrl}" style="position:absolute;inset:0;width:100%;height:100%;border:none" allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture" allowfullscreen></iframe>
+      </div>
+    </div>`;
+  return div;
+}
+
+function buildPhotoBlockEl(url, caption){
+  const div = document.createElement('div');
+  div.className = 'block photo-block';
+  div.dataset.type = 'photo';
+  div.dataset.url = url;
+  div.dataset.caption = caption || '';
+  div.innerHTML = `
+    <div class="block-header">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="1" y="3" width="14" height="10" rx="1.5" stroke="#4A7C3F" stroke-width="1.2" fill="none"/><circle cx="5.5" cy="7.5" r="1.5" stroke="#4A7C3F" stroke-width="1.2" fill="none"/><path d="M1 12l4-4 3 3 2-2 5 4" stroke="#4A7C3F" stroke-width="1.2" stroke-linecap="round"/></svg>
+      <span class="bh-label">Photo</span>
+      <button class="bh-del" onclick="this.closest('.block').remove()">✕</button>
+    </div>
+    <div style="padding:8px 0">
+      <img src="${url}" style="width:100%;max-height:320px;object-fit:cover;border-radius:4px;display:block">
+      ${caption ? `<div style="font-family:var(--H);font-size:13px;color:var(--muted);margin-top:6px">${caption}</div>` : ''}
+    </div>`;
+  return div;
+}
+
 function insertVideoBlock(){
   const input = document.getElementById('video-url-input');
   const errEl = document.getElementById('video-url-error');
@@ -898,22 +943,7 @@ function insertVideoBlock(){
   if(!parsed){ errEl.textContent = "That doesn't look like a YouTube or Vimeo link."; errEl.style.display = 'block'; return; }
 
   const blocks = document.getElementById('blocks-list');
-  const div = document.createElement('div');
-  div.className = 'block video-block';
-  div.dataset.type = 'video';
-  div.dataset.embedUrl = parsed.embedUrl;
-  div.innerHTML = `
-    <div class="block-header">
-      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="1" y="4" width="11" height="10" rx="1.5" stroke="#4A7C3F" stroke-width="1.2" fill="none"/><path d="M12 7l5-3v10l-5-3z" stroke="#4A7C3F" stroke-width="1.2" fill="none" stroke-linejoin="round"/></svg>
-      <span class="bh-label">${parsed.provider} video</span>
-      <button class="bh-del" onclick="this.closest('.block').remove()">✕</button>
-    </div>
-    <div style="padding:8px 0">
-      <div style="position:relative;padding-top:56.25%;border-radius:4px;overflow:hidden;background:#000">
-        <iframe src="${parsed.embedUrl}" style="position:absolute;inset:0;width:100%;height:100%;border:none" allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture" allowfullscreen></iframe>
-      </div>
-    </div>`;
-  blocks.appendChild(div);
+  blocks.appendChild(buildVideoBlockEl(parsed.embedUrl, parsed.provider));
 
   input.value = '';
   closeModal();
@@ -925,22 +955,7 @@ function insertPhotoBlock() {
   const blocks = document.getElementById('blocks-list');
 
   uploadedPhotoUrls.forEach(url => {
-    const div = document.createElement('div');
-    div.className = 'block photo-block';
-    div.dataset.type = 'photo';
-    div.dataset.url = url;
-    div.dataset.caption = caption;
-    div.innerHTML = `
-      <div class="block-header">
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="1" y="3" width="14" height="10" rx="1.5" stroke="#4A7C3F" stroke-width="1.2" fill="none"/><circle cx="5.5" cy="7.5" r="1.5" stroke="#4A7C3F" stroke-width="1.2" fill="none"/><path d="M1 12l4-4 3 3 2-2 5 4" stroke="#4A7C3F" stroke-width="1.2" stroke-linecap="round"/></svg>
-        <span class="bh-label">Photo</span>
-        <button class="bh-del" onclick="this.closest('.block').remove()">✕</button>
-      </div>
-      <div style="padding:8px 0">
-        <img src="${url}" style="width:100%;max-height:320px;object-fit:cover;border-radius:4px;display:block">
-        ${caption ? `<div style="font-family:var(--H);font-size:13px;color:var(--muted);margin-top:6px">${caption}</div>` : ''}
-      </div>`;
-    blocks.appendChild(div);
+    blocks.appendChild(buildPhotoBlockEl(url, caption));
   });
 
   uploadedPhotoUrls = [];
@@ -989,25 +1004,16 @@ async function handleProductImage(file) {
   status.textContent = 'Photo approved ✓';
 }
 
-function insertProductBlock() {
-  const name     = document.getElementById('prod-name').value.trim();
-  const brand    = document.getElementById('prod-brand').value.trim();
-  const price    = document.getElementById('prod-price').value.trim();
-  const platform = document.getElementById('prod-platform').value;
-  const url      = document.getElementById('prod-url').value.trim();
-  const imgUrl   = productImageUrl;
-
-  if(!name && !url) { alert('Please add at least a product name or link.'); return; }
-
-  const blocks = document.getElementById('blocks-list');
+function buildProductBlockEl({name, brand, price, platform, url, img}){
+  const imgUrl = img || '';
   const div = document.createElement('div');
   div.className = 'block product-block';
   div.dataset.type = 'product';
-  div.dataset.name = name;
-  div.dataset.brand = brand;
-  div.dataset.price = price;
-  div.dataset.platform = platform;
-  div.dataset.url = url;
+  div.dataset.name = name || '';
+  div.dataset.brand = brand || '';
+  div.dataset.price = price || '';
+  div.dataset.platform = platform || '';
+  div.dataset.url = url || '';
   div.dataset.img = imgUrl;
 
   div.innerHTML = `
@@ -1028,7 +1034,21 @@ function insertProductBlock() {
         </div>
       </div>
     </div>`;
-  blocks.appendChild(div);
+  return div;
+}
+
+function insertProductBlock() {
+  const name     = document.getElementById('prod-name').value.trim();
+  const brand    = document.getElementById('prod-brand').value.trim();
+  const price    = document.getElementById('prod-price').value.trim();
+  const platform = document.getElementById('prod-platform').value;
+  const url      = document.getElementById('prod-url').value.trim();
+  const imgUrl   = productImageUrl;
+
+  if(!name && !url) { alert('Please add at least a product name or link.'); return; }
+
+  const blocks = document.getElementById('blocks-list');
+  blocks.appendChild(buildProductBlockEl({name, brand, price, platform, url, img: imgUrl}));
 
   // Reset
   ['prod-name','prod-brand','prod-price','prod-url'].forEach(id => document.getElementById(id).value = '');
@@ -1166,6 +1186,15 @@ async function saveDraft(){
     status.textContent = 'Save failed';
     console.error(e);
   }
+}
+
+async function previewDraft(){
+  await saveDraft();
+  if(!currentDraftId){
+    alert('Add a title or some body text before previewing.');
+    return;
+  }
+  location.href = `article.html?id=${currentDraftId}&preview=1`;
 }
 
 // Modal
