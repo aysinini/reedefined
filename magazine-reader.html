@@ -496,8 +496,9 @@ const ARTICLES = [
 // ── DYNAMIC PAGES ──────────────────────────────────────────
 // Base pages always shown
 const BASE_PAGES = [
-  { id:'m-cover',  label:'Cover',          left:'cover-mono',   right:'ad-mono' },
-  { id:'m-editor', label:"Editor's Letter", left:'editor-photo', right:'editor-col' },
+  { id:'m-cover',    label:'Cover',           left:'cover-mono',   right:'ad-mono' },
+  { id:'m-editor',   label:"Editor's Letter", left:'editor-photo', right:'editor-col' },
+  { id:'m-contents', label:'In This Issue',   left:'ad-mono',      right:'contents-mono' },
 ];
 
 // Dynamic pages loaded from Supabase
@@ -886,6 +887,22 @@ function monoAd(){
 }
 
 function monoContents(){
+  const rowsHtml = (CONTRIBUTIONS && CONTRIBUTIONS.length > 0)
+    ? CONTRIBUTIONS.map((article,i) => {
+        const author = (article.profiles && article.profiles.name) ? article.profiles.name : 'Contributor';
+        const pageNum = (BASE_PAGES.length + i) * 2 + 2;
+        return `<div class="mcc-row" onclick="goArticle(${i})">
+        <div class="mcc-n">0${i+1}</div>
+        <div class="mcc-info">
+          <div class="mcc-cat">${escMR(article.category || 'Column')}</div>
+          <div class="mcc-title2">${escMR(article.title || 'Untitled')}</div>
+          <div class="mcc-by">${escMR(author)}</div>
+        </div>
+        <div class="mcc-pg">${pageNum}</div>
+      </div>`;
+      }).join('')
+    : `<div class="mcc-empty" style="padding:32px 0;font-family:var(--H);font-size:14px;color:#999;text-align:center">No articles published yet.</div>`;
+
   return `<div class="mono-contents">
     <div class="mcc-top"></div>
     <div class="mcc-head">
@@ -893,15 +910,7 @@ function monoContents(){
       <div class="mcc-issue">Issue No. 1 · August 2026</div>
     </div>
     <div class="mcc-body">
-      ${ARTICLES.map((a,i)=>`<div class="mcc-row" onclick="goArticle(${i})">
-        <div class="mcc-n">0${i+1}</div>
-        <div class="mcc-info">
-          <div class="mcc-cat">${a.cat}</div>
-          <div class="mcc-title2">${a.title}</div>
-          <div class="mcc-by">${a.by}</div>
-        </div>
-        <div class="mcc-pg">${(i+1)*2+2}</div>
-      </div>`).join('')}
+      ${rowsHtml}
     </div>
     <div class="mcc-foot">
       <span class="mcc-foot-t">"The magazine shaped by the people you follow."</span>
@@ -1023,7 +1032,7 @@ function prevPage(){
   if(cur > 0){ cur--; render(); }
 }
 function goArticle(i){
-  cur = Math.min(1+Math.floor(i/2), getPages().length-1);
+  cur = Math.min(BASE_PAGES.length + i, getPages().length-1);
   render();
 }
 function setStyle(s){ style=s; cur=0; render(); }

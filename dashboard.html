@@ -35,11 +35,11 @@ body{background-color:var(--bg);background-image:radial-gradient(circle at 15% 1
 .tab-panel-wrap{border:1px solid var(--rule);border-radius:9px;padding:8px 24px 8px;margin-bottom:52px}
 .art-row{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:18px 0;border-bottom:1px solid var(--rule);cursor:pointer}
 .art-row:last-child{border-bottom:none}
-.art-status{font-family:var(--C);font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:3px 9px;border-radius:10px;flex-shrink:0}
+.art-status{font-family:var(--C);font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:3px 9px;border-radius:10px;flex-shrink:0}
 .art-status.draft{background:#FAEEDA;color:#854F0B}
 .art-status.submitted{background:var(--teal-l);color:var(--teal)}
 .art-t{font-family:var(--H);font-size:17px;font-weight:700;flex:1}
-.art-cat{font-family:var(--C);font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);flex-shrink:0}
+.art-cat{font-family:var(--C);font-size:12px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);flex-shrink:0}
 .follow-row{display:flex;align-items:center;gap:14px;padding:16px 0;border-bottom:1px solid var(--rule);cursor:pointer}
 .follow-row:last-child{border-bottom:none}
 .follow-avatar{width:40px;height:40px;border-radius:50%;object-fit:cover;background:var(--teal-l);display:flex;align-items:center;justify-content:center;font-family:var(--H);font-size:15px;color:var(--teal);flex-shrink:0}
@@ -176,10 +176,10 @@ function renderCurrentIssueSection(){
     body = `<div class="empty">No draft in progress for this issue.</div>`;
   } else {
     const rightMeta = editable ? `
-        <span style="font-family:var(--C);font-size:11px;color:var(--muted);flex-shrink:0">Editable until July 25</span>
-        <span style="font-family:var(--C);font-size:12px;font-weight:700;letter-spacing:.5px;color:var(--teal);flex-shrink:0">Edit ↗</span>
-        <span style="font-family:var(--C);font-size:12px;font-weight:700;letter-spacing:.5px;color:#C0392B;flex-shrink:0" onclick="event.stopPropagation();deleteDraft(${draft.id})">Delete</span>` : `
-        <span style="font-family:var(--C);font-size:11px;color:var(--light);flex-shrink:0">Editing closed</span>`;
+        <span style="font-family:var(--C);font-size:12px;letter-spacing:1px;color:var(--muted);flex-shrink:0">Editable until July 25</span>
+        <span style="font-family:var(--C);font-size:13px;font-weight:700;letter-spacing:1px;color:var(--teal);text-decoration:underline;text-underline-offset:3px;cursor:pointer;flex-shrink:0">Edit ↗</span>
+        <span style="font-family:var(--C);font-size:13px;font-weight:700;letter-spacing:1px;color:#C0392B;text-decoration:underline;text-underline-offset:3px;cursor:pointer;flex-shrink:0" onclick="event.stopPropagation();deleteDraft(${draft.id})">Delete</span>` : `
+        <span style="font-family:var(--C);font-size:12px;letter-spacing:1px;color:var(--light);flex-shrink:0">Editing closed</span>`;
 
     body = `
       <div class="art-row" ${editable ? `onclick="location.href='editor-portal.html'"` : ''} style="${editable ? '' : 'cursor:default'}">
