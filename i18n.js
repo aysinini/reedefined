@@ -157,6 +157,7 @@ const TRANSLATIONS = {
     'pe.location_ph': 'e.g. Istanbul, Turkey',
     'pe.bio': 'Bio',
     'pe.bio_ph': 'A line or two about you — what you write about, your taste, your background.',
+    'pe.links_h': 'Links & Socials',
     'pe.save': 'Save Profile',
 
     // Article
@@ -547,6 +548,7 @@ const TRANSLATIONS = {
     'pe.location_ph': 'z.B. Istanbul, Türkei',
     'pe.bio': 'Bio',
     'pe.bio_ph': 'Ein, zwei Sätze über dich, worüber du schreibst, dein Geschmack, dein Hintergrund.',
+    'pe.links_h': 'Links & Soziale Medien',
     'pe.save': 'Profil speichern',
 
     // Article

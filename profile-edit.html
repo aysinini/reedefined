@@ -40,6 +40,14 @@ textarea.fi{resize:vertical;min-height:100px;line-height:1.5}
 .status-msg.ok{color:var(--teal)}
 .status-msg.err{color:var(--red)}
 
+.link-row{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.link-label{font-family:var(--S);font-size:14px;color:var(--mid);width:100px;flex-shrink:0}
+.link-label-input{width:100px;flex-shrink:0;padding:12px 10px;border:1px solid var(--rule);border-radius:6px;font-family:var(--S);font-size:14px;color:var(--ink);background:var(--white)}
+.link-input{flex:1;padding:12px 14px;border:1px solid var(--rule);border-radius:6px;font-family:var(--S);font-size:15px;color:var(--ink);background:var(--white);min-width:0}
+.link-remove{background:none;border:none;color:var(--muted);cursor:pointer;font-size:20px;line-height:1;flex-shrink:0;width:20px;padding:0}
+.link-remove:hover{color:var(--red)}
+.btn-add-link{font-family:var(--C);font-size:13px;font-weight:600;letter-spacing:1px;text-transform:uppercase;background:none;color:var(--teal);border:1px dashed var(--teal);border-radius:20px;padding:9px 18px;cursor:pointer;margin-top:4px}
+
 .danger-zone{margin-top:48px;padding:24px;border:1px solid rgba(200,37,26,.3);border-radius:8px}
 .dz-title{font-family:var(--C);font-size:13px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--mid);margin-bottom:8px}
 .dz-desc{font-family:var(--S);font-size:14px;color:var(--muted);line-height:1.6;margin-bottom:18px}
@@ -96,6 +104,24 @@ textarea.fi{resize:vertical;min-height:100px;line-height:1.5}
   </div>
 
   <div class="field">
+    <label class="fl" data-i18n="pe.links_h">Links &amp; Socials</label>
+    <div class="link-row">
+      <span class="link-label">Instagram</span>
+      <input class="link-input" id="link-instagram" placeholder="@username or URL">
+    </div>
+    <div class="link-row">
+      <span class="link-label">TikTok</span>
+      <input class="link-input" id="link-tiktok" placeholder="@username or URL">
+    </div>
+    <div class="link-row">
+      <span class="link-label">Website</span>
+      <input class="link-input" id="link-website" placeholder="https://yoursite.com">
+    </div>
+    <div id="custom-links-list"></div>
+    <button type="button" class="btn-add-link" onclick="addCustomLinkRow()">+ Add another link</button>
+  </div>
+
+  <div class="field">
     <label class="fl" data-i18n="pe.notif_h">Notifications</label>
     <div style="display:flex;flex-direction:column;gap:10px;margin-top:8px">
       <label style="display:flex;align-items:center;gap:8px;font-family:'Barlow',sans-serif;font-size:14px;color:#3A3A3A;cursor:pointer">
@@ -147,7 +173,7 @@ async function init(){
   const { data:{ session } } = await sb.auth.getSession();
   if(!session){ location.href='portal.html'; return; }
 
-  const { data:p } = await sb.from('profiles').select('avatar,bio,name,location,notify_comments_inapp,notify_comments_email,notify_likes_inapp,notify_likes_email').eq('id', session.user.id).single();
+  const { data:p } = await sb.from('profiles').select('avatar,bio,name,location,links,notify_comments_inapp,notify_comments_email,notify_likes_inapp,notify_likes_email').eq('id', session.user.id).single();
   const name = p?.name || session.user.user_metadata?.full_name || session.user.email || '';
   const initial = name.charAt(0).toUpperCase();
 
@@ -160,6 +186,17 @@ async function init(){
   }
   document.getElementById('bio-input').value = p?.bio || '';
   document.getElementById('location-input').value = p?.location || '';
+
+  const links = Array.isArray(p?.links) ? p.links : [];
+  const fixedLabels = { instagram: 'Instagram', tiktok: 'TikTok', website: 'Website' };
+  Object.entries(fixedLabels).forEach(([id, label]) => {
+    const match = links.find(l => (l.label || '').toLowerCase() === label.toLowerCase());
+    document.getElementById(`link-${id}`).value = match?.url || '';
+  });
+  links
+    .filter(l => !Object.values(fixedLabels).some(label => label.toLowerCase() === (l.label || '').toLowerCase()))
+    .forEach(l => addCustomLinkRow(l.label || '', l.url || ''));
+
   document.getElementById('notif-comments-inapp').checked = p?.notify_comments_inapp !== false;
   document.getElementById('notif-comments-email').checked = p?.notify_comments_email !== false;
   document.getElementById('notif-likes-inapp').checked = p?.notify_likes_inapp !== false;
@@ -195,12 +232,13 @@ async function saveProfile(){
 
   const bio = document.getElementById('bio-input').value.trim();
   const location = document.getElementById('location-input').value.trim();
+  const links = collectLinks();
   const notify_comments_inapp = document.getElementById('notif-comments-inapp').checked;
   const notify_comments_email = document.getElementById('notif-comments-email').checked;
   const notify_likes_inapp = document.getElementById('notif-likes-inapp').checked;
   const notify_likes_email = document.getElementById('notif-likes-email').checked;
   const { error } = await sb.from('profiles').update({
-    avatar: currentAvatarUrl, bio, location,
+    avatar: currentAvatarUrl, bio, location, links,
     notify_comments_inapp, notify_comments_email, notify_likes_inapp, notify_likes_email
   }).eq('id', session.user.id);
 
@@ -214,6 +252,41 @@ function showStatus(msg, type){
   const el = document.getElementById('status-msg');
   el.textContent = msg;
   el.className = 'status-msg ' + type;
+}
+
+let customLinkSeq = 0;
+
+function addCustomLinkRow(label, url){
+  const id = customLinkSeq++;
+  const row = document.createElement('div');
+  row.className = 'link-row';
+  row.id = `custom-link-${id}`;
+  row.innerHTML = `
+    <input class="link-label-input" placeholder="Label" value="${escapeAttr(label || '')}">
+    <input class="link-input" placeholder="https://..." value="${escapeAttr(url || '')}">
+    <button type="button" class="link-remove" onclick="document.getElementById('custom-link-${id}').remove()">×</button>
+  `;
+  document.getElementById('custom-links-list').appendChild(row);
+}
+
+function escapeAttr(s){
+  return (s || '').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function collectLinks(){
+  const links = [];
+  const fixedLabels = { instagram: 'Instagram', tiktok: 'TikTok', website: 'Website' };
+  Object.entries(fixedLabels).forEach(([id, label]) => {
+    const url = document.getElementById(`link-${id}`).value.trim();
+    if(url) links.push({ label, url });
+  });
+  document.querySelectorAll('#custom-links-list .link-row').forEach(row => {
+    const inputs = row.querySelectorAll('input');
+    const label = inputs[0].value.trim();
+    const url = inputs[1].value.trim();
+    if(url) links.push({ label: label || 'Link', url });
+  });
+  return links;
 }
 
 function openDeleteModal(){
