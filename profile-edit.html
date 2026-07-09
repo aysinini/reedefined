@@ -5,7 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Reedefined — Edit Profile</title>
 <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Barlow+Condensed:wght@400;500;600;700&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/cropperjs@1.6.2/dist/cropper.min.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/cropperjs@1.6.2/dist/cropper.min.js"></script>
 <script src="session-storage.js"></script>
 <script src="i18n.js"></script>
 <style>
@@ -65,9 +67,12 @@ textarea.fi{resize:vertical;min-height:100px;line-height:1.5}
 .btn-confirm-delete{flex:1;font-family:var(--C);font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;background:var(--red);color:#fff;border:none;border-radius:24px;padding:12px;cursor:pointer}
 .btn-confirm-delete:disabled{opacity:.4;cursor:default}
 
-.rotate-preview-wrap{width:200px;height:200px;margin:0 auto 20px;border-radius:50%;overflow:hidden;border:1px solid var(--rule);display:flex;align-items:center;justify-content:center;background:var(--bg)}
-.rotate-preview-wrap img{max-width:100%;max-height:100%;transition:transform .2s}
-.btn-rotate{width:100%;font-family:var(--C);font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;background:none;color:var(--ink);border:1px solid var(--rule);border-radius:24px;padding:12px;cursor:pointer;margin-bottom:20px}
+.crop-modal-box{max-width:480px}
+.crop-container{width:100%;height:360px;margin:0 0 20px;background:#111;overflow:hidden}
+.crop-container img{display:block;max-width:100%}
+.crop-toolbar{display:flex;align-items:center;gap:14px;margin-bottom:22px}
+.crop-zoom-slider{flex:1;accent-color:var(--teal);cursor:pointer}
+.btn-rotate{flex-shrink:0;font-family:var(--C);font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;background:none;color:var(--ink);border:1px solid var(--rule);border-radius:20px;padding:9px 16px;cursor:pointer;white-space:nowrap}
 .btn-rotate:hover{border-color:var(--ink)}
 .btn-use-photo{flex:1;font-family:var(--C);font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;background:var(--teal);color:#fff;border:none;border-radius:24px;padding:12px;cursor:pointer}
 </style>
@@ -160,15 +165,19 @@ textarea.fi{resize:vertical;min-height:100px;line-height:1.5}
 </div>
 
 <div class="modal-overlay" id="rotate-modal">
-  <div class="modal-box" style="text-align:center">
+  <div class="modal-box crop-modal-box">
     <div class="modal-title">Adjust your photo</div>
-    <div class="rotate-preview-wrap">
-      <img id="rotate-preview-img" src="" alt="">
+    <div class="crop-container">
+      <img id="crop-image" src="" alt="">
     </div>
-    <button type="button" class="btn-rotate" onclick="rotatePreview()">↻ Rotate</button>
+    <div class="crop-toolbar">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2"><circle cx="9" cy="9" r="6"/><path d="M21 21l-4.3-4.3"/></svg>
+      <input type="range" class="crop-zoom-slider" id="crop-zoom-slider" min="0" max="3" step="0.01" value="0" oninput="onZoomSlider(this.value)">
+      <button type="button" class="btn-rotate" onclick="rotateCrop()">↻ Rotate</button>
+    </div>
     <div class="modal-actions">
       <button class="btn-cancel" onclick="cancelRotate()">Cancel</button>
-      <button class="btn-use-photo" onclick="confirmRotateAndUpload()">Use This Photo</button>
+      <button class="btn-use-photo" onclick="confirmRotateAndUpload()">Done</button>
     </div>
   </div>
 </div>
@@ -223,7 +232,8 @@ async function init(){
   document.getElementById('notif-likes-email').checked = p?.notify_likes_email === true;
 }
 
-let rotateState = { file: null, rotation: 0, dataUrl: null };
+let cropper = null;
+let lastZoomVal = 0;
 
 function onAvatarFileSelected(file){
   if(!file) return;
@@ -231,43 +241,53 @@ function onAvatarFileSelected(file){
 
   const reader = new FileReader();
   reader.onload = (e) => {
-    rotateState = { file, rotation: 0, dataUrl: e.target.result };
-    const img = document.getElementById('rotate-preview-img');
+    const img = document.getElementById('crop-image');
     img.src = e.target.result;
-    img.style.transform = 'rotate(0deg)';
     document.getElementById('rotate-modal').classList.add('show');
+
+    if(cropper) cropper.destroy();
+    lastZoomVal = 0;
+    document.getElementById('crop-zoom-slider').value = 0;
+    cropper = new Cropper(img, {
+      aspectRatio: 1,
+      viewMode: 1,
+      dragMode: 'move',
+      autoCropArea: 1,
+      background: false,
+      cropBoxMovable: false,
+      cropBoxResizable: false,
+      toggleDragModeOnDblclick: false
+    });
   };
   reader.readAsDataURL(file);
 }
 
-function rotatePreview(){
-  rotateState.rotation = (rotateState.rotation + 90) % 360;
-  document.getElementById('rotate-preview-img').style.transform = `rotate(${rotateState.rotation}deg)`;
+function onZoomSlider(val){
+  if(!cropper) return;
+  val = parseFloat(val);
+  cropper.zoom(val - lastZoomVal);
+  lastZoomVal = val;
+}
+
+function rotateCrop(){
+  if(cropper) cropper.rotate(90);
 }
 
 function cancelRotate(){
   document.getElementById('rotate-modal').classList.remove('show');
   document.getElementById('avatar-input').value = '';
-  rotateState = { file: null, rotation: 0, dataUrl: null };
+  if(cropper){ cropper.destroy(); cropper = null; }
 }
 
 function confirmRotateAndUpload(){
-  const img = new Image();
-  img.onload = () => {
-    const swap = rotateState.rotation % 180 !== 0;
-    const canvas = document.createElement('canvas');
-    canvas.width = swap ? img.height : img.width;
-    canvas.height = swap ? img.width : img.height;
-    const ctx = canvas.getContext('2d');
-    ctx.translate(canvas.width / 2, canvas.height / 2);
-    ctx.rotate(rotateState.rotation * Math.PI / 180);
-    ctx.drawImage(img, -img.width / 2, -img.height / 2);
-    canvas.toBlob((blob) => {
-      document.getElementById('rotate-modal').classList.remove('show');
-      handleAvatarUpload(blob, rotateState.file.name);
-    }, rotateState.file.type || 'image/jpeg', 0.92);
-  };
-  img.src = rotateState.dataUrl;
+  if(!cropper) return;
+  const canvas = cropper.getCroppedCanvas({ width: 600, height: 600, imageSmoothingQuality: 'high' });
+  canvas.toBlob((blob) => {
+    document.getElementById('rotate-modal').classList.remove('show');
+    cropper.destroy();
+    cropper = null;
+    handleAvatarUpload(blob, 'avatar.jpg');
+  }, 'image/jpeg', 0.92);
 }
 
 async function handleAvatarUpload(file, filename){
