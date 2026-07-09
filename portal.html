@@ -277,7 +277,7 @@ async function doSignUp(){
   btn.disabled=true;btn.innerHTML='<span class="spin"></span>Creating account…';clearMsgs();
   const {error}=await sb.auth.signUp({
     email,password:pw,
-    options:{data:{full_name:name,role:suRole},emailRedirectTo:'https://reedefinedmag.com/portal.html'}
+    options:{data:{full_name:name,role:suRole},emailRedirectTo:'https://reedefined.app/portal.html'}
   });
   btn.disabled=false;btn.textContent=t('p.create_btn');
   if(error){
@@ -293,7 +293,7 @@ async function forgotPw(){
   const email=document.getElementById('si-email').value.trim();
   if(!email){showErr(t('p.err_enter_email'));return;}
   clearMsgs();
-  const {error}=await sb.auth.resetPasswordForEmail(email,{redirectTo:'https://reedefinedmag.com/portal.html'});
+  const {error}=await sb.auth.resetPasswordForEmail(email,{redirectTo:'https://reedefined.app/portal.html'});
   if(error){showErr(error.message);return;}
   showOk(t('p.ok_reset_sent'));
 }
