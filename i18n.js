@@ -168,6 +168,9 @@ const TRANSLATIONS = {
     'art.sign_comment': 'Sign in to leave a comment →',
     'art.no_comments': 'No comments yet — be the first.',
     'art.add_comment': 'Add a comment…',
+    'art.reply': 'Reply',
+    'art.reply_ph': 'Write a reply…',
+    'art.delete': 'Delete',
 
     // Choose screen
     'choose.welcome': 'Welcome back',
@@ -561,6 +564,9 @@ const TRANSLATIONS = {
     'art.sign_comment': 'Anmelden, um zu kommentieren →',
     'art.no_comments': 'Noch keine Kommentare, sei der Erste.',
     'art.add_comment': 'Kommentar hinzufügen…',
+    'art.reply': 'Antworten',
+    'art.reply_ph': 'Antwort schreiben…',
+    'art.delete': 'Löschen',
 
     // Choose screen
     'choose.welcome': 'Willkommen zurück',

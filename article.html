@@ -66,6 +66,15 @@ body{background:var(--bg);color:var(--ink);font-family:var(--S);min-height:100vh
 .comment-date{font-family:var(--C);font-size:11px;letter-spacing:.5px;text-transform:uppercase;color:var(--muted);margin-left:8px}
 .comment-body{font-family:var(--S);font-size:14px;color:var(--mid);line-height:1.5;margin-top:4px}
 .comments-empty{padding:24px 0;color:var(--muted);font-family:var(--H);font-size:14px;text-align:center}
+.comment-actions{display:flex;gap:14px;margin-top:6px}
+.comment-action{font-family:var(--C);font-size:12px;font-weight:600;letter-spacing:.5px;color:var(--muted);text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+.comment-action.delete{color:#C0392B}
+.reply-form{display:flex;gap:8px;margin-top:10px}
+.reply-input{flex:1;padding:9px 12px;border:1px solid var(--rule);border-radius:16px;font-family:var(--S);font-size:13px;color:var(--ink)}
+.reply-submit{font-family:var(--C);font-size:12px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;background:var(--ink);color:#fff;border:none;border-radius:16px;padding:0 16px;cursor:pointer}
+.comment-replies{margin-top:14px;display:flex;flex-direction:column;gap:14px}
+.reply-item{display:flex;gap:10px}
+.reply-avatar{width:26px;height:26px;border-radius:50%;object-fit:cover;background:var(--teal-l);display:flex;align-items:center;justify-content:center;font-family:var(--H);font-size:11px;color:var(--teal);flex-shrink:0}
 </style>
 </head>
 <body>
@@ -176,7 +185,7 @@ async function loadArticle(){
   applyLang(getLang());
 
   loadLikes(a.id, session);
-  loadComments(a.id);
+  loadComments(a.id, session);
   renderCommentForm(a.id, session);
 }
 
@@ -249,31 +258,115 @@ async function toggleLike(contributionId){
   }
 }
 
-async function loadComments(contributionId){
+function avatarHtmlFor(c, sizeClass){
+  const name = c.profiles?.name || 'Reader';
+  const initial = name.charAt(0).toUpperCase();
+  const hasAvatar = c.profiles?.avatar && c.profiles.avatar.trim().length > 0;
+  return hasAvatar
+    ? `<img class="${sizeClass}" src="${c.profiles.avatar}" alt="${esc(name)}" onerror="this.outerHTML='<div class=\\'${sizeClass}\\'>${initial}</div>'">`
+    : `<div class="${sizeClass}">${initial}</div>`;
+}
+
+function canDeleteComment(c, session){
+  if(!session) return false;
+  if(c.user_id === session.user.id) return true;
+  if(CURRENT_ARTICLE && CURRENT_ARTICLE.user_id === session.user.id) return true;
+  return false;
+}
+
+function renderReply(r, contributionId, session){
+  const name = r.profiles?.name || 'Reader';
+  const date = r.created_at ? new Date(r.created_at).toLocaleDateString('en-US',{month:'short',day:'numeric'}) : '';
+  const canDelete = canDeleteComment(r, session);
+  return `
+      <div class="reply-item" id="comment-${r.id}">
+        ${avatarHtmlFor(r, 'reply-avatar')}
+        <div style="flex:1">
+          <span class="comment-name">${esc(name)}</span><span class="comment-date">${date}</span>
+          <div class="comment-body">${esc(r.body)}</div>
+          ${canDelete ? `<div class="comment-actions"><span class="comment-action delete" onclick="deleteComment(${r.id},${contributionId})">${t('art.delete')}</span></div>` : ''}
+        </div>
+      </div>`;
+}
+
+async function loadComments(contributionId, session){
   const { data:comments } = await sb.from('comments')
-    .select('id,body,created_at,user_id,profiles:user_id(name,avatar)')
+    .select('id,body,created_at,user_id,parent_comment_id,profiles:user_id(name,avatar)')
     .eq('contribution_id', contributionId).order('created_at',{ascending:true});
 
   const list = document.getElementById('comments-list');
   if(!comments || comments.length===0){ list.innerHTML = `<div class="comments-empty">${t('art.no_comments')}</div>`; return; }
 
-  list.innerHTML = comments.map(c => {
+  const topLevel = comments.filter(c => !c.parent_comment_id);
+  const repliesByParent = {};
+  comments.filter(c => c.parent_comment_id).forEach(c => {
+    (repliesByParent[c.parent_comment_id] = repliesByParent[c.parent_comment_id] || []).push(c);
+  });
+
+  list.innerHTML = topLevel.map(c => {
     const name = c.profiles?.name || 'Reader';
-    const initial = name.charAt(0).toUpperCase();
-    const hasAvatar = c.profiles?.avatar && c.profiles.avatar.trim().length > 0;
-    const avatarHtml = hasAvatar
-      ? `<img class="comment-avatar" src="${c.profiles.avatar}" alt="${esc(name)}" onerror="this.outerHTML='<div class=\\'comment-avatar\\'>${initial}</div>'">`
-      : `<div class="comment-avatar">${initial}</div>`;
     const date = c.created_at ? new Date(c.created_at).toLocaleDateString('en-US',{month:'short',day:'numeric'}) : '';
+    const canDelete = canDeleteComment(c, session);
+    const replies = repliesByParent[c.id] || [];
+    const repliesHtml = replies.length
+      ? `<div class="comment-replies">${replies.map(r => renderReply(r, contributionId, session)).join('')}</div>`
+      : '';
+    const replyAction = session ? `<span class="comment-action" onclick="toggleReplyForm(${c.id})">${t('art.reply')}</span>` : '';
     return `
-      <div class="comment-item">
-        ${avatarHtml}
-        <div>
+      <div class="comment-item" id="comment-${c.id}">
+        ${avatarHtmlFor(c, 'comment-avatar')}
+        <div style="flex:1">
           <span class="comment-name">${esc(name)}</span><span class="comment-date">${date}</span>
           <div class="comment-body">${esc(c.body)}</div>
+          <div class="comment-actions">
+            ${replyAction}
+            ${canDelete ? `<span class="comment-action delete" onclick="deleteComment(${c.id},${contributionId})">${t('art.delete')}</span>` : ''}
+          </div>
+          <div class="reply-form" id="reply-form-${c.id}" style="display:none">
+            <input class="reply-input" id="reply-input-${c.id}" placeholder="${t('art.reply_ph')}" maxlength="500">
+            <button class="reply-submit" onclick="submitReply(${c.id},${contributionId})">${t('art.post')}</button>
+          </div>
+          ${repliesHtml}
         </div>
       </div>`;
   }).join('');
+}
+
+function toggleReplyForm(commentId){
+  const form = document.getElementById(`reply-form-${commentId}`);
+  if(!form) return;
+  const showing = form.style.display !== 'none';
+  form.style.display = showing ? 'none' : 'flex';
+  if(!showing) document.getElementById(`reply-input-${commentId}`).focus();
+}
+
+async function submitReply(parentId, contributionId){
+  const input = document.getElementById(`reply-input-${parentId}`);
+  const body = input.value.trim();
+  if(!body) return;
+
+  const { data:{ session } } = await sb.auth.getSession();
+  if(!session){ location.href='portal.html'; return; }
+
+  const { error } = await sb.from('comments').insert({ contribution_id: contributionId, user_id: session.user.id, body, parent_comment_id: parentId });
+  if(!error){
+    input.value = '';
+    loadComments(contributionId, session);
+    notifyAuthor(contributionId, 'comment', body);
+  } else {
+    console.error('Reply submit error:', error);
+    alert('Could not post reply: ' + (error.message || 'unknown error'));
+  }
+}
+
+async function deleteComment(commentId, contributionId){
+  if(!confirm('Delete this comment?')) return;
+  const { data:{ session } } = await sb.auth.getSession();
+  if(!session) return;
+
+  const { error } = await sb.from('comments').delete().eq('id', commentId);
+  if(error){ alert('Could not delete comment: ' + (error.message || 'unknown error')); return; }
+  loadComments(contributionId, session);
 }
 
 function renderCommentForm(contributionId, session){
@@ -303,7 +396,7 @@ async function submitComment(contributionId){
   const { error } = await sb.from('comments').insert({ contribution_id: contributionId, user_id: session.user.id, body });
   if(!error){
     input.value = '';
-    loadComments(contributionId);
+    loadComments(contributionId, session);
     notifyAuthor(contributionId, 'comment', body);
   } else {
     console.error('Comment submit error:', error);
