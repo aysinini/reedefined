@@ -535,7 +535,7 @@ if('serviceWorker' in navigator){
     </div>
 
     <!-- Title -->
-    <textarea class="title-input" id="col-title" placeholder="Your column title…" rows="1" oninput="autoResize(this);updatePreview()" data-i18n-placeholder="ep.title_ph"></textarea>
+    <textarea class="title-input" id="col-title" placeholder="Your column title…" rows="1" oninput="autoResize(this)" data-i18n-placeholder="ep.title_ph"></textarea>
 
     <!-- Tagline -->
     <textarea class="tagline-input" id="col-tagline" placeholder="A single line that earns the read…" rows="1" oninput="autoResize(this)" data-i18n-placeholder="ep.tagline_ph"></textarea>
@@ -789,32 +789,10 @@ async function moderatePhoto(file) {
       const mediaType = file.type;
 
       try {
-        const res = await fetch('https://api.anthropic.com/v1/messages', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            model: 'claude-sonnet-4-6',
-            max_tokens: 200,
-            messages: [{
-              role: 'user',
-              content: [
-                {
-                  type: 'image',
-                  source: { type: 'base64', media_type: mediaType, data: base64 }
-                },
-                {
-                  type: 'text',
-                  text: 'Check this image for policy violations. Respond ONLY with JSON: {"passed": true/false, "reason": "brief reason if failed"}. Reject if: nudity or sexual content, graphic violence or gore, hate symbols, self-harm imagery. Accept everything else including art, fashion, food, nature, people, cityscapes.'
-                }
-              ]
-            }]
-          })
-        });
-
-        const data = await res.json();
-        const text = data.content?.[0]?.text || '{"passed":true}';
-        const clean = text.replace(/```json|```/g, '').trim();
-        resolve(JSON.parse(clean));
+        const sb = supabase.createClient('https://gseuejqqwkdjkhxfxxwy.supabase.co','sb_publishable_0Nmw1mwGx__b_jJHLHBDKg__1OAsRuy',{auth:{storage:window.REEDEFINED_AUTH_STORAGE}});
+        const { data, error } = await sb.functions.invoke('moderate-photo', { body: { base64, mediaType } });
+        if(error) throw error;
+        resolve(data);
       } catch(e) {
         // If moderation fails, allow by default
         resolve({ passed: true });
@@ -1090,22 +1068,16 @@ function autoCapitalize(el) {
   }
 }
 
-// Apply to body and tagline textareas
+// Apply to the title and tagline inputs (col-body is a contenteditable div,
+// not an input/textarea — it has no .value, so autoCapitalize can't run on it)
 document.addEventListener('DOMContentLoaded', () => {
-  const body = document.getElementById('col-body');
   const tagline = document.getElementById('col-tagline');
   const title = document.getElementById('col-title');
 
-  [body, tagline, title].forEach(el => {
+  [tagline, title].forEach(el => {
     if(el) el.addEventListener('input', () => autoCapitalize(el));
   });
 });
-
-// Update preview title
-function updatePreview(){
-  const t=document.getElementById('col-title').value||'Your Column';
-  document.getElementById('prev-title').textContent=t;
-}
 
 // Draft save
 let draftTimer;
@@ -1252,8 +1224,6 @@ function delBlock(id){
 function openSubmit(){document.getElementById('submit-overlay').classList.add('open');document.body.style.overflow='hidden'}
 function closeSubmit(){document.getElementById('submit-overlay').classList.remove('open');document.body.style.overflow=''}
 // ══ CONTENT MODERATION ══
-const CLAUDE_MODEL = 'claude-sonnet-4-20250514';
-
 function openModOverlay(){
   document.getElementById('mod-overlay').classList.add('open');
   document.body.style.overflow='hidden';
@@ -1295,41 +1265,10 @@ function showModResult(passed, title, sub, detail){
 
 async function moderateText(title, body){
   try {
-    const response = await fetch('https://api.anthropic.com/v1/messages', {
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({
-        model: CLAUDE_MODEL,
-        max_tokens: 1000,
-        system: `You are a content moderator for Reedefined, an editorial magazine platform. Review the submitted column for policy violations.
-
-Check for:
-- Explicit sexual content or nudity
-- Hate speech, discrimination or harassment based on race, gender, religion, sexuality or other protected characteristics  
-- Graphic violence or gore
-- Promotion of dangerous or illegal activities
-- Spam or meaningless content
-- Content that could harm or harass real individuals
-
-Respond ONLY with valid JSON in this exact format:
-{"passed": true, "reason": null}
-OR
-{"passed": false, "reason": "Brief explanation of the specific issue found, in plain language for the contributor."}
-
-Be fair — creative writing, mature themes handled thoughtfully, strong opinions and personal essays are all acceptable. Only flag clear violations.`,
-        messages:[{
-          role:'user',
-          content: `Title: ${title}
-
-Body:
-${body}`
-        }]
-      })
-    });
-    const data = await response.json();
-    const text = data.content?.[0]?.text || '{"passed":true,"reason":null}';
-    const clean = text.replace(/```json|```/g,'').trim();
-    return JSON.parse(clean);
+    const sb = supabase.createClient('https://gseuejqqwkdjkhxfxxwy.supabase.co','sb_publishable_0Nmw1mwGx__b_jJHLHBDKg__1OAsRuy',{auth:{storage:window.REEDEFINED_AUTH_STORAGE}});
+    const { data, error } = await sb.functions.invoke('moderate-text', { body: { title, body } });
+    if(error) throw error;
+    return data;
   } catch(e) {
     console.log('Moderation error:', e);
     // Fail open — if moderation API is down, allow submission
