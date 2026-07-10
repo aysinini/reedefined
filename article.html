@@ -290,11 +290,12 @@ function renderReply(r, contributionId, session){
 }
 
 async function loadComments(contributionId, session){
-  const { data:comments } = await sb.from('comments')
+  const { data:comments, error } = await sb.from('comments')
     .select('id,body,created_at,user_id,parent_comment_id,profiles:user_id(name,avatar)')
     .eq('contribution_id', contributionId).order('created_at',{ascending:true});
 
   const list = document.getElementById('comments-list');
+  if(error){ console.error('Failed to load comments:', error); list.innerHTML = `<div class="comments-empty">${t('art.no_comments')}</div>`; return; }
   if(!comments || comments.length===0){ list.innerHTML = `<div class="comments-empty">${t('art.no_comments')}</div>`; return; }
 
   const topLevel = comments.filter(c => !c.parent_comment_id);
