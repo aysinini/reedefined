@@ -1183,8 +1183,25 @@ style_tag.textContent = '@keyframes flipIn{from{opacity:0;transform:translateX(2
 document.head.appendChild(style_tag);
 
 // Init — load contributions from Supabase then render
+// Sets `cur` to the spread for a linked article (?article=<id>) without
+// rendering itself -- init() does a single render() right after.
+function goToLinkedArticle(){
+  const params = new URLSearchParams(location.search);
+  const targetId = parseInt(params.get('article'), 10);
+  if(!targetId) return;
+
+  if(EDITORS_LETTER_ARTICLE && EDITORS_LETTER_ARTICLE.id === targetId){
+    cur = 1; // the fixed Editor's Letter spread in BASE_PAGES
+    return;
+  }
+
+  const idx = CONTRIBUTIONS.findIndex(a => a.id === targetId);
+  if(idx !== -1) cur = Math.min(BASE_PAGES.length + idx, getPages().length - 1);
+}
+
 (async function init() {
   await loadContributions();
+  goToLinkedArticle();
   render();
 })();
 

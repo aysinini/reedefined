@@ -121,7 +121,7 @@ body{background:var(--bg);color:var(--ink);font-family:var(--S);min-height:100vh
       <span style="color:var(--rule)">/</span>
       <button class="lang-btn" data-lang="de" onclick="setLang('de')" style="background:none;border:none;font-family:var(--C);font-size:12px;font-weight:600;cursor:pointer;padding:0;color:var(--mid)">DE</button>
     </div>
-    <div class="tb-link" data-i18n="art.flip" onclick="location.href='magazine-reader.html'">Read in flip format ⇄</div>
+    <div class="tb-link" data-i18n="art.flip" onclick="goFlipReader()">Read in flip format ⇄</div>
     <div class="tb-link" data-i18n="art.back" onclick="location.href='newsstand.html'">← Back</div>
   </div>
 </div>
@@ -162,6 +162,10 @@ function esc(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').repla
 // For href/src attribute values: escapes AND only allows http(s) URLs, so a
 // contributor-submitted "javascript:" (or similar) URL can never end up live.
 function safeUrl(u){ const s=(u||'').toString().trim(); return /^https?:\/\//i.test(s) ? esc(s) : ''; }
+
+function goFlipReader(){
+  location.href = CURRENT_ARTICLE ? `magazine-reader.html?article=${CURRENT_ARTICLE.id}` : 'magazine-reader.html';
+}
 
 // Turns the [label](https://…) markdown-style syntax contributors can add via
 // the editor's text-selection "Link" button into a real anchor tag. Runs on
