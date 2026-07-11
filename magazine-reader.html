@@ -512,6 +512,11 @@ let CONTRIBUTIONS = []; // loaded articles
 let MR_ACTIVE_TRANSLATION = {}; // { [contributionId]: 'tr'|'de' }
 let MR_TRANSLATING = {};        // { [contributionId]: true } while in flight
 
+// The one contribution currently flagged is_editors_letter=true, if any.
+// Powers monoEditorCol()/monoEditorPhoto(); falls back to static copy when
+// nothing has been flagged yet.
+let EDITORS_LETTER_ARTICLE = null;
+
 const SBU_MR = 'https://gseuejqqwkdjkhxfxxwy.supabase.co';
 const SBK_MR = 'sb_publishable_0Nmw1mwGx__b_jJHLHBDKg__1OAsRuy';
 
@@ -522,9 +527,19 @@ async function loadContributions() {
     // Get current user's session to check follows
     const { data: { session } } = await sb.auth.getSession();
 
+    const { data: letterRow } = await sb.from('contributions')
+      .select('*, profiles:user_id(name, role, avatar)')
+      .eq('status', 'submitted')
+      .eq('is_editors_letter', true)
+      .order('updated_at', { ascending: false })
+      .limit(1)
+      .maybeSingle();
+    EDITORS_LETTER_ARTICLE = letterRow || null;
+
     let query = sb.from('contributions')
       .select('*, profiles:user_id(name, role, avatar)')
       .eq('status', 'submitted')
+      .eq('is_editors_letter', false)
       .order('updated_at', { ascending: false });
 
     // If logged in and following people, filter to followed contributors
@@ -539,6 +554,7 @@ async function loadContributions() {
         query = sb.from('contributions')
           .select('*, profiles:user_id(name, role, avatar)')
           .eq('status', 'submitted')
+          .eq('is_editors_letter', false)
           .in('user_id', [...followIds, session.user.id])
           .order('updated_at', { ascending: false });
       }
@@ -778,6 +794,43 @@ function monoEditorPhoto(){
 }
 
 function monoEditorCol(){
+  if(EDITORS_LETTER_ARTICLE){
+    const e = EDITORS_LETTER_ARTICLE;
+    const authorName = escMR((e.profiles && e.profiles.name) ? e.profiles.name : 'Editor');
+    const initial = authorName.charAt(0).toUpperCase();
+    const avatarUrl = safeUrlMR((e.profiles && e.profiles.avatar) ? e.profiles.avatar : '');
+    const headerAvatarHtml = avatarUrl
+      ? `<img alt="${authorName}" src="${avatarUrl}" style="width:88px;height:88px;border-radius:50%;object-fit:cover;object-position:center top;border:2px solid #4A7C3F;flex-shrink:0">`
+      : `<div style="width:88px;height:88px;border-radius:50%;background:#4A7C3F;display:flex;align-items:center;justify-content:center;font-family:var(--H);font-size:32px;font-weight:700;color:#fff;flex-shrink:0">${initial}</div>`;
+    const footerAvatarHtml = avatarUrl
+      ? `<img alt="${authorName}" src="${avatarUrl}" style="width:32px;height:32px;border-radius:50%;object-fit:cover;object-position:center top;border:1.5px solid #D4DBCA;flex-shrink:0">`
+      : `<div style="width:32px;height:32px;border-radius:50%;background:#4A7C3F;display:flex;align-items:center;justify-content:center;font-family:var(--H);font-size:13px;font-weight:700;color:#fff;flex-shrink:0">${initial}</div>`;
+    const bodyHtml = (e.body || '').split(/\n\s*\n/).map(p => `<p style="margin-bottom:10px">${escMR(p)}</p>`).join('');
+    const dateLabel = e.updated_at ? new Date(e.updated_at).toLocaleDateString('en-US',{month:'long',year:'numeric'}) : 'August 2026';
+
+    return `<div class="mr-page">
+    <div class="mr-top-rule"></div>
+    <div class="mr-header">
+      <div style="flex:1">
+        <div style="font-family:var(--C);font-size:12px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#4A7C3F;margin-bottom:8px;display:flex;align-items:center;gap:8px"><span style="width:16px;height:1px;background:#4A7C3F;display:inline-block"></span>Editor’s Letter</div>
+        <div class="mr-title">${escMR(e.title || 'Untitled')}</div>
+        ${e.tagline ? `<div style="font-family:var(--H);font-size:14px;color:#3A3A3A;line-height:1.5">"${escMR(e.tagline)}"</div>` : ''}
+      </div>
+      ${headerAvatarHtml}
+    </div>
+    <div class="mr-body">
+      <div style="font-family:var(--S);font-size:15px;line-height:1.8;color:#3A3A3A">${bodyHtml}</div>
+    </div>
+    <div style="padding:12px 22px 14px;border-top:1px solid #E0E0E0;display:flex;align-items:center;gap:10px;background:#EAE6DD;flex-shrink:0">
+      ${footerAvatarHtml}
+      <div>
+        <div style="font-family:var(--C);font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#0C0C0C">${authorName} · Editor in Chief</div>
+        <div style="font-family:var(--H);font-size:12px;color:#4A4A4A">Reedefined · ${escMR(dateLabel)}</div>
+      </div>
+    </div>
+  </div>`;
+  }
+
   return `<div class="mr-page">
     <div class="mr-top-rule"></div>
     <div class="mr-header">

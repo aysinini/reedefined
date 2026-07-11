@@ -114,7 +114,7 @@ async function init(){
   const uid = session.user.id;
 
   const [{ data:articles }, { data:followerRows }, { data:followingRows }, { data:profile }] = await Promise.all([
-    sb.from('contributions').select('id,title,category,status,updated_at').eq('user_id', uid).order('updated_at',{ascending:false}),
+    sb.from('contributions').select('id,title,category,status,updated_at,is_editors_letter').eq('user_id', uid).order('updated_at',{ascending:false}),
     sb.from('follows').select('user_id').eq('contributor_id', uid),
     sb.from('follows').select('contributor_id').eq('user_id', uid),
     sb.from('profiles').select('is_admin').eq('id', uid).maybeSingle()
@@ -214,9 +214,13 @@ function renderCurrentIssueSection(){
 let pastCatFilter = 'all', pastDateFilter = 'all';
 
 function renderPastArtRow(a){
+  const letterBadge = a.is_editors_letter
+    ? `<span class="art-status" style="background:#F4EAD5;color:#8A6116">Editor's Letter</span>`
+    : '';
   return `
       <div class="art-row" onclick="location.href='article.html?id=${a.id}'">
         <span class="art-status submitted">Published</span>
+        ${letterBadge}
         <span class="art-t">${esc(a.title || 'Untitled')}</span>
         <span style="display:flex;align-items:center;gap:4px;font-family:var(--C);font-size:12px;color:var(--muted);flex-shrink:0">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.8 1-1a5.5 5.5 0 0 0 0-7.6z"/></svg>${a.likeCount||0}

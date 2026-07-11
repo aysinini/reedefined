@@ -394,13 +394,22 @@ function safeUrl(u){ const s=(u||'').toString().trim(); return /^https?:\/\//i.t
     window.__sbSignOut=async()=>{await sb.auth.signOut();location.href='index.html';};
   }
 
+  async function applyAdminUI(){
+    const { data:profile } = await sb.from('profiles').select('is_admin').eq('id', session.user.id).maybeSingle();
+    if(profile?.is_admin){
+      const field = document.getElementById('editors-letter-field');
+      if(field) field.style.display = 'flex';
+    }
+  }
+
   async function loadExistingDraft(){
-    const { data:d } = await sb.from('contributions').select('id,title,tagline,category,body,photos,products,videos').eq('user_id', session.user.id).eq('status','draft').order('updated_at',{ascending:false}).limit(1).maybeSingle();
+    const { data:d } = await sb.from('contributions').select('id,title,tagline,category,body,photos,products,videos,is_editors_letter').eq('user_id', session.user.id).eq('status','draft').order('updated_at',{ascending:false}).limit(1).maybeSingle();
     if(d){
       currentDraftId = d.id;
       const t=document.getElementById('col-title'); if(t && d.title) t.value = d.title;
       const tl=document.getElementById('col-tagline'); if(tl && d.tagline) tl.value = d.tagline;
       const c=document.getElementById('col-category'); if(c && d.category) c.value = d.category;
+      const el=document.getElementById('col-editors-letter'); if(el) el.checked = !!d.is_editors_letter;
       if(d.body) setBodyPlainText(d.body);
       [t,tl].forEach(el=>{ if(el && el.value) autoResize(el); });
 
@@ -414,9 +423,9 @@ function safeUrl(u){ const s=(u||'').toString().trim(); return /^https?:\/\//i.t
   }
 
   if(document.readyState==='loading'){
-    document.addEventListener('DOMContentLoaded', ()=>{ applyEditorUI(); loadExistingDraft(); });
+    document.addEventListener('DOMContentLoaded', ()=>{ applyEditorUI(); applyAdminUI(); loadExistingDraft(); });
   } else {
-    applyEditorUI(); loadExistingDraft();
+    applyEditorUI(); applyAdminUI(); loadExistingDraft();
   }
 })();
 
@@ -568,6 +577,11 @@ if('serviceWorker' in navigator){
       <option value="design">Design</option>
       <option value="tech">Tech</option>
     </select>
+
+    <label id="editors-letter-field" style="display:none;align-items:center;gap:8px;margin:-16px 0 20px;cursor:pointer;font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:600;letter-spacing:.5px;color:#4A7C3F">
+      <input type="checkbox" id="col-editors-letter" style="accent-color:#4A7C3F;width:15px;height:15px;cursor:pointer">
+      Mark as Editor's Letter
+    </label>
 
     <div class="editor-rule"></div>
 
@@ -1230,6 +1244,7 @@ async function saveDraft(){
   const title   = document.getElementById('col-title')?.value?.trim() || '';
   const tagline = document.getElementById('col-tagline')?.value?.trim() || '';
   const category = document.getElementById('col-category')?.value || '';
+  const isEditorsLetter = document.getElementById('col-editors-letter')?.checked || false;
   const body    = getBodyPlainText();
 
   // Collect photo blocks
@@ -1266,6 +1281,7 @@ async function saveDraft(){
     const payload = {
       user_id: session.user.id,
       title, tagline, category, body, photos, products, videos,
+      is_editors_letter: isEditorsLetter,
       status: 'draft',
       updated_at: new Date().toISOString()
     };
@@ -1429,6 +1445,7 @@ async function doSubmit(){
   const title   = document.getElementById('col-title')?.value?.trim() || '';
   const tagline = document.getElementById('col-tagline')?.value?.trim() || '';
   const category = document.getElementById('col-category')?.value || '';
+  const isEditorsLetter = document.getElementById('col-editors-letter')?.checked || false;
   const body    = getBodyPlainText();
 
   if(!category){ alert('Please choose a category before submitting.'); return; }
@@ -1462,6 +1479,7 @@ async function doSubmit(){
     const payload = {
       user_id: session.user.id,
       title, tagline, category, body, photos, products, videos,
+      is_editors_letter: isEditorsLetter,
       status: 'submitted',
       updated_at: new Date().toISOString()
     };
