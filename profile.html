@@ -57,7 +57,10 @@ body{background:var(--bg);color:var(--ink);font-family:var(--S);min-height:100vh
 <script>
 const sb = supabase.createClient('https://gseuejqqwkdjkhxfxxwy.supabase.co','sb_publishable_0Nmw1mwGx__b_jJHLHBDKg__1OAsRuy',{auth:{storage:window.REEDEFINED_AUTH_STORAGE}});
 
-function esc(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function esc(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+// For href/src attribute values: escapes AND only allows http(s) URLs, so a
+// user-submitted "javascript:" (or similar) URL can never end up live.
+function safeUrl(u){ const s=(u||'').toString().trim(); return /^https?:\/\//i.test(s) ? esc(s) : ''; }
 
 async function loadProfile(){
   const params = new URLSearchParams(location.search);
@@ -74,12 +77,12 @@ async function loadProfile(){
   const name = p.name || 'Contributor';
   const initial = name.charAt(0).toUpperCase();
   const avatarHtml = p.avatar
-    ? `<img class="avatar" src="${p.avatar}" alt="${esc(name)}" onerror="this.outerHTML='<div class=&quot;avatar&quot;>${initial}</div>'">`
+    ? `<img class="avatar" src="${safeUrl(p.avatar)}" alt="${esc(name)}" onerror="this.outerHTML='<div class=&quot;avatar&quot;>${initial}</div>'">`
     : `<div class="avatar">${initial}</div>`;
 
   const beats = (p.interests || (subs||[]).map(s=>s.category).filter(Boolean).join(','))
     .split(',').map(s=>s.trim()).filter(Boolean);
-  const beatsHtml = beats.length ? beats.slice(0,4).join(' · ') : '';
+  const beatsHtml = beats.length ? beats.slice(0,4).map(esc).join(' · ') : '';
   const metaParts = [];
   if(beatsHtml) metaParts.push(beatsHtml);
   if(p.location) metaParts.push(esc(p.location));

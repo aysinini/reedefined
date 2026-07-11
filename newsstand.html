@@ -338,7 +338,8 @@ footer.site-ft{background:var(--ink);padding:60px 32px 34px}.ft-w{max-width:1400
       return;
     }
 
-    const esc = s => (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    const esc = s => (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    const safeUrl = u => { const s=(u||'').toString().trim(); return /^https?:\/\//i.test(s) ? esc(s) : ''; };
     const byUser = {};
     subs.forEach(s => {
       if(!byUser[s.user_id]) byUser[s.user_id] = { count:0, name:s.profiles?.name||'Contributor', avatar:s.profiles?.avatar, bio:s.profiles?.bio||'' };
@@ -348,7 +349,7 @@ footer.site-ft{background:var(--ink);padding:60px 32px 34px}.ft-w{max-width:1400
     grid.innerHTML = Object.entries(byUser).map(([uid,u]) => {
       const initial = u.name.charAt(0).toUpperCase();
       const avatarHtml = u.avatar
-        ? `<img src="${u.avatar}" alt="${u.name}" style="width:46px;height:46px;border-radius:50%;object-fit:cover;border:2px solid #D4DBCA" onerror="this.outerHTML='<div style=&quot;width:46px;height:46px;border-radius:50%;background:var(--teal-l);display:flex;align-items:center;justify-content:center;font-family:var(--H);font-size:16px;color:var(--teal)&quot;>${initial}</div>'">`
+        ? `<img src="${safeUrl(u.avatar)}" alt="${esc(u.name)}" style="width:46px;height:46px;border-radius:50%;object-fit:cover;border:2px solid #D4DBCA" onerror="this.outerHTML='<div style=&quot;width:46px;height:46px;border-radius:50%;background:var(--teal-l);display:flex;align-items:center;justify-content:center;font-family:var(--H);font-size:16px;color:var(--teal)&quot;>${initial}</div>'">`
         : `<div style="width:46px;height:46px;border-radius:50%;background:var(--teal-l);display:flex;align-items:center;justify-content:center;font-family:var(--H);font-size:16px;color:var(--teal)">${initial}</div>`;
       const isFollowing = contribFollows.has(uid);
       return `
@@ -389,12 +390,13 @@ footer.site-ft{background:var(--ink);padding:60px 32px 34px}.ft-w{max-width:1400
     });
     (commentRows||[]).forEach(c => { commentCounts[c.contribution_id] = (commentCounts[c.contribution_id]||0) + 1; });
 
-    const esc = s => (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    const esc = s => (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    const safeUrl = u => { const s=(u||'').toString().trim(); return /^https?:\/\//i.test(s) ? esc(s) : ''; };
     list.innerHTML = arts.map(a => {
       const authorName = a.profiles?.name || 'Contributor';
       const initial = authorName.charAt(0).toUpperCase();
       const avatarHtml = a.profiles?.avatar
-        ? `<img src="${a.profiles.avatar}" alt="${authorName}" style="width:28px;height:28px;border-radius:50%;object-fit:cover" onerror="this.outerHTML='<div style=&quot;width:28px;height:28px;border-radius:50%;background:var(--teal-l);display:flex;align-items:center;justify-content:center;font-family:var(--H);font-size:11px;color:var(--teal)&quot;>${initial}</div>'">`
+        ? `<img src="${safeUrl(a.profiles.avatar)}" alt="${esc(authorName)}" style="width:28px;height:28px;border-radius:50%;object-fit:cover" onerror="this.outerHTML='<div style=&quot;width:28px;height:28px;border-radius:50%;background:var(--teal-l);display:flex;align-items:center;justify-content:center;font-family:var(--H);font-size:11px;color:var(--teal)&quot;>${initial}</div>'">`
         : `<div style="width:28px;height:28px;border-radius:50%;background:var(--teal-l);display:flex;align-items:center;justify-content:center;font-family:var(--H);font-size:11px;color:var(--teal)">${initial}</div>`;
       const liked = myLikes.has(a.id);
       return `

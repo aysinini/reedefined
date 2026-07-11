@@ -424,18 +424,20 @@ function renderContribs(){
   }
   document.getElementById('contrib-no-results').classList.remove('show');
 
+  const esc = s => (s||'').toString().replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  const safeUrl = u => { const s=(u||'').toString().trim(); return /^https?:\/\//i.test(s) ? esc(s) : ''; };
   grid.innerHTML = filtered.map(c => `
-    <div class="cc fade" data-tags="${c.tags.join(',')}" onclick="location.href='profile.html?id=${c.id}'" style="cursor:pointer">
+    <div class="cc fade" data-tags="${esc(c.tags.join(','))}" onclick="location.href='profile.html?id=${c.id}'" style="cursor:pointer">
       <div class="cc-top">
-        ${c.photo ? `<img class="cc-av" src="${c.photo}" alt="${c.name}" onerror="this.outerHTML='<div class=&quot;cc-av&quot; style=&quot;background:${c.color}&quot;>${c.init}</div>'">` : `<div class="cc-av" style="background:${c.color}">${c.init}</div>`}
+        ${c.photo ? `<img class="cc-av" src="${safeUrl(c.photo)}" alt="${esc(c.name)}" onerror="this.outerHTML='<div class=&quot;cc-av&quot; style=&quot;background:${c.color}&quot;>${esc(c.init)}</div>'">` : `<div class="cc-av" style="background:${c.color}">${esc(c.init)}</div>`}
         <button class="cc-follow${followed.has(c.id)?' on':''}" onclick="event.stopPropagation();toggleFollowById('${c.id}',this)">${followed.has(c.id)?t('disc.following'):t('disc.follow')}</button>
       </div>
-      <div class="cc-name">${c.name}</div>
-      <div class="cc-beats">${c.beats.join(' · ')}</div>
-      <div class="cc-quote" data-translatable data-original="">${c.quote}</div>
-      <div class="cc-meta">${c.followers} followers · ${c.loc}</div>
+      <div class="cc-name">${esc(c.name)}</div>
+      <div class="cc-beats">${esc(c.beats.join(' · '))}</div>
+      <div class="cc-quote" data-translatable data-original="">${esc(c.quote)}</div>
+      <div class="cc-meta">${c.followers} followers · ${esc(c.loc)}</div>
       <div class="cc-articles">
-        ${c.articles.map(a=>`<div class="cc-art"><span class="cc-art-cat">${a.split('—')[0].trim()}</span>${a.split('—')[1]?.trim()||''}</div>`).join('')}
+        ${c.articles.map(a=>`<div class="cc-art"><span class="cc-art-cat">${esc(a.split('—')[0].trim())}</span>${esc(a.split('—')[1]?.trim()||'')}</div>`).join('')}
       </div>
     </div>
   `).join('');
@@ -530,12 +532,13 @@ async function liveSearchSuggest(query){
 
   if(!profiles || profiles.length===0){ box.style.display='none'; box.innerHTML=''; return; }
 
-  const esc = s => (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  const esc = s => (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  const safeUrl = u => { const s=(u||'').toString().trim(); return /^https?:\/\//i.test(s) ? esc(s) : ''; };
   box.innerHTML = profiles.map(p => {
     const name = p.name || 'Contributor';
     const initial = name.charAt(0).toUpperCase();
     const avatarHtml = p.avatar
-      ? `<img src="${p.avatar}" alt="${esc(name)}" style="width:34px;height:34px;border-radius:50%;object-fit:cover" onerror="this.outerHTML='<div style=&quot;width:34px;height:34px;border-radius:50%;background:#D4DBCA;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-size:13px;color:#4A7C3F&quot;>${initial}</div>'">`
+      ? `<img src="${safeUrl(p.avatar)}" alt="${esc(name)}" style="width:34px;height:34px;border-radius:50%;object-fit:cover" onerror="this.outerHTML='<div style=&quot;width:34px;height:34px;border-radius:50%;background:#D4DBCA;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-size:13px;color:#4A7C3F&quot;>${initial}</div>'">`
       : `<div style="width:34px;height:34px;border-radius:50%;background:#D4DBCA;display:flex;align-items:center;justify-content:center;font-family:'Libre Baskerville',Georgia,serif;font-size:13px;color:#4A7C3F">${initial}</div>`;
     return `
       <div style="display:flex;align-items:center;gap:12px;padding:12px 16px;cursor:pointer;border-bottom:1px solid #F0F0EE" onmouseover="this.style.background='#FAFAF8'" onmouseout="this.style.background='none'" onclick="location.href='profile.html?id=${p.id}'">

@@ -99,7 +99,10 @@ body{background-color:var(--bg);background-image:radial-gradient(circle at 15% 1
 <script>
 const sb = supabase.createClient('https://gseuejqqwkdjkhxfxxwy.supabase.co','sb_publishable_0Nmw1mwGx__b_jJHLHBDKg__1OAsRuy',{auth:{storage:window.REEDEFINED_AUTH_STORAGE}});
 
-function esc(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function esc(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+// For href/src attribute values: escapes AND only allows http(s) URLs, so a
+// user-submitted "javascript:" (or similar) URL can never end up live.
+function safeUrl(u){ const s=(u||'').toString().trim(); return /^https?:\/\//i.test(s) ? esc(s) : ''; }
 
 let DATA = { published:[], drafts:[], followers:[], following:[] };
 
@@ -287,7 +290,7 @@ function showTab(tab){
     const name = p.name || 'Contributor';
     const initial = name.charAt(0).toUpperCase();
     const avatarHtml = p.avatar
-      ? `<img class="follow-avatar" src="${p.avatar}" alt="${esc(name)}">`
+      ? `<img class="follow-avatar" src="${safeUrl(p.avatar)}" alt="${esc(name)}">`
       : `<div class="follow-avatar">${initial}</div>`;
     return `
       <div class="follow-row" onclick="location.href='profile.html?id=${p.id}'">
@@ -326,7 +329,7 @@ async function loadNotifications(){
     const name = n.profiles?.name || 'Someone';
     const initial = name.charAt(0).toUpperCase();
     const avatarHtml = n.profiles?.avatar
-      ? `<img src="${n.profiles.avatar}" alt="${esc(name)}" style="width:32px;height:32px;border-radius:50%;object-fit:cover" onerror="this.outerHTML='<div style=&quot;width:32px;height:32px;border-radius:50%;background:#D4DBCA;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-size:12px;color:#4A7C3F&quot;>${initial}</div>'">`
+      ? `<img src="${safeUrl(n.profiles.avatar)}" alt="${esc(name)}" style="width:32px;height:32px;border-radius:50%;object-fit:cover" onerror="this.outerHTML='<div style=&quot;width:32px;height:32px;border-radius:50%;background:#D4DBCA;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-size:12px;color:#4A7C3F&quot;>${initial}</div>'">`
       : `<div style="width:32px;height:32px;border-radius:50%;background:var(--teal-l);display:flex;align-items:center;justify-content:center;font-family:var(--H);font-size:12px;color:var(--teal)">${initial}</div>`;
     const actionText = n.type === 'like'
       ? `liked your column "${esc(n.contributions?.title || '')}"`
