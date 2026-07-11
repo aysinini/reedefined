@@ -163,6 +163,8 @@ const TRANSLATIONS = {
     // Article
     'art.flip': 'Read in flip format ⇄',
     'art.back': '← Back',
+    'art.shop_issue': 'Shop the Issue',
+    'art.buy': 'Buy →',
     'art.comments': 'Comments',
     'art.post': 'Post',
     'art.sign_comment': 'Sign in to leave a comment →',
@@ -559,6 +561,8 @@ const TRANSLATIONS = {
     // Article
     'art.flip': 'Im Magazin-Format lesen ⇄',
     'art.back': '← Zurück',
+    'art.shop_issue': 'Einkaufen zur Ausgabe',
+    'art.buy': 'Kaufen →',
     'art.comments': 'Kommentare',
     'art.post': 'Senden',
     'art.sign_comment': 'Anmelden, um zu kommentieren →',
