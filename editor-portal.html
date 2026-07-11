@@ -1057,38 +1057,83 @@ function insertProductBlock() {
   closeModal();
 }
 
-function autoCapitalize(el) {
-  const val = el.value;
-  const pos = el.selectionStart;
-
-  // Capitalize very first character
-  if(val.length === 1) {
-    el.value = val.charAt(0).toUpperCase();
-    el.selectionStart = el.selectionEnd = 1;
-    return;
+// ══ AUTO-CAPITALIZE ══
+// Capitalizes the first character of a field/paragraph, and any letter typed
+// right after ". "/"! "/"? " — checked only against what was just typed
+// (the text up to the cursor), never by re-scanning the whole field. That
+// keeps it from re-fighting text the writer deliberately left lowercase
+// elsewhere (e.g. "e.g. iPhone") on every later keystroke, and is what makes
+// it safe to run on a long article body, not just a short title/tagline.
+function capitalizedPrefix(before) {
+  if (before.length === 1) return before.toUpperCase();
+  const lastChar = before.slice(-1);
+  const rest = before.slice(0, -1);
+  if (/[.!?]\s+$/.test(rest) && /[a-zçğıöşü]/.test(lastChar)) {
+    return rest + lastChar.toUpperCase();
   }
+  return before;
+}
 
-  // After . ! ? followed by space, capitalize next letter
-  const newVal = val.replace(/([.!?]\s+)([a-züşığçöa-z])/g, (match, p1, p2) => p1 + p2.toUpperCase());
-  // Capitalize first character of entire text
-  const final = newVal.charAt(0).toUpperCase() + newVal.slice(1);
-
-  if(final !== val) {
-    const diff = final.length - val.length;
-    el.value = final;
-    el.selectionStart = el.selectionEnd = pos + diff;
+// For <input>/<textarea> fields (title, tagline, photo caption).
+function autoCapitalize(el) {
+  const pos = el.selectionStart;
+  if (pos !== el.selectionEnd) return; // leave selections/pastes alone
+  const before = el.value.slice(0, pos);
+  const fixed = capitalizedPrefix(before);
+  if (fixed !== before) {
+    el.value = fixed + el.value.slice(pos);
+    el.selectionStart = el.selectionEnd = pos;
   }
 }
 
-// Apply to the title and tagline inputs (col-body is a contenteditable div,
-// not an input/textarea — it has no .value, so autoCapitalize can't run on it)
-document.addEventListener('DOMContentLoaded', () => {
-  const tagline = document.getElementById('col-tagline');
-  const title = document.getElementById('col-title');
+// For #col-body, a contenteditable div — no .value, and paragraphs can be
+// split across multiple text nodes (e.g. by the inline-link feature), so
+// this reconstructs "everything typed in this paragraph before the cursor"
+// by walking the enclosing block, then — since capitalizedPrefix() only
+// ever changes the last character, which always lives in the node the
+// cursor is in — fixes that single character in place via node.data,
+// exactly like the inline-link feature edits text without corrupting the
+// editor's per-paragraph structure.
+function autoCapitalizeBody() {
+  const sel = window.getSelection();
+  if (!sel || sel.rangeCount === 0 || !sel.isCollapsed) return;
+  const node = sel.focusNode;
+  const offset = sel.focusOffset;
+  if (!node || node.nodeType !== Node.TEXT_NODE || offset === 0) return;
 
-  [tagline, title].forEach(el => {
-    if(el) el.addEventListener('input', () => autoCapitalize(el));
+  const bodyEl = document.getElementById('col-body');
+  if (!bodyEl.contains(node)) return;
+
+  let block = node.parentElement;
+  while (block && block.parentElement !== bodyEl && block !== bodyEl) block = block.parentElement;
+  if (!block) block = bodyEl;
+
+  const walker = document.createTreeWalker(block, NodeFilter.SHOW_TEXT);
+  let before = '';
+  let n;
+  while ((n = walker.nextNode())) {
+    if (n === node) { before += n.data.slice(0, offset); break; }
+    before += n.data;
+  }
+
+  const fixed = capitalizedPrefix(before);
+  if (fixed !== before) {
+    node.data = node.data.slice(0, offset - 1) + fixed.slice(-1) + node.data.slice(offset);
+    const range = document.createRange();
+    range.setStart(node, offset);
+    range.collapse(true);
+    sel.removeAllRanges();
+    sel.addRange(range);
+  }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  ['col-tagline', 'col-title', 'photo-caption'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener('input', () => autoCapitalize(el));
   });
+  const body = document.getElementById('col-body');
+  if (body) body.addEventListener('input', autoCapitalizeBody);
 });
 
 // Draft save
