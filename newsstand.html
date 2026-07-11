@@ -253,8 +253,10 @@ footer.site-ft{background:var(--ink);padding:60px 32px 34px}.ft-w{max-width:1400
     const navInitial=name.charAt(0).toUpperCase();
     if(av&&navInitial) av.textContent=navInitial;
     if(av){
+      const escInitial = (navInitial||'').replace(/'/g,'&#39;');
       sb.from('profiles').select('avatar').eq('id', session.user.id).single().then(({data:navProfile}) => {
-        if(navProfile?.avatar) av.innerHTML = `<img src="${navProfile.avatar}" alt="Profile photo" style="width:100%;height:100%;border-radius:50%;object-fit:cover" onerror="this.parentElement.textContent='${navInitial}'">`;
+        const src = /^https?:\/\//i.test(navProfile?.avatar||'') ? navProfile.avatar.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;') : '';
+        if(src) av.innerHTML = `<img src="${src}" alt="Profile photo" style="width:100%;height:100%;border-radius:50%;object-fit:cover" onerror="this.parentElement.textContent='${escInitial}'">`;
       });
     }
     const outEl=document.getElementById('nav-r-logged-out');

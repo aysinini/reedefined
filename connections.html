@@ -508,8 +508,10 @@ let currentUser = null;
   const navInitial = name.charAt(0).toUpperCase();
   if(av && navInitial) av.textContent = navInitial;
   if(av){
+    const escInitial = (navInitial||'').replace(/'/g,'&#39;');
     sb.from('profiles').select('avatar').eq('id', session.user.id).single().then(({data:navProfile}) => {
-      if(navProfile?.avatar) av.innerHTML = `<img src="${navProfile.avatar}" alt="Profile photo" style="width:100%;height:100%;border-radius:50%;object-fit:cover" onerror="this.parentElement.textContent='${navInitial}'">`;
+      const src = /^https?:\/\//i.test(navProfile?.avatar||'') ? navProfile.avatar.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;') : '';
+      if(src) av.innerHTML = `<img src="${src}" alt="Profile photo" style="width:100%;height:100%;border-radius:50%;object-fit:cover" onerror="this.parentElement.textContent='${escInitial}'">`;
     });
   }
   loadConnections();
@@ -704,10 +706,10 @@ function showConnected(platform, val, result) {
       preview.classList.add('show');
       document.getElementById('items-letterboxd').innerHTML = result.films.map(f => `
         <div class="pc-item">
-          ${f.img ? `<img class="pc-item-img" src="${f.img}" alt="${f.title}" onerror="this.style.display='none'">` : ''}
+          ${f.img ? `<img class="pc-item-img" src="${escapeHtml(f.img)}" alt="${escapeHtml(f.title)}" onerror="this.style.display='none'">` : ''}
           <div class="pc-item-info">
-            <div class="pc-item-title">${f.title}${f.year?' ('+f.year+')':''}</div>
-            <div class="pc-item-meta">${f.rating || 'No rating'}</div>
+            <div class="pc-item-title">${escapeHtml(f.title)}${f.year?' ('+escapeHtml(f.year)+')':''}</div>
+            <div class="pc-item-meta">${escapeHtml(f.rating || 'No rating')}</div>
           </div>
         </div>`).join('');
     }
@@ -720,10 +722,10 @@ function showConnected(platform, val, result) {
       preview.classList.add('show');
       document.getElementById('items-goodreads').innerHTML = result.books.map(b => `
         <div class="pc-item">
-          ${b.img ? `<img class="pc-item-img" src="${b.img}" alt="${b.title}" onerror="this.style.display='none'">` : ''}
+          ${b.img ? `<img class="pc-item-img" src="${escapeHtml(b.img)}" alt="${escapeHtml(b.title)}" onerror="this.style.display='none'">` : ''}
           <div class="pc-item-info">
-            <div class="pc-item-title">${b.title}</div>
-            <div class="pc-item-meta">${b.author}</div>
+            <div class="pc-item-title">${escapeHtml(b.title)}</div>
+            <div class="pc-item-meta">${escapeHtml(b.author)}</div>
           </div>
         </div>`).join('');
     }
@@ -736,10 +738,10 @@ function showConnected(platform, val, result) {
       preview.classList.add('show');
       document.getElementById('items-youtube').innerHTML = `
         <div class="pc-item">
-          ${result.thumbnail ? `<img class="pc-item-img" src="${result.thumbnail}" alt="${result.channelName}" onerror="this.style.display='none'">` : ''}
+          ${result.thumbnail ? `<img class="pc-item-img" src="${escapeHtml(result.thumbnail)}" alt="${escapeHtml(result.channelName)}" onerror="this.style.display='none'">` : ''}
           <div class="pc-item-info">
-            <div class="pc-item-title">${result.channelName}</div>
-            <div class="pc-item-meta"><a href="${result.profileUrl}" target="_blank" style="color:var(--teal)">View channel →</a></div>
+            <div class="pc-item-title">${escapeHtml(result.channelName)}</div>
+            <div class="pc-item-meta"><a href="${escapeHtml(result.profileUrl)}" target="_blank" rel="noopener" style="color:var(--teal)">View channel →</a></div>
           </div>
         </div>`;
     }
