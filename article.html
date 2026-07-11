@@ -127,30 +127,30 @@ body{background:var(--bg);color:var(--ink);font-family:var(--S);min-height:100vh
 </div>
 
 <div class="wrap" id="wrap">
-  <div class="empty">Loading article…</div>
+  <div class="empty" data-i18n="art.loading">Loading article…</div>
 </div>
 
 <div class="report-overlay" id="report-overlay">
   <div class="report-card">
-    <div class="report-title">Report this article</div>
+    <div class="report-title" data-i18n="art.report_title">Report this article</div>
     <div id="report-form-body">
       <div class="report-field">
-        <label class="report-label">Reason</label>
+        <label class="report-label" data-i18n="art.report_reason">Reason</label>
         <select class="report-select" id="report-reason">
-          <option>Inappropriate content</option>
-          <option>Incorrect information</option>
-          <option>Copyright infringement</option>
-          <option>Other</option>
+          <option data-i18n="art.reason_inappropriate">Inappropriate content</option>
+          <option data-i18n="art.reason_incorrect">Incorrect information</option>
+          <option data-i18n="art.reason_copyright">Copyright infringement</option>
+          <option data-i18n="art.reason_other">Other</option>
         </select>
       </div>
       <div class="report-field">
-        <label class="report-label">Additional details (optional)</label>
-        <textarea class="report-textarea" id="report-note" placeholder="Anything else we should know?"></textarea>
+        <label class="report-label" data-i18n="art.report_details">Additional details (optional)</label>
+        <textarea class="report-textarea" id="report-note" placeholder="Anything else we should know?" data-i18n-placeholder="art.report_note_ph"></textarea>
       </div>
     </div>
     <div class="report-acts" id="report-acts">
-      <button class="report-cancel" onclick="closeReportModal()">Cancel</button>
-      <button class="report-submit" onclick="submitReport()">Submit report</button>
+      <button class="report-cancel" onclick="closeReportModal()" data-i18n="ep.cancel">Cancel</button>
+      <button class="report-submit" onclick="submitReport()" data-i18n="art.report_submit">Submit report</button>
     </div>
   </div>
 </div>
@@ -276,7 +276,7 @@ async function loadArticle(){
       </button>
       <button class="report-link" onclick="openReportModal()">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 3v18M4 4h13l-2 4 2 4H4"/></svg>
-        <span>Report this article</span>
+        <span data-i18n="art.report_title">Report this article</span>
       </button>
     </div>
 
@@ -372,8 +372,8 @@ async function openReportModal(){
   document.getElementById('report-reason').value = 'Inappropriate content';
   document.getElementById('report-note').value = '';
   document.getElementById('report-acts').innerHTML =
-    `<button class="report-cancel" onclick="closeReportModal()">Cancel</button>` +
-    `<button class="report-submit" onclick="submitReport()">Submit report</button>`;
+    `<button class="report-cancel" onclick="closeReportModal()">${t('ep.cancel')}</button>` +
+    `<button class="report-submit" onclick="submitReport()">${t('art.report_submit')}</button>`;
   document.getElementById('report-overlay').classList.add('open');
 }
 
@@ -403,7 +403,7 @@ async function submitReport(){
   }
 
   document.getElementById('report-form-body').style.display = 'none';
-  document.getElementById('report-acts').innerHTML = `<div class="report-thanks">Thanks — we'll take a look.</div>`;
+  document.getElementById('report-acts').innerHTML = `<div class="report-thanks">${t('art.report_thanks')}</div>`;
   setTimeout(closeReportModal, 1800);
 }
 

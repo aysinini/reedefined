@@ -87,7 +87,7 @@ textarea.fi{resize:vertical;min-height:100px;line-height:1.5}
       <span style="color:var(--rule)">/</span>
       <button class="lang-btn" data-lang="de" onclick="setLang('de')" style="background:none;border:none;font-family:var(--C);font-size:12px;font-weight:600;cursor:pointer;padding:0;color:var(--mid)">DE</button>
     </div>
-    <div class="tb-back" onclick="location.href='editor-portal.html'">← Back to Writing</div>
+    <div class="tb-back" onclick="location.href='editor-portal.html'" data-i18n="pe.back_writing">← Back to Writing</div>
   </div>
 </div>
 
@@ -118,18 +118,18 @@ textarea.fi{resize:vertical;min-height:100px;line-height:1.5}
     <label class="fl" data-i18n="pe.links_h">Links &amp; Socials</label>
     <div class="link-row">
       <span class="link-label">Instagram</span>
-      <input class="link-input" id="link-instagram" placeholder="@username or URL">
+      <input class="link-input" id="link-instagram" placeholder="@username or URL" data-i18n-placeholder="pe.username_url_ph">
     </div>
     <div class="link-row">
       <span class="link-label">TikTok</span>
-      <input class="link-input" id="link-tiktok" placeholder="@username or URL">
+      <input class="link-input" id="link-tiktok" placeholder="@username or URL" data-i18n-placeholder="pe.username_url_ph">
     </div>
     <div class="link-row">
-      <span class="link-label">Website</span>
-      <input class="link-input" id="link-website" placeholder="https://yoursite.com">
+      <span class="link-label" data-i18n="pe.link_website">Website</span>
+      <input class="link-input" id="link-website" placeholder="https://yoursite.com" data-i18n-placeholder="pe.website_ph">
     </div>
     <div id="custom-links-list"></div>
-    <button type="button" class="btn-add-link" onclick="addCustomLinkRow()">+ Add another link</button>
+    <button type="button" class="btn-add-link" onclick="addCustomLinkRow()" data-i18n="pe.add_link">+ Add another link</button>
   </div>
 
   <div class="field">
@@ -158,38 +158,38 @@ textarea.fi{resize:vertical;min-height:100px;line-height:1.5}
   <div class="status-msg" id="status-msg"></div>
 
   <div class="danger-zone">
-    <div class="dz-title">Account Deletion</div>
-    <div class="dz-desc">Deleting your account permanently removes your profile, your published articles and columns, along with your comments, likes, follows, and connected platforms. This cannot be undone.</div>
-    <button class="btn-delete" onclick="openDeleteModal()">Delete My Account</button>
+    <div class="dz-title" data-i18n="pe.account_deletion_h">Account Deletion</div>
+    <div class="dz-desc" data-i18n="pe.account_deletion_d">Deleting your account permanently removes your profile, your published articles and columns, along with your comments, likes, follows, and connected platforms. This cannot be undone.</div>
+    <button class="btn-delete" onclick="openDeleteModal()" data-i18n="pe.delete_my_account">Delete My Account</button>
   </div>
 </div>
 
 <div class="modal-overlay" id="rotate-modal">
   <div class="modal-box crop-modal-box">
-    <div class="modal-title">Adjust your photo</div>
+    <div class="modal-title" data-i18n="pe.adjust_photo">Adjust your photo</div>
     <div class="crop-container">
       <img id="crop-image" src="" alt="">
     </div>
     <div class="crop-toolbar">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2"><circle cx="9" cy="9" r="6"/><path d="M21 21l-4.3-4.3"/></svg>
       <input type="range" class="crop-zoom-slider" id="crop-zoom-slider" min="0" max="3" step="0.01" value="0" oninput="onZoomSlider(this.value)">
-      <button type="button" class="btn-rotate" onclick="rotateCrop()">↻ Rotate</button>
+      <button type="button" class="btn-rotate" onclick="rotateCrop()" data-i18n="pe.rotate">↻ Rotate</button>
     </div>
     <div class="modal-actions">
-      <button class="btn-cancel" onclick="cancelRotate()">Cancel</button>
-      <button class="btn-use-photo" onclick="confirmRotateAndUpload()">Done</button>
+      <button class="btn-cancel" onclick="cancelRotate()" data-i18n="ep.cancel">Cancel</button>
+      <button class="btn-use-photo" onclick="confirmRotateAndUpload()" data-i18n="pe.done">Done</button>
     </div>
   </div>
 </div>
 
 <div class="modal-overlay" id="delete-modal">
   <div class="modal-box">
-    <div class="modal-title">Delete your account?</div>
-    <div class="modal-text">This permanently deletes your profile, your published articles and columns, along with your comments, likes, follows, and connected platforms. Type <strong>DELETE</strong> below to confirm — this cannot be undone.</div>
-    <input class="modal-input" id="delete-confirm-input" placeholder="Type DELETE to confirm" oninput="document.getElementById('delete-confirm-btn').disabled = this.value.trim().toUpperCase() !== 'DELETE'">
+    <div class="modal-title" data-i18n="pe.delete_account_title">Delete your account?</div>
+    <div class="modal-text" data-i18n="pe.delete_modal_text">This permanently deletes your profile, your published articles and columns, along with your comments, likes, follows, and connected platforms. Type <strong>DELETE</strong> below to confirm — this cannot be undone.</div>
+    <input class="modal-input" id="delete-confirm-input" placeholder="Type DELETE to confirm" data-i18n-placeholder="pe.delete_confirm_ph" oninput="document.getElementById('delete-confirm-btn').disabled = this.value.trim().toUpperCase() !== t('pe.delete_confirm_word').toUpperCase()">
     <div class="modal-actions">
-      <button class="btn-cancel" onclick="closeDeleteModal()">Cancel</button>
-      <button class="btn-confirm-delete" id="delete-confirm-btn" disabled onclick="confirmDeleteAccount()">Delete Account</button>
+      <button class="btn-cancel" onclick="closeDeleteModal()" data-i18n="ep.cancel">Cancel</button>
+      <button class="btn-confirm-delete" id="delete-confirm-btn" disabled onclick="confirmDeleteAccount()" data-i18n="pe.delete_account_btn">Delete Account</button>
     </div>
   </div>
 </div>

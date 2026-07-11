@@ -147,9 +147,9 @@ body{background:var(--bg);color:var(--ink);font-family:var(--S);-webkit-font-smo
   <div class="nav-inner">
     <div class="nav-logo" onclick="goHome()">Reedefined</div>
     <div class="nav-links">
-      <span class="nav-link" onclick="location.href='newsstand.html'">The Magazine</span>
-      <span class="nav-link on">Connections</span>
-      <span class="nav-link" onclick="location.href='editor-portal.html'">Write</span>
+      <span class="nav-link" onclick="location.href='newsstand.html'" data-i18n="nav.magazine">The Magazine</span>
+      <span class="nav-link on" data-i18n="nav.connections">Connections</span>
+      <span class="nav-link" onclick="location.href='editor-portal.html'" data-i18n="nav.write">Write</span>
     </div>
     <div class="nav-right">
       <div style="display:flex;gap:6px;align-items:center;margin-right:8px">
@@ -157,7 +157,7 @@ body{background:var(--bg);color:var(--ink);font-family:var(--S);-webkit-font-smo
         <span style="opacity:.3">/</span>
         <button class="lang-btn" data-lang="de" onclick="setLang('de')" style="background:none;border:none;font-family:inherit;font-size:12px;font-weight:600;cursor:pointer;padding:0;color:#3A3A3A">DE</button>
       </div>
-      <button class="btn-p" onclick="location.href='editor-portal.html'">Back to Studio →</button>
+      <button class="btn-p" onclick="location.href='editor-portal.html'" data-i18n="nav.back">Back to Studio →</button>
       <div class="nav-av" id="nav-av">R</div>
     </div>
   </div>
@@ -165,17 +165,17 @@ body{background:var(--bg);color:var(--ink);font-family:var(--S);-webkit-font-smo
 
 <div class="hero">
   <div class="hero-inner">
-    <div class="hero-eyebrow">Contributing Editor</div>
-    <h1 class="hero-h1">Connect your<br><em>platforms.</em></h1>
-    <p class="hero-sub">Pull your real life into your column. Your Letterboxd diary, your Goodreads shelf, your YouTube channel, your Depop shop — all woven into your monthly issue.</p>
+    <div class="hero-eyebrow" data-i18n="conn.eyebrow">Contributing Editor</div>
+    <h1 class="hero-h1" data-i18n="conn.hero_h1">Connect your<br><em>platforms.</em></h1>
+    <p class="hero-sub" data-i18n="conn.hero_sub">Pull your real life into your column. Your Letterboxd diary, your Goodreads shelf, your YouTube channel, your Depop shop — all woven into your monthly issue.</p>
   </div>
 </div>
 
 <div class="summary">
   <div class="summary-inner">
     <div class="sum-item"><div class="sum-dot off" id="sum-dot"></div><span class="sum-text"><strong id="sum-count">0</strong> of 9 connected</span></div>
-    <div class="sum-item"><div class="sum-dot"></div><span class="sum-text">Official APIs only — no scraping</span></div>
-    <div class="sum-item"><div class="sum-dot"></div><span class="sum-text">We never post on your behalf</span></div>
+    <div class="sum-item"><div class="sum-dot"></div><span class="sum-text" data-i18n="conn.official">Official APIs only — no scraping</span></div>
+    <div class="sum-item"><div class="sum-dot"></div><span class="sum-text" data-i18n="conn.never_post">We never post on your behalf</span></div>
   </div>
 </div>
 
@@ -183,8 +183,8 @@ body{background:var(--bg);color:var(--ink);font-family:var(--S);-webkit-font-smo
 
   <!-- ── FILM & BOOKS ── -->
   <div class="sec-head">
-    <span class="sec-title">Film & Books</span>
-    <span class="sec-sub">Works today — no approval needed</span>
+    <span class="sec-title" data-i18n="conn.sec_film_books">Film & Books</span>
+    <span class="sec-sub" data-i18n="conn.works_no_approval">Works today — no approval needed</span>
   </div>
   <div class="platform-grid">
 
@@ -194,30 +194,30 @@ body{background:var(--bg);color:var(--ink);font-family:var(--S);-webkit-font-smo
         <div class="pc-top">
           <div class="pc-info">
             <div class="pc-name">Letterboxd</div>
-            <div class="pc-desc">Your film diary, watchlist and reviews — imported from your public profile.</div>
+            <div class="pc-desc" data-i18n="conn.desc_letterboxd">Your film diary, watchlist and reviews — imported from your public profile.</div>
           </div>
-          <div class="pc-status-wrap"><span class="pc-badge live" id="badge-letterboxd">Live ✓</span></div>
+          <div class="pc-status-wrap"><span class="pc-badge live" id="badge-letterboxd" data-i18n="conn.live_badge">Live ✓</span></div>
         </div>
         <div class="pc-pulls">
-          <span class="pc-pull">Recent films</span>
-          <span class="pc-pull">Star ratings</span>
-          <span class="pc-pull">Reviews</span>
-          <span class="pc-pull">Watchlist</span>
+          <span class="pc-pull" data-i18n="conn.pull_recent_films">Recent films</span>
+          <span class="pc-pull" data-i18n="conn.pull_star_ratings">Star ratings</span>
+          <span class="pc-pull" data-i18n="conn.pull_reviews">Reviews</span>
+          <span class="pc-pull" data-i18n="conn.pull_watchlist">Watchlist</span>
         </div>
         <div class="pc-input-row" id="input-letterboxd">
-          <input class="pc-input" type="text" id="val-letterboxd" placeholder="Your Letterboxd username (e.g. aysegul)">
-          <button class="pc-input-btn" onclick="connect('letterboxd')">Connect →</button>
+          <input class="pc-input" type="text" id="val-letterboxd" placeholder="Your Letterboxd username (e.g. aysegul)" data-i18n-placeholder="conn.ph_letterboxd">
+          <button class="pc-input-btn" onclick="connect('letterboxd')" data-i18n="conn.connect_arrow">Connect →</button>
         </div>
-        <div class="pc-loading" id="loading-letterboxd"><div class="spin"></div>Fetching your film diary…</div>
-        <div class="pc-error" id="error-letterboxd">Couldn't find that username. Make sure your profile is public.</div>
+        <div class="pc-loading" id="loading-letterboxd"><div class="spin"></div><span data-i18n="conn.loading_letterboxd">Fetching your film diary…</span></div>
+        <div class="pc-error" id="error-letterboxd" data-i18n="conn.error_letterboxd">Couldn't find that username. Make sure your profile is public.</div>
         <div class="pc-connected" id="connected-letterboxd">
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 8l4 4 8-8" stroke="#3A7A50" stroke-width="1.5" stroke-linecap="round"/></svg>
           <span class="pc-connected-handle" id="handle-letterboxd"></span>
           <span class="pc-connected-sub" id="sub-letterboxd"></span>
-          <button class="pc-disconnect" onclick="disconnect('letterboxd')">Disconnect</button>
+          <button class="pc-disconnect" onclick="disconnect('letterboxd')" data-i18n="conn.disconnect">Disconnect</button>
         </div>
         <div class="pc-preview" id="preview-letterboxd">
-          <div class="pc-preview-label">Your recent films</div>
+          <div class="pc-preview-label" data-i18n="conn.preview_recent_films">Your recent films</div>
           <div class="pc-preview-items" id="items-letterboxd"></div>
         </div>
       </div>
@@ -229,29 +229,29 @@ body{background:var(--bg);color:var(--ink);font-family:var(--S);-webkit-font-smo
         <div class="pc-top">
           <div class="pc-info">
             <div class="pc-name">Goodreads</div>
-            <div class="pc-desc">Your reading list, reviews and currently-reading shelf.</div>
+            <div class="pc-desc" data-i18n="conn.desc_goodreads">Your reading list, reviews and currently-reading shelf.</div>
           </div>
-          <div class="pc-status-wrap"><span class="pc-badge live" id="badge-goodreads">Live ✓</span></div>
+          <div class="pc-status-wrap"><span class="pc-badge live" id="badge-goodreads" data-i18n="conn.live_badge">Live ✓</span></div>
         </div>
         <div class="pc-pulls">
-          <span class="pc-pull">Currently reading</span>
-          <span class="pc-pull">Recent reviews</span>
-          <span class="pc-pull">Reading list</span>
+          <span class="pc-pull" data-i18n="conn.pull_currently_reading">Currently reading</span>
+          <span class="pc-pull" data-i18n="conn.pull_recent_reviews">Recent reviews</span>
+          <span class="pc-pull" data-i18n="conn.pull_reading_list">Reading list</span>
         </div>
         <div class="pc-input-row" id="input-goodreads">
-          <input class="pc-input" type="text" id="val-goodreads" placeholder="Your Goodreads profile URL or user ID">
-          <button class="pc-input-btn" onclick="connect('goodreads')">Connect →</button>
+          <input class="pc-input" type="text" id="val-goodreads" placeholder="Your Goodreads profile URL or user ID" data-i18n-placeholder="conn.ph_goodreads">
+          <button class="pc-input-btn" onclick="connect('goodreads')" data-i18n="conn.connect_arrow">Connect →</button>
         </div>
-        <div class="pc-loading" id="loading-goodreads"><div class="spin"></div>Fetching your reading shelf…</div>
-        <div class="pc-error" id="error-goodreads">Couldn't fetch your shelf. Make sure your profile is public.</div>
+        <div class="pc-loading" id="loading-goodreads"><div class="spin"></div><span data-i18n="conn.loading_goodreads">Fetching your reading shelf…</span></div>
+        <div class="pc-error" id="error-goodreads" data-i18n="conn.error_goodreads">Couldn't fetch your shelf. Make sure your profile is public.</div>
         <div class="pc-connected" id="connected-goodreads">
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 8l4 4 8-8" stroke="#3A7A50" stroke-width="1.5" stroke-linecap="round"/></svg>
           <span class="pc-connected-handle" id="handle-goodreads"></span>
           <span class="pc-connected-sub" id="sub-goodreads"></span>
-          <button class="pc-disconnect" onclick="disconnect('goodreads')">Disconnect</button>
+          <button class="pc-disconnect" onclick="disconnect('goodreads')" data-i18n="conn.disconnect">Disconnect</button>
         </div>
         <div class="pc-preview" id="preview-goodreads">
-          <div class="pc-preview-label">Your recent reads</div>
+          <div class="pc-preview-label" data-i18n="conn.preview_recent_reads">Your recent reads</div>
           <div class="pc-preview-items" id="items-goodreads"></div>
         </div>
       </div>
@@ -261,8 +261,8 @@ body{background:var(--bg);color:var(--ink);font-family:var(--S);-webkit-font-smo
 
   <!-- ── VIDEO & FASHION ── -->
   <div class="sec-head">
-    <span class="sec-title">Video & Fashion</span>
-    <span class="sec-sub">Works today — public profile required</span>
+    <span class="sec-title" data-i18n="conn.sec_video_fashion">Video & Fashion</span>
+    <span class="sec-sub" data-i18n="conn.works_public_profile">Works today — public profile required</span>
   </div>
   <div class="platform-grid">
 
@@ -272,24 +272,24 @@ body{background:var(--bg);color:var(--ink);font-family:var(--S);-webkit-font-smo
         <div class="pc-top">
           <div class="pc-info">
             <div class="pc-name">TikTok</div>
-            <div class="pc-desc">Your videos and content — featured in your monthly column.</div>
+            <div class="pc-desc" data-i18n="conn.desc_tiktok">Your videos and content — featured in your monthly column.</div>
           </div>
-          <div class="pc-status-wrap"><span class="pc-badge live" id="badge-tiktok">Live ✓</span></div>
+          <div class="pc-status-wrap"><span class="pc-badge live" id="badge-tiktok" data-i18n="conn.live_badge">Live ✓</span></div>
         </div>
-        <div class="pc-pulls"><span class="pc-pull">Recent videos</span><span class="pc-pull">Profile info</span></div>
-        <div class="pc-loading" id="loading-tiktok"><div class="spin"></div>Connecting to TikTok…</div>
-        <div class="pc-error" id="error-tiktok">Could not connect to TikTok. Please try again.</div>
+        <div class="pc-pulls"><span class="pc-pull" data-i18n="conn.pull_recent_videos">Recent videos</span><span class="pc-pull" data-i18n="conn.pull_profile_info">Profile info</span></div>
+        <div class="pc-loading" id="loading-tiktok"><div class="spin"></div><span data-i18n="conn.loading_tiktok">Connecting to TikTok…</span></div>
+        <div class="pc-error" id="error-tiktok" data-i18n="conn.error_tiktok">Could not connect to TikTok. Please try again.</div>
         <div class="pc-connected" id="connected-tiktok">
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 8l4 4 8-8" stroke="#3A7A50" stroke-width="1.5" stroke-linecap="round"/></svg>
           <span class="pc-connected-handle" id="handle-tiktok"></span>
           <span class="pc-connected-sub" id="sub-tiktok"></span>
-          <button class="pc-disconnect" onclick="disconnectTikTok()">Disconnect</button>
+          <button class="pc-disconnect" onclick="disconnectTikTok()" data-i18n="conn.disconnect">Disconnect</button>
         </div>
         <div class="pc-preview" id="preview-tiktok">
-          <div class="pc-preview-label">Your recent videos</div>
+          <div class="pc-preview-label" data-i18n="conn.preview_recent_videos">Your recent videos</div>
           <div class="pc-preview-items" id="items-tiktok"></div>
         </div>
-        <button class="pc-btn connect" id="btn-tiktok" onclick="connectTikTok()">Connect TikTok →</button>
+        <button class="pc-btn connect" id="btn-tiktok" onclick="connectTikTok()" data-i18n="conn.connect_tiktok">Connect TikTok →</button>
       </div>
     </div>
 
@@ -299,29 +299,29 @@ body{background:var(--bg);color:var(--ink);font-family:var(--S);-webkit-font-smo
         <div class="pc-top">
           <div class="pc-info">
             <div class="pc-name">YouTube</div>
-            <div class="pc-desc">Your recent videos pulled into your column via your public channel.</div>
+            <div class="pc-desc" data-i18n="conn.desc_youtube">Your recent videos pulled into your column via your public channel.</div>
           </div>
-          <div class="pc-status-wrap"><span class="pc-badge live" id="badge-youtube">Live ✓</span></div>
+          <div class="pc-status-wrap"><span class="pc-badge live" id="badge-youtube" data-i18n="conn.live_badge">Live ✓</span></div>
         </div>
         <div class="pc-pulls">
-          <span class="pc-pull">Recent videos</span>
-          <span class="pc-pull">Channel info</span>
-          <span class="pc-pull">View counts</span>
+          <span class="pc-pull" data-i18n="conn.pull_recent_videos">Recent videos</span>
+          <span class="pc-pull" data-i18n="conn.pull_channel_info">Channel info</span>
+          <span class="pc-pull" data-i18n="conn.pull_view_counts">View counts</span>
         </div>
         <div class="pc-input-row" id="input-youtube">
-          <input class="pc-input" type="text" id="val-youtube" placeholder="Your YouTube channel URL or @handle">
-          <button class="pc-input-btn" onclick="connect('youtube')">Connect →</button>
+          <input class="pc-input" type="text" id="val-youtube" placeholder="Your YouTube channel URL or @handle" data-i18n-placeholder="conn.ph_youtube">
+          <button class="pc-input-btn" onclick="connect('youtube')" data-i18n="conn.connect_arrow">Connect →</button>
         </div>
-        <div class="pc-loading" id="loading-youtube"><div class="spin"></div>Fetching your channel…</div>
-        <div class="pc-error" id="error-youtube">Couldn't find that channel. Check the URL and try again.</div>
+        <div class="pc-loading" id="loading-youtube"><div class="spin"></div><span data-i18n="conn.loading_youtube">Fetching your channel…</span></div>
+        <div class="pc-error" id="error-youtube" data-i18n="conn.error_youtube">Couldn't find that channel. Check the URL and try again.</div>
         <div class="pc-connected" id="connected-youtube">
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 8l4 4 8-8" stroke="#3A7A50" stroke-width="1.5" stroke-linecap="round"/></svg>
           <span class="pc-connected-handle" id="handle-youtube"></span>
           <span class="pc-connected-sub" id="sub-youtube"></span>
-          <button class="pc-disconnect" onclick="disconnect('youtube')">Disconnect</button>
+          <button class="pc-disconnect" onclick="disconnect('youtube')" data-i18n="conn.disconnect">Disconnect</button>
         </div>
         <div class="pc-preview" id="preview-youtube">
-          <div class="pc-preview-label">Your recent videos</div>
+          <div class="pc-preview-label" data-i18n="conn.preview_recent_videos">Your recent videos</div>
           <div class="pc-preview-items" id="items-youtube"></div>
         </div>
       </div>
@@ -333,29 +333,29 @@ body{background:var(--bg);color:var(--ink);font-family:var(--S);-webkit-font-smo
         <div class="pc-top">
           <div class="pc-info">
             <div class="pc-name">Depop</div>
-            <div class="pc-desc">Your shop and recent listings featured in your fashion column.</div>
+            <div class="pc-desc" data-i18n="conn.desc_depop">Your shop and recent listings featured in your fashion column.</div>
           </div>
-          <div class="pc-status-wrap"><span class="pc-badge live" id="badge-depop">Live ✓</span></div>
+          <div class="pc-status-wrap"><span class="pc-badge live" id="badge-depop" data-i18n="conn.live_badge">Live ✓</span></div>
         </div>
         <div class="pc-pulls">
-          <span class="pc-pull">Shop link</span>
-          <span class="pc-pull">Recent listings</span>
-          <span class="pc-pull">Shop profile</span>
+          <span class="pc-pull" data-i18n="conn.pull_shop_link">Shop link</span>
+          <span class="pc-pull" data-i18n="conn.pull_recent_listings">Recent listings</span>
+          <span class="pc-pull" data-i18n="conn.pull_shop_profile">Shop profile</span>
         </div>
         <div class="pc-input-row" id="input-depop">
-          <input class="pc-input" type="text" id="val-depop" placeholder="Your Depop username (e.g. aysegul)">
-          <button class="pc-input-btn" onclick="connect('depop')">Connect →</button>
+          <input class="pc-input" type="text" id="val-depop" placeholder="Your Depop username (e.g. aysegul)" data-i18n-placeholder="conn.ph_depop">
+          <button class="pc-input-btn" onclick="connect('depop')" data-i18n="conn.connect_arrow">Connect →</button>
         </div>
-        <div class="pc-loading" id="loading-depop"><div class="spin"></div>Saving your shop details…</div>
-        <div class="pc-error" id="error-depop">Please enter a valid Depop username.</div>
+        <div class="pc-loading" id="loading-depop"><div class="spin"></div><span data-i18n="conn.loading_shop">Saving your shop details…</span></div>
+        <div class="pc-error" id="error-depop" data-i18n="conn.error_depop">Please enter a valid Depop username.</div>
         <div class="pc-connected" id="connected-depop">
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 8l4 4 8-8" stroke="#3A7A50" stroke-width="1.5" stroke-linecap="round"/></svg>
           <span class="pc-connected-handle" id="handle-depop"></span>
           <span class="pc-connected-sub" id="sub-depop"></span>
-          <button class="pc-disconnect" onclick="disconnect('depop')">Disconnect</button>
+          <button class="pc-disconnect" onclick="disconnect('depop')" data-i18n="conn.disconnect">Disconnect</button>
         </div>
         <div class="pc-preview" id="preview-depop">
-          <div class="pc-preview-label">Your Depop shop</div>
+          <div class="pc-preview-label" data-i18n="conn.preview_depop_shop">Your Depop shop</div>
           <div class="pc-preview-items" id="items-depop"></div>
         </div>
       </div>
@@ -367,29 +367,29 @@ body{background:var(--bg);color:var(--ink);font-family:var(--S);-webkit-font-smo
         <div class="pc-top">
           <div class="pc-info">
             <div class="pc-name">Vinted</div>
-            <div class="pc-desc">Your second-hand shop and listings featured in your fashion column.</div>
+            <div class="pc-desc" data-i18n="conn.desc_vinted">Your second-hand shop and listings featured in your fashion column.</div>
           </div>
-          <div class="pc-status-wrap"><span class="pc-badge live" id="badge-vinted">Live ✓</span></div>
+          <div class="pc-status-wrap"><span class="pc-badge live" id="badge-vinted" data-i18n="conn.live_badge">Live ✓</span></div>
         </div>
         <div class="pc-pulls">
-          <span class="pc-pull">Shop link</span>
-          <span class="pc-pull">Recent listings</span>
-          <span class="pc-pull">Shop profile</span>
+          <span class="pc-pull" data-i18n="conn.pull_shop_link">Shop link</span>
+          <span class="pc-pull" data-i18n="conn.pull_recent_listings">Recent listings</span>
+          <span class="pc-pull" data-i18n="conn.pull_shop_profile">Shop profile</span>
         </div>
         <div class="pc-input-row" id="input-vinted">
-          <input class="pc-input" type="text" id="val-vinted" placeholder="Your Vinted profile URL or username">
-          <button class="pc-input-btn" onclick="connect('vinted')">Connect →</button>
+          <input class="pc-input" type="text" id="val-vinted" placeholder="Your Vinted profile URL or username" data-i18n-placeholder="conn.ph_vinted">
+          <button class="pc-input-btn" onclick="connect('vinted')" data-i18n="conn.connect_arrow">Connect →</button>
         </div>
-        <div class="pc-loading" id="loading-vinted"><div class="spin"></div>Saving your shop details…</div>
-        <div class="pc-error" id="error-vinted">Please enter a valid Vinted username or profile URL.</div>
+        <div class="pc-loading" id="loading-vinted"><div class="spin"></div><span data-i18n="conn.loading_shop">Saving your shop details…</span></div>
+        <div class="pc-error" id="error-vinted" data-i18n="conn.error_vinted">Please enter a valid Vinted username or profile URL.</div>
         <div class="pc-connected" id="connected-vinted">
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 8l4 4 8-8" stroke="#3A7A50" stroke-width="1.5" stroke-linecap="round"/></svg>
           <span class="pc-connected-handle" id="handle-vinted"></span>
           <span class="pc-connected-sub" id="sub-vinted"></span>
-          <button class="pc-disconnect" onclick="disconnect('vinted')">Disconnect</button>
+          <button class="pc-disconnect" onclick="disconnect('vinted')" data-i18n="conn.disconnect">Disconnect</button>
         </div>
         <div class="pc-preview" id="preview-vinted">
-          <div class="pc-preview-label">Your Vinted shop</div>
+          <div class="pc-preview-label" data-i18n="conn.preview_vinted_shop">Your Vinted shop</div>
           <div class="pc-preview-items" id="items-vinted"></div>
         </div>
       </div>
@@ -401,24 +401,24 @@ body{background:var(--bg);color:var(--ink);font-family:var(--S);-webkit-font-smo
         <div class="pc-top">
           <div class="pc-info">
             <div class="pc-name">Spotify</div>
-            <div class="pc-desc">Your playlists and top tracks — featured in your monthly column.</div>
+            <div class="pc-desc" data-i18n="conn.desc_spotify">Your playlists and top tracks — featured in your monthly column.</div>
           </div>
-          <div class="pc-status-wrap"><span class="pc-badge live" id="badge-spotify">Live ✓</span></div>
+          <div class="pc-status-wrap"><span class="pc-badge live" id="badge-spotify" data-i18n="conn.live_badge">Live ✓</span></div>
         </div>
-        <div class="pc-pulls"><span class="pc-pull">Monthly playlist</span><span class="pc-pull">Top tracks</span><span class="pc-pull">Recent albums</span></div>
-        <div class="pc-loading" id="loading-spotify"><div class="spin"></div>Connecting to Spotify…</div>
-        <div class="pc-error" id="error-spotify">Could not connect to Spotify. Please try again.</div>
+        <div class="pc-pulls"><span class="pc-pull" data-i18n="conn.pull_monthly_playlist">Monthly playlist</span><span class="pc-pull" data-i18n="conn.pull_top_tracks">Top tracks</span><span class="pc-pull" data-i18n="conn.pull_recent_albums">Recent albums</span></div>
+        <div class="pc-loading" id="loading-spotify"><div class="spin"></div><span data-i18n="conn.loading_spotify">Connecting to Spotify…</span></div>
+        <div class="pc-error" id="error-spotify" data-i18n="conn.error_spotify">Could not connect to Spotify. Please try again.</div>
         <div class="pc-connected" id="connected-spotify">
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 8l4 4 8-8" stroke="#3A7A50" stroke-width="1.5" stroke-linecap="round"/></svg>
           <span class="pc-connected-handle" id="handle-spotify"></span>
           <span class="pc-connected-sub" id="sub-spotify"></span>
-          <button class="pc-disconnect" onclick="disconnectSpotify()">Disconnect</button>
+          <button class="pc-disconnect" onclick="disconnectSpotify()" data-i18n="conn.disconnect">Disconnect</button>
         </div>
         <div class="pc-preview" id="preview-spotify">
-          <div class="pc-preview-label">Your top tracks</div>
+          <div class="pc-preview-label" data-i18n="conn.preview_top_tracks">Your top tracks</div>
           <div class="pc-preview-items" id="items-spotify"></div>
         </div>
-        <button class="pc-btn connect" id="btn-spotify" onclick="connectSpotify()">Connect Spotify →</button>
+        <button class="pc-btn connect" id="btn-spotify" onclick="connectSpotify()" data-i18n="conn.connect_spotify">Connect Spotify →</button>
       </div>
     </div>
 
@@ -427,8 +427,8 @@ body{background:var(--bg);color:var(--ink);font-family:var(--S);-webkit-font-smo
   <!-- ── COMING SOON ── -->
 
   <div class="sec-head">
-    <span class="sec-title">Coming Soon</span>
-    <span class="sec-sub">Pending platform approval</span>
+    <span class="sec-title" data-i18n="conn.coming">Coming Soon</span>
+    <span class="sec-sub" data-i18n="conn.pending_approval">Pending platform approval</span>
   </div>
   <div class="platform-grid">
 
@@ -438,12 +438,12 @@ body{background:var(--bg);color:var(--ink);font-family:var(--S);-webkit-font-smo
         <div class="pc-top">
           <div class="pc-info">
             <div class="pc-name">Apple Music</div>
-            <div class="pc-desc">Your listening history — pending Apple Developer approval.</div>
+            <div class="pc-desc" data-i18n="conn.desc_applemusic">Your listening history — pending Apple Developer approval.</div>
           </div>
-          <div class="pc-status-wrap"><span class="pc-badge pending">In review</span></div>
+          <div class="pc-status-wrap"><span class="pc-badge pending" data-i18n="conn.in_review">In review</span></div>
         </div>
-        <div class="pc-pulls"><span class="pc-pull">Monthly playlist</span><span class="pc-pull">Top tracks</span></div>
-        <button class="pc-btn pending-btn">Awaiting Apple Approval</button>
+        <div class="pc-pulls"><span class="pc-pull" data-i18n="conn.pull_monthly_playlist">Monthly playlist</span><span class="pc-pull" data-i18n="conn.pull_top_tracks">Top tracks</span></div>
+        <button class="pc-btn pending-btn" data-i18n="conn.awaiting_apple">Awaiting Apple Approval</button>
       </div>
     </div>
 
@@ -453,12 +453,12 @@ body{background:var(--bg);color:var(--ink);font-family:var(--S);-webkit-font-smo
         <div class="pc-top">
           <div class="pc-info">
             <div class="pc-name">Instagram</div>
-            <div class="pc-desc">Your posts and reels — pending Meta Graph API approval.</div>
+            <div class="pc-desc" data-i18n="conn.desc_instagram">Your posts and reels — pending Meta Graph API approval.</div>
           </div>
-          <div class="pc-status-wrap"><span class="pc-badge pending">In review</span></div>
+          <div class="pc-status-wrap"><span class="pc-badge pending" data-i18n="conn.in_review">In review</span></div>
         </div>
-        <div class="pc-pulls"><span class="pc-pull">Recent posts</span><span class="pc-pull">Reels</span></div>
-        <button class="pc-btn pending-btn">Requires Meta Business Approval</button>
+        <div class="pc-pulls"><span class="pc-pull" data-i18n="conn.pull_recent_posts">Recent posts</span><span class="pc-pull" data-i18n="conn.pull_reels">Reels</span></div>
+        <button class="pc-btn pending-btn" data-i18n="conn.requires_meta">Requires Meta Business Approval</button>
       </div>
     </div>
 
@@ -467,8 +467,8 @@ body{background:var(--bg);color:var(--ink);font-family:var(--S);-webkit-font-smo
   </div>
 
   <div class="privacy-note">
-    <div class="pn-label">Privacy note</div>
-    <div class="pn-text">We only read public data via official APIs and RSS feeds. We never post, like, follow or take any action on your behalf on any platform. You can disconnect at any time and we will stop pulling your content immediately. All connections are stored securely in your Reedefined account.</div>
+    <div class="pn-label" data-i18n="conn.privacy">Privacy note</div>
+    <div class="pn-text" data-i18n="conn.privacy_desc">We only read public data via official APIs and RSS feeds. We never post, like, follow or take any action on your behalf on any platform. You can disconnect at any time and we will stop pulling your content immediately. All connections are stored securely in your Reedefined account.</div>
   </div>
 
 </div>
@@ -477,15 +477,15 @@ body{background:var(--bg);color:var(--ink);font-family:var(--S);-webkit-font-smo
   <div class="footer-inner">
     <div class="footer-logo">Reedefined</div>
     <div class="footer-links">
-      <span class="footer-link" onclick="goHome()">Home</span>
-      <span class="footer-link" onclick="location.href='newsstand.html'">The Magazine</span>
-      <span class="footer-link" onclick="location.href='editor-portal.html'">Write</span>
-      <span class="footer-link" onclick="location.href='privacy.html'">Privacy</span>
-      <span class="footer-link" onclick="location.href='terms.html'">Terms</span>
+      <span class="footer-link" onclick="goHome()" data-i18n="disc.footer_home">Home</span>
+      <span class="footer-link" onclick="location.href='newsstand.html'" data-i18n="nav.magazine">The Magazine</span>
+      <span class="footer-link" onclick="location.href='editor-portal.html'" data-i18n="nav.write">Write</span>
+      <span class="footer-link" onclick="location.href='privacy.html'" data-i18n="idx.footer_privacy">Privacy</span>
+      <span class="footer-link" onclick="location.href='terms.html'" data-i18n="idx.footer_terms">Terms</span>
     </div>
   </div>
   <div class="footer-bottom">
-    <span>© 2026 Reedefined. All rights reserved.</span>
+    <span data-i18n="footer.rights">© 2026 Reedefined. All rights reserved.</span>
     <span>reedefined.app/connections.html</span>
   </div>
 </footer>

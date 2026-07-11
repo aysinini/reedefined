@@ -46,12 +46,12 @@ body{background:var(--bg);color:var(--ink);font-family:var(--S);min-height:100vh
       <span style="color:var(--rule)">/</span>
       <button class="lang-btn" data-lang="de" onclick="setLang('de')" style="background:none;border:none;font-family:var(--C);font-size:12px;font-weight:600;cursor:pointer;padding:0;color:var(--mid)">DE</button>
     </div>
-    <div class="tb-back" onclick="location.href='discover.html'">← Back to Discover</div>
+    <div class="tb-back" onclick="location.href='discover.html'" data-i18n="profile.back_discover">← Back to Discover</div>
   </div>
 </div>
 
 <div class="wrap" id="wrap">
-  <div class="empty">Loading profile…</div>
+  <div class="empty" data-i18n="profile.loading">Loading profile…</div>
 </div>
 
 <script>

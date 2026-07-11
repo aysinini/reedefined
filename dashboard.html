@@ -73,7 +73,7 @@ body{background-color:var(--bg);background-image:radial-gradient(circle at 15% 1
       </button>
       <div id="notif-menu" style="display:none;position:absolute;top:36px;right:0;width:320px;max-height:400px;overflow-y:auto;background:#fff;border:1px solid var(--rule);border-radius:10px;box-shadow:0 10px 30px rgba(0,0,0,.12);z-index:300"></div>
     </div>
-    <span class="tb-link" onclick="location.href='newsstand.html'">Newsstand</span>
+    <span class="tb-link" onclick="location.href='newsstand.html'" data-i18n="dash.newsstand">Newsstand</span>
     <span class="tb-link" data-i18n="gl.cta" onclick="location.href='editor-portal.html'">Write →</span>
   </div>
 </div>
@@ -90,10 +90,10 @@ body{background-color:var(--bg);background-image:radial-gradient(circle at 15% 1
     <div class="stat-card" id="tab-drafts" onclick="showTab('articles')"><div class="stat-n" id="stat-drafts">—</div><div class="stat-l" data-i18n="dash.drafts">Drafts</div></div>
     <div class="stat-card" id="tab-followers" onclick="showTab('followers')"><div class="stat-n" id="stat-followers">—</div><div class="stat-l" data-i18n="dash.followers">Followers</div></div>
     <div class="stat-card" id="tab-following" onclick="showTab('following')"><div class="stat-n" id="stat-following">—</div><div class="stat-l" data-i18n="dash.following">Following</div></div>
-    <div class="stat-card" id="tab-reported" onclick="showTab('reported')" style="display:none"><div class="stat-n" id="stat-reported">—</div><div class="stat-l" style="color:var(--red)">Reported</div></div>
+    <div class="stat-card" id="tab-reported" onclick="showTab('reported')" style="display:none"><div class="stat-n" id="stat-reported">—</div><div class="stat-l" style="color:var(--red)" data-i18n="dash.reported">Reported</div></div>
   </div>
   <div class="tab-panel-wrap">
-    <div id="tab-content"><div class="empty">Loading…</div></div>
+    <div id="tab-content"><div class="empty" data-i18n="dash.loading">Loading…</div></div>
   </div>
 </div>
 
