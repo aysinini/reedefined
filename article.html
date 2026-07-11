@@ -116,6 +116,14 @@ const sb = supabase.createClient('https://gseuejqqwkdjkhxfxxwy.supabase.co','sb_
 
 function esc(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
+// Turns the [label](https://…) markdown-style syntax contributors can add via
+// the editor's text-selection "Link" button into a real anchor tag. Runs on
+// already-escaped text, so no raw HTML from the article body can slip through.
+function renderInlineLinks(escapedText){
+  return escapedText.replace(/\[([^\[\]]+)\]\((https?:\/\/[^\s()]+)\)/g,
+    (m, label, url) => `<a href="${url}" target="_blank" rel="noopener">${label}</a>`);
+}
+
 let CURRENT_ARTICLE = null;
 
 async function loadArticle(){
@@ -150,7 +158,7 @@ async function loadArticle(){
     ? `<img class="a-avatar" src="${a.profiles.avatar}" alt="${esc(name)}">`
     : `<div class="a-avatar">${initial}</div>`;
   const date = a.updated_at ? new Date(a.updated_at).toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'}) : '';
-  const paragraphs = (a.body || '').split(/\n\s*\n/).map(p => `<p>${esc(p)}</p>`).join('');
+  const paragraphs = (a.body || '').split(/\n\s*\n/).map(p => `<p>${renderInlineLinks(esc(p))}</p>`).join('');
 
   let photoArr = [], videoArr = [], productArr = [];
   try{ photoArr = JSON.parse(a.photos||'[]'); }catch(e){}

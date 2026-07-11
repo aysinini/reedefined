@@ -99,6 +99,12 @@ a{color:inherit;text-decoration:none}
 }
 .body-plus:hover{border-color:var(--teal);color:var(--teal)}
 @media(max-width:900px){.body-plus-wrap{position:static;margin-bottom:12px}}
+.link-selection-btn{
+  display:none;position:fixed;z-index:900;
+  font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;
+  background:var(--ink);color:#fff;border:none;border-radius:14px;padding:7px 14px;cursor:pointer;
+  box-shadow:0 6px 16px rgba(0,0,0,.18);
+}
 
 /* ── BLOCKS ── */
 .blocks-list{display:flex;flex-direction:column;gap:12px;margin-top:32px}
@@ -576,6 +582,7 @@ if('serviceWorker' in navigator){
         </div>
       </div>
       <div class="body-area" id="col-body" contenteditable="true" data-placeholder="Start writing. This is your column, your voice is the whole point." data-i18n-placeholder="ep.body_ph"></div>
+      <button class="link-selection-btn" id="link-selection-btn" onmousedown="event.preventDefault()" onclick="linkSelectedText()" data-i18n="ep.link_selected">🔗 Link</button>
     </div>
 
     <!-- BLOCKS LIST -->
@@ -1103,6 +1110,71 @@ document.getElementById('col-body').addEventListener('paste', (e) => {
   const text = (e.clipboardData || window.clipboardData).getData('text/plain');
   document.execCommand('insertText', false, text);
 });
+
+// ══ INLINE LINKS ══
+// Select a word/phrase in the body, a small "Link" button appears above the
+// selection — clicking it wraps the selection in [text](url) markdown-style
+// syntax. Storage stays plain text (col-body has no HTML persistence), so
+// article.html parses this syntax back into a real link at render time.
+let savedLinkRange = null;
+
+document.addEventListener('selectionchange', () => {
+  const btn = document.getElementById('link-selection-btn');
+  const bodyEl = document.getElementById('col-body');
+  if(!btn || !bodyEl) return;
+
+  const sel = window.getSelection();
+  if(!sel || sel.rangeCount === 0 || sel.isCollapsed){
+    btn.style.display = 'none';
+    savedLinkRange = null;
+    return;
+  }
+
+  const range = sel.getRangeAt(0);
+  if(!bodyEl.contains(range.commonAncestorContainer)){
+    btn.style.display = 'none';
+    savedLinkRange = null;
+    return;
+  }
+
+  savedLinkRange = range.cloneRange();
+  const rect = range.getBoundingClientRect();
+  btn.style.top = Math.max(8, rect.top - 40) + 'px';
+  btn.style.left = rect.left + 'px';
+  btn.style.display = 'block';
+});
+
+function linkSelectedText(){
+  const btn = document.getElementById('link-selection-btn');
+  if(!savedLinkRange){ return; }
+
+  // Keep this to a single text node — a selection spanning multiple
+  // paragraphs would corrupt the editor's per-line div structure. Editing
+  // the node's .data in place (rather than deleteContents+insertNode) also
+  // avoids splitting it into extra sibling text nodes, which getBodyPlainText()
+  // would otherwise read as new, unwanted paragraph breaks.
+  if(savedLinkRange.startContainer !== savedLinkRange.endContainer || savedLinkRange.startContainer.nodeType !== Node.TEXT_NODE){
+    alert('Please select text within a single paragraph.');
+    return;
+  }
+
+  const url = (prompt('Link URL (https://…)') || '').trim();
+  if(!url) return;
+  if(!/^https?:\/\//i.test(url)){
+    alert('Please enter a link starting with http:// or https://');
+    return;
+  }
+
+  const node = savedLinkRange.startContainer;
+  const start = savedLinkRange.startOffset;
+  const end = savedLinkRange.endOffset;
+  const text = node.data.slice(start, end);
+  node.data = node.data.slice(0, start) + `[${text}](${url})` + node.data.slice(end);
+
+  btn.style.display = 'none';
+  savedLinkRange = null;
+  document.getElementById('col-body').dispatchEvent(new Event('input', { bubbles: true }));
+}
 
 async function saveDraft(){
   const status = document.getElementById('draft-status');
