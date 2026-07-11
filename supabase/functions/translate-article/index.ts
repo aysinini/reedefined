@@ -3,6 +3,15 @@
 // The Anthropic API key lives here, server-side, as a secret — it is
 // NEVER exposed to the browser. The frontend calls this function instead
 // of calling Anthropic directly.
+//
+// After a successful translation, also caches it into
+// contributions.translations (a per-language JSON blob) using the service
+// role key, so the same article/language pair only ever costs one Anthropic
+// call — every later reader gets it straight from the row. Readers can't
+// write that column themselves (RLS only allows the article's own author to
+// update their row), so the cache write happens here, server-side, instead.
+
+import { createClient } from "jsr:@supabase/supabase-js@2";
 
 const LANG_NAMES: Record<string, string> = {
   tr: "Turkish",
@@ -20,7 +29,7 @@ Deno.serve(async (req: Request) => {
   }
 
   try {
-    const { title, tagline, body, lang } = await req.json();
+    const { contributionId, title, tagline, body, lang } = await req.json();
     const targetLang = LANG_NAMES[lang];
 
     if (!targetLang) {
@@ -79,6 +88,36 @@ Deno.serve(async (req: Request) => {
     } catch {
       // If the model didn't return clean JSON, fail safe to the original text
       parsed = { title, tagline, body };
+    }
+
+    // Cache the translation so this article/language pair never needs a
+    // second Anthropic call. Best-effort: a cache-write failure shouldn't
+    // stop the reader from seeing the translation they just asked for.
+    if (contributionId) {
+      try {
+        const supabaseAdmin = createClient(
+          Deno.env.get("SUPABASE_URL")!,
+          Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
+        );
+        const { data: row } = await supabaseAdmin
+          .from("contributions")
+          .select("translations")
+          .eq("id", contributionId)
+          .single();
+        let translations: Record<string, unknown> = {};
+        try {
+          translations = JSON.parse(row?.translations || "{}");
+        } catch {
+          translations = {};
+        }
+        translations[lang] = parsed;
+        await supabaseAdmin
+          .from("contributions")
+          .update({ translations: JSON.stringify(translations) })
+          .eq("id", contributionId);
+      } catch (e) {
+        console.error("Failed to cache translation:", e);
+      }
     }
 
     return new Response(JSON.stringify(parsed), {

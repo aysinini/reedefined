@@ -32,6 +32,8 @@ body{background:var(--bg);color:var(--ink);font-family:var(--S);min-height:100vh
 .a-avatar{width:44px;height:44px;border-radius:50%;object-fit:cover;background:var(--teal-l);display:flex;align-items:center;justify-content:center;font-family:var(--H);font-size:16px;color:var(--teal);flex-shrink:0}
 .a-byname{font-family:var(--H);font-size:15px;font-weight:700}
 .a-bydate{font-family:var(--C);font-size:12px;letter-spacing:.5px;text-transform:uppercase;color:var(--muted)}
+.a-translate-cta{font-family:var(--C);font-size:12px;letter-spacing:.5px;color:var(--muted);margin-bottom:24px}
+.a-translate-cta a{color:var(--ink);text-decoration:underline;text-underline-offset:2px;cursor:pointer}
 .a-body{font-family:var(--B);font-size:18px;line-height:1.7;color:var(--ink);white-space:pre-wrap}
 .a-body p{margin-bottom:22px}
 .a-body a{color:var(--ink);text-decoration:underline;text-underline-offset:3px}
@@ -98,9 +100,9 @@ body{background:var(--bg);color:var(--ink);font-family:var(--S);min-height:100vh
   <div class="tb-logo" onclick="goHome()">Reedefined</div>
   <div class="tb-actions">
     <div style="display:flex;gap:6px;align-items:center;margin-right:8px">
-      <button class="lang-btn" data-lang="en" onclick="switchArticleLang('en')" style="background:none;border:none;font-family:var(--C);font-size:12px;font-weight:600;cursor:pointer;padding:0;color:var(--mid)">EN</button>
+      <button class="lang-btn" data-lang="en" onclick="setLang('en')" style="background:none;border:none;font-family:var(--C);font-size:12px;font-weight:600;cursor:pointer;padding:0;color:var(--mid)">EN</button>
       <span style="color:var(--rule)">/</span>
-      <button class="lang-btn" data-lang="de" onclick="switchArticleLang('de')" style="background:none;border:none;font-family:var(--C);font-size:12px;font-weight:600;cursor:pointer;padding:0;color:var(--mid)">DE</button>
+      <button class="lang-btn" data-lang="de" onclick="setLang('de')" style="background:none;border:none;font-family:var(--C);font-size:12px;font-weight:600;cursor:pointer;padding:0;color:var(--mid)">DE</button>
     </div>
     <div class="tb-link" data-i18n="art.flip" onclick="location.href='magazine-reader.html'">Read in flip format ⇄</div>
     <div class="tb-link" data-i18n="art.back" onclick="location.href='newsstand.html'">← Back</div>
@@ -128,6 +130,8 @@ function renderInlineLinks(escapedText){
 }
 
 let CURRENT_ARTICLE = null;
+let translationsCache = {}; // { tr: {title,tagline,body}, de: {...} } — from contributions.translations
+let activeTranslationLang = null; // null = showing original, 'tr'|'de' = showing that translation
 
 async function loadArticle(){
   const params = new URLSearchParams(location.search);
@@ -138,7 +142,7 @@ async function loadArticle(){
   if(!id){ wrap.innerHTML = '<div class="empty">No article specified.</div>'; return; }
 
   let query = sb.from('contributions')
-    .select('id,title,tagline,category,body,photos,videos,products,updated_at,user_id,profiles:user_id(name,avatar)')
+    .select('id,title,tagline,category,body,photos,videos,products,translations,updated_at,user_id,profiles:user_id(name,avatar)')
     .eq('id', id);
   if(!isPreview) query = query.eq('status','submitted');
 
@@ -154,6 +158,8 @@ async function loadArticle(){
   }
 
   CURRENT_ARTICLE = a;
+  activeTranslationLang = null;
+  try{ translationsCache = JSON.parse(a.translations || '{}'); }catch(e){ translationsCache = {}; }
 
   const name = a.profiles?.name || 'Contributor';
   const initial = name.charAt(0).toUpperCase();
@@ -211,7 +217,7 @@ async function loadArticle(){
         <div class="a-bydate">${date}</div>
       </div>
     </div>
-    <div id="a-translate-note" style="display:none;font-family:var(--C);font-size:12px;letter-spacing:.5px;color:var(--muted);margin-bottom:16px">Translated automatically — <span onclick="switchArticleLang('en')" style="text-decoration:underline;cursor:pointer">show original</span></div>
+    <div id="a-translate-cta" class="a-translate-cta"></div>
     <div class="a-body" id="a-body">${paragraphs}</div>
     ${photosHtml}
     ${videosHtml}
@@ -232,6 +238,7 @@ async function loadArticle(){
   `;
 
   applyLang(getLang());
+  renderTranslateCta();
 
   loadLikes(a.id, session);
   loadComments(a.id, session);
@@ -454,62 +461,74 @@ async function submitComment(contributionId){
   }
 }
 
-async function switchArticleLang(lang){
-  setLang(lang); // translate the surrounding chrome (buttons, comments UI etc.)
-  if(!CURRENT_ARTICLE) return;
+function renderTranslateCta(){
+  const cta = document.getElementById('a-translate-cta');
+  if(!cta) return;
+  const langLabel = { tr: 'Türkçe', de: 'Deutsch' };
+  if(activeTranslationLang){
+    const other = activeTranslationLang === 'tr' ? 'de' : 'tr';
+    cta.innerHTML = `Showing the ${langLabel[activeTranslationLang]} translation — ` +
+      `<a onclick="showOriginalArticle()">Show original</a> · ` +
+      `<a onclick="translateArticleTo('${other}')">${langLabel[other]}</a>`;
+  } else {
+    cta.innerHTML = `Translate this column: ` +
+      `<a onclick="translateArticleTo('tr')">Türkçe</a> · ` +
+      `<a onclick="translateArticleTo('de')">Deutsch</a>`;
+  }
+}
 
+function setTranslateCtaLoading(){
+  const cta = document.getElementById('a-translate-cta');
+  if(cta) cta.textContent = 'Translating…';
+}
+
+async function translateArticleTo(lang){
   const titleEl = document.getElementById('a-title');
-  const taglineEl = document.getElementById('a-tagline');
   const bodyEl = document.getElementById('a-body');
-  const noteEl = document.getElementById('a-translate-note');
-  if(!titleEl || !bodyEl) return;
+  if(!titleEl || !bodyEl || !CURRENT_ARTICLE) return;
 
-  if(lang === 'en'){
-    titleEl.textContent = CURRENT_ARTICLE.title || 'Untitled';
-    if(taglineEl) taglineEl.textContent = CURRENT_ARTICLE.tagline ? `"${CURRENT_ARTICLE.tagline}"` : '';
-    bodyEl.innerHTML = (CURRENT_ARTICLE.body || '').split(/\n\s*\n/).map(p => `<p>${esc(p)}</p>`).join('');
-    if(noteEl) noteEl.style.display = 'none';
+  if(translationsCache[lang]){
+    applyTranslation(translationsCache[lang], lang);
     return;
   }
 
-  const cacheKey = `art-trans-${CURRENT_ARTICLE.id}-${lang}`;
-  const cached = sessionStorage.getItem(cacheKey);
-  if(cached){
-    const t = JSON.parse(cached);
-    titleEl.textContent = t.title;
-    if(taglineEl) taglineEl.textContent = t.tagline ? `"${t.tagline}"` : '';
-    bodyEl.innerHTML = (t.body || '').split(/\n\s*\n/).map(p => `<p>${esc(p)}</p>`).join('');
-    if(noteEl) noteEl.style.display = 'block';
-    return;
-  }
-
-  const originalOpacity = document.getElementById('wrap').style.opacity;
-  document.getElementById('wrap').style.opacity = '.5';
-
-  // Translation is a real AI call and can take several seconds on a full
-  // article — show something more than dimmed opacity so it doesn't read
-  // as stuck. Reuses the existing note slot; restore its real content below.
-  const originalNoteHtml = noteEl ? noteEl.innerHTML : '';
-  if(noteEl){ noteEl.textContent = 'Translating…'; noteEl.style.display = 'block'; }
-
+  setTranslateCtaLoading();
   try{
     const { data, error } = await sb.functions.invoke('translate-article', {
-      body: { title: CURRENT_ARTICLE.title, tagline: CURRENT_ARTICLE.tagline, body: CURRENT_ARTICLE.body, lang }
+      body: { contributionId: CURRENT_ARTICLE.id, title: CURRENT_ARTICLE.title, tagline: CURRENT_ARTICLE.tagline, body: CURRENT_ARTICLE.body, lang }
     });
     if(error || !data || data.error) throw new Error(data?.error || error?.message || 'translation failed');
-
-    sessionStorage.setItem(cacheKey, JSON.stringify(data));
-    titleEl.textContent = data.title;
-    if(taglineEl) taglineEl.textContent = data.tagline ? `"${data.tagline}"` : '';
-    bodyEl.innerHTML = (data.body || '').split(/\n\s*\n/).map(p => `<p>${esc(p)}</p>`).join('');
-    if(noteEl){ noteEl.innerHTML = originalNoteHtml; noteEl.style.display = 'block'; }
+    translationsCache[lang] = data;
+    applyTranslation(data, lang);
   }catch(e){
     console.error('Article translation failed:', e);
-    // Fail quietly, keep showing the original English text
-    if(noteEl){ noteEl.innerHTML = originalNoteHtml; noteEl.style.display = 'none'; }
-  }finally{
-    document.getElementById('wrap').style.opacity = originalOpacity || '1';
+    renderTranslateCta(); // fail quietly, revert CTA and keep the original text on screen
   }
+}
+
+function applyTranslation(data, lang){
+  document.getElementById('a-title').textContent = data.title;
+  const taglineEl = document.getElementById('a-tagline');
+  if(taglineEl){
+    taglineEl.textContent = data.tagline ? `"${data.tagline}"` : '';
+    taglineEl.style.display = data.tagline ? '' : 'none';
+  }
+  document.getElementById('a-body').innerHTML = (data.body || '').split(/\n\s*\n/).map(p => `<p>${esc(p)}</p>`).join('');
+  activeTranslationLang = lang;
+  renderTranslateCta();
+}
+
+function showOriginalArticle(){
+  if(!CURRENT_ARTICLE) return;
+  document.getElementById('a-title').textContent = CURRENT_ARTICLE.title || 'Untitled';
+  const taglineEl = document.getElementById('a-tagline');
+  if(taglineEl){
+    taglineEl.textContent = CURRENT_ARTICLE.tagline ? `"${CURRENT_ARTICLE.tagline}"` : '';
+    taglineEl.style.display = CURRENT_ARTICLE.tagline ? '' : 'none';
+  }
+  document.getElementById('a-body').innerHTML = (CURRENT_ARTICLE.body || '').split(/\n\s*\n/).map(p => `<p>${renderInlineLinks(esc(p))}</p>`).join('');
+  activeTranslationLang = null;
+  renderTranslateCta();
 }
 
 loadArticle();
