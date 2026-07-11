@@ -508,11 +508,6 @@ let CONTRIBUTIONS = []; // loaded articles
 const SBU_MR = 'https://gseuejqqwkdjkhxfxxwy.supabase.co';
 const SBK_MR = 'sb_publishable_0Nmw1mwGx__b_jJHLHBDKg__1OAsRuy';
 
-// The editor's own submissions already have a permanent, hand-crafted
-// "Editor's Letter" page (see BASE_PAGES below), so we exclude them here
-// to avoid showing the same letter twice.
-const EDITOR_USER_ID = 'dfa18b13-a201-4012-8449-7356b3ef2c69';
-
 async function loadContributions() {
   try {
     const sb = supabase.createClient(SBU_MR, SBK_MR, {auth:{storage:window.REEDEFINED_AUTH_STORAGE}});
@@ -523,7 +518,6 @@ async function loadContributions() {
     let query = sb.from('contributions')
       .select('*, profiles:user_id(name, role, avatar)')
       .eq('status', 'submitted')
-      .neq('user_id', EDITOR_USER_ID)
       .order('updated_at', { ascending: false });
 
     // If logged in and following people, filter to followed contributors
@@ -534,11 +528,10 @@ async function loadContributions() {
 
       if(follows && follows.length > 0) {
         const followIds = follows.map(f => f.contributor_id);
-        // Include editor's own posts + followed contributors
+        // Include the reader's own posts + followed contributors
         query = sb.from('contributions')
           .select('*, profiles:user_id(name, role, avatar)')
           .eq('status', 'submitted')
-          .neq('user_id', EDITOR_USER_ID)
           .in('user_id', [...followIds, session.user.id])
           .order('updated_at', { ascending: false });
       }
