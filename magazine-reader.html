@@ -505,6 +505,13 @@ const BASE_PAGES = [
 let DYNAMIC_PAGES = [];
 let CONTRIBUTIONS = []; // loaded articles
 
+// Per-article translation state, keyed by contribution id -- shares the
+// same server-side translations cache as article.html (translate-article
+// writes into contributions.translations, which is already included here
+// since loadContributions() selects '*').
+let MR_ACTIVE_TRANSLATION = {}; // { [contributionId]: 'tr'|'de' }
+let MR_TRANSLATING = {};        // { [contributionId]: true } while in flight
+
 const SBU_MR = 'https://gseuejqqwkdjkhxfxxwy.supabase.co';
 const SBK_MR = 'sb_publishable_0Nmw1mwGx__b_jJHLHBDKg__1OAsRuy';
 
@@ -796,6 +803,61 @@ function monoEditorCol(){
   </div>`;
 }
 
+function mrTranslateCta(article, activeLang){
+  const langLabel = { tr: 'Türkçe', de: 'Deutsch' };
+  const wrap = (inner) => `<div style="padding:0 22px;margin:10px 0 4px;font-family:var(--C);font-size:12px;letter-spacing:.5px;color:#6B6B6B">${inner}</div>`;
+  const link = (onclick, text) => `<a onclick="${onclick}" style="color:#0C0C0C;text-decoration:underline;text-underline-offset:2px;cursor:pointer">${text}</a>`;
+
+  if(MR_TRANSLATING[article.id]) return wrap('Translating…');
+
+  if(activeLang){
+    const other = activeLang === 'tr' ? 'de' : 'tr';
+    return wrap(`Showing the ${langLabel[activeLang]} translation — ${link(`mrShowOriginal(${article.id})`, 'Show original')} · ${link(`mrTranslate(${article.id},'${other}')`, langLabel[other])}`);
+  }
+  return wrap(`Translate this column: ${link(`mrTranslate(${article.id},'tr')`, 'Türkçe')} · ${link(`mrTranslate(${article.id},'de')`, 'Deutsch')}`);
+}
+
+async function mrTranslate(articleId, lang){
+  const article = CONTRIBUTIONS.find(a => a.id === articleId);
+  if(!article) return;
+
+  let translationsCache = {};
+  try{ translationsCache = JSON.parse(article.translations || '{}'); }catch(e){}
+
+  if(translationsCache[lang]){
+    MR_ACTIVE_TRANSLATION[articleId] = lang;
+    render();
+    return;
+  }
+
+  MR_TRANSLATING[articleId] = true;
+  render();
+
+  try{
+    const sb = supabase.createClient(SBU_MR, SBK_MR, {auth:{storage:window.REEDEFINED_AUTH_STORAGE}});
+    const { data, error } = await sb.functions.invoke('translate-article', {
+      body: { contributionId: article.id, title: article.title, tagline: article.tagline, body: article.body, lang }
+    });
+    if(error || !data || data.error) throw new Error(data?.error || error?.message || 'translation failed');
+
+    let updatedCache = {};
+    try{ updatedCache = JSON.parse(article.translations || '{}'); }catch(e){}
+    updatedCache[lang] = data;
+    article.translations = JSON.stringify(updatedCache);
+    MR_ACTIVE_TRANSLATION[articleId] = lang;
+  }catch(e){
+    console.error('Flip reader translation failed:', e);
+  }finally{
+    delete MR_TRANSLATING[articleId];
+    render();
+  }
+}
+
+function mrShowOriginal(articleId){
+  delete MR_ACTIVE_TRANSLATION[articleId];
+  render();
+}
+
 function monoArticleFull(idx){
   const article = CONTRIBUTIONS[idx];
   if(!article) return `<div style="width:100%;height:100%;background:#F8F7F4"></div>`;
@@ -803,7 +865,17 @@ function monoArticleFull(idx){
   const author = escMR((article.profiles && article.profiles.name) ? article.profiles.name : 'Contributor');
   const initial = author.charAt(0).toUpperCase();
   const avatarUrl = safeUrlMR((article.profiles && article.profiles.avatar) ? article.profiles.avatar : '');
-  const bodyHtml = article.body ? '<p style="margin-bottom:10px">' + escMR(article.body).replace(/\n\n/g,'</p><p style="margin-bottom:10px">').replace(/\n/g,'<br>') + '</p>' : '';
+
+  let mrTranslationsCache = {};
+  try{ mrTranslationsCache = JSON.parse(article.translations || '{}'); }catch(e){}
+  const mrActiveLang = MR_ACTIVE_TRANSLATION[article.id];
+  const mrTranslation = mrActiveLang ? mrTranslationsCache[mrActiveLang] : null;
+
+  const displayTitle = mrTranslation?.title || article.title || 'Untitled';
+  const displayTagline = mrTranslation ? (mrTranslation.tagline || '') : (article.tagline || '');
+  const displayBody = mrTranslation?.body || article.body || '';
+
+  const bodyHtml = displayBody ? '<p style="margin-bottom:10px">' + escMR(displayBody).replace(/\n\n/g,'</p><p style="margin-bottom:10px">').replace(/\n/g,'<br>') + '</p>' : '';
 
   let productsHtml = '';
   try {
@@ -845,11 +917,12 @@ function monoArticleFull(idx){
     <div class="mr-header">
       <div style="flex:1">
         <div style="font-family:var(--C);font-size:12px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#4A7C3F;margin-bottom:8px;display:flex;align-items:center;gap:8px"><span style="width:16px;height:1px;background:#4A7C3F;display:inline-block"></span>${escMR(article.category || 'Contributor Column')}</div>
-        <div class="mr-title">${escMR(article.title || 'Untitled')}</div>
-        ${article.tagline ? `<div style="font-family:var(--H);font-size:14px;color:#3A3A3A;line-height:1.5">"${escMR(article.tagline)}"</div>` : ''}
+        <div class="mr-title">${escMR(displayTitle)}</div>
+        ${displayTagline ? `<div style="font-family:var(--H);font-size:14px;color:#3A3A3A;line-height:1.5">"${escMR(displayTagline)}"</div>` : ''}
       </div>
       ${avatarHtml}
     </div>
+    ${mrTranslateCta(article, mrActiveLang)}
     <div class="mr-body">
       <div style="font-family:var(--S);font-size:15px;line-height:1.8;color:#3A3A3A">${bodyHtml}</div>
       ${productsHtml}
