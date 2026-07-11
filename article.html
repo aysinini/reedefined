@@ -486,6 +486,12 @@ async function switchArticleLang(lang){
   const originalOpacity = document.getElementById('wrap').style.opacity;
   document.getElementById('wrap').style.opacity = '.5';
 
+  // Translation is a real AI call and can take several seconds on a full
+  // article — show something more than dimmed opacity so it doesn't read
+  // as stuck. Reuses the existing note slot; restore its real content below.
+  const originalNoteHtml = noteEl ? noteEl.innerHTML : '';
+  if(noteEl){ noteEl.textContent = 'Translating…'; noteEl.style.display = 'block'; }
+
   try{
     const { data, error } = await sb.functions.invoke('translate-article', {
       body: { title: CURRENT_ARTICLE.title, tagline: CURRENT_ARTICLE.tagline, body: CURRENT_ARTICLE.body, lang }
@@ -496,10 +502,11 @@ async function switchArticleLang(lang){
     titleEl.textContent = data.title;
     if(taglineEl) taglineEl.textContent = data.tagline ? `"${data.tagline}"` : '';
     bodyEl.innerHTML = (data.body || '').split(/\n\s*\n/).map(p => `<p>${esc(p)}</p>`).join('');
-    if(noteEl) noteEl.style.display = 'block';
+    if(noteEl){ noteEl.innerHTML = originalNoteHtml; noteEl.style.display = 'block'; }
   }catch(e){
     console.error('Article translation failed:', e);
     // Fail quietly, keep showing the original English text
+    if(noteEl){ noteEl.innerHTML = originalNoteHtml; noteEl.style.display = 'none'; }
   }finally{
     document.getElementById('wrap').style.opacity = originalOpacity || '1';
   }
