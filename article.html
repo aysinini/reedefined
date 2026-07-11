@@ -65,11 +65,28 @@ body{background:var(--bg);color:var(--ink);font-family:var(--S);min-height:100vh
 @media(max-width:520px){.shop-grid{grid-template-columns:1fr}}
 
 /* ── LIKE ── */
-.engage-row{display:flex;align-items:center;gap:16px;padding:28px 0;margin-top:8px;border-top:1px solid var(--rule)}
+.engage-row{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:28px 0;margin-top:8px;border-top:1px solid var(--rule)}
 .like-btn{display:flex;align-items:center;gap:8px;background:none;border:1px solid var(--rule);border-radius:20px;padding:9px 18px;cursor:pointer;font-family:var(--C);font-size:14px;font-weight:600;color:var(--mid);transition:all .15s}
 .like-btn:hover{border-color:var(--ink)}
 .like-btn.on{background:#FBEAE8;border-color:#E4A199;color:#C8251A}
 .like-btn svg{width:16px;height:16px}
+
+/* ── REPORT ── */
+.report-link{display:flex;align-items:center;gap:6px;background:none;border:none;font-family:var(--C);font-size:12px;font-weight:600;letter-spacing:.3px;color:var(--light);cursor:pointer;padding:0;transition:color .15s}
+.report-link:hover{color:var(--muted)}
+.report-link svg{width:14px;height:14px}
+.report-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:500;align-items:center;justify-content:center}
+.report-overlay.open{display:flex}
+.report-card{background:var(--white);width:420px;max-width:calc(100vw - 32px);padding:28px;border-radius:8px}
+.report-title{font-family:var(--H);font-size:20px;font-weight:700;margin-bottom:18px}
+.report-field{margin-bottom:16px}
+.report-label{font-family:var(--C);font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:7px}
+.report-select,.report-textarea{width:100%;padding:11px 13px;font-family:var(--S);font-size:14px;color:var(--ink);background:var(--bg);border:1px solid var(--rule);border-radius:7px;outline:none}
+.report-textarea{resize:vertical;min-height:70px}
+.report-acts{display:flex;gap:8px;justify-content:flex-end;margin-top:20px}
+.report-cancel{font-family:var(--H);font-size:13px;font-weight:700;padding:9px 18px;border:1px solid var(--rule);background:var(--white);color:var(--muted);cursor:pointer;border-radius:7px}
+.report-submit{font-family:var(--H);font-size:13px;font-weight:700;padding:9px 18px;background:var(--ink);color:#fff;border:none;cursor:pointer;border-radius:7px}
+.report-thanks{font-family:var(--H);font-size:14px;color:var(--teal);text-align:center;padding:8px 0}
 
 /* ── COMMENTS ── */
 .comments-section{margin-top:20px}
@@ -111,6 +128,31 @@ body{background:var(--bg);color:var(--ink);font-family:var(--S);min-height:100vh
 
 <div class="wrap" id="wrap">
   <div class="empty">Loading article…</div>
+</div>
+
+<div class="report-overlay" id="report-overlay">
+  <div class="report-card">
+    <div class="report-title">Report this article</div>
+    <div id="report-form-body">
+      <div class="report-field">
+        <label class="report-label">Reason</label>
+        <select class="report-select" id="report-reason">
+          <option>Inappropriate content</option>
+          <option>Incorrect information</option>
+          <option>Copyright infringement</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="report-field">
+        <label class="report-label">Additional details (optional)</label>
+        <textarea class="report-textarea" id="report-note" placeholder="Anything else we should know?"></textarea>
+      </div>
+    </div>
+    <div class="report-acts" id="report-acts">
+      <button class="report-cancel" onclick="closeReportModal()">Cancel</button>
+      <button class="report-submit" onclick="submitReport()">Submit report</button>
+    </div>
+  </div>
 </div>
 
 <script>
@@ -228,6 +270,10 @@ async function loadArticle(){
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.8 1-1a5.5 5.5 0 0 0 0-7.6z"/></svg>
         <span id="like-count">–</span>
       </button>
+      <button class="report-link" onclick="openReportModal()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 3v18M4 4h13l-2 4 2 4H4"/></svg>
+        <span>Report this article</span>
+      </button>
     </div>
 
     <div class="comments-section">
@@ -313,6 +359,53 @@ async function toggleLike(contributionId){
     notifyAuthor(contributionId, 'like');
   }
 }
+
+async function openReportModal(){
+  const { data:{ session } } = await sb.auth.getSession();
+  if(!session){ location.href='portal.html'; return; }
+
+  document.getElementById('report-form-body').style.display = '';
+  document.getElementById('report-reason').value = 'Inappropriate content';
+  document.getElementById('report-note').value = '';
+  document.getElementById('report-acts').innerHTML =
+    `<button class="report-cancel" onclick="closeReportModal()">Cancel</button>` +
+    `<button class="report-submit" onclick="submitReport()">Submit report</button>`;
+  document.getElementById('report-overlay').classList.add('open');
+}
+
+function closeReportModal(){
+  document.getElementById('report-overlay').classList.remove('open');
+}
+
+async function submitReport(){
+  if(!CURRENT_ARTICLE) return;
+  const { data:{ session } } = await sb.auth.getSession();
+  if(!session){ location.href='portal.html'; return; }
+
+  const reason = document.getElementById('report-reason').value;
+  const note = document.getElementById('report-note').value.trim();
+
+  const { error } = await sb.from('reports').insert({
+    article_id: CURRENT_ARTICLE.id,
+    reporter_id: session.user.id,
+    reason,
+    note: note || null
+  });
+
+  if(error){
+    console.error('Report submit error:', error);
+    alert('Could not submit report: ' + (error.message || 'unknown error'));
+    return;
+  }
+
+  document.getElementById('report-form-body').style.display = 'none';
+  document.getElementById('report-acts').innerHTML = `<div class="report-thanks">Thanks — we'll take a look.</div>`;
+  setTimeout(closeReportModal, 1800);
+}
+
+document.getElementById('report-overlay').addEventListener('click', function(e){
+  if(e.target === this) closeReportModal();
+});
 
 function avatarHtmlFor(c, sizeClass){
   const name = c.profiles?.name || 'Reader';

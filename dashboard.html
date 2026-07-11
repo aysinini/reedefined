@@ -85,11 +85,12 @@ body{background-color:var(--bg);background-image:radial-gradient(circle at 15% 1
   </div>
   <div class="h1" data-i18n="dash.h1">Your writer's desk</div>
 
-  <div class="stats-row">
+  <div class="stats-row" id="stats-row">
     <div class="stat-card on" id="tab-published" onclick="showTab('articles')"><div class="stat-n" id="stat-published">—</div><div class="stat-l" data-i18n="dash.published">Published</div></div>
     <div class="stat-card" id="tab-drafts" onclick="showTab('articles')"><div class="stat-n" id="stat-drafts">—</div><div class="stat-l" data-i18n="dash.drafts">Drafts</div></div>
     <div class="stat-card" id="tab-followers" onclick="showTab('followers')"><div class="stat-n" id="stat-followers">—</div><div class="stat-l" data-i18n="dash.followers">Followers</div></div>
     <div class="stat-card" id="tab-following" onclick="showTab('following')"><div class="stat-n" id="stat-following">—</div><div class="stat-l" data-i18n="dash.following">Following</div></div>
+    <div class="stat-card" id="tab-reported" onclick="showTab('reported')" style="display:none"><div class="stat-n" id="stat-reported">—</div><div class="stat-l" style="color:var(--red)">Reported</div></div>
   </div>
   <div class="tab-panel-wrap">
     <div id="tab-content"><div class="empty">Loading…</div></div>
@@ -104,18 +105,26 @@ function esc(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').repla
 // user-submitted "javascript:" (or similar) URL can never end up live.
 function safeUrl(u){ const s=(u||'').toString().trim(); return /^https?:\/\//i.test(s) ? esc(s) : ''; }
 
-let DATA = { published:[], drafts:[], followers:[], following:[] };
+let DATA = { published:[], drafts:[], followers:[], following:[], reports:[] };
+let IS_ADMIN = false;
 
 async function init(){
   const { data:{ session } } = await sb.auth.getSession();
   if(!session){ location.href='portal.html'; return; }
   const uid = session.user.id;
 
-  const [{ data:articles }, { data:followerRows }, { data:followingRows }] = await Promise.all([
+  const [{ data:articles }, { data:followerRows }, { data:followingRows }, { data:profile }] = await Promise.all([
     sb.from('contributions').select('id,title,category,status,updated_at').eq('user_id', uid).order('updated_at',{ascending:false}),
     sb.from('follows').select('user_id').eq('contributor_id', uid),
-    sb.from('follows').select('contributor_id').eq('user_id', uid)
+    sb.from('follows').select('contributor_id').eq('user_id', uid),
+    sb.from('profiles').select('is_admin').eq('id', uid).maybeSingle()
   ]);
+
+  IS_ADMIN = !!profile?.is_admin;
+  if(IS_ADMIN){
+    document.getElementById('tab-reported').style.display = '';
+    await loadReports();
+  }
 
   DATA.published = (articles||[]).filter(a => a.status==='submitted');
   DATA.drafts = (articles||[]).filter(a => a.status==='draft');
@@ -268,6 +277,66 @@ function renderArticlesPanel(){
   return renderCurrentIssueSection() + renderPastIssuesSection() + renderForthcomingSection();
 }
 
+async function loadReports(){
+  const { data:reportRows, error } = await sb.from('reports')
+    .select('id,article_id,reason,note,created_at,contributions:article_id(id,title,status),profiles:reporter_id(name)')
+    .order('created_at',{ascending:false});
+  if(error){ console.error('Failed to load reports:', error); return; }
+  DATA.reports = reportRows || [];
+  document.getElementById('stat-reported').textContent = new Set(DATA.reports.map(r => r.article_id)).size;
+}
+
+function renderReportedPanel(){
+  if(DATA.reports.length===0){ return `<div class="empty">No reports yet.</div>`; }
+
+  const groups = {};
+  DATA.reports.forEach(r => {
+    if(!groups[r.article_id]) groups[r.article_id] = { article: r.contributions, items: [] };
+    groups[r.article_id].items.push(r);
+  });
+
+  // DATA.reports is already newest-first, but Object.values() on numeric-ish
+  // keys always iterates in ascending key order regardless of insertion --
+  // sort explicitly by each group's most recent report so fresh reports
+  // surface at the top.
+  const sortedGroups = Object.values(groups).sort((a, b) =>
+    new Date(b.items[0].created_at) - new Date(a.items[0].created_at)
+  );
+
+  return sortedGroups.map(g => {
+    const title = esc(g.article?.title || 'Untitled');
+    const removed = g.article?.status === 'removed';
+    return `
+      <div class="section-block">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:10px">
+          <div class="section-h" style="cursor:pointer" onclick="location.href='article.html?id=${g.article?.id}'">${title}</div>
+          <span style="font-family:var(--C);font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--red);background:#FBEAE8;padding:3px 9px;border-radius:10px;flex-shrink:0">${g.items.length} report${g.items.length>1?'s':''}</span>
+        </div>
+        ${g.items.map(r => `
+          <div style="padding:10px 0;border-top:1px solid var(--rule)">
+            <div style="font-family:var(--C);font-size:12px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--muted)">${esc(r.reason)} · ${esc(r.profiles?.name || 'Reader')} · ${new Date(r.created_at).toLocaleDateString('en-US',{month:'short',day:'numeric'})}</div>
+            ${r.note ? `<div style="font-family:var(--S);font-size:13px;color:var(--mid);margin-top:4px">${esc(r.note)}</div>` : ''}
+          </div>`).join('')}
+        <div style="margin-top:14px">
+          ${removed
+            ? `<span style="font-family:var(--C);font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted)">Removed from publication</span>`
+            : `<button onclick="removeArticle(${g.article?.id})" style="font-family:var(--H);font-size:13px;font-weight:700;padding:8px 16px;background:var(--red);color:#fff;border:none;border-radius:7px;cursor:pointer">Remove from publication</button>`}
+        </div>
+      </div>`;
+  }).join('');
+}
+
+async function removeArticle(articleId){
+  if(!IS_ADMIN) return;
+  if(!confirm('Remove this article from publication? It disappears from the site immediately for all readers. This can be reversed manually later if needed.')) return;
+
+  const { error } = await sb.from('contributions').update({ status:'removed' }).eq('id', articleId);
+  if(error){ alert('Could not remove article: ' + (error.message || 'unknown error')); return; }
+
+  await loadReports();
+  showTab('reported');
+}
+
 function showTab(tab){
   document.querySelectorAll('.stat-card').forEach(c => c.classList.remove('on'));
   if(tab==='articles'){
@@ -281,6 +350,11 @@ function showTab(tab){
 
   if(tab==='articles'){
     el.innerHTML = renderArticlesPanel();
+    return;
+  }
+
+  if(tab==='reported'){
+    el.innerHTML = renderReportedPanel();
     return;
   }
 
