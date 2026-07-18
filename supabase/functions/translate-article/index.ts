@@ -111,13 +111,20 @@ Deno.serve(async (req: Request) => {
           .select("translations")
           .eq("id", contributionId)
           .single();
-        let translations: Record<string, unknown> = {};
+        let translations: Record<string, any> = {};
         try {
           translations = JSON.parse(row?.translations || "{}");
         } catch {
           translations = {};
         }
-        translations[lang] = parsed;
+        // Merge per-field instead of overwriting wholesale: a title/tagline-only
+        // request (e.g. from a newsstand card preview) must not clobber a
+        // previously cached full-article translation's body, and vice versa.
+        const existing = (translations[lang] && typeof translations[lang] === "object") ? translations[lang] : {};
+        const merged: Record<string, unknown> = { ...existing, title: parsed.title, tagline: parsed.tagline };
+        if (body) merged.body = parsed.body;
+        else if (existing.body) merged.body = existing.body;
+        translations[lang] = merged;
         await supabaseAdmin
           .from("contributions")
           .update({ translations: JSON.stringify(translations) })

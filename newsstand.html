@@ -246,6 +246,7 @@ footer.site-ft{background:var(--ink);padding:60px 32px 34px}.ft-w{max-width:1400
   let activeCategory='all';
   let contribSubs=[];
   let contribFollows=new Set();
+  const NS_ARTS_CACHE={};
   const {data:{session}}=await sb.auth.getSession();
   if(!session){ location.href='portal.html'; return; }
 
@@ -370,7 +371,7 @@ footer.site-ft{background:var(--ink);padding:60px 32px 34px}.ft-w{max-width:1400
 
   async function loadIssueArticles(category){
     let query = sb.from('contributions')
-      .select('id,title,tagline,category,updated_at,profiles:user_id(name,avatar)')
+      .select('id,title,tagline,category,translations,updated_at,profiles:user_id(name,avatar)')
       .eq('status','submitted');
     if(category && category!=='all') query = query.eq('category', category);
     const { data:arts } = await query.order('updated_at',{ascending:false}).limit(10);
@@ -397,6 +398,11 @@ footer.site-ft{background:var(--ink);padding:60px 32px 34px}.ft-w{max-width:1400
 
     const esc = s => (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
     const safeUrl = u => { const s=(u||'').toString().trim(); return /^https?:\/\//i.test(s) ? esc(s) : ''; };
+    arts.forEach(a => {
+      let translations = {};
+      try{ translations = JSON.parse(a.translations || '{}'); }catch(e){ translations = {}; }
+      NS_ARTS_CACHE[a.id] = { title: a.title, tagline: a.tagline, translations };
+    });
     list.innerHTML = arts.map(a => {
       const authorName = a.profiles?.name || 'Contributor';
       const initial = authorName.charAt(0).toUpperCase();
@@ -407,8 +413,9 @@ footer.site-ft{background:var(--ink);padding:60px 32px 34px}.ft-w{max-width:1400
       return `
       <div style="padding:20px 0;border-top:1px solid var(--rule);cursor:pointer" onclick="location.href='article.html?id=${a.id}'">
         <div style="font-family:var(--C);font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--teal);margin-bottom:6px">${esc(a.category||'Column')}</div>
-        <div style="font-family:var(--H);font-size:19px;font-weight:700;margin-bottom:4px">${esc(a.title||'Untitled')}</div>
-        ${a.tagline ? `<div style="font-family:var(--H);font-size:14px;color:var(--mid)">${esc(a.tagline)}</div>` : ''}
+        <div id="nt-title-${a.id}" style="font-family:var(--H);font-size:19px;font-weight:700;margin-bottom:4px">${esc(a.title||'Untitled')}</div>
+        ${a.tagline ? `<div id="nt-tagline-${a.id}" style="font-family:var(--H);font-size:14px;color:var(--mid)">${esc(a.tagline)}</div>` : ''}
+        <span id="nt-translate-${a.id}" onclick="event.stopPropagation();translateNewsstandCard(${a.id})" style="display:inline-block;margin-top:4px;font-family:var(--C);font-size:11px;letter-spacing:.5px;color:var(--muted);text-decoration:underline;cursor:pointer" data-i18n="xlt.translate">${t('xlt.translate')}</span>
         <div style="display:flex;align-items:center;justify-content:space-between;margin-top:10px">
           <div style="display:flex;align-items:center;gap:8px">
             ${avatarHtml}
@@ -428,6 +435,39 @@ footer.site-ft{background:var(--ink);padding:60px 32px 34px}.ft-w{max-width:1400
       </div>`;
     }).join('');
   }
+
+  window.translateNewsstandCard = async function(id){
+    const art = NS_ARTS_CACHE[id];
+    if(!art) return;
+    const lang = getLang();
+    const titleEl = document.getElementById(`nt-title-${id}`);
+    const taglineEl = document.getElementById(`nt-tagline-${id}`);
+    const linkEl = document.getElementById(`nt-translate-${id}`);
+
+    const cached = art.translations[lang];
+    if(cached && cached.title){
+      titleEl.textContent = cached.title;
+      if(taglineEl && cached.tagline) taglineEl.textContent = cached.tagline;
+      if(linkEl) linkEl.style.display = 'none';
+      return;
+    }
+
+    if(linkEl) linkEl.textContent = t('xlt.translating');
+    try{
+      const { data, error } = await sb.functions.invoke('translate-article', {
+        body: { contributionId: id, title: art.title, tagline: art.tagline, body: '', lang }
+      });
+      if(error || !data || data.error) throw new Error(data?.error || error?.message || 'translation failed');
+      art.translations[lang] = data;
+      titleEl.textContent = data.title;
+      if(taglineEl && data.tagline) taglineEl.textContent = data.tagline;
+      if(linkEl) linkEl.style.display = 'none';
+    }catch(e){
+      console.error('Newsstand card translation failed:', e);
+      if(linkEl) linkEl.textContent = t('xlt.failed');
+      setTimeout(() => { if(linkEl){ linkEl.textContent = t('xlt.translate'); linkEl.style.display=''; } }, 2500);
+    }
+  };
 
   window.toggleNewsstandLike = async function(id, el){
     const { data:{ session } } = await sb.auth.getSession();

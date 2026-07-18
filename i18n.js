@@ -654,6 +654,11 @@ const TRANSLATIONS = {
     'conn.desc_instagram': 'Your posts and reels — pending Meta Graph API approval.',
     'conn.pull_recent_posts': 'Recent posts',
     'conn.pull_reels': 'Reels',
+    'xlt.translate': 'Translate',
+    'xlt.translating': 'Translating…',
+    'xlt.translated': 'Translated',
+    'xlt.show_original': 'Show original',
+    'xlt.failed': 'Translation failed — please try again.',
   },
 
   de: {
@@ -1302,6 +1307,11 @@ const TRANSLATIONS = {
     'conn.desc_instagram': 'Deine Beiträge und Reels — ausstehende Meta-Graph-API-Genehmigung.',
     'conn.pull_recent_posts': 'Letzte Beiträge',
     'conn.pull_reels': 'Reels',
+    'xlt.translate': 'Übersetzen',
+    'xlt.translating': 'Wird übersetzt…',
+    'xlt.translated': 'Übersetzt',
+    'xlt.show_original': 'Original anzeigen',
+    'xlt.failed': 'Übersetzung fehlgeschlagen — bitte erneut versuchen.',
   }
 };
 

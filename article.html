@@ -558,26 +558,19 @@ async function submitComment(contributionId){
   }
 }
 
-const TRANSLATE_LANGS = ['en', 'tr', 'de'];
-const TRANSLATE_LANG_LABEL = { en: 'English', tr: 'Türkçe', de: 'Deutsch' };
-
 function renderTranslateCta(){
   const cta = document.getElementById('a-translate-cta');
   if(!cta) return;
   if(activeTranslationLang){
-    const others = TRANSLATE_LANGS.filter(l => l !== activeTranslationLang);
-    cta.innerHTML = `Showing the ${TRANSLATE_LANG_LABEL[activeTranslationLang]} translation — ` +
-      `<a onclick="showOriginalArticle()">Show original</a> · ` +
-      others.map(l => `<a onclick="translateArticleTo('${l}')">${TRANSLATE_LANG_LABEL[l]}</a>`).join(' · ');
+    cta.innerHTML = `${t('xlt.translated')} — <a onclick="showOriginalArticle()">${t('xlt.show_original')}</a>`;
   } else {
-    cta.innerHTML = `Translate this column: ` +
-      TRANSLATE_LANGS.map(l => `<a onclick="translateArticleTo('${l}')">${TRANSLATE_LANG_LABEL[l]}</a>`).join(' · ');
+    cta.innerHTML = `<a onclick="translateArticleTo('${getLang()}')">${t('xlt.translate')}</a>`;
   }
 }
 
 function setTranslateCtaLoading(){
   const cta = document.getElementById('a-translate-cta');
-  if(cta) cta.textContent = 'Translating…';
+  if(cta) cta.textContent = t('xlt.translating');
 }
 
 async function translateArticleTo(lang){
@@ -585,7 +578,7 @@ async function translateArticleTo(lang){
   const bodyEl = document.getElementById('a-body');
   if(!titleEl || !bodyEl || !CURRENT_ARTICLE) return;
 
-  if(translationsCache[lang]){
+  if(translationsCache[lang] && translationsCache[lang].body){
     applyTranslation(translationsCache[lang], lang);
     return;
   }
@@ -601,8 +594,8 @@ async function translateArticleTo(lang){
   }catch(e){
     console.error('Article translation failed:', e);
     const cta = document.getElementById('a-translate-cta');
-    if(cta) cta.textContent = 'Translation failed — please try again.';
-    setTimeout(renderTranslateCta, 2500); // revert CTA back to the language options after showing the error
+    if(cta) cta.textContent = t('xlt.failed');
+    setTimeout(renderTranslateCta, 2500); // revert CTA back to the translate link after showing the error
   }
 }
 
@@ -613,7 +606,7 @@ function applyTranslation(data, lang){
     taglineEl.textContent = data.tagline ? `"${data.tagline}"` : '';
     taglineEl.style.display = data.tagline ? '' : 'none';
   }
-  document.getElementById('a-body').innerHTML = (data.body || '').split(/\n\s*\n/).map(p => `<p>${esc(p)}</p>`).join('');
+  document.getElementById('a-body').innerHTML = (data.body || '').split(/\n\s*\n/).map(p => `<p>${renderInlineLinks(esc(p))}</p>`).join('');
   activeTranslationLang = lang;
   renderTranslateCta();
 }
