@@ -558,19 +558,20 @@ async function submitComment(contributionId){
   }
 }
 
+const TRANSLATE_LANGS = ['en', 'tr', 'de'];
+const TRANSLATE_LANG_LABEL = { en: 'English', tr: 'Türkçe', de: 'Deutsch' };
+
 function renderTranslateCta(){
   const cta = document.getElementById('a-translate-cta');
   if(!cta) return;
-  const langLabel = { tr: 'Türkçe', de: 'Deutsch' };
   if(activeTranslationLang){
-    const other = activeTranslationLang === 'tr' ? 'de' : 'tr';
-    cta.innerHTML = `Showing the ${langLabel[activeTranslationLang]} translation — ` +
+    const others = TRANSLATE_LANGS.filter(l => l !== activeTranslationLang);
+    cta.innerHTML = `Showing the ${TRANSLATE_LANG_LABEL[activeTranslationLang]} translation — ` +
       `<a onclick="showOriginalArticle()">Show original</a> · ` +
-      `<a onclick="translateArticleTo('${other}')">${langLabel[other]}</a>`;
+      others.map(l => `<a onclick="translateArticleTo('${l}')">${TRANSLATE_LANG_LABEL[l]}</a>`).join(' · ');
   } else {
     cta.innerHTML = `Translate this column: ` +
-      `<a onclick="translateArticleTo('tr')">Türkçe</a> · ` +
-      `<a onclick="translateArticleTo('de')">Deutsch</a>`;
+      TRANSLATE_LANGS.map(l => `<a onclick="translateArticleTo('${l}')">${TRANSLATE_LANG_LABEL[l]}</a>`).join(' · ');
   }
 }
 
@@ -599,7 +600,9 @@ async function translateArticleTo(lang){
     applyTranslation(data, lang);
   }catch(e){
     console.error('Article translation failed:', e);
-    renderTranslateCta(); // fail quietly, revert CTA and keep the original text on screen
+    const cta = document.getElementById('a-translate-cta');
+    if(cta) cta.textContent = 'Translation failed — please try again.';
+    setTimeout(renderTranslateCta, 2500); // revert CTA back to the language options after showing the error
   }
 }
 

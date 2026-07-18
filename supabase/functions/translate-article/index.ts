@@ -14,6 +14,7 @@
 import { createClient } from "jsr:@supabase/supabase-js@2";
 
 const LANG_NAMES: Record<string, string> = {
+  en: "English",
   tr: "Turkish",
   de: "German",
 };
@@ -48,7 +49,9 @@ Deno.serve(async (req: Request) => {
     }
 
     const prompt =
-      `Translate the following personal magazine column from English to ${targetLang}. ` +
+      `Translate the following personal magazine column to ${targetLang}. ` +
+      `Auto-detect the source language from the text itself — do not assume it is written in English. ` +
+      `If the text is already written in ${targetLang}, return it unchanged. ` +
       `Keep the personal, editorial tone — do not make it sound like a news article. ` +
       `Return ONLY valid JSON with exactly these keys: "title", "tagline", "body". ` +
       `No markdown fences, no explanation, just the JSON object.\n\n` +
@@ -65,7 +68,7 @@ Deno.serve(async (req: Request) => {
       },
       body: JSON.stringify({
         model: "claude-opus-4-8",
-        max_tokens: 2000,
+        max_tokens: 8192,
         messages: [{ role: "user", content: prompt }],
       }),
     });
@@ -86,8 +89,12 @@ Deno.serve(async (req: Request) => {
     try {
       parsed = JSON.parse(cleaned);
     } catch {
-      // If the model didn't return clean JSON, fail safe to the original text
-      parsed = { title, tagline, body };
+      // The model didn't return clean JSON — surface a real error instead of
+      // silently echoing the original text back as if it were a translation.
+      return new Response(JSON.stringify({ error: "Translation service returned an unexpected response" }), {
+        status: 502,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
     }
 
     // Cache the translation so this article/language pair never needs a
