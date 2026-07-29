@@ -188,7 +188,7 @@ function renderCurrentIssueSection(){
     body = `<div class="empty">No draft in progress for this issue.</div>`;
   } else {
     const rightMeta = editable ? `
-        <span style="font-family:var(--C);font-size:12px;letter-spacing:1px;color:var(--muted);flex-shrink:0">Editable until July 25</span>
+        <span style="font-family:var(--C);font-size:12px;letter-spacing:1px;color:var(--muted);flex-shrink:0">Editable until August 25</span>
         <span style="font-family:var(--C);font-size:13px;font-weight:700;letter-spacing:1px;color:var(--teal);text-decoration:underline;text-underline-offset:3px;cursor:pointer;flex-shrink:0">Edit ↗</span>
         <span style="font-family:var(--C);font-size:13px;font-weight:700;letter-spacing:1px;color:#C0392B;text-decoration:underline;text-underline-offset:3px;cursor:pointer;flex-shrink:0" onclick="event.stopPropagation();deleteDraft(${draft.id})">Delete</span>` : `
         <span style="font-family:var(--C);font-size:12px;letter-spacing:1px;color:var(--light);flex-shrink:0">Editing closed</span>`;
@@ -205,8 +205,8 @@ function renderCurrentIssueSection(){
   return `
     <div class="section-block">
       <div class="section-h">Current Issue</div>
-      <div class="section-sub">Issue No. 1 · August 2026</div>
-      <div style="font-family:var(--S);font-size:13px;color:var(--muted);line-height:1.5;margin-bottom:16px">Submit before 25 July to be included in this issue. Drafts not submitted by the deadline won't appear in the magazine.</div>
+      <div class="section-sub">Issue No. 1 · September 2026</div>
+      <div style="font-family:var(--S);font-size:13px;color:var(--muted);line-height:1.5;margin-bottom:16px">Submit before 25 August to be included in this issue. Drafts not submitted by the deadline won't appear in the magazine.</div>
       ${body}
     </div>`;
 }
@@ -236,7 +236,7 @@ function renderPastIssuesSection(){
   let filtersHtml = '', listHtml;
 
   if(DATA.published.length === 0){
-    listHtml = `<div class="empty">No past issues yet — Issue No. 1 launches in August 2026.</div>`;
+    listHtml = `<div class="empty">No past issues yet — Issue No. 1 launches in September 2026.</div>`;
   } else {
     const categories = [...new Set(DATA.published.map(a => a.category).filter(Boolean))];
     const dateBuckets = [...new Set(DATA.published.map(a => monthYearOf(a.updated_at)))];
