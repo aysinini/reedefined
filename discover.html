@@ -599,7 +599,29 @@ async function toggleFollowById(id, btn){
       console.error('Follow failed:', error);
       followed.delete(id); btn.classList.remove('on'); btn.textContent = t('disc.follow');
       alert('Could not follow: ' + error.message);
+    } else {
+      notifyFollow(id, session);
     }
+  }
+}
+
+async function notifyFollow(contributorId, session){
+  const { data:profile } = await sb.from('profiles')
+    .select('notify_follows_inapp,notify_follows_email')
+    .eq('id', contributorId).single();
+  if(!profile) return;
+
+  if(profile.notify_follows_inapp !== false){
+    await sb.from('notifications').insert({ user_id: contributorId, actor_id: session.user.id, type: 'follow' });
+  }
+
+  if(profile.notify_follows_email === true){
+    const actorName = session.user.user_metadata?.full_name || 'A reader';
+    try{
+      await sb.functions.invoke('send-notification', {
+        body: { userId: contributorId, subject: `${actorName} started following you on Reedefined`, message: `${actorName} started following you on Reedefined.` }
+      });
+    }catch(e){ console.error('Follow notification email failed:', e); }
   }
 }
 

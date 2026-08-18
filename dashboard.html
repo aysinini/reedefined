@@ -441,9 +441,12 @@ async function loadNotifications(){
       : `<div style="width:32px;height:32px;border-radius:50%;background:var(--teal-l);display:flex;align-items:center;justify-content:center;font-family:var(--H);font-size:12px;color:var(--teal)">${initial}</div>`;
     const actionText = n.type === 'like'
       ? `liked your column "${esc(n.contributions?.title || '')}"`
+      : n.type === 'follow'
+      ? `started following you`
       : `commented on "${esc(n.contributions?.title || '')}"`;
+    const target = n.type === 'follow' ? `profile.html?id=${n.actor_id}` : `article.html?id=${n.contribution_id}`;
     return `
-      <div style="display:flex;gap:10px;padding:12px 14px;border-bottom:1px solid #F0F0EE;background:${n.read ? 'none' : '#FAFAF5'};cursor:pointer" onclick="location.href='article.html?id=${n.contribution_id}'">
+      <div style="display:flex;gap:10px;padding:12px 14px;border-bottom:1px solid #F0F0EE;background:${n.read ? 'none' : '#FAFAF5'};cursor:pointer" onclick="location.href='${target}'">
         ${avatarHtml}
         <div style="flex:1">
           <div style="font-family:var(--H);font-size:13px;color:var(--ink)"><strong>${esc(name)}</strong> ${actionText}</div>
