@@ -24,6 +24,13 @@ body{background:var(--bg);color:var(--ink);font-family:var(--S);min-height:100vh
 .tb-logo{font-family:var(--H);font-size:20px;font-weight:400;cursor:pointer;letter-spacing:.08em}
 .tb-actions{display:flex;align-items:center;gap:18px}
 .tb-link{font-family:var(--C);font-size:13px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--mid);cursor:pointer}
+.nav-av{width:32px;height:32px;border-radius:50%;background:var(--teal);display:flex;align-items:center;justify-content:center;font-family:var(--H);font-size:12px;font-weight:700;color:#fff;cursor:pointer}
+.profile-menu{background:#fff;border:1px solid rgba(74,124,63,.15);border-radius:12px;box-shadow:0 12px 32px rgba(0,0,0,.12);min-width:210px;overflow:hidden}
+.profile-menu-item{display:block;width:100%;text-align:left;padding:14px 20px;background:none;border:none;border-top:1px solid var(--rule);cursor:pointer;font-family:var(--H);font-size:13px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#3A3A3A;transition:background .15s,color .15s}
+.profile-menu-item:first-child{border-top:none}
+.profile-menu-item:hover{background:var(--teal-l);color:var(--teal)}
+.profile-menu-item.danger{color:#C8251A;margin-top:4px}
+.profile-menu-item.danger:hover{background:rgba(200,37,26,.07);color:#C8251A}
 .wrap{max-width:680px;margin:0 auto;padding:56px 24px 100px}
 .a-tag{font-family:var(--C);font-size:15px;font-weight:700;letter-spacing:1.5px;font-variant:small-caps;color:var(--teal);margin-bottom:14px}
 .a-title{font-family:var(--H);font-size:36px;font-weight:400;line-height:1.3;margin-bottom:26px;letter-spacing:.06em}
@@ -123,6 +130,15 @@ body{background:var(--bg);color:var(--ink);font-family:var(--S);min-height:100vh
     </div>
     <div class="tb-link" data-i18n="art.flip" onclick="goFlipReader()">Read in flip format ⇄</div>
     <div class="tb-link" data-i18n="art.back" onclick="location.href='newsstand.html'">← Back</div>
+    <div id="nav-r-logged-in" style="display:none;position:relative">
+      <div class="nav-av" id="nav-av" onclick="toggleNavAvMenu()"></div>
+      <div id="nav-av-menu" class="profile-menu" style="display:none;position:absolute;top:40px;right:0;z-index:300">
+        <button id="nav-av-myprofile" class="profile-menu-item" onclick="location.href='profile.html?id='" data-i18n="disc.my_profile">My Profile</button>
+        <button id="nav-av-dashboard" class="profile-menu-item" style="display:none" onclick="location.href='dashboard.html'" data-i18n="ep.my_dashboard">My Dashboard</button>
+        <button class="profile-menu-item" onclick="location.href='profile-edit.html'" data-i18n="ep.edit_profile">Edit Profile</button>
+        <button class="profile-menu-item danger" onclick="window.__sbSignOut&&window.__sbSignOut()" data-i18n="ep.sign_out">Sign Out</button>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -625,6 +641,45 @@ function showOriginalArticle(){
 }
 
 loadArticle();
+
+// ── NAV AVATAR / SIGN OUT ──
+(async()=>{
+  const {data:{session}} = await sb.auth.getSession();
+  if(!session) return;
+  const name = session.user?.user_metadata?.full_name || session.user?.email || '';
+  const role = session.user?.user_metadata?.role || 'reader';
+  const av = document.getElementById('nav-av');
+  const navInitial = name.charAt(0).toUpperCase();
+  if(av && navInitial) av.textContent = navInitial;
+  if(av){
+    const escInitial = (navInitial||'').replace(/'/g,'&#39;');
+    sb.from('profiles').select('avatar').eq('id', session.user.id).single().then(({data:navProfile}) => {
+      const src = /^https?:\/\//i.test(navProfile?.avatar||'') ? navProfile.avatar.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;') : '';
+      if(src) av.innerHTML = `<img src="${src}" alt="Profile photo" style="width:100%;height:100%;border-radius:50%;object-fit:cover" onerror="this.parentElement.textContent='${escInitial}'">`;
+    });
+  }
+  const inEl = document.getElementById('nav-r-logged-in');
+  if(inEl) inEl.style.display = '';
+  const myProfileBtn = document.getElementById('nav-av-myprofile');
+  if(myProfileBtn) myProfileBtn.setAttribute('onclick', `location.href='profile.html?id=${session.user.id}'`);
+  if(role==='contrib'){
+    const dashBtn = document.getElementById('nav-av-dashboard');
+    if(dashBtn) dashBtn.style.display = '';
+  }
+  window.__sbSignOut = async()=>{ await sb.auth.signOut(); location.href='index.html'; };
+})();
+
+function toggleNavAvMenu(){
+  const menu = document.getElementById('nav-av-menu');
+  if(menu) menu.style.display = menu.style.display==='none' ? 'block' : 'none';
+}
+document.addEventListener('click', e=>{
+  const menu = document.getElementById('nav-av-menu');
+  const av = document.getElementById('nav-av');
+  if(menu && av && !av.contains(e.target) && !menu.contains(e.target)){
+    menu.style.display = 'none';
+  }
+});
 </script>
 
 </body>
