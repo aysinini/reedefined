@@ -18,6 +18,13 @@
 body{background:var(--bg);color:var(--ink);font-family:var(--S);-webkit-font-smoothing:antialiased;min-height:100vh;display:flex;flex-direction:column}
 .topbar{border-bottom:3px solid var(--ink);padding:0 48px;height:64px;display:flex;align-items:center;background:var(--white)}
 .tb-logo{font-family:var(--H);font-size:22px;font-weight:400;color:var(--ink);letter-spacing:.08em}
+.nav-av{width:32px;height:32px;border-radius:50%;background:var(--teal);display:flex;align-items:center;justify-content:center;font-family:var(--H);font-size:12px;font-weight:700;color:#fff;cursor:pointer}
+.profile-menu{background:#fff;border:1px solid rgba(74,124,63,.15);border-radius:12px;box-shadow:0 12px 32px rgba(0,0,0,.12);min-width:210px;overflow:hidden}
+.profile-menu-item{display:block;width:100%;text-align:left;padding:14px 20px;background:none;border:none;border-top:1px solid var(--rule);cursor:pointer;font-family:var(--H);font-size:13px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#3A3A3A;transition:background .15s,color .15s}
+.profile-menu-item:first-child{border-top:none}
+.profile-menu-item:hover{background:var(--teal-l);color:var(--teal)}
+.profile-menu-item.danger{color:#C8251A;margin-top:4px}
+.profile-menu-item.danger:hover{background:rgba(200,37,26,.07);color:#C8251A}
 .wrap{flex:1;display:flex;align-items:center;justify-content:center;padding:40px 24px}
 .card{max-width:640px;width:100%;text-align:center}
 .eyebrow{font-family:var(--C);font-size:13px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--teal);margin-bottom:14px}
@@ -33,15 +40,28 @@ body{background:var(--bg);color:var(--ink);font-family:var(--S);-webkit-font-smo
 .opt-d{font-family:var(--S);font-size:14px;color:var(--mid);line-height:1.5}
 .opt-arrow{font-family:var(--C);font-size:13px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink);margin-top:20px;display:flex;align-items:center;gap:6px}
 </style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="session-storage.js"></script>
 <script src="i18n.js"></script>
 </head>
 <body>
 
-<div class="topbar"><div class="tb-logo" onclick="location.href='index.html'" style="cursor:pointer">Reedefined</div><div style="display:flex;gap:6px;align-items:center">
+<div class="topbar" style="justify-content:space-between"><div class="tb-logo" onclick="location.href='index.html'" style="cursor:pointer">Reedefined</div><div style="display:flex;align-items:center;gap:16px">
+    <div style="display:flex;gap:6px;align-items:center">
       <button class="lang-btn" data-lang="en" onclick="setLang('en')" style="background:none;border:none;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:600;cursor:pointer;padding:0;color:var(--muted)">EN</button>
       <span style="color:var(--rule)">/</span>
       <button class="lang-btn" data-lang="de" onclick="setLang('de')" style="background:none;border:none;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:600;cursor:pointer;padding:0;color:var(--muted)">DE</button>
-    </div></div>
+    </div>
+    <div style="position:relative">
+      <div class="nav-av" id="nav-av" onclick="toggleNavAvMenu()"></div>
+      <div id="nav-av-menu" class="profile-menu" style="display:none;position:absolute;top:40px;right:0;z-index:300">
+        <button id="nav-av-myprofile" class="profile-menu-item" onclick="location.href='profile.html?id='" data-i18n="disc.my_profile">My Profile</button>
+        <button class="profile-menu-item" onclick="location.href='dashboard.html'" data-i18n="ep.my_dashboard">My Dashboard</button>
+        <button class="profile-menu-item" onclick="location.href='profile-edit.html'" data-i18n="ep.edit_profile">Edit Profile</button>
+        <button class="profile-menu-item danger" onclick="window.__sbSignOut&&window.__sbSignOut()" data-i18n="ep.sign_out">Sign Out</button>
+      </div>
+    </div>
+  </div></div>
 
 <div class="wrap">
   <div class="card">
@@ -71,6 +91,41 @@ body{background:var(--bg);color:var(--ink);font-family:var(--S);-webkit-font-smo
     </div>
   </div>
 </div>
+
+<script>
+const sb = supabase.createClient('https://gseuejqqwkdjkhxfxxwy.supabase.co','sb_publishable_0Nmw1mwGx__b_jJHLHBDKg__1OAsRuy',{auth:{storage:window.REEDEFINED_AUTH_STORAGE}});
+
+(async()=>{
+  const {data:{session}} = await sb.auth.getSession();
+  if(!session){ location.href='portal.html'; return; }
+  const name = session.user?.user_metadata?.full_name || session.user?.email || '';
+  const av = document.getElementById('nav-av');
+  const navInitial = name.charAt(0).toUpperCase();
+  if(av && navInitial) av.textContent = navInitial;
+  if(av){
+    const escInitial = (navInitial||'').replace(/'/g,'&#39;');
+    sb.from('profiles').select('avatar').eq('id', session.user.id).single().then(({data:navProfile}) => {
+      const src = /^https?:\/\//i.test(navProfile?.avatar||'') ? navProfile.avatar.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;') : '';
+      if(src) av.innerHTML = `<img src="${src}" alt="Profile photo" style="width:100%;height:100%;border-radius:50%;object-fit:cover" onerror="this.parentElement.textContent='${escInitial}'">`;
+    });
+  }
+  const myProfileBtn = document.getElementById('nav-av-myprofile');
+  if(myProfileBtn) myProfileBtn.setAttribute('onclick', `location.href='profile.html?id=${session.user.id}'`);
+  window.__sbSignOut = async()=>{ await sb.auth.signOut(); location.href='index.html'; };
+})();
+
+function toggleNavAvMenu(){
+  const menu = document.getElementById('nav-av-menu');
+  if(menu) menu.style.display = menu.style.display==='none' ? 'block' : 'none';
+}
+document.addEventListener('click', e=>{
+  const menu = document.getElementById('nav-av-menu');
+  const av = document.getElementById('nav-av');
+  if(menu && av && !av.contains(e.target) && !menu.contains(e.target)){
+    menu.style.display = 'none';
+  }
+});
+</script>
 
 </body>
 </html>
