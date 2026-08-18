@@ -74,6 +74,21 @@ body{background:var(--white);color:var(--ink);font-family:var(--S);-webkit-font-
 .btn-submit{width:100%;padding:15px;font-family:var(--H);font-size:13px;font-weight:700;background:var(--ink);color:#fff;border:none;cursor:pointer;border-radius:20px;transition:opacity .15s}
 .btn-submit:hover{opacity:.85}.btn-submit:disabled{opacity:.4;cursor:default}
 
+/* Google button + divider */
+.btn-google{width:100%;padding:13px;font-family:var(--H);font-size:13px;font-weight:700;background:var(--white);color:var(--ink);border:1px solid var(--rule);cursor:pointer;border-radius:20px;transition:border-color .15s;display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:20px}
+.btn-google:hover{border-color:var(--ink)}
+.btn-google:disabled{opacity:.4;cursor:default}
+.btn-google svg{flex-shrink:0}
+.divider{display:flex;align-items:center;gap:12px;margin-bottom:20px;font-family:var(--C);font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--light)}
+.divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--rule)}
+
+/* OTP code input */
+.otp-input{width:100%;padding:16px;font-family:var(--H);font-size:22px;letter-spacing:4px;text-align:center;color:var(--ink);background:var(--white);border:1px solid var(--rule);outline:none;border-radius:6px;transition:border-color .15s;-webkit-appearance:none}
+.otp-input:focus{border-color:var(--ink)}
+.otp-actions{display:flex;align-items:center;justify-content:space-between;margin-top:14px;margin-bottom:6px}
+.otp-actions button{font-family:var(--H);font-size:13px;color:var(--muted);background:none;border:none;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.otp-actions button:hover{color:var(--ink)}
+
 /* Messages */
 .msg{display:none;padding:12px 16px;font-family:var(--H);font-size:14px;line-height:1.5;margin-bottom:18px}
 .msg.show{display:block}
@@ -129,6 +144,11 @@ body{background:var(--white);color:var(--ink);font-family:var(--S);-webkit-font-
 
   <!-- SIGN IN -->
   <div class="pane on" id="pane-si">
+    <button type="button" class="btn-google" id="btn-google-si" onclick="continueWithGoogle()">
+      <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844a4.14 4.14 0 01-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.874 2.684-6.615z"/><path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 009 18z"/><path fill="#FBBC05" d="M3.964 10.71A5.41 5.41 0 013.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 000 9c0 1.452.348 2.827.957 4.042l3.007-2.332z"/><path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 00.957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z"/></svg>
+      <span data-i18n="p.continue_google">Continue with Google</span>
+    </button>
+    <div class="divider" data-i18n="p.or">or</div>
     <div class="field">
       <label class="fl" data-i18n="p.email">Email</label>
       <input class="fi" type="email" id="si-email" placeholder="your@email.com" autocomplete="email">
@@ -153,6 +173,11 @@ body{background:var(--white);color:var(--ink);font-family:var(--S);-webkit-font-
 
   <!-- SIGN UP: STEP 1 - ROLE CHOICE -->
   <div class="pane" id="pane-su-role">
+    <button type="button" class="btn-google" id="btn-google-su" onclick="continueWithGoogle()">
+      <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844a4.14 4.14 0 01-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.874 2.684-6.615z"/><path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 009 18z"/><path fill="#FBBC05" d="M3.964 10.71A5.41 5.41 0 013.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 000 9c0 1.452.348 2.827.957 4.042l3.007-2.332z"/><path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 00.957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z"/></svg>
+      <span data-i18n="p.continue_google">Continue with Google</span>
+    </button>
+    <div class="divider" data-i18n="p.or">or</div>
     <div class="role-sel" style="grid-template-columns:1fr;gap:14px;margin-bottom:8px">
       <div class="r-card" id="r-reader" onclick="chooseRoleAndContinue('reader')" style="padding:24px 20px;text-align:left">
         <div class="r-t" style="font-size:18px;margin-bottom:6px" data-i18n="p.reader_t">Reader</div>
@@ -188,6 +213,19 @@ body{background:var(--white);color:var(--ink);font-family:var(--S);-webkit-font-
     <p class="switch"><span data-i18n="p.already_have">Already have an account?</span> <a onclick="switchTab('si')" data-i18n="p.signin_link">Sign in</a></p>
   </div>
 
+  <!-- SIGN UP: STEP 3 - EMAIL OTP VERIFICATION -->
+  <div class="pane" id="pane-su-otp">
+    <div class="field">
+      <label class="fl" data-i18n="p.enter_code">Verification code</label>
+      <input class="otp-input" type="text" id="su-otp-code" inputmode="numeric" pattern="[0-9]*" maxlength="12" autocomplete="one-time-code" placeholder="0000">
+    </div>
+    <button class="btn-submit" id="btn-su-otp" onclick="verifySignupOtp()" data-i18n="p.verify_btn">Verify &amp; Create Account →</button>
+    <div class="otp-actions">
+      <button type="button" onclick="backToSignupDetails()" data-i18n="p.change_email">← Change email</button>
+      <button type="button" onclick="resendSignupOtp()" data-i18n="p.resend_code">Resend code</button>
+    </div>
+  </div>
+
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
@@ -198,6 +236,7 @@ const SBU='https://gseuejqqwkdjkhxfxxwy.supabase.co';
 const SBK='sb_publishable_0Nmw1mwGx__b_jJHLHBDKg__1OAsRuy';
 const sb=supabase.createClient(SBU,SBK,{auth:{storage:window.REEDEFINED_AUTH_STORAGE}});
 let suRole='reader';
+let pendingSignup=null; // {email, pw, role} — set once the signup OTP has been sent
 
 (async()=>{
   const {data:{session}}=await sb.auth.getSession();
@@ -207,14 +246,16 @@ let suRole='reader';
   }
 })();
 
-function switchTab(t){
-  document.getElementById('tab-si').classList.toggle('on',t==='si');
-  document.getElementById('tab-su').classList.toggle('on',t==='su');
-  document.getElementById('pane-si').classList.toggle('on',t==='si');
-  document.getElementById('pane-su-role').classList.toggle('on',t==='su');
+function switchTab(tab){
+  document.getElementById('tab-si').classList.toggle('on',tab==='si');
+  document.getElementById('tab-su').classList.toggle('on',tab==='su');
+  document.getElementById('pane-si').classList.toggle('on',tab==='si');
+  document.getElementById('pane-su-role').classList.toggle('on',tab==='su');
   document.getElementById('pane-su').classList.remove('on');
+  document.getElementById('pane-su-otp').classList.remove('on');
+  pendingSignup=null;
   clearMsgs();
-  const si=t==='si';
+  const si=tab==='si';
   document.getElementById('eyebrow').textContent=si?t('p.welcome_back'):t('p.join');
   document.getElementById('main-h').textContent=si?t('p.signin_h'):t('p.create_h');
   document.getElementById('main-sub').textContent=si?t('p.signin_sub'):t('p.create_sub');
@@ -274,19 +315,80 @@ async function doSignUp(){
   if(!name||!email||!pw){showErr(t('p.err_fill_all'));return;}
   if(pw.length<6){showErr(t('p.err_pw_length'));return;}
   const btn=document.getElementById('btn-su');
-  btn.disabled=true;btn.innerHTML='<span class="spin"></span>Creating account…';clearMsgs();
-  const {error}=await sb.auth.signUp({
-    email,password:pw,
-    options:{data:{full_name:name,role:suRole},emailRedirectTo:'https://reedefined.app/portal.html'}
+  btn.disabled=true;btn.innerHTML=`<span class="spin"></span>${t('p.sending_code')}`;clearMsgs();
+  const {error}=await sb.auth.signInWithOtp({
+    email,
+    options:{shouldCreateUser:true,data:{full_name:name,role:suRole}}
   });
   btn.disabled=false;btn.textContent=t('p.create_btn');
-  if(error){
-    if(error.message.includes('already registered'))showErr(t('p.err_already_registered'));
-    else showErr(error.message);
+  if(error){showErr(error.message);return;}
+
+  pendingSignup={email,pw,role:suRole};
+  document.getElementById('su-otp-code').value='';
+  document.getElementById('pane-su').classList.remove('on');
+  document.getElementById('pane-su-otp').classList.add('on');
+  document.getElementById('eyebrow').textContent=t('p.verify_email_h');
+  document.getElementById('main-h').textContent=t('p.verify_email_h');
+  document.getElementById('main-sub').textContent=`${t('p.verify_email_sub')} (${email})`;
+  clearMsgs();
+}
+
+async function verifySignupOtp(){
+  if(!pendingSignup)return;
+  const code=document.getElementById('su-otp-code').value.trim();
+  if(!code){showErr(t('p.err_enter_code'));return;}
+  const btn=document.getElementById('btn-su-otp');
+  btn.disabled=true;btn.innerHTML=`<span class="spin"></span>${t('p.verifying')}`;clearMsgs();
+  const {data,error}=await sb.auth.verifyOtp({email:pendingSignup.email,token:code,type:'email'});
+  btn.disabled=false;btn.textContent=t('p.verify_btn');
+  if(error){showErr(t('p.err_bad_code'));return;}
+
+  const user=data.user;
+  // Guard against silently claiming a pre-existing account: a genuinely new
+  // signup's created_at and this verification happen within the same flow
+  // (seconds apart); an account that already existed was created long before.
+  const createdMsAgo=Date.now()-new Date(user.created_at).getTime();
+  if(createdMsAgo>3*60*1000){
+    await sb.auth.signOut();
+    pendingSignup=null;
+    showErr(t('p.err_already_registered'));
+    switchTab('si');
     return;
   }
-  showOk(t('p.ok_account_created'));
-  ['su-name','su-email','su-pw'].forEach(id=>document.getElementById(id).value='');
+
+  const {error:updErr}=await sb.auth.updateUser({password:pendingSignup.pw});
+  if(updErr){showErr(updErr.message);return;}
+
+  const role=pendingSignup.role;
+  pendingSignup=null;
+  location.href=role==='contrib'?'choose.html':'newsstand.html';
+}
+
+async function resendSignupOtp(){
+  if(!pendingSignup)return;
+  clearMsgs();
+  const {error}=await sb.auth.signInWithOtp({email:pendingSignup.email,options:{shouldCreateUser:true}});
+  if(error){showErr(error.message);return;}
+  showOk(t('p.ok_code_resent'));
+}
+
+function backToSignupDetails(){
+  pendingSignup=null;
+  document.getElementById('pane-su-otp').classList.remove('on');
+  document.getElementById('pane-su').classList.add('on');
+  document.getElementById('eyebrow').textContent = suRole==='contrib' ? 'Contributor & Reader' : 'Reader';
+  document.getElementById('main-h').textContent=t('p.your_details_h');
+  document.getElementById('main-sub').textContent = suRole==='contrib' ? "You'll be able to write and read." : "You'll read your personalised issue.";
+  clearMsgs();
+}
+
+async function continueWithGoogle(){
+  clearMsgs();
+  const {error}=await sb.auth.signInWithOAuth({
+    provider:'google',
+    options:{redirectTo:'https://reedefined.app/portal.html'}
+  });
+  if(error)showErr(error.message);
 }
 
 async function forgotPw(){
