@@ -34,6 +34,8 @@ body{background:var(--bg);color:var(--ink);font-family:var(--S);min-height:100vh
 .avatar{width:88px;height:88px;border-radius:50%;object-fit:cover;background:var(--teal-l);display:flex;align-items:center;justify-content:center;font-family:var(--H);font-size:28px;color:var(--teal);flex-shrink:0}
 .p-name{font-family:var(--H);font-size:28px;font-weight:700}
 .p-beats{font-family:var(--C);font-size:13px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-top:6px}
+.cc-follow{font-family:var(--C);font-size:13px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--teal);border:1px solid rgba(74,102,112,.35);border-radius:999px;padding:5px 12px;cursor:pointer;transition:all .15s;background:none;white-space:nowrap;margin-left:auto}
+.cc-follow:hover,.cc-follow.on{background:var(--teal);color:#fff;border-color:var(--teal)}.cc-follow.on::after{content:' ✓'}
 .p-bio{font-family:var(--H);font-size:16px;color:var(--mid);line-height:1.6;margin:24px 0 36px;padding-bottom:32px;border-bottom:1px solid var(--rule)}
 .arch-h{font-family:var(--C);font-size:13px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--ink);margin-bottom:20px}
 .arch-item{padding:20px 0;border-bottom:1px solid var(--rule);cursor:pointer}
@@ -85,10 +87,18 @@ async function loadProfile(){
 
   if(!uid){ wrap.innerHTML = '<div class="empty">No profile specified.</div>'; return; }
 
-  const { data:p, error } = await sb.from('profiles').select('name,avatar,bio,interests,location').eq('id', uid).single();
+  const { data:p, error } = await sb.from('profiles').select('name,avatar,bio,interests,location,role').eq('id', uid).single();
   if(error || !p){ wrap.innerHTML = '<div class="empty">This profile could not be found.</div>'; return; }
 
   const { data:subs } = await sb.from('contributions').select('id,title,tagline,category,updated_at').eq('user_id', uid).eq('status','submitted').order('updated_at', { ascending:false });
+
+  const { data:{ session } } = await sb.auth.getSession();
+  const showFollowBtn = p.role === 'contrib' && (!session || session.user.id !== uid);
+  let isFollowing = false;
+  if(showFollowBtn && session){
+    const { data:followRow } = await sb.from('follows').select('contributor_id').eq('user_id', session.user.id).eq('contributor_id', uid).maybeSingle();
+    isFollowing = !!followRow;
+  }
 
   const name = p.name || 'Contributor';
   const initial = name.charAt(0).toUpperCase();
@@ -120,11 +130,38 @@ async function loadProfile(){
         <div class="p-name">${esc(name)}</div>
         ${metaHtml ? `<div class="p-beats">${metaHtml}</div>` : ''}
       </div>
+      ${showFollowBtn ? `<button class="cc-follow${isFollowing?' on':''}" onclick="toggleFollowById('${uid}',this)">${isFollowing?t('disc.following'):t('disc.follow')}</button>` : ''}
     </div>
     ${p.bio ? `<div class="p-bio">${esc(p.bio)}</div>` : ''}
     <div class="arch-h">${t('profile.archive')}</div>
     ${archiveHtml}
   `;
+}
+
+async function toggleFollowById(id, btn){
+  const { data:{ session } } = await sb.auth.getSession();
+  if(!session){ location.href='portal.html'; return; }
+
+  const isOn = btn.classList.contains('on');
+  if(isOn){
+    btn.classList.remove('on');
+    btn.textContent = t('disc.follow');
+    const { error } = await sb.from('follows').delete().eq('user_id', session.user.id).eq('contributor_id', id);
+    if(error){
+      console.error('Unfollow failed:', error);
+      btn.classList.add('on'); btn.textContent = t('disc.following');
+      alert('Could not unfollow: ' + error.message);
+    }
+  } else {
+    btn.classList.add('on');
+    btn.textContent = t('disc.following');
+    const { error } = await sb.from('follows').insert({ user_id: session.user.id, contributor_id: id });
+    if(error){
+      console.error('Follow failed:', error);
+      btn.classList.remove('on'); btn.textContent = t('disc.follow');
+      alert('Could not follow: ' + error.message);
+    }
+  }
 }
 
 loadProfile();
