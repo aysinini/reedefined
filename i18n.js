@@ -1607,7 +1607,7 @@ const TRANSLATIONS = {
     'idx.start_reading': 'Okumaya Başla →',
     'idx.become_contributor': 'Katkı Sağlayan Ol',
     'idx.manifesto_label': 'Neye inanıyoruz',
-    'idx.manifesto_text': 'İnternet herkese bir ses verdi. Algoritmalar kimin duyulacağına karar verdi. <strong>Reedefined bu seçimi tekrar senin ellerine veriyor.</strong> Dergin için kimin yazacağını sen seçersin. Aylık sayını kimin zevkinin şekillendireceğini sen seçersin. Hiçbir iki okuyucu aynı dergiyi almaz, çünkü hiçbir iki okuyucu aynı kişi değildir.',
+    'idx.manifesto_text': 'İnternet herkese bir ses verdi. Ama kimin duyulacağına algoritmalar karar verdi. <strong>Reedefined bu seçimi sana geri veriyor.</strong> Dergine kimin yazacağını, aylık sayının kime göre şekilleneceğini sen belirlersin. Çünkü hiçbir okuyucu bir diğeriyle aynı değil — o yüzden hiçbir sayı da birbirinin aynısı olmaz.',
     'idx.how_label': 'Nasıl çalışır',
     'idx.how1_t': 'Katkı sağlayanlarını takip et',
     'idx.how1_d': 'Yazarlara, eleştirmenlere, fotoğrafçılara ve içerik üreticilerine göz at. Bakış açısını hayatında istediklerini takip et.',
