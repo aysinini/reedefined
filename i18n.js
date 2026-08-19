@@ -2139,9 +2139,10 @@ document.addEventListener('DOMContentLoaded', () => {
 const ISSUE_NUMBER = 1; // ← Update this manually each month (1, 2, 3...)
 
 function getCurrentIssueDate() {
-  const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  const localeMap = { en:'en-US', tr:'tr-TR', de:'de-DE' };
+  const lang = (typeof getLang === 'function') ? getLang() : 'en';
   const now = new Date();
-  return months[now.getMonth()] + ' ' + now.getFullYear();
+  return now.toLocaleDateString(localeMap[lang] || 'en-US', {month:'long',year:'numeric'});
 }
 
 function getIssueLabel() {

@@ -639,7 +639,7 @@ window.renderUtilDate = function(){
   const el = document.getElementById('util-date');
   if(el) el.textContent = d.toLocaleDateString(localeMap[lang] || 'en-US', opts);
 };
-renderUtilDate();
+document.addEventListener('DOMContentLoaded', renderUtilDate);
 </script>
 <!-- PWA Install Banner -->
 <div id="pwa-banner" style="display:none;position:fixed;bottom:0;left:0;right:0;background:var(--ink);padding:14px 20px;display:none;align-items:center;justify-content:space-between;gap:16px;z-index:1000;box-shadow:0 -4px 24px rgba(0,0,0,.3)">
