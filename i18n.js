@@ -2083,6 +2083,13 @@ function t(key) {
   return TRANSLATIONS[lang]?.[key] || TRANSLATIONS['en']?.[key] || key;
 }
 
+function tCat(cat) {
+  if (!cat) return '';
+  const key = 'cat.' + String(cat).toLowerCase();
+  const val = t(key);
+  return val === key ? cat : val;
+}
+
 function applyLang(lang) {
   document.querySelectorAll('[data-i18n]').forEach(el => {
     const key = el.getAttribute('data-i18n');

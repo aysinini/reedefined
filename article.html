@@ -271,7 +271,7 @@ async function loadArticle(){
     </div>`;
 
   wrap.innerHTML = `
-    <div class="a-tag" id="a-tag">${esc(a.category || 'Column')}</div>
+    <div class="a-tag" id="a-tag">${esc(tCat(a.category) || 'Column')}</div>
     <div class="a-title" id="a-title">${esc(a.title || 'Untitled')}</div>
     <div class="a-tagline" id="a-tagline" style="${a.tagline ? '' : 'display:none'}">"${esc(a.tagline||'')}"</div>
     <div class="a-byline" onclick="location.href='profile.html?id=${a.user_id}'">

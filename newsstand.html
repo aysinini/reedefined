@@ -449,7 +449,7 @@ footer.site-ft{background:var(--ink);padding:60px 32px 34px}.ft-w{max-width:1400
       const liked = myLikes.has(a.id);
       return `
       <div style="padding:20px 0;border-top:1px solid var(--rule);cursor:pointer" onclick="location.href='article.html?id=${a.id}'">
-        <div style="font-family:var(--C);font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--teal);margin-bottom:6px">${esc(a.category||'Column')}</div>
+        <div style="font-family:var(--C);font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--teal);margin-bottom:6px">${esc(tCat(a.category) || 'Column')}</div>
         <div id="nt-title-${a.id}" style="font-family:var(--H);font-size:19px;font-weight:700;margin-bottom:4px">${esc(a.title||'Untitled')}</div>
         ${a.tagline ? `<div id="nt-tagline-${a.id}" style="font-family:var(--H);font-size:14px;color:var(--mid)">${esc(a.tagline)}</div>` : ''}
         <span id="nt-translate-${a.id}" onclick="event.stopPropagation();translateNewsstandCard(${a.id})" style="display:inline-block;margin-top:4px;font-family:var(--C);font-size:11px;letter-spacing:.5px;color:var(--muted);text-decoration:underline;cursor:pointer" data-i18n="xlt.translate">${t('xlt.translate')}</span>

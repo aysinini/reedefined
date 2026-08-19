@@ -108,8 +108,9 @@ async function loadProfile(){
     ? `<img class="avatar" src="${safeUrl(p.avatar)}" alt="${esc(name)}" onerror="this.outerHTML='<div class=&quot;avatar&quot;>${initial}</div>'">`
     : `<div class="avatar">${initial}</div>`;
 
-  const beats = (p.interests || (subs||[]).map(s=>s.category).filter(Boolean).join(','))
-    .split(',').map(s=>s.trim()).filter(Boolean);
+  const beats = p.interests
+    ? p.interests.split(',').map(s=>s.trim()).filter(Boolean)
+    : [...new Set((subs||[]).map(s=>s.category).filter(Boolean))].map(tCat);
   const beatsHtml = beats.length ? beats.slice(0,4).map(esc).join(' · ') : '';
   const metaParts = [];
   if(beatsHtml) metaParts.push(beatsHtml);
@@ -119,7 +120,7 @@ async function loadProfile(){
   const archiveHtml = (subs && subs.length)
     ? subs.map(s => `
         <div class="arch-item" onclick="location.href='article.html?id=${s.id}'">
-          <div class="arch-tag">${esc(s.category||'Column')}</div>
+          <div class="arch-tag">${esc(tCat(s.category) || 'Column')}</div>
           <div class="arch-t">${esc(s.title||'Untitled')}</div>
           ${s.tagline ? `<div class="arch-dek">${esc(s.tagline)}</div>` : ''}
         </div>`).join('')

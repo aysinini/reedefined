@@ -724,7 +724,7 @@ async function loadRealContributors(){
       const uid = s.user_id;
       if(!byUser[uid]) byUser[uid] = { articles: [], cats: new Set(), name: s.profiles?.name || 'Contributor', avatar: s.profiles?.avatar || '' };
       if(s.category) byUser[uid].cats.add(s.category.toLowerCase());
-      byUser[uid].articles.push(`${s.category ? s.category[0].toUpperCase()+s.category.slice(1) : 'Column'} — ${s.title}`);
+      byUser[uid].articles.push(`${s.category ? tCat(s.category) : 'Column'} — ${s.title}`);
     });
 
     const palette = ['#4A7C3F','#8A6A8A','#B8953A','#3A6E8A','#A85A45'];
@@ -739,7 +739,7 @@ async function loadRealContributors(){
         name: u.name,
         handle: '',
         loc: '',
-        beats: [...u.cats].map(c => c.charAt(0).toUpperCase()+c.slice(1)),
+        beats: [...u.cats].map(tCat),
         quote: '',
         followers: '—',
         articles: u.articles,

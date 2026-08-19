@@ -231,7 +231,7 @@ function renderCurrentIssueSection(){
         <span class="art-status draft">${t('dash.draft_badge')}</span>
         <span class="art-t">${esc(draft.title || t('dash.untitled'))}</span>
         ${rightMeta}
-        <span class="art-cat">${esc(draft.category || '')}</span>
+        <span class="art-cat">${esc(tCat(draft.category))}</span>
       </div>`;
   }
 
@@ -261,7 +261,7 @@ function renderPastArtRow(a){
         <span style="display:flex;align-items:center;gap:4px;font-family:var(--C);font-size:12px;color:var(--muted);flex-shrink:0">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-8.5 8.5 8.38 8.38 0 0 1-4-1L3 20l1-5.5a8.38 8.38 0 0 1-1-4A8.38 8.38 0 0 1 11.5 2a8.5 8.5 0 0 1 8.5 8.5z"/></svg>${a.commentCount||0}
         </span>
-        <span class="art-cat">${esc(a.category || '')}</span>
+        <span class="art-cat">${esc(tCat(a.category))}</span>
       </div>`;
 }
 
@@ -275,7 +275,7 @@ function renderPastIssuesSection(){
     const dateBuckets = [...new Set(DATA.published.map(a => monthYearOf(a.updated_at)))];
 
     const catOptions = ['all', ...categories].map(c =>
-      `<option value="${esc(c)}" ${pastCatFilter===c?'selected':''}>${c==='all'?t('dash.all_categories'):esc(c)}</option>`).join('');
+      `<option value="${esc(c)}" ${pastCatFilter===c?'selected':''}>${c==='all'?t('dash.all_categories'):esc(tCat(c))}</option>`).join('');
     const dateOptions = ['all', ...dateBuckets].map(d =>
       `<option value="${esc(d)}" ${pastDateFilter===d?'selected':''}>${d==='all'?t('dash.all_dates'):esc(d)}</option>`).join('');
 
