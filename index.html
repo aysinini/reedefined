@@ -306,7 +306,24 @@ body{background:var(--white);color:var(--ink);font-family:var(--S);-webkit-font-
   </div>
 </footer>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="session-storage.js"></script>
 <script src="/i18n.js"></script>
+<script>
+// Supabase auth redirects (password recovery, magic links, OAuth) currently
+// land here on the bare domain instead of the intended page, depending on
+// how the project's Redirect URL allowlist is configured. If someone arrives
+// via a "reset password" email link, catch it here and hand off to
+// portal.html's reset UI — the session is already established in shared
+// storage by this point, so portal.html just needs a flag to know to show
+// the reset pane instead of treating it as a normal signed-in visit.
+const _sb = supabase.createClient('https://gseuejqqwkdjkhxfxxwy.supabase.co','sb_publishable_0Nmw1mwGx__b_jJHLHBDKg__1OAsRuy',{auth:{storage:window.REEDEFINED_AUTH_STORAGE}});
+_sb.auth.onAuthStateChange((event)=>{
+  if(event==='PASSWORD_RECOVERY'){
+    location.href='portal.html?recovery=1';
+  }
+});
+</script>
 <script>
 const _fadeObserver = new IntersectionObserver(entries => {
   entries.forEach((entry, i) => {

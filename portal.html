@@ -226,6 +226,18 @@ body{background:var(--white);color:var(--ink);font-family:var(--S);-webkit-font-
     </div>
   </div>
 
+  <!-- PASSWORD RECOVERY: SET NEW PASSWORD -->
+  <div class="pane" id="pane-reset">
+    <div class="field">
+      <label class="fl" data-i18n="p.password">Password</label>
+      <div class="pw-wrap">
+        <input class="fi" type="password" id="reset-pw" placeholder="At least 6 characters" data-i18n-placeholder="portal.pw_hint" autocomplete="new-password">
+        <button class="pw-toggle" type="button" onclick="togglePw('reset-pw',this)" data-i18n="p.show">Show</button>
+      </div>
+    </div>
+    <button class="btn-submit" id="btn-reset" onclick="updatePasswordFromRecovery()" data-i18n="p.update_pw_btn">Update Password →</button>
+  </div>
+
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
@@ -238,13 +250,71 @@ const sb=supabase.createClient(SBU,SBK,{auth:{storage:window.REEDEFINED_AUTH_STO
 let suRole='reader';
 let pendingSignup=null; // {email, pw, role} — set once the signup OTP has been sent
 
-(async()=>{
-  const {data:{session}}=await sb.auth.getSession();
-  if(session){
-    const {data:p}=await sb.from('profiles').select('role').eq('id',session.user.id).single();
-    location.href=(p&&p.role==='contrib')?'choose.html':'newsstand.html';
+// Checked synchronously, before any Supabase auth event has a chance to
+// fire, so this can't race against event ordering (observed live: the
+// PASSWORD_RECOVERY event does not reliably fire before INITIAL_SESSION,
+// which would otherwise redirect the user away before the recovery UI ever
+// shows). Covers both a direct recovery redirect (type=recovery in the hash)
+// and the case where it landed on index.html first and forwarded here with
+// ?recovery=1 (see index.html — Supabase's Redirect URL allowlist currently
+// truncates the target path for these auth redirects).
+let inPasswordRecovery=new URLSearchParams(location.search).get('recovery')==='1' || location.hash.includes('type=recovery');
+
+async function redirectSignedInUser(session){
+  const {data:p}=await sb.from('profiles').select('role').eq('id',session.user.id).single();
+  location.href=(p&&p.role==='contrib')?'choose.html':'newsstand.html';
+}
+
+function showResetPasswordPane(){
+  inPasswordRecovery=true;
+  document.getElementById('pane-si').classList.remove('on');
+  document.getElementById('pane-su-role').classList.remove('on');
+  document.getElementById('pane-su').classList.remove('on');
+  document.getElementById('pane-su-otp').classList.remove('on');
+  document.getElementById('pane-reset').classList.add('on');
+  // This can run before DOMContentLoaded (auth state resolves early), which
+  // would otherwise race with i18n.js's own DOMContentLoaded handler
+  // overwriting these via their data-i18n attributes. Drop the attributes
+  // so applyLang() leaves this custom copy alone regardless of timing.
+  const eyebrowEl=document.getElementById('eyebrow'), mainHEl=document.getElementById('main-h'), mainSubEl=document.getElementById('main-sub');
+  eyebrowEl.removeAttribute('data-i18n'); mainHEl.removeAttribute('data-i18n'); mainSubEl.removeAttribute('data-i18n');
+  eyebrowEl.textContent=t('p.reset_pw_h');
+  mainHEl.textContent=t('p.reset_pw_h');
+  mainSubEl.textContent=t('p.reset_pw_sub');
+}
+
+// PASSWORD_RECOVERY fires distinctly from a normal session when the user
+// arrives via the "reset password" email link — must be checked before any
+// generic "already signed in, redirect into the app" logic runs, otherwise
+// the recovery session gets treated like an ordinary login and the user is
+// bounced into the app without ever setting a new password.
+sb.auth.onAuthStateChange((event,session)=>{
+  if(event==='PASSWORD_RECOVERY'){
+    showResetPasswordPane();
+    return;
   }
-})();
+  if(event==='INITIAL_SESSION' && session){
+    if(inPasswordRecovery){
+      showResetPasswordPane();
+    } else {
+      redirectSignedInUser(session);
+    }
+  }
+});
+
+async function updatePasswordFromRecovery(){
+  const pw=document.getElementById('reset-pw').value;
+  if(pw.length<6){showErr(t('p.err_pw_length'));return;}
+  const btn=document.getElementById('btn-reset');
+  btn.disabled=true;btn.innerHTML=`<span class="spin"></span>${t('p.saving_pw')}`;clearMsgs();
+  const {error}=await sb.auth.updateUser({password:pw});
+  btn.disabled=false;btn.textContent=t('p.update_pw_btn');
+  if(error){showErr(error.message);return;}
+  inPasswordRecovery=false;
+  showOk(t('p.ok_pw_updated'));
+  const {data:{session}}=await sb.auth.getSession();
+  setTimeout(()=>redirectSignedInUser(session),1200);
+}
 
 function switchTab(tab){
   document.getElementById('tab-si').classList.toggle('on',tab==='si');
@@ -253,7 +323,9 @@ function switchTab(tab){
   document.getElementById('pane-su-role').classList.toggle('on',tab==='su');
   document.getElementById('pane-su').classList.remove('on');
   document.getElementById('pane-su-otp').classList.remove('on');
+  document.getElementById('pane-reset').classList.remove('on');
   pendingSignup=null;
+  inPasswordRecovery=false;
   clearMsgs();
   const si=tab==='si';
   document.getElementById('eyebrow').textContent=si?t('p.welcome_back'):t('p.join');
