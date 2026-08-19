@@ -98,8 +98,8 @@ body{background:var(--bg);color:var(--ink);font-family:var(--S);min-height:100vh
 /* ── COMMENTS ── */
 .comments-section{margin-top:20px}
 .comments-h{font-family:var(--C);font-size:13px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--ink);margin-bottom:20px}
-.comment-form{display:flex;gap:10px;margin-bottom:32px}
-.comment-input{flex:1;padding:12px 14px;border:1px solid var(--rule);border-radius:20px;font-family:var(--S);font-size:14px;color:var(--ink)}
+.comment-form{display:flex;gap:10px;margin-bottom:32px;align-items:flex-end}
+.comment-input{flex:1;padding:12px 14px;border:1px solid var(--rule);border-radius:14px;font-family:var(--S);font-size:14px;color:var(--ink);resize:none;line-height:1.4;max-height:200px;overflow-y:auto}
 .comment-submit{font-family:var(--C);font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;background:var(--ink);color:#fff;border:none;border-radius:20px;padding:0 22px;cursor:pointer}
 .comment-item{display:flex;gap:12px;padding:16px 0;border-top:1px solid var(--rule)}
 .comment-avatar{width:34px;height:34px;border-radius:50%;object-fit:cover;background:var(--teal-l);display:flex;align-items:center;justify-content:center;font-family:var(--H);font-size:13px;color:var(--teal);flex-shrink:0}
@@ -110,8 +110,9 @@ body{background:var(--bg);color:var(--ink);font-family:var(--S);min-height:100vh
 .comment-actions{display:flex;gap:14px;margin-top:6px}
 .comment-action{font-family:var(--C);font-size:12px;font-weight:600;letter-spacing:.5px;color:var(--muted);text-decoration:underline;text-underline-offset:3px;cursor:pointer}
 .comment-action.delete{color:#C0392B}
-.reply-form{display:flex;gap:8px;margin-top:10px}
-.reply-input{flex:1;padding:9px 12px;border:1px solid var(--rule);border-radius:16px;font-family:var(--S);font-size:13px;color:var(--ink)}
+.reply-form{display:flex;gap:8px;margin-top:10px;align-items:flex-end}
+.reply-input{flex:1;padding:9px 12px;border:1px solid var(--rule);border-radius:12px;font-family:var(--S);font-size:13px;color:var(--ink);resize:none;line-height:1.4;max-height:160px;overflow-y:auto}
+@media(max-width:520px){.comment-input,.reply-input{font-size:16px}}
 .reply-submit{font-family:var(--C);font-size:12px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;background:var(--ink);color:#fff;border:none;border-radius:16px;padding:0 16px;cursor:pointer}
 .comment-replies{margin-top:14px;display:flex;flex-direction:column;gap:14px}
 .reply-item{display:flex;gap:10px}
@@ -180,6 +181,7 @@ function esc(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').repla
 // For href/src attribute values: escapes AND only allows http(s) URLs, so a
 // contributor-submitted "javascript:" (or similar) URL can never end up live.
 function safeUrl(u){ const s=(u||'').toString().trim(); return /^https?:\/\//i.test(s) ? esc(s) : ''; }
+function autoResize(el){ el.style.height='auto'; el.style.height=el.scrollHeight+'px'; }
 
 function goFlipReader(){
   location.href = CURRENT_ARTICLE ? `magazine-reader.html?article=${CURRENT_ARTICLE.id}` : 'magazine-reader.html';
@@ -495,7 +497,7 @@ async function loadComments(contributionId, session){
             ${canDelete ? `<span class="comment-action delete" onclick="deleteComment(${c.id},${contributionId})">${t('art.delete')}</span>` : ''}
           </div>
           <div class="reply-form" id="reply-form-${c.id}" style="display:none">
-            <input class="reply-input" id="reply-input-${c.id}" placeholder="${t('art.reply_ph')}" maxlength="500">
+            <textarea class="reply-input" id="reply-input-${c.id}" placeholder="${t('art.reply_ph')}" maxlength="500" rows="1" oninput="autoResize(this)"></textarea>
             <button class="reply-submit" onclick="submitReply(${c.id},${contributionId})">${t('art.post')}</button>
           </div>
           ${repliesHtml}
@@ -509,7 +511,16 @@ function toggleReplyForm(commentId){
   if(!form) return;
   const showing = form.style.display !== 'none';
   form.style.display = showing ? 'none' : 'flex';
-  if(!showing) document.getElementById(`reply-input-${commentId}`).focus();
+  if(!showing){
+    const input = document.getElementById(`reply-input-${commentId}`);
+    input.focus();
+    if(!input.dataset.boundKeydown){
+      input.dataset.boundKeydown = '1';
+      input.addEventListener('keydown', e=>{
+        if(e.key==='Enter' && !e.shiftKey){ e.preventDefault(); submitReply(commentId, CURRENT_ARTICLE.id); }
+      });
+    }
+  }
 }
 
 async function submitReply(parentId, contributionId){
@@ -549,11 +560,11 @@ function renderCommentForm(contributionId, session){
   }
   wrap.innerHTML = `
     <div class="comment-form">
-      <input class="comment-input" id="new-comment-input" placeholder="${t('art.add_comment')}" maxlength="500">
+      <textarea class="comment-input" id="new-comment-input" placeholder="${t('art.add_comment')}" maxlength="500" rows="1" oninput="autoResize(this)"></textarea>
       <button class="comment-submit" onclick="submitComment(${contributionId})">${t('art.post')}</button>
     </div>`;
   document.getElementById('new-comment-input').addEventListener('keydown', e=>{
-    if(e.key==='Enter') submitComment(contributionId);
+    if(e.key==='Enter' && !e.shiftKey){ e.preventDefault(); submitComment(contributionId); }
   });
 }
 
@@ -568,6 +579,7 @@ async function submitComment(contributionId){
   const { error } = await sb.from('comments').insert({ contribution_id: contributionId, user_id: session.user.id, body });
   if(!error){
     input.value = '';
+    input.style.height = 'auto';
     loadComments(contributionId, session);
     notifyAuthor(contributionId, 'comment', body);
   } else {
