@@ -38,8 +38,8 @@ body{background:var(--white);color:var(--ink);font-family:var(--S);-webkit-font-
 .nav-right{display:flex;align-items:center;gap:10px}
 .btn-si{font-family:var(--H);font-size:13px;font-weight:700;background:none;color:var(--ink);padding:10px 22px;border:1px solid var(--ink);cursor:pointer;transition:all .15s;border-radius:20px}
 .btn-si:hover{background:var(--ink);color:#fff}
-.btn-su{font-family:var(--H);font-size:13px;font-weight:700;background:var(--ink);color:#fff;padding:10px 22px;border:none;cursor:pointer;transition:opacity .15s;border-radius:20px}
-.btn-su:hover{opacity:.85}
+.btn-su{font-family:var(--H);font-size:13px;font-weight:700;background:var(--ink);color:#fff;padding:10px 22px;border:none;cursor:pointer;transition:opacity .15s,transform .2s;border-radius:20px}
+.btn-su:hover{opacity:.85;transform:scale(1.04)}
 
 /* HERO */
 .hero{padding:96px 0 80px;border-bottom:1px solid var(--rule);position:relative;overflow:hidden}
@@ -56,10 +56,10 @@ body{background:var(--white);color:var(--ink);font-family:var(--S);-webkit-font-
 .hero-cta-side{padding-left:64px;display:flex;flex-direction:column;justify-content:center;gap:16px}
 .hero-cta-label{font-family:var(--C);font-size:13px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--mid)}
 .hero-cta-btns{display:flex;align-items:center;gap:12px;animation:heroIn .7s cubic-bezier(.16,1,.3,1) .36s both}
-.btn-hero-p{font-family:var(--H);font-size:14px;font-weight:700;background:var(--ink);color:#fff;padding:14px 28px;border:none;cursor:pointer;transition:opacity .15s;border-radius:6px}
-.btn-hero-p:hover{opacity:.85}
-.btn-hero-s{font-family:var(--H);font-size:14px;font-weight:700;background:none;color:var(--ink);padding:13px 28px;border:1px solid var(--ink);cursor:pointer;transition:all .15s;border-radius:6px}
-.btn-hero-s:hover{background:var(--gold);border-color:var(--gold);color:#fff}
+.btn-hero-p{font-family:var(--H);font-size:14px;font-weight:700;background:var(--ink);color:#fff;padding:14px 28px;border:none;cursor:pointer;transition:opacity .15s,transform .2s;border-radius:6px}
+.btn-hero-p:hover{opacity:.85;transform:scale(1.04)}
+.btn-hero-s{font-family:var(--H);font-size:14px;font-weight:700;background:none;color:var(--ink);padding:13px 28px;border:1px solid var(--ink);cursor:pointer;transition:background .15s,border-color .15s,color .15s,transform .2s;border-radius:6px}
+.btn-hero-s:hover{background:var(--gold);border-color:var(--gold);color:#fff;transform:scale(1.04)}
 
 /* MANIFESTO */
 .manifesto{padding:96px 0;background:var(--bg);border-bottom:1px solid var(--rule)}
@@ -327,7 +327,10 @@ _sb.auth.onAuthStateChange((event)=>{
 <script>
 const _fadeObserver = new IntersectionObserver(entries => {
   entries.forEach((entry, i) => {
-    if (entry.isIntersecting) setTimeout(() => entry.target.classList.add('in'), i * 80);
+    if (entry.isIntersecting) {
+      setTimeout(() => entry.target.classList.add('in'), i * 120);
+      _fadeObserver.unobserve(entry.target);
+    }
   });
 }, { threshold: .08 });
 document.querySelectorAll('.fade').forEach(el => _fadeObserver.observe(el));
