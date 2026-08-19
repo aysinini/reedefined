@@ -192,20 +192,21 @@ async function init(){
   showTab('articles');
 }
 
-const ISSUE_DEADLINE = new Date('2026-07-26T00:00:00');
-const MONTH_NAMES = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+const ISSUE_DEADLINE = new Date('2026-08-25T00:00:00');
+const MONTH_LOCALE_MAP = { en:'en-US', tr:'tr-TR', de:'de-DE' };
 
 function monthYearOf(iso){
   const d = new Date(iso);
-  return MONTH_NAMES[d.getMonth()] + ' ' + d.getFullYear();
+  const lang = (typeof getLang === 'function') ? getLang() : 'en';
+  return d.toLocaleDateString(MONTH_LOCALE_MAP[lang] || 'en-US', {month:'long',year:'numeric'});
 }
 
 async function deleteDraft(id){
-  if(!confirm('Delete this draft? This cannot be undone.')) return;
+  if(!confirm(t('dash.confirm_delete_draft'))) return;
   const { data:{ session } } = await sb.auth.getSession();
   if(!session) return;
   const { error } = await sb.from('contributions').delete().eq('id', id).eq('user_id', session.user.id);
-  if(error){ alert('Could not delete draft.'); console.error(error); return; }
+  if(error){ alert(t('dash.delete_draft_failed')); console.error(error); return; }
   DATA.drafts = DATA.drafts.filter(d => d.id !== id);
   document.getElementById('stat-drafts').textContent = DATA.drafts.length;
   showTab('articles');
@@ -217,18 +218,18 @@ function renderCurrentIssueSection(){
 
   let body;
   if(!draft){
-    body = `<div class="empty">No draft in progress for this issue.</div>`;
+    body = `<div class="empty">${t('dash.no_draft')}</div>`;
   } else {
     const rightMeta = editable ? `
-        <span style="font-family:var(--C);font-size:12px;letter-spacing:1px;color:var(--muted);flex-shrink:0">Editable until August 25</span>
-        <span style="font-family:var(--C);font-size:13px;font-weight:700;letter-spacing:1px;color:var(--teal);text-decoration:underline;text-underline-offset:3px;cursor:pointer;flex-shrink:0">Edit ↗</span>
-        <span style="font-family:var(--C);font-size:13px;font-weight:700;letter-spacing:1px;color:#C0392B;text-decoration:underline;text-underline-offset:3px;cursor:pointer;flex-shrink:0" onclick="event.stopPropagation();deleteDraft(${draft.id})">Delete</span>` : `
-        <span style="font-family:var(--C);font-size:12px;letter-spacing:1px;color:var(--light);flex-shrink:0">Editing closed</span>`;
+        <span style="font-family:var(--C);font-size:12px;letter-spacing:1px;color:var(--muted);flex-shrink:0">${t('dash.editable_until')}</span>
+        <span style="font-family:var(--C);font-size:13px;font-weight:700;letter-spacing:1px;color:var(--teal);text-decoration:underline;text-underline-offset:3px;cursor:pointer;flex-shrink:0">${t('dash.edit_link')}</span>
+        <span style="font-family:var(--C);font-size:13px;font-weight:700;letter-spacing:1px;color:#C0392B;text-decoration:underline;text-underline-offset:3px;cursor:pointer;flex-shrink:0" onclick="event.stopPropagation();deleteDraft(${draft.id})">${t('art.delete')}</span>` : `
+        <span style="font-family:var(--C);font-size:12px;letter-spacing:1px;color:var(--light);flex-shrink:0">${t('dash.editing_closed')}</span>`;
 
     body = `
       <div class="art-row" ${editable ? `onclick="location.href='editor-portal.html'"` : ''} style="${editable ? '' : 'cursor:default'}">
-        <span class="art-status draft">Draft</span>
-        <span class="art-t">${esc(draft.title || 'Untitled')}</span>
+        <span class="art-status draft">${t('dash.draft_badge')}</span>
+        <span class="art-t">${esc(draft.title || t('dash.untitled'))}</span>
         ${rightMeta}
         <span class="art-cat">${esc(draft.category || '')}</span>
       </div>`;
@@ -236,9 +237,9 @@ function renderCurrentIssueSection(){
 
   return `
     <div class="section-block">
-      <div class="section-h">Current Issue</div>
-      <div class="section-sub">Issue No. 1 · September 2026</div>
-      <div style="font-family:var(--S);font-size:13px;color:var(--muted);line-height:1.5;margin-bottom:16px">Submit before 25 August to be included in this issue. Drafts not submitted by the deadline won't appear in the magazine.</div>
+      <div class="section-h">${t('dash.current_issue')}</div>
+      <div class="section-sub">${t('idx.hero_eyebrow')}</div>
+      <div style="font-family:var(--S);font-size:13px;color:var(--muted);line-height:1.5;margin-bottom:16px">${t('dash.submit_deadline_notice')}</div>
       ${body}
     </div>`;
 }
@@ -247,13 +248,13 @@ let pastCatFilter = 'all', pastDateFilter = 'all';
 
 function renderPastArtRow(a){
   const letterBadge = a.is_editors_letter
-    ? `<span class="art-status" style="background:#F4EAD5;color:#8A6116">Editor's Letter</span>`
+    ? `<span class="art-status" style="background:#F4EAD5;color:#8A6116">${t('mr.label_editor')}</span>`
     : '';
   return `
       <div class="art-row" onclick="location.href='article.html?id=${a.id}'">
-        <span class="art-status submitted">Published</span>
+        <span class="art-status submitted">${t('dash.published')}</span>
         ${letterBadge}
-        <span class="art-t">${esc(a.title || 'Untitled')}</span>
+        <span class="art-t">${esc(a.title || t('dash.untitled'))}</span>
         <span style="display:flex;align-items:center;gap:4px;font-family:var(--C);font-size:12px;color:var(--muted);flex-shrink:0">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.8 1-1a5.5 5.5 0 0 0 0-7.6z"/></svg>${a.likeCount||0}
         </span>
@@ -268,15 +269,15 @@ function renderPastIssuesSection(){
   let filtersHtml = '', listHtml;
 
   if(DATA.published.length === 0){
-    listHtml = `<div class="empty">No past issues yet — Issue No. 1 launches in September 2026.</div>`;
+    listHtml = `<div class="empty">${t('dash.no_past_issues')}</div>`;
   } else {
     const categories = [...new Set(DATA.published.map(a => a.category).filter(Boolean))];
     const dateBuckets = [...new Set(DATA.published.map(a => monthYearOf(a.updated_at)))];
 
     const catOptions = ['all', ...categories].map(c =>
-      `<option value="${esc(c)}" ${pastCatFilter===c?'selected':''}>${c==='all'?'All categories':esc(c)}</option>`).join('');
+      `<option value="${esc(c)}" ${pastCatFilter===c?'selected':''}>${c==='all'?t('dash.all_categories'):esc(c)}</option>`).join('');
     const dateOptions = ['all', ...dateBuckets].map(d =>
-      `<option value="${esc(d)}" ${pastDateFilter===d?'selected':''}>${d==='all'?'All dates':esc(d)}</option>`).join('');
+      `<option value="${esc(d)}" ${pastDateFilter===d?'selected':''}>${d==='all'?t('dash.all_dates'):esc(d)}</option>`).join('');
 
     filtersHtml = `
       <div class="filters-row">
@@ -289,13 +290,13 @@ function renderPastIssuesSection(){
       (pastDateFilter==='all' || monthYearOf(a.updated_at)===pastDateFilter));
 
     listHtml = filtered.length === 0
-      ? `<div class="empty">No articles match these filters.</div>`
+      ? `<div class="empty">${t('dash.no_filter_match')}</div>`
       : filtered.map(renderPastArtRow).join('');
   }
 
   return `
     <div class="section-block">
-      <div class="section-h">Past Issues</div>
+      <div class="section-h">${t('dash.past_issues')}</div>
       ${filtersHtml}
       ${listHtml}
     </div>`;
@@ -304,8 +305,8 @@ function renderPastIssuesSection(){
 function renderForthcomingSection(){
   return `
     <div class="section-block">
-      <div class="section-h">Forthcoming Issues</div>
-      <div class="empty">No forthcoming drafts yet. Once Issue No. 1 closes, your next draft will appear here.</div>
+      <div class="section-h">${t('dash.forthcoming_issues')}</div>
+      <div class="empty">${t('dash.no_forthcoming')}</div>
     </div>`;
 }
 
