@@ -66,6 +66,17 @@ body{background:var(--white);color:var(--ink);font-family:var(--S);-webkit-font-
 .pw-toggle{position:absolute;right:16px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-family:var(--C);font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted)}
 .pw-toggle:hover{color:var(--ink)}
 
+/* Password strength */
+.pw-strength{margin-top:9px;display:none}
+.pw-strength.show{display:block}
+.pw-strength-bar{height:4px;background:var(--rule);border-radius:2px;overflow:hidden}
+.pw-strength-fill{height:100%;width:0%;border-radius:2px;transition:width .2s ease,background .2s ease}
+.pw-strength-label{font-family:var(--C);font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-top:5px;display:block}
+
+/* Field hint (validation errors under an input) */
+.field-hint{font-family:var(--S);font-size:12px;color:var(--red);margin-top:7px;display:none}
+.field-hint.show{display:block}
+
 /* Forgot */
 .forgot{text-align:right;margin-bottom:20px}
 .forgot button{font-family:var(--H);font-size:13px;color:var(--muted);background:none;border:none;cursor:pointer;text-decoration:underline;text-underline-offset:3px}.forgot button:hover{color:var(--ink)}
@@ -205,9 +216,21 @@ body{background:var(--white);color:var(--ink);font-family:var(--S);-webkit-font-
     <div class="field">
       <label class="fl" data-i18n="p.password">Password</label>
       <div class="pw-wrap">
-        <input class="fi" type="password" id="su-pw" placeholder="At least 6 characters" data-i18n-placeholder="portal.pw_hint" autocomplete="new-password">
+        <input class="fi" type="password" id="su-pw" placeholder="At least 6 characters" data-i18n-placeholder="portal.pw_hint" autocomplete="new-password" oninput="updatePwStrength('su-pw');checkPwMatch('su')">
         <button class="pw-toggle" type="button" onclick="togglePw('su-pw',this)" data-i18n="p.show">Show</button>
       </div>
+      <div class="pw-strength" id="su-pw-strength">
+        <div class="pw-strength-bar"><div class="pw-strength-fill" id="su-pw-strength-fill"></div></div>
+        <span class="pw-strength-label" id="su-pw-strength-label"></span>
+      </div>
+    </div>
+    <div class="field">
+      <label class="fl" data-i18n="p.confirm_password">Confirm Password</label>
+      <div class="pw-wrap">
+        <input class="fi" type="password" id="su-pw-confirm" placeholder="Re-enter your password" data-i18n-placeholder="p.confirm_pw_ph" autocomplete="new-password" oninput="checkPwMatch('su')">
+        <button class="pw-toggle" type="button" onclick="togglePw('su-pw-confirm',this)" data-i18n="p.show">Show</button>
+      </div>
+      <span class="field-hint" id="su-pw-mismatch-hint" data-i18n="p.err_pw_mismatch">Passwords don't match.</span>
     </div>
     <button class="btn-submit" id="btn-su" onclick="doSignUp()" data-i18n="p.create_btn">Create Account →</button>
     <p class="switch"><span data-i18n="p.already_have">Already have an account?</span> <a onclick="switchTab('si')" data-i18n="p.signin_link">Sign in</a></p>
@@ -231,9 +254,21 @@ body{background:var(--white);color:var(--ink);font-family:var(--S);-webkit-font-
     <div class="field">
       <label class="fl" data-i18n="p.password">Password</label>
       <div class="pw-wrap">
-        <input class="fi" type="password" id="reset-pw" placeholder="At least 6 characters" data-i18n-placeholder="portal.pw_hint" autocomplete="new-password">
+        <input class="fi" type="password" id="reset-pw" placeholder="At least 6 characters" data-i18n-placeholder="portal.pw_hint" autocomplete="new-password" oninput="updatePwStrength('reset-pw');checkPwMatch('reset')">
         <button class="pw-toggle" type="button" onclick="togglePw('reset-pw',this)" data-i18n="p.show">Show</button>
       </div>
+      <div class="pw-strength" id="reset-pw-strength">
+        <div class="pw-strength-bar"><div class="pw-strength-fill" id="reset-pw-strength-fill"></div></div>
+        <span class="pw-strength-label" id="reset-pw-strength-label"></span>
+      </div>
+    </div>
+    <div class="field">
+      <label class="fl" data-i18n="p.confirm_password">Confirm Password</label>
+      <div class="pw-wrap">
+        <input class="fi" type="password" id="reset-pw-confirm" placeholder="Re-enter your password" data-i18n-placeholder="p.confirm_pw_ph" autocomplete="new-password" oninput="checkPwMatch('reset')">
+        <button class="pw-toggle" type="button" onclick="togglePw('reset-pw-confirm',this)" data-i18n="p.show">Show</button>
+      </div>
+      <span class="field-hint" id="reset-pw-mismatch-hint" data-i18n="p.err_pw_mismatch">Passwords don't match.</span>
     </div>
     <button class="btn-submit" id="btn-reset" onclick="updatePasswordFromRecovery()" data-i18n="p.update_pw_btn">Update Password →</button>
   </div>
@@ -305,6 +340,7 @@ sb.auth.onAuthStateChange((event,session)=>{
 async function updatePasswordFromRecovery(){
   const pw=document.getElementById('reset-pw').value;
   if(pw.length<6){showErr(t('p.err_pw_length'));return;}
+  if(!checkPwMatch('reset')){showErr(t('p.err_pw_mismatch'));return;}
   const btn=document.getElementById('btn-reset');
   btn.disabled=true;btn.innerHTML=`<span class="spin"></span>${t('p.saving_pw')}`;clearMsgs();
   const {error}=await sb.auth.updateUser({password:pw});
@@ -356,6 +392,46 @@ function togglePw(id,btn){
   btn.textContent=el.type==='password'?t('p.show'):t('p.hide');
 }
 
+function passwordStrengthScore(pw){
+  if(!pw) return 0;
+  let score=0;
+  if(pw.length>=6) score++;
+  if(pw.length>=10) score++;
+  if(/[a-z]/.test(pw) && /[A-Z]/.test(pw)) score++;
+  if(/[0-9]/.test(pw)) score++;
+  if(/[^A-Za-z0-9]/.test(pw)) score++;
+  return score;
+}
+
+function updatePwStrength(inputId){
+  const pw=document.getElementById(inputId).value;
+  const wrap=document.getElementById(`${inputId}-strength`);
+  const fill=document.getElementById(`${inputId}-strength-fill`);
+  const label=document.getElementById(`${inputId}-strength-label`);
+  if(!pw){ wrap.classList.remove('show'); return; }
+  wrap.classList.add('show');
+  const score=passwordStrengthScore(pw);
+  let pct,color,text;
+  if(score<=1){ pct=33; color='#C8251A'; text=t('p.pw_weak'); }
+  else if(score<=3){ pct=66; color='#B8860B'; text=t('p.pw_medium'); }
+  else { pct=100; color='#4A7C3F'; text=t('p.pw_strong'); }
+  fill.style.width=pct+'%';
+  fill.style.background=color;
+  label.textContent=text;
+  label.style.color=color;
+}
+
+function checkPwMatch(prefix){
+  const pw=document.getElementById(`${prefix}-pw`).value;
+  const confirmPw=document.getElementById(`${prefix}-pw-confirm`).value;
+  const hint=document.getElementById(`${prefix}-pw-mismatch-hint`);
+  const btn=document.getElementById(`btn-${prefix}`);
+  const mismatch=confirmPw.length>0 && pw!==confirmPw;
+  hint.classList.toggle('show',mismatch);
+  btn.disabled=mismatch;
+  return !mismatch;
+}
+
 function showErr(m){const e=document.getElementById('msg-err');e.textContent=m;e.classList.add('show');document.getElementById('msg-ok').classList.remove('show');}
 function showOk(m){const e=document.getElementById('msg-ok');e.textContent=m;e.classList.add('show');document.getElementById('msg-err').classList.remove('show');}
 function clearMsgs(){document.getElementById('msg-err').classList.remove('show');document.getElementById('msg-ok').classList.remove('show');}
@@ -386,6 +462,7 @@ async function doSignUp(){
   const pw=document.getElementById('su-pw').value;
   if(!name||!email||!pw){showErr(t('p.err_fill_all'));return;}
   if(pw.length<6){showErr(t('p.err_pw_length'));return;}
+  if(!checkPwMatch('su')){showErr(t('p.err_pw_mismatch'));return;}
   const btn=document.getElementById('btn-su');
   btn.disabled=true;btn.innerHTML=`<span class="spin"></span>${t('p.sending_code')}`;clearMsgs();
   const {error}=await sb.auth.signInWithOtp({
