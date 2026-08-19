@@ -180,7 +180,13 @@ async function notifyFollow(contributorId, session){
     const actorName = session.user.user_metadata?.full_name || 'A reader';
     try{
       await sb.functions.invoke('send-notification', {
-        body: { userId: contributorId, subject: `${actorName} started following you on Reedefined`, message: `${actorName} started following you on Reedefined.` }
+        body: {
+          userId: contributorId,
+          subject: `${actorName} started following you on Reedefined`,
+          message: `<strong>${actorName}</strong> started following you on Reedefined.`,
+          ctaText: 'View Profile',
+          ctaUrl: `https://reedefined.app/profile.html?id=${session.user.id}`
+        }
       });
     }catch(e){ console.error('Follow notification email failed:', e); }
   }
