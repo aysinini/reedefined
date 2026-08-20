@@ -253,6 +253,11 @@ body{font-family:var(--S);-webkit-font-smoothing:antialiased;display:flex;flex-d
 .pzc-clue{font-family:var(--S);font-size:12.5px;line-height:1.6;color:var(--mid);margin-bottom:6px}
 .pzc-clue b{font-family:var(--H);color:var(--ink);font-weight:700;margin-right:4px}
 
+/* MONOCLE PUZZLE — mobile combined (grid + clues stacked, single scroll) */
+.mono-puzzle-mobile{width:100%;height:100%;background:#F2F0EB;display:flex;flex-direction:column;overflow:hidden}
+.pzm-body{flex:1;overflow-y:auto;padding:16px 20px 20px}
+.pz-grid-wrap-mobile{display:flex;justify-content:center;padding:4px 0 18px}
+
 /* MONOCLE ARTICLE */
 .mono-article{width:100%;height:100%;background:#F2F0EB;display:flex;flex-direction:column;overflow:hidden}
 .ma2-top{height:3px;background:var(--teal)}
@@ -656,8 +661,8 @@ async function loadHoroscopes() {
 }
 
 const HOROSCOPE_PAGE = [
-  { id:'m-horoscope-1', labelKey:'mr.label_horoscope', left:'horoscope-1', right:'horoscope-2' },
-  { id:'m-horoscope-2', labelKey:'mr.label_horoscope', left:'horoscope-3', right:'ad-mono' },
+  { id:'m-horoscope-1', labelKey:'mr.label_horoscope', left:'horoscope-1', right:'horoscope-2', mobile:'horoscope-mobile-1' },
+  { id:'m-horoscope-2', labelKey:'mr.label_horoscope', left:'horoscope-3', right:'ad-mono', mobile:'horoscope-mobile-2' },
 ];
 
 // Closing spread: this issue's crossword, loaded for the active site
@@ -683,7 +688,7 @@ async function loadPuzzle() {
 }
 
 const PUZZLE_PAGE = [
-  { id:'m-puzzle', labelKey:'mr.label_puzzle', left:'puzzle-grid', right:'puzzle-clues' },
+  { id:'m-puzzle', labelKey:'mr.label_puzzle', left:'puzzle-grid', right:'puzzle-clues', mobile:'puzzle-mobile' },
 ];
 
 function getPages() {
@@ -709,6 +714,16 @@ async function mrSwitchLang(lang){
   render();
 }
 
+// Below 850px the book shows only #page-right (see the "Single page on
+// mobile" media query) — #page-left is display:none. A few spreads split
+// one continuous piece of content across left/right (horoscope signs,
+// puzzle grid+clues), so on mobile that content has to be recombined into
+// a single scrollable panel instead of silently losing whatever was on
+// the hidden left side.
+function isMobileStage(){
+  return window.matchMedia('(max-width:850px)').matches;
+}
+
 function render(){
   const pages = getPages();
   const pg = pages[cur];
@@ -716,7 +731,7 @@ function render(){
   const R = document.getElementById('page-right');
 
   L.innerHTML = buildPage(pg.left);
-  R.innerHTML = buildPage(pg.right);
+  R.innerHTML = buildPage((pg.mobile && isMobileStage()) ? pg.mobile : pg.right);
   attachPuzzleHandlers();
 
   // Animate
@@ -775,8 +790,11 @@ function buildPage(id){
   if(id==='horoscope-1') return monoHoroscope(0, 4);
   if(id==='horoscope-2') return monoHoroscope(4, 8);
   if(id==='horoscope-3') return monoHoroscope(8, 12);
+  if(id==='horoscope-mobile-1') return monoHoroscope(0, 8);
+  if(id==='horoscope-mobile-2') return monoHoroscope(8, 12);
   if(id==='puzzle-grid') return monoPuzzleGrid();
   if(id==='puzzle-clues') return monoPuzzleClues();
+  if(id==='puzzle-mobile') return monoPuzzleMobile();
   return '<div style="width:100%;height:100%;background:#fff"></div>';
 }
 
@@ -1206,8 +1224,7 @@ function monoHoroscope(start, end){
   </div>`;
 }
 
-function monoPuzzleGrid(){
-  if(!PUZZLE) return `<div class="mono-puzzle"><div class="mh-empty">No puzzle yet.</div></div>`;
+function pzCellsHtml(){
   const { width, height, cells } = PUZZLE;
   let cellsHtml = '';
   for(let r=0; r<height; r++){
@@ -1228,6 +1245,21 @@ function monoPuzzleGrid(){
       </div>`;
     }
   }
+  return cellsHtml;
+}
+
+function pzCluesHtml(){
+  const acrossHtml = PUZZLE.across.map(e => `<div class="pzc-clue"><b>${e.number}.</b>${escMR(e.clue)}</div>`).join('');
+  const downHtml = PUZZLE.down.map(e => `<div class="pzc-clue"><b>${e.number}.</b>${escMR(e.clue)}</div>`).join('');
+  return `<div class="pzc-section-h">${escMR(t('mr.puzzle_across'))}</div>
+    ${acrossHtml}
+    <div class="pzc-section-h">${escMR(t('mr.puzzle_down'))}</div>
+    ${downHtml}`;
+}
+
+function monoPuzzleGrid(){
+  if(!PUZZLE) return `<div class="mono-puzzle"><div class="mh-empty">No puzzle yet.</div></div>`;
+  const { width, height } = PUZZLE;
   return `<div class="mono-puzzle">
     <div class="pz-top"></div>
     <div class="pz-head">
@@ -1236,7 +1268,7 @@ function monoPuzzleGrid(){
     </div>
     <div class="pz-grid-wrap">
       <div class="pz-grid" style="grid-template-columns:repeat(${width},1fr);grid-template-rows:repeat(${height},1fr);width:min(100%, calc((100vh - 260px) * ${width} / ${height}));aspect-ratio:${width}/${height}">
-        ${cellsHtml}
+        ${pzCellsHtml()}
       </div>
     </div>
   </div>`;
@@ -1244,8 +1276,6 @@ function monoPuzzleGrid(){
 
 function monoPuzzleClues(){
   if(!PUZZLE) return `<div class="mono-puzzle-clues"><div class="mh-empty">No puzzle yet.</div></div>`;
-  const acrossHtml = PUZZLE.across.map(e => `<div class="pzc-clue"><b>${e.number}.</b>${escMR(e.clue)}</div>`).join('');
-  const downHtml = PUZZLE.down.map(e => `<div class="pzc-clue"><b>${e.number}.</b>${escMR(e.clue)}</div>`).join('');
   return `<div class="mono-puzzle-clues">
     <div class="pz-top"></div>
     <div class="pz-head">
@@ -1253,10 +1283,31 @@ function monoPuzzleClues(){
       <div class="pz-issue">Issue No. 1 · ${ISSUE_DATE_LABEL}</div>
     </div>
     <div class="pzc-body">
-      <div class="pzc-section-h">${escMR(t('mr.puzzle_across'))}</div>
-      ${acrossHtml}
-      <div class="pzc-section-h">${escMR(t('mr.puzzle_down'))}</div>
-      ${downHtml}
+      ${pzCluesHtml()}
+    </div>
+  </div>`;
+}
+
+// Mobile-only combined layout: below 850px only #page-right is shown (see
+// the "Single page on mobile" media query), so the grid (normally left)
+// and clues (normally right) are stacked into one scrollable panel here
+// instead of the grid silently never rendering.
+function monoPuzzleMobile(){
+  if(!PUZZLE) return `<div class="mono-puzzle-mobile"><div class="mh-empty">No puzzle yet.</div></div>`;
+  const { width, height } = PUZZLE;
+  return `<div class="mono-puzzle-mobile">
+    <div class="pz-top"></div>
+    <div class="pz-head">
+      <div class="pz-title">${escMR(t('mr.label_puzzle'))}</div>
+      <div class="pz-issue">Issue No. 1 · ${ISSUE_DATE_LABEL}</div>
+    </div>
+    <div class="pzm-body">
+      <div class="pz-grid-wrap-mobile">
+        <div class="pz-grid" style="grid-template-columns:repeat(${width},1fr);grid-template-rows:repeat(${height},1fr);width:100%;max-width:420px;aspect-ratio:${width}/${height}">
+          ${pzCellsHtml()}
+        </div>
+      </div>
+      ${pzCluesHtml()}
     </div>
   </div>`;
 }
@@ -1530,9 +1581,18 @@ document.addEventListener('keydown', e=>{
 });
 
 // Touch/swipe
+// Touch Events (used here) and Pointer Events (used by the puzzle canvas
+// for handwriting) both fire independently for the same physical touch, so
+// a letter stroke with >60px of horizontal movement would otherwise also
+// register as a page-flip swipe. Ignore touches that start on a canvas.
 let tx=0;
-document.querySelector('.stage').addEventListener('touchstart',e=>{ tx=e.touches[0].clientX; });
+let txOnCanvas=false;
+document.querySelector('.stage').addEventListener('touchstart',e=>{
+  txOnCanvas = !!e.target.closest('.pz-canvas');
+  tx=e.touches[0].clientX;
+});
 document.querySelector('.stage').addEventListener('touchend',e=>{
+  if(txOnCanvas) return;
   const d = tx - e.changedTouches[0].clientX;
   if(Math.abs(d)>60){ d>0?nextPage():prevPage(); }
 });
