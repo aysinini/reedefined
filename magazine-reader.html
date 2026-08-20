@@ -44,11 +44,17 @@ body{font-family:var(--S);-webkit-font-smoothing:antialiased;display:flex;flex-d
 .reader-prog-fill{height:100%;background:var(--teal);transition:width .4s cubic-bezier(.16,1,.3,1)}
 
 /* ── STAGE ── */
+/* touch-action:manipulation disables the browser's double-tap-to-zoom
+   gesture (which was firing when readers tapped page-nav controls in
+   quick succession) while still allowing panning and two-finger pinch
+   zoom everywhere — pairs with the manual zoom button below for readers
+   who want to zoom on purpose. */
 .stage {
   flex:1;display:flex;align-items:center;justify-content:center;
   padding:24px 32px 76px;position:relative;overflow:hidden;
-  perspective:2000px;
+  perspective:2000px;touch-action:manipulation;
 }
+.stage.zoomed{overflow:auto}
 
 /* ── BOOK ── */
 .book {
@@ -56,6 +62,20 @@ body{font-family:var(--S);-webkit-font-smoothing:antialiased;display:flex;flex-d
   display:flex;position:relative;
   filter:drop-shadow(0 20px 60px rgba(0,0,0,.35)) drop-shadow(0 4px 16px rgba(0,0,0,.2));
 }
+.book.zoomed{transform:scale(1.5);transform-origin:top center}
+
+/* ── ZOOM BUTTON ── */
+.zoom-btn{
+  position:absolute;bottom:10px;right:10px;z-index:60;
+  width:34px;height:34px;border-radius:50%;
+  background:rgba(28,32,42,.85);color:rgba(255,255,255,.9);
+  border:1px solid rgba(255,255,255,.4);
+  display:flex;align-items:center;justify-content:center;
+  font-size:15px;cursor:pointer;backdrop-filter:blur(6px);
+  transition:all .2s;touch-action:manipulation;
+}
+.zoom-btn:hover{background:rgba(28,32,42,1);transform:scale(1.08)}
+.zoom-btn.active{background:var(--teal);border-color:var(--teal)}
 
 /* ── PAGE ── */
 .page-wrap {
@@ -86,7 +106,7 @@ body{font-family:var(--S);-webkit-font-smoothing:antialiased;display:flex;flex-d
   background:rgba(28,32,42,.85);color:rgba(255,255,255,.9);
   font-size:28px;cursor:pointer;display:flex;align-items:center;justify-content:center;
   transition:all .2s;z-index:200;border-radius:50%;
-  backdrop-filter:blur(8px);
+  backdrop-filter:blur(8px);touch-action:manipulation;
 }
 .nav-arrow:hover{background:rgba(28,32,42,1);color:#fff;border-color:rgba(255,255,255,.6);transform:translateY(-50%) scale(1.08)}
 .nav-arrow:disabled{opacity:.15;cursor:default;pointer-events:none}
@@ -494,6 +514,7 @@ if('serviceWorker' in navigator){
     <div style="flex:1;height:100%;position:relative;border-radius:12px 0 0 12px;overflow:hidden;box-shadow:-4px 0 24px rgba(0,0,0,.18)" id="page-left"></div>
     <div class="spine"></div>
     <div style="flex:1;height:100%;position:relative;border-radius:0 12px 12px 0;overflow:hidden;box-shadow:4px 0 24px rgba(0,0,0,.18)" id="page-right"></div>
+    <button class="zoom-btn" id="zoom-btn" onclick="toggleZoom()" title="Zoom" type="button">🔍</button>
   </div>
 
   <button class="nav-arrow nav-next" id="nav-next" onclick="nextPage()">›</button>
@@ -501,12 +522,12 @@ if('serviceWorker' in navigator){
 </div>
 
 <!-- CLEAR TEXT PAGE CONTROLS -->
-<div style="position:fixed;bottom:0;left:0;right:0;background:rgba(28,32,42,.97);backdrop-filter:blur(10px);border-top:1px solid rgba(255,255,255,.5);padding:14px 24px;display:flex;align-items:center;justify-content:center;gap:24px;z-index:250">
-  <button id="text-prev" onclick="prevPage()" disabled style="display:flex;align-items:center;gap:10px;background:none;border:1px solid rgba(255,255,255,.65);color:rgba(255,255,255,.6);font-family:'Libre Baskerville',Georgia,serif;font-size:14px;font-weight:700;padding:11px 22px;border-radius:6px;cursor:pointer;transition:all .2s" data-i18n="mr.previous">
+<div style="position:fixed;bottom:0;left:0;right:0;background:rgba(28,32,42,.97);backdrop-filter:blur(10px);border-top:1px solid rgba(255,255,255,.5);padding:14px 24px;display:flex;align-items:center;justify-content:center;gap:24px;z-index:250;touch-action:manipulation">
+  <button id="text-prev" onclick="prevPage()" disabled style="display:flex;align-items:center;gap:10px;background:none;border:1px solid rgba(255,255,255,.65);color:rgba(255,255,255,.6);font-family:'Libre Baskerville',Georgia,serif;font-size:14px;font-weight:700;padding:11px 22px;border-radius:6px;cursor:pointer;transition:all .2s;touch-action:manipulation" data-i18n="mr.previous">
     ← Previous
   </button>
   <div id="text-page-label" style="font-family:'Libre Baskerville',Georgia,serif;font-size:12px;color:rgba(255,255,255,.7);min-width:140px;text-align:center;letter-spacing:.5px"></div>
-  <button id="text-next" onclick="nextPage()" style="display:flex;align-items:center;gap:10px;background:#4A7C3F;border:1px solid #4A7C3F;color:#fff;font-family:'Libre Baskerville',Georgia,serif;font-size:14px;font-weight:700;padding:11px 22px;border-radius:6px;cursor:pointer;transition:all .2s">
+  <button id="text-next" onclick="nextPage()" style="display:flex;align-items:center;gap:10px;background:#4A7C3F;border:1px solid #4A7C3F;color:#fff;font-family:'Libre Baskerville',Georgia,serif;font-size:14px;font-weight:700;padding:11px 22px;border-radius:6px;cursor:pointer;transition:all .2s;touch-action:manipulation">
     Next Page →
   </button>
 </div>
@@ -727,7 +748,23 @@ function isMobileStage(){
   return window.matchMedia('(max-width:850px)').matches;
 }
 
+// Manual zoom: readers who don't want to rely on pinch-zoom can tap this
+// button instead. Resets on every page turn so a zoomed-in view doesn't
+// carry over onto unrelated content on the next spread.
+function toggleZoom(){
+  const zoomed = document.querySelector('.book').classList.toggle('zoomed');
+  document.querySelector('.stage').classList.toggle('zoomed', zoomed);
+  document.getElementById('zoom-btn').classList.toggle('active', zoomed);
+}
+
+function resetZoom(){
+  document.querySelector('.book').classList.remove('zoomed');
+  document.querySelector('.stage').classList.remove('zoomed');
+  document.getElementById('zoom-btn').classList.remove('active');
+}
+
 function render(){
+  resetZoom();
   const pages = getPages();
   const pg = pages[cur];
   const L = document.getElementById('page-left');
