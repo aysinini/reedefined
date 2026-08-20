@@ -62,20 +62,32 @@ body{font-family:var(--S);-webkit-font-smoothing:antialiased;display:flex;flex-d
   display:flex;position:relative;
   filter:drop-shadow(0 20px 60px rgba(0,0,0,.35)) drop-shadow(0 4px 16px rgba(0,0,0,.2));
 }
-.book.zoomed{transform:scale(1.5);transform-origin:top center}
 
-/* ── ZOOM BUTTON ── */
-.zoom-btn{
-  position:absolute;bottom:10px;right:10px;z-index:60;
-  width:34px;height:34px;border-radius:50%;
-  background:rgba(28,32,42,.85);color:rgba(255,255,255,.9);
-  border:1px solid rgba(255,255,255,.4);
-  display:flex;align-items:center;justify-content:center;
-  font-size:15px;cursor:pointer;backdrop-filter:blur(6px);
-  transition:all .2s;touch-action:manipulation;
+/* ── ZOOM CONTROL ──
+   position:fixed (not tied to .book) so it never scrolls away with the
+   zoomed content — .book's own transform:scale is applied inline per
+   zoom level, not via this control's positioning. */
+.zoom-ctrl{
+  position:fixed;bottom:86px;right:16px;z-index:210;
+  display:flex;align-items:center;gap:2px;
+  background:rgba(28,32,42,.85);border:1px solid rgba(255,255,255,.4);
+  border-radius:20px;padding:4px;backdrop-filter:blur(6px);
+  touch-action:manipulation;
 }
-.zoom-btn:hover{background:rgba(28,32,42,1);transform:scale(1.08)}
-.zoom-btn.active{background:var(--teal);border-color:var(--teal)}
+.zoom-ctrl-btn{
+  width:28px;height:28px;border-radius:50%;border:none;flex-shrink:0;
+  background:transparent;color:rgba(255,255,255,.9);
+  font-size:16px;line-height:1;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:background .2s;
+}
+.zoom-ctrl-btn:hover:not(:disabled){background:rgba(255,255,255,.18)}
+.zoom-ctrl-btn:disabled{opacity:.25;cursor:default}
+.zoom-pct{
+  min-width:34px;text-align:center;
+  font-family:var(--C);font-size:10px;font-weight:700;letter-spacing:.5px;
+  color:rgba(255,255,255,.85);
+}
 
 /* ── PAGE ── */
 .page-wrap {
@@ -390,6 +402,7 @@ body{font-family:var(--S);-webkit-font-smoothing:antialiased;display:flex;flex-d
   .nav-arrow{width:30px;height:30px;font-size:16px}
   .nav-prev{left:2px}.nav-next{right:2px}
   .page-counter{font-size:9px;padding:3px 10px;bottom:10px}
+  .zoom-ctrl{bottom:120px;right:8px}
 
   /* Page content scaling */
   .mc-logo{font-size:20px}
@@ -516,11 +529,18 @@ if('serviceWorker' in navigator){
     <div style="flex:1;height:100%;position:relative;border-radius:12px 0 0 12px;overflow:hidden;box-shadow:-4px 0 24px rgba(0,0,0,.18)" id="page-left"></div>
     <div class="spine"></div>
     <div style="flex:1;height:100%;position:relative;border-radius:0 12px 12px 0;overflow:hidden;box-shadow:4px 0 24px rgba(0,0,0,.18)" id="page-right"></div>
-    <button class="zoom-btn" id="zoom-btn" onclick="toggleZoom()" title="Zoom" type="button">🔍</button>
   </div>
 
   <button class="nav-arrow nav-next" id="nav-next" onclick="nextPage()">›</button>
   <div class="page-counter" id="page-counter">Page 1 of 8</div>
+</div>
+
+<!-- ZOOM CONTROL — fixed to the viewport (not .book), so it stays put
+     while a zoomed-in spread is scrolled. Same control on every page. -->
+<div class="zoom-ctrl">
+  <button class="zoom-ctrl-btn" id="zoom-out-btn" onclick="zoomOut()" title="Zoom out" type="button">−</button>
+  <span class="zoom-pct" id="zoom-pct">100%</span>
+  <button class="zoom-ctrl-btn" id="zoom-in-btn" onclick="zoomIn()" title="Zoom in" type="button">+</button>
 </div>
 
 <!-- CLEAR TEXT PAGE CONTROLS -->
@@ -750,20 +770,34 @@ function isMobileStage(){
   return window.matchMedia('(max-width:850px)').matches;
 }
 
-// Manual zoom: readers who don't want to rely on pinch-zoom can tap this
-// button instead. Resets on every page turn so a zoomed-in view doesn't
-// carry over onto unrelated content on the next spread.
-function toggleZoom(){
-  const zoomed = document.querySelector('.book').classList.toggle('zoomed');
-  document.querySelector('.stage').classList.toggle('zoomed', zoomed);
-  document.getElementById('zoom-btn').classList.toggle('active', zoomed);
+// Manual zoom: readers who don't want to rely on pinch-zoom can step
+// through these instead. Scales the whole visible spread (both pages on
+// desktop, the single visible page on mobile) uniformly, the same way on
+// every spread type — resets to 100% on every page turn so a zoomed-in
+// view doesn't carry over onto unrelated content on the next spread.
+const ZOOM_LEVELS = [1, 1.25, 1.5, 1.75, 2];
+let zoomIdx = 0;
+
+function applyZoom(){
+  const scale = ZOOM_LEVELS[zoomIdx];
+  const book = document.querySelector('.book');
+  const stage = document.querySelector('.stage');
+  if(scale === 1){
+    book.style.transform = '';
+    stage.classList.remove('zoomed');
+  } else {
+    book.style.transform = `scale(${scale})`;
+    book.style.transformOrigin = 'top center';
+    stage.classList.add('zoomed');
+  }
+  document.getElementById('zoom-pct').textContent = Math.round(scale * 100) + '%';
+  document.getElementById('zoom-out-btn').disabled = zoomIdx === 0;
+  document.getElementById('zoom-in-btn').disabled = zoomIdx === ZOOM_LEVELS.length - 1;
 }
 
-function resetZoom(){
-  document.querySelector('.book').classList.remove('zoomed');
-  document.querySelector('.stage').classList.remove('zoomed');
-  document.getElementById('zoom-btn').classList.remove('active');
-}
+function zoomIn(){ if(zoomIdx < ZOOM_LEVELS.length - 1){ zoomIdx++; applyZoom(); } }
+function zoomOut(){ if(zoomIdx > 0){ zoomIdx--; applyZoom(); } }
+function resetZoom(){ zoomIdx = 0; applyZoom(); }
 
 function render(){
   resetZoom();
