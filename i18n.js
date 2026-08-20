@@ -8,6 +8,7 @@ const TRANSLATIONS = {
     'nav.write': 'Write',
     'nav.advertise': 'Advertise',
     'nav.signin': 'Sign In',
+    'nav.my_portal': 'My Portal',
     'nav.join': 'Sign Up →',
     'nav.back': 'Back to Studio →',
 
@@ -283,7 +284,7 @@ const TRANSLATIONS = {
     'ns.your_issue': 'Your Issue',
     'ns.your_issue_empty': 'No articles yet, follow contributors on the Discover page and your issue will fill up here.',
     'ns.empty_contributors': 'No contributors have published yet.',
-    'ticker.live': 'Issue No. 1 — September 2026 — Now Live',
+    'ticker.live': 'Issue No. 1 — September 2026 — In the Making',
     // Index / landing page
     'idx.nav_discover': 'Discover',
     'idx.nav_advertise': 'Advertise',
@@ -736,6 +737,7 @@ const TRANSLATIONS = {
     'nav.write': 'Schreiben',
     'nav.advertise': 'Werbung',
     'nav.signin': 'Anmelden',
+    'nav.my_portal': 'Mein Portal',
     'nav.join': 'Registrieren →',
     'nav.back': 'Zurück zum Studio →',
 
@@ -1003,7 +1005,7 @@ const TRANSLATIONS = {
     'ns.your_issue': 'Deine Ausgabe',
     'ns.your_issue_empty': 'Noch keine Artikel, folge Contributors auf der Discover-Seite und deine Ausgabe füllt sich.',
     'ns.empty_contributors': 'Noch keine Contributors haben veröffentlicht.',
-    'ticker.live': 'Ausgabe Nr. 1 — September 2026 — Jetzt Live',
+    'ticker.live': 'Ausgabe Nr. 1 — September 2026 — In Arbeit',
     // Index / landing page
     'idx.nav_discover': 'Entdecken',
     'idx.nav_advertise': 'Werbung',
@@ -1456,6 +1458,7 @@ const TRANSLATIONS = {
     'nav.write': 'Yaz',
     'nav.advertise': 'Reklam Ver',
     'nav.signin': 'Giriş Yap',
+    'nav.my_portal': 'Panelim',
     'nav.join': 'Kaydol →',
     'nav.back': 'Stüdyoya Dön →',
     'index.eyebrow': 'Sayı No. 1 · Mayıs 2026',
@@ -1696,7 +1699,7 @@ const TRANSLATIONS = {
     'ns.your_issue': 'Senin Sayın',
     'ns.your_issue_empty': 'Henüz makale yok, Keşfet sayfasından katkı sağlayanları takip et, sayın burada dolmaya başlayacak.',
     'ns.empty_contributors': 'Henüz yayınlayan katkı sağlayan yok.',
-    'ticker.live': 'Sayı No. 1 — Eylül 2026 — Şimdi Yayında',
+    'ticker.live': 'Sayı No. 1 — Eylül 2026 — Hazırlanıyor',
     'idx.nav_discover': 'Keşfet',
     'idx.nav_advertise': 'Reklam Ver',
     'idx.nav_illustrators': 'İllüstratörler',

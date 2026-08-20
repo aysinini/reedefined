@@ -170,11 +170,11 @@ body{background:var(--white);color:var(--ink);font-family:var(--S);-webkit-font-
     </div>
     <div class="nav-right">
       <div style="display:flex;gap:6px;align-items:center;margin-right:8px">
-        <button class="lang-btn" data-lang="en" onclick="setLang('en')" style="background:none;border:none;font-family:inherit;font-size:12px;font-weight:600;cursor:pointer;padding:0;color:#3A3A3A">EN</button>
+        <button class="lang-btn" data-lang="en" onclick="setLang('en');applyIdxSignin()" style="background:none;border:none;font-family:inherit;font-size:12px;font-weight:600;cursor:pointer;padding:0;color:#3A3A3A">EN</button>
         <span style="opacity:.3">/</span>
-        <button class="lang-btn" data-lang="de" onclick="setLang('de')" style="background:none;border:none;font-family:inherit;font-size:12px;font-weight:600;cursor:pointer;padding:0;color:#3A3A3A">DE</button>
+        <button class="lang-btn" data-lang="de" onclick="setLang('de');applyIdxSignin()" style="background:none;border:none;font-family:inherit;font-size:12px;font-weight:600;cursor:pointer;padding:0;color:#3A3A3A">DE</button>
         <span style="opacity:.3">/</span>
-        <button class="lang-btn" data-lang="tr" onclick="setLang('tr')" style="background:none;border:none;font-family:inherit;font-size:12px;font-weight:600;cursor:pointer;padding:0;color:#3A3A3A">TR</button>
+        <button class="lang-btn" data-lang="tr" onclick="setLang('tr');applyIdxSignin()" style="background:none;border:none;font-family:inherit;font-size:12px;font-weight:600;cursor:pointer;padding:0;color:#3A3A3A">TR</button>
       </div>
       <button class="btn-si" onclick="location.href='portal.html'" data-i18n="idx.signin">Sign In</button>
       <button class="btn-su" onclick="location.href='portal.html'" data-i18n="idx.signup">Sign Up →</button>
@@ -335,6 +335,38 @@ _sb.auth.onAuthStateChange((event)=>{
     location.href='portal.html?recovery=1';
   }
 });
+
+// Both nav and footer "Sign In" links carry data-i18n="idx.signin" for
+// their logged-out default, but applyLang() (i18n.js) re-applies that on
+// every language switch and would otherwise stomp a "My Portal" swap back
+// to "Sign In" — re-run this after setLang() too, same fix as
+// newsstand.html/discover.html's applyUtilSignin().
+let idxSession = null;
+function applyIdxSignin(){
+  if(!idxSession) return;
+  const role = idxSession.user?.user_metadata?.role || 'reader';
+  const dest = (role==='contrib') ? 'dashboard.html' : 'newsstand.html';
+  document.querySelectorAll('[data-i18n="idx.signin"]').forEach(el => {
+    el.textContent = t('nav.my_portal');
+    el.onclick = () => location.href = dest;
+  });
+  const signupBtn = document.querySelector('.btn-su');
+  if(signupBtn) signupBtn.style.display = 'none';
+}
+window.applyIdxSignin = applyIdxSignin;
+(async()=>{
+  const {data:{session}} = await _sb.auth.getSession();
+  idxSession = session;
+  applyIdxSignin();
+  // i18n.js's own DOMContentLoaded listener (which resets idx.signin's
+  // data-i18n text) can end up running after this one — the getSession()
+  // await above can resume while the document is still mid-parse, so a
+  // setTimeout(0) isn't reliably after DOMContentLoaded either. `load`
+  // always fires strictly after DOMContentLoaded (and therefore after
+  // i18n.js, an earlier ordinary script, has finished executing).
+  if(document.readyState==='complete'){ applyIdxSignin(); }
+  else { window.addEventListener('load', applyIdxSignin); }
+})();
 </script>
 <script>
 const _fadeObserver = new IntersectionObserver(entries => {

@@ -249,14 +249,14 @@ if('serviceWorker' in navigator){
     <a onclick="location.href='newsstand.html'" data-i18n="nav.magazine">The Magazine</a>
     <div class="util-sep"></div>
     <div style="display:flex;gap:6px;align-items:center">
-      <button class="lang-btn" data-lang="en" onclick="setLang('en')" style="background:none;border:none;font-family:inherit;font-size:inherit;letter-spacing:inherit;cursor:pointer;padding:0;color:rgba(255,255,255,.8)">EN</button>
+      <button class="lang-btn" data-lang="en" onclick="setLang('en');applyUtilSignin()" style="background:none;border:none;font-family:inherit;font-size:inherit;letter-spacing:inherit;cursor:pointer;padding:0;color:rgba(255,255,255,.8)">EN</button>
       <span style="color:rgba(255,255,255,.3)">/</span>
-      <button class="lang-btn" data-lang="de" onclick="setLang('de')" style="background:none;border:none;font-family:inherit;font-size:inherit;letter-spacing:inherit;cursor:pointer;padding:0;color:rgba(255,255,255,.8)">DE</button>
+      <button class="lang-btn" data-lang="de" onclick="setLang('de');applyUtilSignin()" style="background:none;border:none;font-family:inherit;font-size:inherit;letter-spacing:inherit;cursor:pointer;padding:0;color:rgba(255,255,255,.8)">DE</button>
       <span style="color:rgba(255,255,255,.3)">/</span>
-      <button class="lang-btn" data-lang="tr" onclick="setLang('tr')" style="background:none;border:none;font-family:inherit;font-size:inherit;letter-spacing:inherit;cursor:pointer;padding:0;color:rgba(255,255,255,.8)">TR</button>
+      <button class="lang-btn" data-lang="tr" onclick="setLang('tr');applyUtilSignin()" style="background:none;border:none;font-family:inherit;font-size:inherit;letter-spacing:inherit;cursor:pointer;padding:0;color:rgba(255,255,255,.8)">TR</button>
     </div>
     <div class="util-sep"></div>
-    <a onclick="location.href='portal.html'" data-i18n="nav.signin">Sign In</a>
+    <a id="util-signin" href="portal.html" data-i18n="nav.signin">Sign In</a>
   </div>
 </div>
 
@@ -667,8 +667,25 @@ async function toggleOptIn(){
 }
 
 // ── SESSION ──
+let discoverSession = null;
+// The .util bar's Sign In link carries data-i18n="nav.signin" for its
+// logged-out default, but applyLang() (i18n.js, loaded last) re-applies
+// that on every language switch and would otherwise stomp a "My Portal"
+// swap back to "Sign In". Exposed globally + re-run from the lang
+// buttons, same fix as newsstand.html's applyUtilSignin(). No-op when
+// logged out, since this page is browsable without an account.
+function applyUtilSignin(){
+  const utilSignin = document.getElementById('util-signin');
+  if(!utilSignin || !discoverSession) return;
+  const role = discoverSession.user?.user_metadata?.role || 'reader';
+  utilSignin.textContent = t('nav.my_portal');
+  utilSignin.href = (role==='contrib') ? 'dashboard.html' : 'newsstand.html';
+}
+window.applyUtilSignin = applyUtilSignin;
+
 (async()=>{
   const {data:{session}} = await sb.auth.getSession();
+  discoverSession = session;
   if(session){
     const name = session.user?.user_metadata?.full_name || session.user?.email || '';
     const role = session.user?.user_metadata?.role || 'reader';
@@ -692,6 +709,15 @@ async function toggleOptIn(){
       const dashBtn = document.getElementById('nav-av-dashboard');
       if(dashBtn) dashBtn.style.display = '';
     }
+    applyUtilSignin();
+    // i18n.js's own DOMContentLoaded listener (which resets util-signin's
+    // data-i18n text) can end up running after this one — the getSession()
+    // await above can resume while the document is still mid-parse, so a
+    // setTimeout(0) isn't reliably after DOMContentLoaded either. `load`
+    // always fires strictly after DOMContentLoaded (and therefore after
+    // i18n.js, an earlier ordinary script, has finished executing).
+    if(document.readyState==='complete'){ applyUtilSignin(); }
+    else { window.addEventListener('load', applyUtilSignin); }
     window.__sbSignOut = async()=>{ await sb.auth.signOut(); location.href='index.html'; };
   }
 })();
