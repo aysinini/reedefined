@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="manifest" href="/manifest.json">
 <meta name="theme-color" content="#0C0C0C">
-<title>Reedefined — Cover Brief · Issue No. 2</title>
+<title>Reedefined — Cover Brief · Issue No. 1</title>
 <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Barlow+Condensed:wght@400;500;600;700&family=Barlow:wght@300;400;500&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700;1,900&display=swap" rel="stylesheet">
 <style>
 :root{
@@ -146,8 +146,8 @@ a:hover{text-decoration:underline;text-underline-offset:3px}
   <p class="hero-sub" data-i18n="brief.sub">We are looking for an illustrator for the cover of Issue No. 2. Open call. Voluntary, full credit on the cover, in the issue and across our platforms. Your work will be seen by our readers.</p>
   <div class="hero-meta">
     <div class="hm-item"><div class="hm-label" data-i18n="brief.commission">Commission</div><div class="hm-val" data-i18n="brief.full_credit">Full Credit</div></div>
-    <div class="hm-item"><div class="hm-label" data-i18n="brief.deadline">Deadline</div><div class="hm-val">15 <span data-issue-date="month">July 2026</span></div></div>
-    <div class="hm-item"><div class="hm-label" data-i18n="brief.issue">Issue</div><div class="hm-val">No. 2 · September 2026</div></div>
+    <div class="hm-item"><div class="hm-label" data-i18n="brief.deadline">Deadline</div><div class="hm-val">25 <span data-issue-date="month">July 2026</span></div></div>
+    <div class="hm-item"><div class="hm-label" data-i18n="brief.issue">Issue</div><div class="hm-val">No. 1 · September 2026</div></div>
     <div class="hm-item"><div class="hm-label" data-i18n="brief.questions">Questions</div><div class="hm-val"><a href="mailto:illustrators@reedefined.app" style="color:var(--teal)">illustrators@reedefined.app</a></div></div>
   </div>
 </div>
@@ -313,7 +313,7 @@ async function submitForm(){
     await fetch(SBU+'/rest/v1/cover_submissions',{
       method:'POST',
       headers:{'Content-Type':'application/json','apikey':SBK,'Authorization':'Bearer '+SBK,'Prefer':'return=minimal'},
-      body:JSON.stringify({name,email,social,location,drift_answer:drift,filename:file1.name,sketch_filename:file2?file2.name:null,issue:'No. 2 · September 2026',submitted_at:new Date().toISOString()})
+      body:JSON.stringify({name,email,social,location,drift_answer:drift,filename:file1.name,sketch_filename:file2?file2.name:null,issue:'No. 1 · September 2026',submitted_at:new Date().toISOString()})
     });
   }catch(e){}
 

@@ -802,6 +802,24 @@ function render(){
   if(tPrev) tPrev.disabled = cur===0;
   if(tLabel) tLabel.textContent = `${pgLabel} — ${cur+1} ${t('mr.of')} ${pages.length}`;
   if(tNext) tNext.innerHTML = cur>=pages.length-1 ? `${t('mr.back_to_start')} <span style="font-size:18px">↻</span>` : `${t('mr.next_page')} <span style="font-size:18px">→</span>`;
+
+  syncPageInUrl();
+}
+
+// Keeps the URL's ?page= in sync with the current spread so a refresh (or
+// a shared/bookmarked link) resumes exactly here instead of always
+// restarting at the cover. Uses replaceState (not pushState) so flipping
+// through pages doesn't spam browser history. Deep-link params like
+// ?article=/?horoscope=1/?puzzle=1 are one-time entry points — once
+// resolved into a `cur`, the URL normalizes to ?page= so subsequent
+// refreshes go through the same simple mechanism.
+function syncPageInUrl(){
+  const params = new URLSearchParams(location.search);
+  params.delete('article');
+  params.delete('horoscope');
+  params.delete('puzzle');
+  params.set('page', cur);
+  history.replaceState(null, '', location.pathname + '?' + params.toString());
 }
 
 function buildPage(id){
@@ -1865,7 +1883,9 @@ document.head.appendChild(style_tag);
 
 // Init — load contributions from Supabase then render
 // Sets `cur` to the spread for a linked article (?article=<id>) without
-// rendering itself -- init() does a single render() right after.
+// rendering itself -- init() does a single render() right after. Falls
+// back to ?page=<n> (set by syncPageInUrl() on every render) so a
+// refresh resumes on the same spread instead of restarting at the cover.
 function goToLinkedArticle(){
   const params = new URLSearchParams(location.search);
 
@@ -1879,15 +1899,19 @@ function goToLinkedArticle(){
   }
 
   const targetId = parseInt(params.get('article'), 10);
-  if(!targetId) return;
-
-  if(EDITORS_LETTER_ARTICLE && EDITORS_LETTER_ARTICLE.id === targetId){
-    cur = 1; // the fixed Editor's Letter spread in BASE_PAGES
-    return;
+  if(targetId){
+    if(EDITORS_LETTER_ARTICLE && EDITORS_LETTER_ARTICLE.id === targetId){
+      cur = 1; // the fixed Editor's Letter spread in BASE_PAGES
+      return;
+    }
+    const idx = CONTRIBUTIONS.findIndex(a => a.id === targetId);
+    if(idx !== -1){ cur = Math.min(BASE_PAGES.length + idx, getPages().length - 1); return; }
   }
 
-  const idx = CONTRIBUTIONS.findIndex(a => a.id === targetId);
-  if(idx !== -1) cur = Math.min(BASE_PAGES.length + idx, getPages().length - 1);
+  const pageParam = parseInt(params.get('page'), 10);
+  if(!isNaN(pageParam) && pageParam >= 0 && pageParam < getPages().length){
+    cur = pageParam;
+  }
 }
 
 (async function init() {

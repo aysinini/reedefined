@@ -79,9 +79,9 @@ const TRANSLATIONS = {
     'conn.privacy_text': 'We only read public data via official APIs. We never post, like, follow or take any action on your behalf.',
 
     // Cover brief
-    'brief.eyebrow': 'Open Call · Issue No. 2 · September 2026',
+    'brief.eyebrow': 'Open Call · Issue No. 1 · September 2026',
     'brief.h1': 'Cover<br>Brief.',
-    'brief.sub': 'We are looking for an illustrator for the cover of Issue No. 2. Open call. Voluntary, full credit on the cover, in the issue and across our platforms. Your work will be seen by our readers.',
+    'brief.sub': 'We are looking for an illustrator for the cover of Issue No. 1. Open call. Voluntary, full credit on the cover, in the issue and across our platforms. Your work will be seen by our readers.',
     'brief.submit': 'Submit My Work →',
     'brief.submitting': 'Submitting…',
     'brief.commission': 'Commission',
@@ -96,7 +96,7 @@ const TRANSLATIONS = {
     'brief.spec_style': 'Style',
     'brief.spec_style_val': 'No restrictions. Hand-drawn, digital, collage, watercolour. No photorealism. We want a human hand.',
     'brief.spec_rights': 'Rights',
-    'brief.spec_rights_val': 'You keep full ownership. We license it for Issue No. 2 only. Full credit on the cover, in the issue and across all Reedefined platforms. No fee at this stage, this is a voluntary open call.',
+    'brief.spec_rights_val': 'You keep full ownership. We license it for Issue No. 1 only. Full credit on the cover, in the issue and across all Reedefined platforms. No fee at this stage, this is a voluntary open call.',
     'brief.spec_process': 'Process',
     'brief.spec_process_val': 'Include a sketch or rough with your submission. We check process before finals, it matters.',
     'brief.form_label': 'Submit your work.',
@@ -274,6 +274,9 @@ const TRANSLATIONS = {
     'ns.flip_sub': 'Flip through Issue No. 1 like a real magazine, spread by spread.',
     'ns.horoscope_widget_eyebrow': "This Month's Horoscopes",
     'ns.horoscope_widget_cta': 'See all signs →',
+    'ns.puzzle_widget_eyebrow': "This Issue's Puzzle",
+    'ns.puzzle_widget_desc': "Solve this month's crossword, right in the flip reader.",
+    'ns.puzzle_widget_cta': 'Solve it →',
     'ns.from_issue': 'From This Issue',
     'ns.empty_articles': 'No articles published yet.',
     'ns.empty_articles_sub': 'Once contributors you follow publish, their columns will appear here.',
@@ -798,9 +801,9 @@ const TRANSLATIONS = {
     'conn.privacy': 'Datenschutzhinweis',
     'conn.privacy_text': 'Wir lesen nur öffentliche Daten über offizielle APIs. Wir posten, liken oder folgen nie in deinem Namen.',
 
-    'brief.eyebrow': 'Offener Aufruf · Ausgabe Nr. 2 · September 2026',
-    'brief.h1': 'Cover<br>Brief.',
-    'brief.sub': 'Wir suchen einen Illustrator für das Cover der Ausgabe Nr. 2. Offener Aufruf. Freiwillig, volle Namensnennung auf dem Cover, in der Ausgabe und auf allen unseren Plattformen. Deine Arbeit wird von unseren Lesern gesehen.',
+    'brief.eyebrow': 'Offener Aufruf · Ausgabe Nr. 1 · September 2026',
+    'brief.h1': 'Cover-Brief.',
+    'brief.sub': 'Wir suchen einen Illustrator für das Cover der Ausgabe Nr. 1. Offener Aufruf. Freiwillig, volle Namensnennung auf dem Cover, in der Ausgabe und auf allen unseren Plattformen. Deine Arbeit wird von unseren Lesern gesehen.',
     'brief.submit': 'Meine Arbeit einreichen →',
     'brief.submitting': 'Wird gesendet…',
     'brief.commission': 'Auftrag',
@@ -809,15 +812,15 @@ const TRANSLATIONS = {
     'brief.issue': 'Ausgabe',
     'brief.questions': 'Fragen',
     'brief.theme': 'Dunst.',
-    'brief.theme_dek': 'Das Gefühl eines Monats, der verging, ohne dass man es bemerkte. Lange Abende, langsame Morgen, das Gefühl, zwischen den Dingen zu sein. Wir wollen etwas Warmes, Menschliches, leicht Entspanntes. Eine Figur, ein Raum, eine Stadt, etwas, das ein gelebtes Leben andeutet.',
+    'brief.theme_dek': 'Das Gefühl eines Sommernachmittags, an dem es zu warm ist, um klar zu denken. Träge Stunden, helles Licht, das Gefühl, dass die Zeit anders vergeht. Wir wollen etwas Warmes, Menschliches, leicht Entspanntes. Eine Figur, ein Raum, eine Stadt — etwas, das ein gelebtes Leben andeutet.',
     'brief.spec_format': 'Format',
     'brief.spec_format_val': 'Hochformat. Mindestens 2400 × 3200px. Platz oben und unten für Kopfzeile und Artikel-Teaser lassen.',
     'brief.spec_style': 'Stil',
     'brief.spec_style_val': 'Keine Einschränkungen. Handgezeichnet, digital, Collage, Aquarell. Kein Fotorealismus. Wir wollen eine menschliche Hand.',
     'brief.spec_rights': 'Rechte',
-    'brief.spec_rights_val': 'Du behältst das volle Eigentum. Wir lizenzieren es nur für Ausgabe Nr. 2. Volle Namensnennung auf dem Cover, in der Ausgabe und auf allen Reedefined-Plattformen. Keine Bezahlung in dieser Phase, dies ist ein freiwilliger offener Aufruf.',
+    'brief.spec_rights_val': 'Du behältst das volle Eigentum. Wir lizenzieren es nur für Ausgabe Nr. 1. Volle Namensnennung auf dem Cover, in der Ausgabe und auf allen Reedefined-Plattformen. Keine Bezahlung in dieser Phase, dies ist ein freiwilliger offener Aufruf.',
     'brief.spec_process': 'Prozess',
-    'brief.spec_process_val': 'Füge deiner Einreichung eine Skizze oder einen Entwurf bei. Wir prüfen den Prozess vor den finalen Arbeiten, das ist wichtig.',
+    'brief.spec_process_val': 'Füge deiner Einreichung eine Skizze oder einen Entwurf bei. Wir prüfen den Prozess vor der endgültigen Version, das ist wichtig.',
     'brief.form_label': 'Reiche deine Arbeit ein.',
     'brief.form_sub': 'Wir lesen jede Einreichung persönlich. Du hörst innerhalb von zwei Wochen nach der Frist von uns, ob du ausgewählt wurdest.',
     'brief.f_name': 'Dein Name',
@@ -991,6 +994,9 @@ const TRANSLATIONS = {
     'ns.flip_sub': 'Blättere durch Ausgabe Nr. 1 wie durch ein echtes Magazin, Seite für Seite.',
     'ns.horoscope_widget_eyebrow': 'Die Horoskope dieses Monats',
     'ns.horoscope_widget_cta': 'Alle Sternzeichen →',
+    'ns.puzzle_widget_eyebrow': 'Das Rätsel dieser Ausgabe',
+    'ns.puzzle_widget_desc': 'Lösen Sie das Kreuzworträtsel dieses Monats direkt im Flip-Reader.',
+    'ns.puzzle_widget_cta': 'Jetzt lösen →',
     'ns.from_issue': 'Aus dieser Ausgabe',
     'ns.empty_articles': 'Noch nichts veröffentlicht.',
     'ns.empty_articles_sub': 'Sobald Contributors, denen du folgst, veröffentlichen, erscheinen ihre Kolumnen hier.',
@@ -1509,13 +1515,13 @@ const TRANSLATIONS = {
     'conn.disconnect': 'Bağlantıyı Kes',
     'conn.privacy': 'Gizlilik notu',
     'conn.privacy_text': 'Sadece resmi API\'ler aracılığıyla herkese açık verileri okuruz. Senin adına asla paylaşım yapmaz, beğenmez, takip etmez veya herhangi bir işlem gerçekleştirmeyiz.',
-    'brief.eyebrow': 'Açık Çağrı · Sayı No. 2 · Eylül 2026',
-    'brief.h1': 'Kapak<br>Brifingi.',
-    'brief.sub': 'Sayı No. 2\'nin kapağı için bir illüstratör arıyoruz. Açık çağrı. Gönüllü, kapakta, sayıda ve tüm platformlarımızda tam kredi. Çalışman okuyucularımız tarafından görülecek.',
+    'brief.eyebrow': 'Açık Çağrı · Sayı No. 1 · Eylül 2026',
+    'brief.h1': 'Kapak<br>Notu.',
+    'brief.sub': 'Sayı No. 1\'in kapağı için bir illüstratör arıyoruz. Açık çağrı. Gönüllü katılım; karşılığında kapakta, sayıda ve tüm platformlarımızda tam atıf verilecek. Çalışman okuyucularımız tarafından görülecek.',
     'brief.submit': 'Çalışmamı Gönder →',
     'brief.submitting': 'Gönderiliyor…',
     'brief.commission': 'Ücret',
-    'brief.full_credit': 'Tam Kredi',
+    'brief.full_credit': 'Tam Atıf',
     'brief.deadline': 'Son Tarih',
     'brief.issue': 'Sayı',
     'brief.questions': 'Sorular',
@@ -1526,20 +1532,20 @@ const TRANSLATIONS = {
     'brief.spec_style': 'Stil',
     'brief.spec_style_val': 'Kısıtlama yok. Elle çizim, dijital, kolaj, suluboya. Fotogerçekçilik olmasın. İnsan eli istiyoruz.',
     'brief.spec_rights': 'Haklar',
-    'brief.spec_rights_val': 'Tam mülkiyeti sende kalır. Sadece Sayı No. 2 için lisanslarız. Kapakta, sayıda ve tüm Reedefined platformlarında tam kredi. Bu aşamada ücret yok, bu gönüllü bir açık çağrıdır.',
+    'brief.spec_rights_val': 'Tam mülkiyeti sende kalır. Sadece Sayı No. 1 için lisanslarız. Kapakta, sayıda ve tüm Reedefined platformlarında tam atıf. Bu aşamada ücret yok, bu gönüllü bir açık çağrıdır.',
     'brief.spec_process': 'Süreç',
-    'brief.spec_process_val': 'Gönderinle birlikte bir taslak veya eskiz ekle. Son hallerden önce süreci kontrol ederiz, bu önemli.',
+    'brief.spec_process_val': 'Gönderinle birlikte bir taslak veya eskiz ekle. Kesin halinden önce süreci kontrol ederiz, bu önemli.',
     'brief.form_label': 'Çalışmanı gönder.',
-    'brief.form_sub': 'Her gönderiyi kişisel olarak inceliyoruz. Seçilip seçilmediğine dair son tarihten itibaren iki hafta içinde haber alacaksın.',
+    'brief.form_sub': 'Her gönderiyi kişisel olarak inceliyoruz. Seçilip seçilmediğini son tarihten itibaren iki hafta içinde öğreneceksin.',
     'brief.f_name': 'Adın',
     'brief.f_email': 'E-posta',
     'brief.f_social': 'Instagram veya Web Sitesi',
     'brief.f_location': 'Konum',
     'brief.f_illustration': 'İllüstrasyonun',
     'brief.drop_here': 'İllüstrasyonunu buraya bırak',
-    'brief.click_browse': 'veya göz atmak için tıkla',
+    'brief.click_browse': 'veya dosya seçmek için tıkla',
     'brief.file_spec': 'PNG · PDF · TIFF · JPG — 50MB\'a kadar',
-    'brief.f_sketch': 'Bir taslak veya eskiz (şiddetle önerilir)',
+    'brief.f_sketch': 'Bir taslak veya eskiz (kesinlikle önerilir)',
     'brief.upload_sketch': 'Bir taslak veya devam eden çalışma yükle',
     'brief.sketch_hint': 'Eskiz defterinin bir fotoğrafı, ilk taslak, sürecini gösteren herhangi bir şey',
     'brief.f_drift': '"Sis" senin için kişisel olarak ne ifade ediyor?',
@@ -1681,6 +1687,9 @@ const TRANSLATIONS = {
     'ns.flip_sub': 'Sayı No. 1\'i gerçek bir dergi gibi, sayfa sayfa çevir.',
     'ns.horoscope_widget_eyebrow': 'Bu Ayın Burçları',
     'ns.horoscope_widget_cta': 'Tüm burçları gör →',
+    'ns.puzzle_widget_eyebrow': 'Bu Sayının Bulmacası',
+    'ns.puzzle_widget_desc': 'Bu ayın çengel bulmacasını flip reader içinde çözün.',
+    'ns.puzzle_widget_cta': 'Çöz →',
     'ns.from_issue': 'Bu Sayıdan',
     'ns.empty_articles': 'Henüz yayınlanan makale yok.',
     'ns.empty_articles_sub': 'Takip ettiğin katkı sağlayanlar yayınladığında, köşe yazıları burada görünecek.',
@@ -2139,6 +2148,13 @@ function setLang(lang) {
   localStorage.setItem('rd-lang', lang);
   applyLang(lang);
   updateSwitcher(lang);
+  // applyLang() only refreshes [data-i18n] static text — data-issue-date
+  // spans are JS-rendered separately (see applyIssueDates() below) and
+  // were going stale until a full page reload after a language switch.
+  // Same class of bug as newsstand.html's renderUtilDate(): fixed once
+  // here so every page that uses data-issue-date is covered, not just
+  // the ones with a page-specific setLang() wrapper.
+  if (typeof applyIssueDates === 'function') applyIssueDates();
 }
 
 function t(key) {
@@ -2157,7 +2173,17 @@ function applyLang(lang) {
   document.querySelectorAll('[data-i18n]').forEach(el => {
     const key = el.getAttribute('data-i18n');
     const val = TRANSLATIONS[lang]?.[key] || TRANSLATIONS['en']?.[key];
-    if (val) el.innerHTML = val;
+    if (val) {
+      // Browsers apply CSS text-transform:uppercase using the locale-
+      // unaware default case mapping (i→I), not Turkish's i→İ rule, so
+      // correct-looking source strings like "Son Tarih" render as
+      // "SON TARIH" instead of "SON TARİH" wherever that CSS is used.
+      // Pre-uppercase with the correct Turkish rule in that case so the
+      // browser's transform has nothing left to get wrong (uppercasing
+      // an already-uppercase İ is a no-op, so this is safe either way).
+      const needsTrUppercase = lang === 'tr' && getComputedStyle(el).textTransform === 'uppercase';
+      el.innerHTML = needsTrUppercase ? val.toLocaleUpperCase('tr-TR') : val;
+    }
   });
   document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
     const key = el.getAttribute('data-i18n-placeholder');
