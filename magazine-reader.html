@@ -782,12 +782,15 @@ function applyZoom(){
   const scale = ZOOM_LEVELS[zoomIdx];
   const book = document.querySelector('.book');
   const stage = document.querySelector('.stage');
+  // CSS zoom (not transform:scale) so the browser genuinely re-lays-out
+  // and re-renders the real text/DOM content at the new size, instead of
+  // stretching an already-rasterized bitmap of it — transform:scale was
+  // making every spread's text visibly soft/blurry once zoomed in.
   if(scale === 1){
-    book.style.transform = '';
+    book.style.zoom = '';
     stage.classList.remove('zoomed');
   } else {
-    book.style.transform = `scale(${scale})`;
-    book.style.transformOrigin = 'top center';
+    book.style.zoom = scale;
     stage.classList.add('zoomed');
   }
   document.getElementById('zoom-pct').textContent = Math.round(scale * 100) + '%';
