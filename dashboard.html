@@ -250,7 +250,7 @@ let pastCatFilter = 'all', pastDateFilter = 'all';
 
 function renderPastArtRow(a){
   const letterBadge = a.is_editors_letter
-    ? `<span class="art-status" style="background:#F4EAD5;color:#8A6116">${t('mr.label_editor')}</span>`
+    ? `<span class="art-status" style="background:#F4EAD5;color:#8A6116">${tUp('mr.label_editor')}</span>`
     : '';
   return `
       <div class="art-row" onclick="location.href='article.html?id=${a.id}'">
@@ -283,8 +283,8 @@ function renderPastIssuesSection(){
 
     filtersHtml = `
       <div class="filters-row">
-        <select class="filter-select" onchange="pastCatFilter=this.value;showTab('articles')">${catOptions}</select>
-        <select class="filter-select" onchange="pastDateFilter=this.value;showTab('articles')">${dateOptions}</select>
+        <select class="filter-select" aria-label="Filter by category" onchange="pastCatFilter=this.value;showTab('articles')">${catOptions}</select>
+        <select class="filter-select" aria-label="Filter by date" onchange="pastDateFilter=this.value;showTab('articles')">${dateOptions}</select>
       </div>`;
 
     const filtered = DATA.published.filter(a =>

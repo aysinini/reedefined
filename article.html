@@ -133,6 +133,7 @@ body{background:var(--bg);color:var(--ink);font-family:var(--S);min-height:100vh
     </div>
     <div class="tb-link" data-i18n="art.flip" onclick="goFlipReader()">Read in flip format ⇄</div>
     <div class="tb-link" data-i18n="art.back" onclick="location.href='newsstand.html'">← Back</div>
+    <div id="nav-r-logged-out" class="tb-link" onclick="location.href='portal.html'" data-i18n="nav.signin">Sign In</div>
     <div id="nav-r-logged-in" style="display:none;position:relative">
       <div class="nav-av" id="nav-av" onclick="toggleNavAvMenu()"></div>
       <div id="nav-av-menu" class="profile-menu" style="display:none;position:absolute;top:40px;right:0;z-index:300">
@@ -154,7 +155,7 @@ body{background:var(--bg);color:var(--ink);font-family:var(--S);min-height:100vh
     <div class="report-title" data-i18n="art.report_title">Report this article</div>
     <div id="report-form-body">
       <div class="report-field">
-        <label class="report-label" data-i18n="art.report_reason">Reason</label>
+        <label class="report-label" for="report-reason" data-i18n="art.report_reason">Reason</label>
         <select class="report-select" id="report-reason">
           <option data-i18n="art.reason_inappropriate">Inappropriate content</option>
           <option data-i18n="art.reason_incorrect">Incorrect information</option>
@@ -672,7 +673,9 @@ loadArticle();
       if(src) av.innerHTML = `<img src="${src}" alt="Profile photo" style="width:100%;height:100%;border-radius:50%;object-fit:cover" onerror="this.parentElement.textContent='${escInitial}'">`;
     });
   }
+  const outEl = document.getElementById('nav-r-logged-out');
   const inEl = document.getElementById('nav-r-logged-in');
+  if(outEl) outEl.style.display = 'none';
   if(inEl) inEl.style.display = '';
   const myProfileBtn = document.getElementById('nav-av-myprofile');
   if(myProfileBtn) myProfileBtn.setAttribute('onclick', `location.href='profile.html?id=${session.user.id}'`);

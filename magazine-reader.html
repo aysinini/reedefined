@@ -1951,8 +1951,25 @@ function goToLinkedArticle(){
   }
 }
 
+// "My Portal" defaults to newsstand.html in the markup (the right
+// destination for readers/anonymous visitors) — for a signed-in
+// contributor it should go to their dashboard instead, matching the
+// role-based routing already used on newsstand.html/discover.html/etc.
+async function applyMyPortalLink(){
+  try {
+    const sb = supabase.createClient(SBU_MR, SBK_MR, {auth:{storage:window.REEDEFINED_AUTH_STORAGE}});
+    const { data: { session } } = await sb.auth.getSession();
+    if(session?.user?.user_metadata?.role === 'contrib'){
+      const btn = document.querySelector('[data-i18n="mr.my_portal"]');
+      if(btn) btn.setAttribute('onclick', "location.href='dashboard.html'");
+    }
+  } catch(e) {
+    console.error('Failed to resolve My Portal destination:', e);
+  }
+}
+
 (async function init() {
-  await Promise.all([loadContributions(), loadHoroscopes(), loadPuzzle()]);
+  await Promise.all([loadContributions(), loadHoroscopes(), loadPuzzle(), applyMyPortalLink()]);
   goToLinkedArticle();
   render();
 })();

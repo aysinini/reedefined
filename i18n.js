@@ -13,7 +13,7 @@ const TRANSLATIONS = {
     'nav.back': 'Back to Studio →',
 
     // Index
-    'index.eyebrow': 'Issue No. 1 · May 2026',
+    'index.eyebrow': 'Issue No. 1 · September 2026',
     'index.h1': 'The magazine<br><em>shaped by the<br>people you follow.</em>',
     'index.sub': 'Every month a personalised issue — assembled from the columns, playlists, film diaries and wardrobes of the contributors you choose to follow.',
     'index.join': 'Join the Waitlist →',
@@ -44,7 +44,7 @@ const TRANSLATIONS = {
     'portal.waitlist.thanks': 'You\'re on the list.',
 
     // Newsstand
-    'newsstand.eyebrow': 'Issue No. 1 · May 2026',
+    'newsstand.eyebrow': 'Issue No. 1 · September 2026',
     'newsstand.welcome': 'Good morning.',
     'newsstand.sub': 'Your personalised issue is ready.',
     'newsstand.open': 'Open Flip Reader',
@@ -54,7 +54,7 @@ const TRANSLATIONS = {
     'newsstand.follow': 'Follow',
 
     // Discover
-    'discover.eyebrow': 'Issue No. 1 · May 2026',
+    'discover.eyebrow': 'Issue No. 1 · September 2026',
     'discover.h1': 'Discover<br><em>who to follow.</em>',
     'discover.sub': 'Browse the contributors who write for Reedefined — and see the public issues of people whose taste you admire.',
     'discover.featured': 'Featured This Month',
@@ -741,7 +741,7 @@ const TRANSLATIONS = {
     'nav.join': 'Registrieren →',
     'nav.back': 'Zurück zum Studio →',
 
-    'index.eyebrow': 'Ausgabe Nr. 1 · Mai 2026',
+    'index.eyebrow': 'Ausgabe Nr. 1 · September 2026',
     'index.h1': 'Das Magazin,<br><em>geformt von den<br>Menschen, denen du folgst.</em>',
     'index.sub': 'Jeden Monat eine personalisierte Ausgabe — zusammengestellt aus den Kolumnen, Playlists, Filmtagebüchern und Garderoben der Beitragenden, denen du folgst.',
     'index.join': 'Warteliste beitreten →',
@@ -770,7 +770,7 @@ const TRANSLATIONS = {
     'portal.waitlist.join': 'Registrieren →',
     'portal.waitlist.thanks': 'Konto erstellt. Bitte E-Mail bestätigen.',
 
-    'newsstand.eyebrow': 'Ausgabe Nr. 1 · Mai 2026',
+    'newsstand.eyebrow': 'Ausgabe Nr. 1 · September 2026',
     'newsstand.welcome': 'Guten Morgen.',
     'newsstand.sub': 'Deine personalisierte Ausgabe ist bereit.',
     'newsstand.open': 'Flip-Reader öffnen',
@@ -779,7 +779,7 @@ const TRANSLATIONS = {
     'newsstand.following': 'Gefolgt',
     'newsstand.follow': 'Folgen',
 
-    'discover.eyebrow': 'Ausgabe Nr. 1 · Mai 2026',
+    'discover.eyebrow': 'Ausgabe Nr. 1 · September 2026',
     'discover.h1': 'Entdecke,<br><em>wem du folgen möchtest.</em>',
     'discover.sub': 'Entdecke die Autoren von Reedefined — und sieh die öffentlichen Ausgaben von Menschen, deren Geschmack du bewunderst.',
     'discover.featured': 'Diesen Monat empfohlen',
@@ -1461,7 +1461,7 @@ const TRANSLATIONS = {
     'nav.my_portal': 'Panelim',
     'nav.join': 'Kaydol →',
     'nav.back': 'Stüdyoya Dön →',
-    'index.eyebrow': 'Sayı No. 1 · Mayıs 2026',
+    'index.eyebrow': 'Sayı No. 1 · Eylül 2026',
     'index.h1': 'Dergi<br><em>takip ettiğin<br>insanların şekillendirdiği.</em>',
     'index.sub': 'Her ay, takip etmeyi seçtiğin katkı sağlayanların köşe yazılarından, çalma listelerinden, film günlüklerinden ve gardıroplarından derlenen kişiselleştirilmiş bir sayı.',
     'index.join': 'Bekleme Listesine Katıl →',
@@ -1488,7 +1488,7 @@ const TRANSLATIONS = {
     'portal.waitlist.email': 'E-posta adresi',
     'portal.waitlist.join': 'Kaydol →',
     'portal.waitlist.thanks': 'Listeye eklendin.',
-    'newsstand.eyebrow': 'Sayı No. 1 · Mayıs 2026',
+    'newsstand.eyebrow': 'Sayı No. 1 · Eylül 2026',
     'newsstand.welcome': 'Günaydın.',
     'newsstand.sub': 'Kişiselleştirilmiş sayın hazır.',
     'newsstand.open': 'Flip Okuyucuyu Aç',
@@ -1496,7 +1496,7 @@ const TRANSLATIONS = {
     'newsstand.discover': 'Daha fazla keşfet →',
     'newsstand.following': 'Takip Ediliyor',
     'newsstand.follow': 'Takip Et',
-    'discover.eyebrow': 'Sayı No. 1 · Mayıs 2026',
+    'discover.eyebrow': 'Sayı No. 1 · Eylül 2026',
     'discover.h1': 'Kimi takip<br><em>edeceğini keşfet.</em>',
     'discover.sub': 'Reedefined için yazan katkı sağlayanlara göz at — ve beğendiğin zevke sahip kişilerin herkese açık sayılarını gör.',
     'discover.featured': 'Bu Ay Öne Çıkanlar',
