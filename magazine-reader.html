@@ -437,11 +437,11 @@ if('serviceWorker' in navigator){
   <div class="rb-controls">
 <div class="rb-sep"></div>
     <div style="display:flex;gap:6px;align-items:center">
-      <button class="lang-btn" data-lang="en" onclick="setLang('en')" style="background:none;border:none;font-family:inherit;font-size:12px;font-weight:600;cursor:pointer;padding:0;color:rgba(255,255,255,.7)">EN</button>
+      <button class="lang-btn" data-lang="en" onclick="mrSwitchLang('en')" style="background:none;border:none;font-family:inherit;font-size:12px;font-weight:600;cursor:pointer;padding:0;color:rgba(255,255,255,.7)">EN</button>
       <span style="color:rgba(255,255,255,.3)">/</span>
-      <button class="lang-btn" data-lang="de" onclick="setLang('de')" style="background:none;border:none;font-family:inherit;font-size:12px;font-weight:600;cursor:pointer;padding:0;color:rgba(255,255,255,.7)">DE</button>
+      <button class="lang-btn" data-lang="de" onclick="mrSwitchLang('de')" style="background:none;border:none;font-family:inherit;font-size:12px;font-weight:600;cursor:pointer;padding:0;color:rgba(255,255,255,.7)">DE</button>
       <span style="color:rgba(255,255,255,.3)">/</span>
-      <button class="lang-btn" data-lang="tr" onclick="setLang('tr')" style="background:none;border:none;font-family:inherit;font-size:12px;font-weight:600;cursor:pointer;padding:0;color:rgba(255,255,255,.7)">TR</button>
+      <button class="lang-btn" data-lang="tr" onclick="mrSwitchLang('tr')" style="background:none;border:none;font-family:inherit;font-size:12px;font-weight:600;cursor:pointer;padding:0;color:rgba(255,255,255,.7)">TR</button>
     </div>
     <div class="rb-sep"></div>
     <button class="rb-btn" onclick="location.href='newsstand.html'" data-i18n="mr.my_portal">← My Portal</button>
@@ -646,6 +646,16 @@ let cur = 0;
 // ════════════════════════════════════════════
 // RENDER
 // ════════════════════════════════════════════
+// setLang() only refreshes static data-i18n text — this page's flip-book
+// content (articles, contents, horoscopes) is built via JS and injected as
+// innerHTML, so switching language must also re-fetch language-dependent
+// data and rebuild the currently-shown page.
+async function mrSwitchLang(lang){
+  setLang(lang);
+  await loadHoroscopes();
+  render();
+}
+
 function render(){
   const pages = getPages();
   const pg = pages[cur];
@@ -1077,6 +1087,15 @@ function monoContents(){
       }).join('')
     : `<div class="mcc-empty" style="padding:32px 0;font-family:var(--H);font-size:14px;color:#999;text-align:center">No articles published yet.</div>`;
 
+  const horoscopeRow = Object.keys(HOROSCOPES).length > 0 ? `
+      <div class="mcc-row" onclick="goHoroscopePage()">
+        <div class="mcc-n">✦</div>
+        <div class="mcc-info">
+          <div class="mcc-title2">${escMR(t('mr.label_horoscope'))}</div>
+        </div>
+        <div class="mcc-pg">${(BASE_PAGES.length + DYNAMIC_PAGES.length) * 2 + 2}</div>
+      </div>` : '';
+
   return `<div class="mono-contents">
     <div class="mcc-top"></div>
     <div class="mcc-head">
@@ -1085,6 +1104,7 @@ function monoContents(){
     </div>
     <div class="mcc-body">
       ${rowsHtml}
+      ${horoscopeRow}
     </div>
     <div class="mcc-foot">
       <span class="mcc-foot-t">"The magazine shaped by the people you follow."</span>
@@ -1251,6 +1271,10 @@ function prevPage(){
 }
 function goArticle(i){
   cur = Math.min(BASE_PAGES.length + i, getPages().length-1);
+  render();
+}
+function goHoroscopePage(){
+  cur = getPages().length - 1; // the horoscope spread is always the closing page
   render();
 }
 function setStyle(s){ style=s; cur=0; render(); }
