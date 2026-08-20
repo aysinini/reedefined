@@ -1277,7 +1277,7 @@ const TRANSLATIONS = {
     'adv.current_opps': 'Aktuelle Möglichkeiten',
     'adv.issue1_desc': 'September 2026 · Startausgabe',
     'adv.issue2_name': 'Ausgabe Nr. 2',
-    'adv.issue2_desc': 'October 2026 — Buchung geöffnet',
+    'adv.issue2_desc': 'Oktober 2026 — Buchung geöffnet',
     'adv.badge_open': 'Offen',
     'adv.why_h': 'Warum Reedefined',
     'adv.why1_t': 'Kuratiert, nicht algorithmisch',
@@ -1313,7 +1313,7 @@ const TRANSLATIONS = {
     'adv.opt_not_sure': 'Noch unsicher',
     'adv.preferred_issue': 'Bevorzugte Ausgabe',
     'adv.select_issue': 'Ausgabe auswählen',
-    'adv.opt_issue2': 'Ausgabe Nr. 2 · October 2026',
+    'adv.opt_issue2': 'Ausgabe Nr. 2 · Oktober 2026',
     'adv.opt_open_discussion': 'Offen für Gespräche',
     'adv.tell_us': 'Erzähl uns von deiner Marke',
     'adv.form_note': 'Wir beantworten alle Anfragen innerhalb von 48 Stunden. Unverbindlich.',
@@ -2163,6 +2163,15 @@ function setLang(lang) {
 function t(key) {
   const lang = getLang();
   return TRANSLATIONS[lang]?.[key] || TRANSLATIONS['en']?.[key] || key;
+}
+
+// For text set via JS directly (.textContent = ...) into an element
+// that's always displayed through CSS text-transform:uppercase — unlike
+// data-i18n content, applyLang() never sees this text, so its Turkish
+// i→İ pre-uppercase fix doesn't apply here. Same fix, applied manually.
+function tUp(key) {
+  const val = t(key);
+  return getLang() === 'tr' ? val.toLocaleUpperCase('tr-TR') : val;
 }
 
 function tCat(cat) {

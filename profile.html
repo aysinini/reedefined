@@ -133,7 +133,7 @@ async function loadProfile(){
         <div class="p-name">${esc(name)}</div>
         ${metaHtml ? `<div class="p-beats">${metaHtml}</div>` : ''}
       </div>
-      ${showFollowBtn ? `<button class="cc-follow${isFollowing?' on':''}" onclick="toggleFollowById('${uid}',this)">${isFollowing?t('disc.following'):t('disc.follow')}</button>` : ''}
+      ${showFollowBtn ? `<button class="cc-follow${isFollowing?' on':''}" onclick="toggleFollowById('${uid}',this)">${isFollowing?tUp('disc.following'):tUp('disc.follow')}</button>` : ''}
     </div>
     ${p.bio ? `<div class="p-bio">${esc(p.bio)}</div>` : ''}
     <div class="arch-h">${t('profile.archive')}</div>
@@ -148,20 +148,20 @@ async function toggleFollowById(id, btn){
   const isOn = btn.classList.contains('on');
   if(isOn){
     btn.classList.remove('on');
-    btn.textContent = t('disc.follow');
+    btn.textContent = tUp('disc.follow');
     const { error } = await sb.from('follows').delete().eq('user_id', session.user.id).eq('contributor_id', id);
     if(error){
       console.error('Unfollow failed:', error);
-      btn.classList.add('on'); btn.textContent = t('disc.following');
+      btn.classList.add('on'); btn.textContent = tUp('disc.following');
       alert('Could not unfollow: ' + error.message);
     }
   } else {
     btn.classList.add('on');
-    btn.textContent = t('disc.following');
+    btn.textContent = tUp('disc.following');
     const { error } = await sb.from('follows').insert({ user_id: session.user.id, contributor_id: id });
     if(error){
       console.error('Follow failed:', error);
-      btn.classList.remove('on'); btn.textContent = t('disc.follow');
+      btn.classList.remove('on'); btn.textContent = tUp('disc.follow');
       alert('Could not follow: ' + error.message);
     } else {
       notifyFollow(id, session);

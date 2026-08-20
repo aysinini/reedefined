@@ -384,6 +384,8 @@ function safeUrl(u){ const s=(u||'').toString().trim(); return /^https?:\/\//i.t
   const sb=supabase.createClient('https://gseuejqqwkdjkhxfxxwy.supabase.co','sb_publishable_0Nmw1mwGx__b_jJHLHBDKg__1OAsRuy',{auth:{storage:window.REEDEFINED_AUTH_STORAGE}});
   const {data:{session}}=await sb.auth.getSession();
   if(!session){ location.href='portal.html'; return; }
+  const role=session.user?.user_metadata?.role||'reader';
+  if(role!=='contrib'){ location.href='newsstand.html'; return; }
 
   function applyEditorUI(){
     const name=session.user?.user_metadata?.full_name||session.user?.email||'';
@@ -1531,7 +1533,12 @@ function nextHint(){hi=(hi+1)%hints.length;document.getElementById('ai-text').te
 // Modal backdrop
 document.getElementById('modal').addEventListener('click',function(e){if(e.target===this)closeModal()});
 document.getElementById('submit-overlay').addEventListener('click',function(e){if(e.target===this)closeSubmit()});
-document.getElementById('mod-overlay').addEventListener('click',function(e){if(e.target===this)closeModOverlay()});
+// #mod-overlay's markup is further down the page than this script tag, so
+// it doesn't exist in the DOM yet at this point in parsing — defer this
+// one listener (only) to DOMContentLoaded instead of moving the markup.
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('mod-overlay').addEventListener('click',function(e){if(e.target===this)closeModOverlay()});
+});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal();closeSubmit()}});
 </script>
 
