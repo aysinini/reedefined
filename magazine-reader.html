@@ -214,6 +214,20 @@ body{font-family:var(--S);-webkit-font-smoothing:antialiased;display:flex;flex-d
 .mcc-foot-t{font-family:var(--H);font-size:13px;color:rgba(255,255,255,.5)}
 .mcc-foot-r{font-family:var(--C);font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.65)}
 
+/* MONOCLE HOROSCOPE */
+.mono-horoscope{width:100%;height:100%;background:#F2F0EB;display:flex;flex-direction:column;overflow:hidden;border-radius:0 12px 12px 0}
+.mh-top{height:3px;background:var(--teal)}
+.mh-head{padding:18px 28px 14px;border-bottom:2px solid var(--ink);display:flex;align-items:baseline;justify-content:space-between}
+.mh-title{font-family:var(--H);font-size:22px;font-weight:700;color:var(--ink);letter-spacing:-.5px}
+.mh-issue{font-family:var(--C);font-size:13px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted)}
+.mh-grid{flex:1;overflow:hidden;display:grid;grid-template-columns:1fr 1fr;grid-auto-rows:1fr}
+.mh-sign{padding:14px 20px;border-bottom:1px solid var(--rule);display:flex;gap:12px}
+.mh-sign:nth-child(odd){border-right:1px solid var(--rule)}
+.mh-icon{width:30px;height:30px;flex-shrink:0}
+.mh-sign-name{font-family:var(--H);font-size:14px;font-weight:700;color:var(--ink);margin-bottom:4px}
+.mh-sign-text{font-family:var(--S);font-size:11.5px;line-height:1.5;color:var(--mid)}
+.mh-empty{padding:32px 0;font-family:var(--H);font-size:14px;color:#999;text-align:center}
+
 /* MONOCLE ARTICLE */
 .mono-article{width:100%;height:100%;background:#F2F0EB;display:flex;flex-direction:column;overflow:hidden}
 .ma2-top{height:3px;background:var(--teal)}
@@ -590,8 +604,40 @@ async function loadContributions() {
   }
 }
 
+const ZODIAC_ORDER = [
+  'aries','taurus','gemini','cancer','leo','virgo',
+  'libra','scorpio','sagittarius','capricorn','aquarius','pisces',
+];
+
+// Closing spread: this issue's horoscopes, loaded for the active site
+// language (getLang() from i18n.js). { sign: content }
+let HOROSCOPES = {};
+
+async function loadHoroscopes() {
+  try {
+    const sb = supabase.createClient(SBU_MR, SBK_MR, {auth:{storage:window.REEDEFINED_AUTH_STORAGE}});
+    const lang = (typeof getLang === 'function') ? getLang() : 'en';
+    const { data, error } = await sb.from('horoscopes')
+      .select('sign, content')
+      .eq('issue_number', ISSUE_NUMBER)
+      .eq('lang', lang);
+    if(error || !data) { HOROSCOPES = {}; return; }
+    HOROSCOPES = {};
+    data.forEach(row => { HOROSCOPES[row.sign] = row.content; });
+  } catch(e) {
+    console.error('Failed to load horoscopes:', e);
+    HOROSCOPES = {};
+  }
+}
+
+const HOROSCOPE_PAGE = [
+  { id:'m-horoscope', labelKey:'mr.label_horoscope', left:'horoscope-1', right:'horoscope-2' },
+];
+
 function getPages() {
-  return [...BASE_PAGES, ...DYNAMIC_PAGES];
+  const pages = [...BASE_PAGES, ...DYNAMIC_PAGES];
+  if(Object.keys(HOROSCOPES).length > 0) pages.push(...HOROSCOPE_PAGE);
+  return pages;
 }
 
 let style = 'mono';
@@ -662,6 +708,8 @@ function buildPage(id){
   if(id.startsWith('contents-')) return monoContents();
   if(id.startsWith('img-')){ const i=parseInt(id.split('-')[1]); return monoImg(i); }
   if(id.startsWith('article-')){ const i=parseInt(id.split('-').pop()); return monoArticle(i); }
+  if(id==='horoscope-1') return monoHoroscope(0, 6);
+  if(id==='horoscope-2') return monoHoroscope(6, 12);
   return '<div style="width:100%;height:100%;background:#fff"></div>';
 }
 
@@ -1045,6 +1093,32 @@ function monoContents(){
   </div>`;
 }
 
+function monoHoroscope(start, end){
+  const signs = ZODIAC_ORDER.slice(start, end);
+  const cardsHtml = signs.map(sign => {
+    const name = (typeof t === 'function') ? t('zodiac.' + sign) : sign;
+    const content = HOROSCOPES[sign] || '';
+    return `<div class="mh-sign">
+        <div class="mh-icon">${zodiacSVG(sign)}</div>
+        <div>
+          <div class="mh-sign-name">${escMR(name)}</div>
+          <div class="mh-sign-text">${escMR(content)}</div>
+        </div>
+      </div>`;
+  }).join('');
+
+  return `<div class="mono-horoscope">
+    <div class="mh-top"></div>
+    <div class="mh-head">
+      <div class="mh-title">${escMR(t('mr.label_horoscope'))}</div>
+      <div class="mh-issue">Issue No. 1 · ${ISSUE_DATE_LABEL}</div>
+    </div>
+    <div class="mh-grid">
+      ${cardsHtml}
+    </div>
+  </div>`;
+}
+
 function escMR(s){ return (s||'').toString().replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 // For href/src attribute values: escapes AND only allows http(s) URLs, so a
 // contributor-submitted "javascript:" (or similar) URL can never end up live.
@@ -1150,6 +1224,21 @@ function figSVG(type, color='#4A7C3F'){
 }
 
 // ════════════════════════════════════════════
+// ZODIAC ICONS — minimal single-color line-art symbols
+// ════════════════════════════════════════════
+const ZODIAC_GLYPHS = {
+  aries:'♈', taurus:'♉', gemini:'♊', cancer:'♋',
+  leo:'♌', virgo:'♍', libra:'♎', scorpio:'♏',
+  sagittarius:'♐', capricorn:'♑', aquarius:'♒', pisces:'♓',
+};
+function zodiacSVG(sign, color='#4A7C3F'){
+  const glyph = ZODIAC_GLYPHS[sign] || '?';
+  return `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+    <text x="50" y="53" text-anchor="middle" dominant-baseline="central" font-size="58" font-family="'Libre Baskerville',Georgia,serif" fill="none" stroke="${color}" stroke-width="1.4">${glyph}</text>
+  </svg>`;
+}
+
+// ════════════════════════════════════════════
 // NAVIGATION
 // ════════════════════════════════════════════
 function nextPage(){
@@ -1191,6 +1280,12 @@ document.head.appendChild(style_tag);
 // rendering itself -- init() does a single render() right after.
 function goToLinkedArticle(){
   const params = new URLSearchParams(location.search);
+
+  if(params.get('horoscope') === '1' && Object.keys(HOROSCOPES).length > 0){
+    cur = getPages().length - 1; // the horoscope spread is always the closing page
+    return;
+  }
+
   const targetId = parseInt(params.get('article'), 10);
   if(!targetId) return;
 
@@ -1204,7 +1299,7 @@ function goToLinkedArticle(){
 }
 
 (async function init() {
-  await loadContributions();
+  await Promise.all([loadContributions(), loadHoroscopes()]);
   goToLinkedArticle();
   render();
 })();
