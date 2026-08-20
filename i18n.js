@@ -1733,7 +1733,7 @@ const TRANSLATIONS = {
     'idx.tag_everything': 'Her Şey',
     'idx.editor_label': 'Editor in Chief',
     'idx.editor_role': 'Kültür · Her Şey',
-    'idx.editor_quote': '"Onu yapan herkesten oluşan bir dergi. Her ay, sadece senin için derlenir."',
+    'idx.editor_quote': '"Katkı veren herkesten doğan bir dergi. Her ay, özenle senin için derlenir."',
     'idx.cta2_h': 'Farklı oku.',
     'idx.cta2_sub': 'Reedefined\'a katıl. Çalışması senin için önemli olan insanları takip et. Her ay kişiselleştirilmiş sayını al.',
     'idx.footer_dek': 'Kişiselleştirilmiş bir dijital dergi. Takip ettiğin insanlar, kendi sayına derlenir. Her ay.',
