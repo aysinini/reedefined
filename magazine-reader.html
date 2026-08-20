@@ -249,17 +249,17 @@ body{font-family:var(--S);-webkit-font-smoothing:antialiased;display:flex;flex-d
 .mono-puzzle-clues{width:100%;height:100%;background:#F2F0EB;display:flex;flex-direction:column;overflow:hidden;border-radius:0 12px 12px 0}
 .pzc-body{flex:1;overflow-y:auto;padding:16px 26px}
 .pzc-section-h{font-family:var(--C);font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--teal);margin:16px 0 8px}
-.pzc-section-h:first-child{margin-top:0}
+.pzc-section-h:first-child,.pzm-toggle+.pzc-section-h{margin-top:0}
 .pzc-clue{font-family:var(--S);font-size:12.5px;line-height:1.6;color:var(--mid);margin-bottom:6px}
 .pzc-clue b{font-family:var(--H);color:var(--ink);font-weight:700;margin-right:4px}
+.pzc-answer{font-family:var(--H);font-weight:700;color:var(--teal)}
 
 /* MONOCLE PUZZLE — mobile combined (grid + clues stacked, single scroll) */
 .mono-puzzle-mobile{width:100%;height:100%;background:#F2F0EB;display:flex;flex-direction:column;overflow:hidden}
 .pzm-body{flex:1;overflow-y:auto;padding:16px 20px 20px}
 .pz-grid-wrap-mobile{display:flex;justify-content:center;padding:4px 0 18px}
-.pzm-toggle{display:block;margin-left:auto;font-family:var(--C);font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--teal);background:none;border:none;padding:4px 0;cursor:pointer}
+.pzm-toggle{display:block;margin-left:auto;margin-bottom:10px;font-family:var(--C);font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--teal);background:none;border:none;padding:4px 0;cursor:pointer}
 .pzm-toggle:hover{text-decoration:underline}
-.pzm-answers{margin-top:10px;border-top:1px solid var(--rule);padding-top:10px}
 
 /* MONOCLE ARTICLE */
 .mono-article{width:100%;height:100%;background:#F2F0EB;display:flex;flex-direction:column;overflow:hidden}
@@ -1251,13 +1251,26 @@ function pzCellsHtml(){
   return cellsHtml;
 }
 
+function pzClueRow(e){
+  return `<div class="pzc-clue"><b>${e.number}.</b>${escMR(e.clue)} <span class="pzc-answer" hidden>— ${escMR(e.answer)}</span></div>`;
+}
+
 function pzCluesHtml(){
-  const acrossHtml = PUZZLE.across.map(e => `<div class="pzc-clue"><b>${e.number}.</b>${escMR(e.clue)}</div>`).join('');
-  const downHtml = PUZZLE.down.map(e => `<div class="pzc-clue"><b>${e.number}.</b>${escMR(e.clue)}</div>`).join('');
-  return `<div class="pzc-section-h">${escMR(t('mr.puzzle_across'))}</div>
+  const acrossHtml = PUZZLE.across.map(pzClueRow).join('');
+  const downHtml = PUZZLE.down.map(pzClueRow).join('');
+  return `<button class="pzm-toggle" type="button" onclick="togglePuzzleAnswers(this)">${escMR(t('mr.puzzle_show_answers'))}</button>
+    <div class="pzc-section-h">${escMR(t('mr.puzzle_across'))}</div>
     ${acrossHtml}
     <div class="pzc-section-h">${escMR(t('mr.puzzle_down'))}</div>
     ${downHtml}`;
+}
+
+function togglePuzzleAnswers(btn){
+  const container = btn.closest('.pzc-body, .pzm-body');
+  const spans = container.querySelectorAll('.pzc-answer');
+  const willShow = spans.length > 0 && spans[0].hasAttribute('hidden');
+  spans.forEach(s => willShow ? s.removeAttribute('hidden') : s.setAttribute('hidden',''));
+  btn.textContent = willShow ? t('mr.puzzle_hide_answers') : t('mr.puzzle_show_answers');
 }
 
 function monoPuzzleGrid(){
@@ -1310,19 +1323,9 @@ function monoPuzzleMobile(){
           ${pzCellsHtml()}
         </div>
       </div>
-      <button class="pzm-toggle" type="button" onclick="togglePuzzleAnswers(this)">${escMR(t('mr.puzzle_show_answers'))}</button>
-      <div class="pzm-answers" hidden>
-        ${pzCluesHtml()}
-      </div>
+      ${pzCluesHtml()}
     </div>
   </div>`;
-}
-
-function togglePuzzleAnswers(btn){
-  const answers = btn.nextElementSibling;
-  const hidden = answers.hasAttribute('hidden');
-  if(hidden){ answers.removeAttribute('hidden'); btn.textContent = t('mr.puzzle_hide_answers'); }
-  else{ answers.setAttribute('hidden',''); btn.textContent = t('mr.puzzle_show_answers'); }
 }
 
 // ── PUZZLE INTERACTION: handwriting-first cell input ──
