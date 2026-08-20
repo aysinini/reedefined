@@ -228,6 +228,31 @@ body{font-family:var(--S);-webkit-font-smoothing:antialiased;display:flex;flex-d
 .mh-sign-text{font-family:var(--S);font-size:12.5px;line-height:1.5;color:var(--mid)}
 .mh-empty{padding:32px 0;font-family:var(--H);font-size:14px;color:#999;text-align:center}
 
+/* MONOCLE PUZZLE */
+.mono-puzzle{width:100%;height:100%;background:#F2F0EB;display:flex;flex-direction:column;overflow:hidden;border-radius:12px 0 0 12px}
+.pz-top{height:3px;background:var(--teal);flex-shrink:0}
+.pz-head{padding:14px 24px 10px;border-bottom:2px solid var(--ink);display:flex;align-items:baseline;justify-content:space-between;flex-shrink:0}
+.pz-title{font-family:var(--H);font-size:20px;font-weight:700;color:var(--ink);letter-spacing:-.5px}
+.pz-issue{font-family:var(--C);font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted)}
+.pz-grid-wrap{flex:1;display:flex;align-items:center;justify-content:center;padding:16px}
+.pz-grid{display:grid;background:var(--ink);gap:1px;border:1px solid var(--ink)}
+.pz-cell{position:relative;background:#fff;aspect-ratio:1/1}
+.pz-cell.blocked{background:var(--ink)}
+.pz-canvas{width:100%;height:100%;display:block;touch-action:none;cursor:crosshair}
+.pz-number{position:absolute;top:1px;left:2px;font-family:var(--C);font-size:9px;font-weight:700;color:var(--muted);pointer-events:none;z-index:2}
+.pz-letter{display:none;position:absolute;inset:0;align-items:center;justify-content:center;font-family:var(--H);font-size:22px;font-weight:700;color:var(--ink);cursor:pointer;background:var(--teal-ll)}
+.pz-input{display:none;position:absolute;inset:0;width:100%;height:100%;border:none;text-align:center;font-family:var(--H);font-size:22px;font-weight:700;color:var(--ink);background:#fff;text-transform:uppercase;outline:2px solid var(--teal)}
+.pz-kb-btn{position:absolute;bottom:1px;right:1px;width:16px;height:16px;border:none;background:rgba(74,124,63,.12);color:var(--teal);font-size:9px;line-height:16px;text-align:center;cursor:pointer;border-radius:3px;padding:0;z-index:2}
+.pz-spinner{display:none;position:absolute;inset:0;align-items:center;justify-content:center;background:rgba(255,255,255,.85);font-family:var(--C);font-size:9px;letter-spacing:.5px;text-transform:uppercase;color:var(--teal);z-index:3}
+
+/* MONOCLE PUZZLE CLUES */
+.mono-puzzle-clues{width:100%;height:100%;background:#F2F0EB;display:flex;flex-direction:column;overflow:hidden;border-radius:0 12px 12px 0}
+.pzc-body{flex:1;overflow-y:auto;padding:16px 26px}
+.pzc-section-h{font-family:var(--C);font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--teal);margin:16px 0 8px}
+.pzc-section-h:first-child{margin-top:0}
+.pzc-clue{font-family:var(--S);font-size:12.5px;line-height:1.6;color:var(--mid);margin-bottom:6px}
+.pzc-clue b{font-family:var(--H);color:var(--ink);font-weight:700;margin-right:4px}
+
 /* MONOCLE ARTICLE */
 .mono-article{width:100%;height:100%;background:#F2F0EB;display:flex;flex-direction:column;overflow:hidden}
 .ma2-top{height:3px;background:var(--teal)}
@@ -635,9 +660,36 @@ const HOROSCOPE_PAGE = [
   { id:'m-horoscope-2', labelKey:'mr.label_horoscope', left:'horoscope-3', right:'ad-mono' },
 ];
 
+// Closing spread: this issue's crossword, loaded for the active site
+// language. Built server-side once a month (generate-puzzle edge function);
+// this page only displays + lets the reader fill it in, never builds a grid.
+let PUZZLE = null; // { width, height, cells, across, down } | null
+
+async function loadPuzzle() {
+  try {
+    const sb = supabase.createClient(SBU_MR, SBK_MR, {auth:{storage:window.REEDEFINED_AUTH_STORAGE}});
+    const lang = (typeof getLang === 'function') ? getLang() : 'en';
+    const { data, error } = await sb.from('puzzles')
+      .select('grid_data, clues')
+      .eq('issue_number', ISSUE_NUMBER)
+      .eq('lang', lang)
+      .maybeSingle();
+    if(error || !data) { PUZZLE = null; return; }
+    PUZZLE = { ...data.grid_data, ...data.clues };
+  } catch(e) {
+    console.error('Failed to load puzzle:', e);
+    PUZZLE = null;
+  }
+}
+
+const PUZZLE_PAGE = [
+  { id:'m-puzzle', labelKey:'mr.label_puzzle', left:'puzzle-grid', right:'puzzle-clues' },
+];
+
 function getPages() {
   const pages = [...BASE_PAGES, ...DYNAMIC_PAGES];
   if(Object.keys(HOROSCOPES).length > 0) pages.push(...HOROSCOPE_PAGE);
+  if(PUZZLE) pages.push(...PUZZLE_PAGE);
   return pages;
 }
 
@@ -648,12 +700,12 @@ let cur = 0;
 // RENDER
 // ════════════════════════════════════════════
 // setLang() only refreshes static data-i18n text — this page's flip-book
-// content (articles, contents, horoscopes) is built via JS and injected as
-// innerHTML, so switching language must also re-fetch language-dependent
-// data and rebuild the currently-shown page.
+// content (articles, contents, horoscopes, puzzle) is built via JS and
+// injected as innerHTML, so switching language must also re-fetch
+// language-dependent data and rebuild the currently-shown page.
 async function mrSwitchLang(lang){
   setLang(lang);
-  await loadHoroscopes();
+  await Promise.all([loadHoroscopes(), loadPuzzle()]);
   render();
 }
 
@@ -665,6 +717,7 @@ function render(){
 
   L.innerHTML = buildPage(pg.left);
   R.innerHTML = buildPage(pg.right);
+  attachPuzzleHandlers();
 
   // Animate
   [L,R].forEach(el=>{
@@ -722,6 +775,8 @@ function buildPage(id){
   if(id==='horoscope-1') return monoHoroscope(0, 4);
   if(id==='horoscope-2') return monoHoroscope(4, 8);
   if(id==='horoscope-3') return monoHoroscope(8, 12);
+  if(id==='puzzle-grid') return monoPuzzleGrid();
+  if(id==='puzzle-clues') return monoPuzzleClues();
   return '<div style="width:100%;height:100%;background:#fff"></div>';
 }
 
@@ -1098,6 +1153,15 @@ function monoContents(){
         <div class="mcc-pg">${(BASE_PAGES.length + DYNAMIC_PAGES.length) * 2 + 2}</div>
       </div>` : '';
 
+  const puzzleRow = PUZZLE ? `
+      <div class="mcc-row" onclick="goPuzzlePage()">
+        <div class="mcc-n">✎</div>
+        <div class="mcc-info">
+          <div class="mcc-title2">${escMR(t('mr.label_puzzle'))}</div>
+        </div>
+        <div class="mcc-pg">${(getPages().length - PUZZLE_PAGE.length) * 2 + 2}</div>
+      </div>` : '';
+
   return `<div class="mono-contents">
     <div class="mcc-top"></div>
     <div class="mcc-head">
@@ -1107,6 +1171,7 @@ function monoContents(){
     <div class="mcc-body">
       ${rowsHtml}
       ${horoscopeRow}
+      ${puzzleRow}
     </div>
     <div class="mcc-foot">
       <span class="mcc-foot-t">"The magazine shaped by the people you follow."</span>
@@ -1139,6 +1204,176 @@ function monoHoroscope(start, end){
       ${cardsHtml}
     </div>
   </div>`;
+}
+
+function monoPuzzleGrid(){
+  if(!PUZZLE) return `<div class="mono-puzzle"><div class="mh-empty">No puzzle yet.</div></div>`;
+  const { width, height, cells } = PUZZLE;
+  let cellsHtml = '';
+  for(let r=0; r<height; r++){
+    for(let c=0; c<width; c++){
+      const cell = cells[r][c];
+      if(cell.blocked){
+        cellsHtml += `<div class="pz-cell blocked"></div>`;
+        continue;
+      }
+      const numHtml = cell.number ? `<span class="pz-number">${cell.number}</span>` : '';
+      cellsHtml += `<div class="pz-cell" data-row="${r}" data-col="${c}" data-answer="${escMR(cell.letter)}">
+        ${numHtml}
+        <canvas class="pz-canvas" width="100" height="100"></canvas>
+        <div class="pz-letter"></div>
+        <input class="pz-input" maxlength="1">
+        <button class="pz-kb-btn" type="button" title="Keyboard">⌨</button>
+        <div class="pz-spinner">${escMR(t('mr.puzzle_recognizing'))}</div>
+      </div>`;
+    }
+  }
+  return `<div class="mono-puzzle">
+    <div class="pz-top"></div>
+    <div class="pz-head">
+      <div class="pz-title">${escMR(t('mr.label_puzzle'))}</div>
+      <div class="pz-issue">Issue No. 1 · ${ISSUE_DATE_LABEL}</div>
+    </div>
+    <div class="pz-grid-wrap">
+      <div class="pz-grid" style="grid-template-columns:repeat(${width},1fr);grid-template-rows:repeat(${height},1fr);width:min(100%, calc((100vh - 260px) * ${width} / ${height}));aspect-ratio:${width}/${height}">
+        ${cellsHtml}
+      </div>
+    </div>
+  </div>`;
+}
+
+function monoPuzzleClues(){
+  if(!PUZZLE) return `<div class="mono-puzzle-clues"><div class="mh-empty">No puzzle yet.</div></div>`;
+  const acrossHtml = PUZZLE.across.map(e => `<div class="pzc-clue"><b>${e.number}.</b>${escMR(e.clue)}</div>`).join('');
+  const downHtml = PUZZLE.down.map(e => `<div class="pzc-clue"><b>${e.number}.</b>${escMR(e.clue)}</div>`).join('');
+  return `<div class="mono-puzzle-clues">
+    <div class="pz-top"></div>
+    <div class="pz-head">
+      <div class="pz-title">${escMR(t('mr.label_puzzle'))}</div>
+      <div class="pz-issue">Issue No. 1 · ${ISSUE_DATE_LABEL}</div>
+    </div>
+    <div class="pzc-body">
+      <div class="pzc-section-h">${escMR(t('mr.puzzle_across'))}</div>
+      ${acrossHtml}
+      <div class="pzc-section-h">${escMR(t('mr.puzzle_down'))}</div>
+      ${downHtml}
+    </div>
+  </div>`;
+}
+
+// ── PUZZLE INTERACTION: handwriting-first cell input ──
+// Each cell is a <canvas> the reader draws a letter on with a finger/mouse.
+// On stroke-end, the drawing is sent to the recognize-letter edge function
+// (Claude Haiku vision) and replaced with the recognized character. A
+// keyboard-icon button is always visible (not just on failure) since the
+// model doesn't reliably self-report low confidence — testing showed it
+// will confidently guess a letter for an illegible scribble rather than
+// admit uncertainty, so a manual escape hatch has to be a first-class
+// option, not just a fallback.
+function attachPuzzleHandlers(){
+  document.querySelectorAll('.pz-canvas').forEach(canvas => {
+    const ctx = canvas.getContext('2d');
+    ctx.strokeStyle = '#0C0C0C';
+    ctx.lineWidth = 7;
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    let drawing = false;
+    let hasDrawn = false;
+
+    function pos(e){
+      const rect = canvas.getBoundingClientRect();
+      return {
+        x: (e.clientX - rect.left) * (canvas.width / rect.width),
+        y: (e.clientY - rect.top) * (canvas.height / rect.height),
+      };
+    }
+
+    canvas.addEventListener('pointerdown', e => {
+      e.preventDefault();
+      drawing = true; hasDrawn = true;
+      const p = pos(e);
+      ctx.beginPath();
+      ctx.moveTo(p.x, p.y);
+      canvas.setPointerCapture(e.pointerId);
+    });
+    canvas.addEventListener('pointermove', e => {
+      if(!drawing) return;
+      const p = pos(e);
+      ctx.lineTo(p.x, p.y);
+      ctx.stroke();
+    });
+    canvas.addEventListener('pointerup', () => {
+      if(!drawing) return;
+      drawing = false;
+      if(hasDrawn) recognizeCell(canvas);
+    });
+  });
+
+  document.querySelectorAll('.pz-kb-btn').forEach(btn => {
+    btn.addEventListener('click', () => switchCellToKeyboard(btn.closest('.pz-cell')));
+  });
+}
+
+async function recognizeCell(canvas){
+  const cell = canvas.closest('.pz-cell');
+  const spinner = cell.querySelector('.pz-spinner');
+  spinner.style.display = 'flex';
+  canvas.style.opacity = '.25';
+  try {
+    const base64 = canvas.toDataURL('image/png').split(',')[1];
+    const lang = (typeof getLang === 'function') ? getLang() : 'en';
+    const res = await fetch(SBU_MR + '/functions/v1/recognize-letter', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', apikey: SBK_MR, Authorization: 'Bearer ' + SBK_MR },
+      body: JSON.stringify({ image: base64, lang }),
+    });
+    const data = await res.json();
+    if(data && data.letter && !data.uncertain){
+      showRecognizedLetter(cell, data.letter);
+    } else {
+      switchCellToKeyboard(cell);
+    }
+  } catch(e){
+    console.error('Letter recognition failed:', e);
+    switchCellToKeyboard(cell);
+  } finally {
+    spinner.style.display = 'none';
+    canvas.style.opacity = '1';
+  }
+}
+
+function showRecognizedLetter(cell, letter){
+  const canvas = cell.querySelector('.pz-canvas');
+  const input = cell.querySelector('.pz-input');
+  const letterDiv = cell.querySelector('.pz-letter');
+  canvas.style.display = 'none';
+  input.style.display = 'none';
+  letterDiv.textContent = letter;
+  letterDiv.style.display = 'flex';
+  letterDiv.onclick = () => {
+    // tap a filled cell to redraw
+    letterDiv.style.display = 'none';
+    canvas.style.display = 'block';
+    canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
+  };
+}
+
+function switchCellToKeyboard(cell){
+  const canvas = cell.querySelector('.pz-canvas');
+  const input = cell.querySelector('.pz-input');
+  const letterDiv = cell.querySelector('.pz-letter');
+  letterDiv.style.display = 'none';
+  canvas.style.display = 'none';
+  input.style.display = 'block';
+  input.value = '';
+  input.focus();
+  input.oninput = () => {
+    if(input.value){
+      const lang = (typeof getLang === 'function') ? getLang() : 'en';
+      const locale = { en:'en-US', tr:'tr-TR', de:'de-DE' }[lang] || 'en-US';
+      showRecognizedLetter(cell, input.value.toLocaleUpperCase(locale));
+    }
+  };
 }
 
 function escMR(s){ return (s||'').toString().replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
@@ -1276,8 +1511,13 @@ function goArticle(i){
   render();
 }
 function goHoroscopePage(){
-  // The horoscope section is always the closing HOROSCOPE_PAGE.length entries — jump to its start.
-  cur = getPages().length - HOROSCOPE_PAGE.length;
+  // Horoscopes always start right after BASE_PAGES + DYNAMIC_PAGES, whether
+  // or not a puzzle section follows them — don't count from the end.
+  cur = BASE_PAGES.length + DYNAMIC_PAGES.length;
+  render();
+}
+function goPuzzlePage(){
+  cur = getPages().length - PUZZLE_PAGE.length;
   render();
 }
 function setStyle(s){ style=s; cur=0; render(); }
@@ -1309,8 +1549,11 @@ function goToLinkedArticle(){
   const params = new URLSearchParams(location.search);
 
   if(params.get('horoscope') === '1' && Object.keys(HOROSCOPES).length > 0){
-    // The horoscope section is always the closing HOROSCOPE_PAGE.length entries — jump to its start.
-    cur = getPages().length - HOROSCOPE_PAGE.length;
+    cur = BASE_PAGES.length + DYNAMIC_PAGES.length;
+    return;
+  }
+  if(params.get('puzzle') === '1' && PUZZLE){
+    cur = getPages().length - PUZZLE_PAGE.length;
     return;
   }
 
@@ -1327,7 +1570,7 @@ function goToLinkedArticle(){
 }
 
 (async function init() {
-  await Promise.all([loadContributions(), loadHoroscopes()]);
+  await Promise.all([loadContributions(), loadHoroscopes(), loadPuzzle()]);
   goToLinkedArticle();
   render();
 })();
