@@ -951,7 +951,7 @@ const TRANSLATIONS = {
     'about.p2': 'Gleichzeitig erleben wir den reichsten Moment aller Zeiten dafür, dass Menschen teilen, was sie lieben, jeder hat eine Playlist, eine Art, einen Film zu sehen, eine Meinung zu einem Restaurant, die es wert ist, aufgeschrieben zu werden. Soziale Medien haben jedem eine Stimme gegeben, sie aber auf hundert Plattformen ohne echtes Zuhause verstreut. Reedefined ist mein Versuch, das wieder zu etwas zu machen, das sich wie ein Magazin liest.',
     'about.p3': 'Ich glaube, dass jeder etwas hat, das es wert ist, mit jemand anderem geteilt zu werden, eine Perspektive, einen Geschmack, eine Art, Dinge wahrzunehmen. Genug davon zusammengebracht, Ausgabe für Ausgabe, ergibt etwas, das kein einzelner Redakteur je hätte planen können: ein wirklich wertvolles, wirklich anderes Magazin, gebaut von den Menschen, die es lesen.',
     'about.p4': 'Das bauen wir hier gemeinsam auf.',
-    'about.role': 'Gründerin & Chefredakteurin, Reedefined',
+    'about.role': 'Gründerin & Editor in Chief, Reedefined',
     'about.cta': 'Die Contributors kennenlernen →',
 
         'gl.step1': 'Melde dich als Contributor an (oder upgrade dein bestehendes Konto).',
@@ -1038,7 +1038,7 @@ const TRANSLATIONS = {
     'cat.sport': 'Sport',
     'idx.tag_design': 'Design',
     'idx.tag_everything': 'Alles',
-    'idx.editor_label': 'Chefredakteurin',
+    'idx.editor_label': 'Editor in Chief',
     'idx.editor_role': 'Kultur · Alles',
     'idx.editor_quote': '"Ein Magazin aus allen, die es machen. Jeden Monat, nur für dich zusammengestellt."',
     'idx.cta2_h': 'Anders lesen.',
@@ -1649,7 +1649,7 @@ const TRANSLATIONS = {
     'about.p2': 'Aynı zamanda, insanların sevdiklerini paylaşması için şimdiye kadarki en zengin dönemi yaşıyoruz — herkesin bir çalma listesi, bir filmi görme biçimi, yazmaya değer bir restoran görüşü var. Sosyal medya herkese bir ses verdi ama bunu gerçek bir yuvası olmadan yüz platforma dağıttı. Reedefined, bunu tekrar bir dergi gibi okunan bir şeye geri getirme girişimim.',
     'about.p3': 'Herkesin başka birine katabileceği değerli bir şeyi olduğuna inanıyorum — bir bakış açısı, bir zevk, şeyleri fark etme biçimi. Bunlardan yeterince bir araya getirdiğinde, sayı sayı, hiçbir editörün tek başına planlayamayacağı bir şey elde edersin: gerçekten değerli, gerçekten farklı, onu okuyan insanlar tarafından inşa edilmiş bir dergi.',
     'about.p4': 'İşte burada birlikte inşa ettiğimiz şey bu.',
-    'about.role': 'Kurucu ve Yazı İşleri Müdürü, Reedefined',
+    'about.role': 'Kurucu ve Editor in Chief, Reedefined',
     'about.cta': 'Katkı Sağlayanlarla Tanış →',
     'gl.step1': 'Katkı Sağlayan olarak kaydol (ya da mevcut hesabını yükselt).',
     'gl.step2': 'Katkı Sağlayan Portalını aç ve yeni bir köşe yazısı başlat.',
@@ -1731,7 +1731,7 @@ const TRANSLATIONS = {
     'cat.sport': 'Spor',
     'idx.tag_design': 'Tasarım',
     'idx.tag_everything': 'Her Şey',
-    'idx.editor_label': 'Yazı İşleri Müdürü',
+    'idx.editor_label': 'Editor in Chief',
     'idx.editor_role': 'Kültür · Her Şey',
     'idx.editor_quote': '"Onu yapan herkesten oluşan bir dergi. Her ay, sadece senin için derlenir."',
     'idx.cta2_h': 'Farklı oku.',
@@ -2172,6 +2172,10 @@ function tCat(cat) {
   return val === key ? cat : val;
 }
 
+// Keys where an English title is embedded in an otherwise-translated TR
+// sentence (e.g. "Kurucu ve Editor in Chief, Reedefined") — see applyLang().
+const TR_CASE_NEUTRAL_KEYS = new Set(['about.role']);
+
 function applyLang(lang) {
   document.querySelectorAll('[data-i18n]').forEach(el => {
     const key = el.getAttribute('data-i18n');
@@ -2184,8 +2188,17 @@ function applyLang(lang) {
       // Pre-uppercase with the correct Turkish rule in that case so the
       // browser's transform has nothing left to get wrong (uppercasing
       // an already-uppercase İ is a no-op, so this is safe either way).
+      // Exception: a handful of keys (e.g. "Editor in Chief") are
+      // deliberately left untranslated and identical across all three
+      // languages — those are English text, not Turkish, so Turkish
+      // casing rules would wrongly turn "Editor in Chief" into
+      // "EDİTOR İN CHİEF". Same value in en and tr is a reliable signal
+      // for keys that are pass-through in full; TR_CASE_NEUTRAL_KEYS
+      // covers keys where only part of the string (e.g. a title embedded
+      // in an otherwise-translated sentence) is meant to stay English.
+      const isPassThrough = TRANSLATIONS.tr?.[key] === TRANSLATIONS.en?.[key] || TR_CASE_NEUTRAL_KEYS.has(key);
       const needsTrUppercase = lang === 'tr' && getComputedStyle(el).textTransform === 'uppercase';
-      el.innerHTML = needsTrUppercase ? val.toLocaleUpperCase('tr-TR') : val;
+      el.innerHTML = needsTrUppercase ? val.toLocaleUpperCase(isPassThrough ? 'en-US' : 'tr-TR') : val;
     }
   });
   document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
