@@ -216,16 +216,16 @@ body{font-family:var(--S);-webkit-font-smoothing:antialiased;display:flex;flex-d
 
 /* MONOCLE HOROSCOPE */
 .mono-horoscope{width:100%;height:100%;background:#F2F0EB;display:flex;flex-direction:column;overflow:hidden;border-radius:0 12px 12px 0}
-.mh-top{height:3px;background:var(--teal)}
-.mh-head{padding:18px 28px 14px;border-bottom:2px solid var(--ink);display:flex;align-items:baseline;justify-content:space-between}
-.mh-title{font-family:var(--H);font-size:22px;font-weight:700;color:var(--ink);letter-spacing:-.5px}
-.mh-issue{font-family:var(--C);font-size:13px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted)}
-.mh-grid{flex:1;overflow:hidden;display:grid;grid-template-columns:1fr 1fr;grid-auto-rows:1fr}
-.mh-sign{padding:14px 20px;border-bottom:1px solid var(--rule);display:flex;gap:12px}
-.mh-sign:nth-child(odd){border-right:1px solid var(--rule)}
+.mh-top{height:3px;background:var(--teal);flex-shrink:0}
+.mh-head{padding:14px 28px 10px;border-bottom:2px solid var(--ink);display:flex;align-items:baseline;justify-content:space-between;flex-shrink:0}
+.mh-title{font-family:var(--H);font-size:20px;font-weight:700;color:var(--ink);letter-spacing:-.5px}
+.mh-issue{font-family:var(--C);font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted)}
+.mh-grid{flex:1;overflow-y:auto;display:flex;flex-direction:column}
+.mh-sign{padding:14px 28px;border-bottom:1px solid var(--rule);display:flex;gap:14px;align-items:flex-start}
+.mh-sign:last-child{border-bottom:none}
 .mh-icon{width:30px;height:30px;flex-shrink:0}
-.mh-sign-name{font-family:var(--H);font-size:14px;font-weight:700;color:var(--ink);margin-bottom:4px}
-.mh-sign-text{font-family:var(--S);font-size:11.5px;line-height:1.5;color:var(--mid)}
+.mh-sign-name{font-family:var(--H);font-size:15px;font-weight:700;color:var(--ink);margin-bottom:4px}
+.mh-sign-text{font-family:var(--S);font-size:12.5px;line-height:1.5;color:var(--mid)}
 .mh-empty{padding:32px 0;font-family:var(--H);font-size:14px;color:#999;text-align:center}
 
 /* MONOCLE ARTICLE */
@@ -631,7 +631,8 @@ async function loadHoroscopes() {
 }
 
 const HOROSCOPE_PAGE = [
-  { id:'m-horoscope', labelKey:'mr.label_horoscope', left:'horoscope-1', right:'horoscope-2' },
+  { id:'m-horoscope-1', labelKey:'mr.label_horoscope', left:'horoscope-1', right:'horoscope-2' },
+  { id:'m-horoscope-2', labelKey:'mr.label_horoscope', left:'horoscope-3', right:'ad-mono' },
 ];
 
 function getPages() {
@@ -718,8 +719,9 @@ function buildPage(id){
   if(id.startsWith('contents-')) return monoContents();
   if(id.startsWith('img-')){ const i=parseInt(id.split('-')[1]); return monoImg(i); }
   if(id.startsWith('article-')){ const i=parseInt(id.split('-').pop()); return monoArticle(i); }
-  if(id==='horoscope-1') return monoHoroscope(0, 6);
-  if(id==='horoscope-2') return monoHoroscope(6, 12);
+  if(id==='horoscope-1') return monoHoroscope(0, 4);
+  if(id==='horoscope-2') return monoHoroscope(4, 8);
+  if(id==='horoscope-3') return monoHoroscope(8, 12);
   return '<div style="width:100%;height:100%;background:#fff"></div>';
 }
 
@@ -1274,7 +1276,8 @@ function goArticle(i){
   render();
 }
 function goHoroscopePage(){
-  cur = getPages().length - 1; // the horoscope spread is always the closing page
+  // The horoscope section is always the closing HOROSCOPE_PAGE.length entries — jump to its start.
+  cur = getPages().length - HOROSCOPE_PAGE.length;
   render();
 }
 function setStyle(s){ style=s; cur=0; render(); }
@@ -1306,7 +1309,8 @@ function goToLinkedArticle(){
   const params = new URLSearchParams(location.search);
 
   if(params.get('horoscope') === '1' && Object.keys(HOROSCOPES).length > 0){
-    cur = getPages().length - 1; // the horoscope spread is always the closing page
+    // The horoscope section is always the closing HOROSCOPE_PAGE.length entries — jump to its start.
+    cur = getPages().length - HOROSCOPE_PAGE.length;
     return;
   }
 
