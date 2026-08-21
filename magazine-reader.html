@@ -1567,6 +1567,54 @@ function clearCellContent(cell){
   canvas.style.display = 'block';
   canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
   delete cell.dataset.filled;
+  schedulePuzzleSave();
+}
+
+// ── PROGRESS PERSISTENCE ──
+// The puzzle works without an account, so progress is saved to
+// localStorage rather than Supabase — keyed by issue + language, since
+// each language has its own grid/answers and shouldn't share progress.
+function pzStorageKey(){
+  const lang = (typeof getLang === 'function') ? getLang() : 'en';
+  return `puzzle_progress_${ISSUE_NUMBER}_${lang}`;
+}
+
+let pzSaveTimer = null;
+function schedulePuzzleSave(){
+  clearTimeout(pzSaveTimer);
+  pzSaveTimer = setTimeout(savePuzzleProgress, 400);
+}
+
+function savePuzzleProgress(){
+  if(!PUZZLE) return;
+  const progress = {};
+  document.querySelectorAll('.pz-cell[data-row][data-col]').forEach(cell => {
+    if(cell.dataset.filled){
+      const letter = cell.querySelector('.pz-letter').textContent;
+      if(letter) progress[`${cell.dataset.row},${cell.dataset.col}`] = letter;
+    }
+  });
+  try {
+    localStorage.setItem(pzStorageKey(), JSON.stringify(progress));
+  } catch(e) {
+    console.error('Failed to save puzzle progress:', e);
+  }
+}
+
+function restorePuzzleProgress(){
+  let progress;
+  try {
+    const raw = localStorage.getItem(pzStorageKey());
+    progress = raw ? JSON.parse(raw) : null;
+  } catch(e) {
+    progress = null;
+  }
+  if(!progress) return;
+  Object.entries(progress).forEach(([key, letter]) => {
+    const [row, col] = key.split(',').map(Number);
+    const cell = cellAt(row, col);
+    if(cell && !cell.classList.contains('blocked')) fillCell(cell, letter);
+  });
 }
 
 function handleBackspace(){
@@ -1601,6 +1649,7 @@ function handleBackspace(){
 function attachPuzzleHandlers(){
   activeCell = null;
   buildPuzzleIndex();
+  restorePuzzleProgress();
 
   document.querySelectorAll('.pz-canvas').forEach(canvas => {
     const cell = canvas.closest('.pz-cell');
@@ -1713,7 +1762,10 @@ function flashWordFeedback(cellEls, correct){
   setTimeout(() => cellEls.forEach(c => c.classList.remove(cls)), correct ? 800 : 450);
 }
 
-function showRecognizedLetter(cell, letter){
+// Pure DOM update, shared by live input (showRecognizedLetter) and
+// silently restoring saved progress (restorePuzzleProgress) — the latter
+// shouldn't trigger word-completion flashes, auto-advance, or a re-save.
+function fillCell(cell, letter){
   const canvas = cell.querySelector('.pz-canvas');
   const input = cell.querySelector('.pz-input');
   const letterDiv = cell.querySelector('.pz-letter');
@@ -1729,8 +1781,13 @@ function showRecognizedLetter(cell, letter){
     // toggling direction twice.
     clearCellContent(cell);
   };
+}
+
+function showRecognizedLetter(cell, letter){
+  fillCell(cell, letter);
   const row = +cell.dataset.row, col = +cell.dataset.col;
   checkWordCompletion(row, col);
+  schedulePuzzleSave();
   if(activeCell && activeCell.row===row && activeCell.col===col){
     advanceCursor();
     // Keep the on-screen keyboard open across the auto-advance instead of
