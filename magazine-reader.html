@@ -258,7 +258,7 @@ body{font-family:var(--S);-webkit-font-smoothing:antialiased;display:flex;flex-d
 .mh-head{padding:14px 28px 10px;border-bottom:2px solid var(--ink);display:flex;align-items:baseline;justify-content:space-between;flex-shrink:0}
 .mh-title{font-family:var(--H);font-size:20px;font-weight:700;color:var(--ink);letter-spacing:-.5px}
 .mh-issue{font-family:var(--C);font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted)}
-.mh-grid{flex:1;overflow-y:auto;display:flex;flex-direction:column}
+.mh-grid{flex:1;overflow-y:auto;display:flex;flex-direction:column;touch-action:pan-y;overscroll-behavior-y:contain}
 .mh-sign{padding:14px 28px;border-bottom:1px solid var(--rule);display:flex;gap:14px;align-items:flex-start}
 .mh-sign:last-child{border-bottom:none}
 .mh-icon{width:30px;height:30px;flex-shrink:0}
@@ -289,7 +289,7 @@ body{font-family:var(--S);-webkit-font-smoothing:antialiased;display:flex;flex-d
 
 /* MONOCLE PUZZLE CLUES */
 .mono-puzzle-clues{width:100%;height:100%;background:#F2F0EB;display:flex;flex-direction:column;overflow:hidden;border-radius:0 12px 12px 0}
-.pzc-body{flex:1;overflow-y:auto;padding:16px 26px}
+.pzc-body{flex:1;overflow-y:auto;padding:16px 26px;touch-action:pan-y;overscroll-behavior-y:contain}
 .pzc-section-h{font-family:var(--C);font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--teal);margin:16px 0 8px}
 .pzc-section-h:first-child,.pzm-toggle+.pzc-section-h{margin-top:0}
 .pzc-clue{font-family:var(--S);font-size:12.5px;line-height:1.6;color:var(--mid);margin-bottom:6px}
@@ -298,7 +298,7 @@ body{font-family:var(--S);-webkit-font-smoothing:antialiased;display:flex;flex-d
 
 /* MONOCLE PUZZLE — mobile combined (grid + clues stacked, single scroll) */
 .mono-puzzle-mobile{width:100%;height:100%;background:#F2F0EB;display:flex;flex-direction:column;overflow:hidden}
-.pzm-body{flex:1;overflow-y:auto;padding:16px 20px 20px}
+.pzm-body{flex:1;overflow-y:auto;padding:16px 20px 20px;touch-action:pan-y;overscroll-behavior-y:contain}
 .pz-grid-wrap-mobile{display:flex;justify-content:center;padding:4px 0 18px}
 .pzm-toggle{display:block;margin-left:auto;margin-bottom:10px;font-family:var(--C);font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--teal);background:none;border:none;padding:4px 0;cursor:pointer}
 .pzm-toggle:hover{text-decoration:underline}
@@ -406,7 +406,6 @@ body{font-family:var(--S);-webkit-font-smoothing:antialiased;display:flex;flex-d
   .spine{display:none}
   #page-right{
     border-radius:10px!important;
-    touch-action:pan-y;
   }
   /* Page-curl affordance: a folded-corner hint that this page can be
      turned, since the nav arrows/buttons are hidden here in favor of
@@ -514,7 +513,7 @@ body{font-family:var(--S);-webkit-font-smoothing:antialiased;display:flex;flex-d
 .mr-top-rule{height:3px;background:#4A7C3F;flex-shrink:0}
 .mr-header{padding:22px 24px 14px;border-bottom:2px solid #0C0C0C;flex-shrink:0;display:flex;gap:16px;align-items:flex-start}
 .mr-title{font-family:var(--H);font-size:clamp(20px,3vw,36px);font-weight:400;color:#0C0C0C;line-height:1.25;letter-spacing:.06em;margin-bottom:12px}
-.mr-body{flex:1;overflow-y:auto;padding:14px 24px 20px}
+.mr-body{flex:1;overflow-y:auto;padding:14px 24px 20px;touch-action:pan-y;overscroll-behavior-y:contain}
 
 </style>
 
@@ -830,9 +829,12 @@ function applyZoom(){
   if(scale === 1){
     book.style.zoom = '';
     stage.classList.remove('zoomed');
-    // Restore the vertical-only touch-action the swipe handler relies on
-    // (see below) — while zoomed, panning needs to move in any direction.
-    if(page) page.style.touchAction = 'pan-y';
+    // #page-right itself is never scrollable (the actual scrollable
+    // content, e.g. .mr-body, declares its own pan-y) — clearing any
+    // inline override here avoids granting this non-scrolling card
+    // permission to pan, which was letting scroll-chaining bounce the
+    // whole card when reading text hit its top/bottom edge.
+    if(page) page.style.touchAction = '';
   } else {
     book.style.zoom = scale;
     stage.classList.add('zoomed');
