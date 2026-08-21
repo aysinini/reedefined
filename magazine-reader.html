@@ -268,10 +268,12 @@ body{font-family:var(--S);-webkit-font-smoothing:antialiased;display:flex;flex-d
 .pz-issue{font-family:var(--C);font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted)}
 .pz-grid-wrap{flex:1;display:flex;align-items:center;justify-content:center;padding:16px}
 .pz-grid{display:grid;background:var(--ink);gap:1px;border:1px solid var(--ink)}
-.pz-cell{position:relative;background:#fff;aspect-ratio:1/1;cursor:pointer}
+.pz-cell{position:relative;background:#fff;aspect-ratio:1/1;cursor:pointer;transition:background .3s ease}
 .pz-cell.blocked{background:var(--ink);cursor:default}
 .pz-cell.pz-active-word{background:#EAF1E6}
 .pz-cell.pz-active{background:#CFE0C6}
+.pz-cell.pz-correct{background:#8FD48A}
+.pz-cell.pz-incorrect{background:#EFAFAF}
 .pz-canvas{width:100%;height:100%;display:block;touch-action:none;cursor:crosshair;background:transparent}
 .pz-number{position:absolute;top:1px;left:2px;font-family:var(--C);font-size:9px;font-weight:700;color:var(--muted);pointer-events:none;z-index:2}
 .pz-letter{display:none;position:absolute;inset:0;align-items:center;justify-content:center;font-family:var(--H);font-size:22px;font-weight:700;color:var(--ink);cursor:pointer;background:var(--teal-ll)}
@@ -1446,6 +1448,11 @@ function monoPuzzleMobile(){
 let activeCell = null;   // {row, col} | null
 let activeDir = 'A';     // 'A' (across) | 'D' (down)
 let PZ_CELL_WORDS = {};  // "row,col" -> {A: acrossWordIndex?, D: downWordIndex?}
+// True once the reader has explicitly opened the on-screen keyboard
+// fallback for a cell — kept true across auto-advance so the keyboard
+// stays open for the next cell instead of closing after every letter.
+// Cleared the moment they start a handwriting stroke instead.
+let keyboardModeActive = false;
 
 function buildPuzzleIndex(){
   PZ_CELL_WORDS = {};
@@ -1616,6 +1623,7 @@ function attachPuzzleHandlers(){
     canvas.addEventListener('pointerdown', e => {
       e.preventDefault();
       drawing = true; hasDrawn = false;
+      keyboardModeActive = false;
       const p = pos(e);
       ctx.beginPath();
       ctx.moveTo(p.x, p.y);
@@ -1679,6 +1687,32 @@ async function recognizeCell(canvas){
   }
 }
 
+// After a letter lands, check every word that passes through this cell
+// (a cell can be part of both an Across and a Down word) — if a word is
+// now fully filled, compare it against the stored answer (the same
+// PUZZLE.across/down[i].answer used by "Show answers") and flash it
+// green or red. Never reveals the correct letters, just a pass/fail cue.
+function checkWordCompletion(row, col){
+  const key = `${row},${col}`;
+  const words = PZ_CELL_WORDS[key] || {};
+  ['A','D'].forEach(dir => {
+    const wordIdx = words[dir];
+    if(wordIdx == null) return;
+    const cells = getWordCells(dir, wordIdx);
+    const cellEls = cells.map(c => cellAt(c.row, c.col));
+    if(cellEls.some(c => !c || !c.dataset.filled)) return;
+    const typed = cellEls.map(c => c.querySelector('.pz-letter').textContent).join('');
+    const answer = (dir === 'A' ? PUZZLE.across : PUZZLE.down)[wordIdx].answer;
+    flashWordFeedback(cellEls, typed === answer);
+  });
+}
+
+function flashWordFeedback(cellEls, correct){
+  const cls = correct ? 'pz-correct' : 'pz-incorrect';
+  cellEls.forEach(c => c.classList.add(cls));
+  setTimeout(() => cellEls.forEach(c => c.classList.remove(cls)), correct ? 800 : 450);
+}
+
 function showRecognizedLetter(cell, letter){
   const canvas = cell.querySelector('.pz-canvas');
   const input = cell.querySelector('.pz-input');
@@ -1696,12 +1730,20 @@ function showRecognizedLetter(cell, letter){
     clearCellContent(cell);
   };
   const row = +cell.dataset.row, col = +cell.dataset.col;
+  checkWordCompletion(row, col);
   if(activeCell && activeCell.row===row && activeCell.col===col){
     advanceCursor();
+    // Keep the on-screen keyboard open across the auto-advance instead of
+    // requiring a fresh tap on the keyboard icon for every letter.
+    if(keyboardModeActive && activeCell){
+      const nextCell = cellAt(activeCell.row, activeCell.col);
+      if(nextCell && !nextCell.dataset.filled) switchCellToKeyboard(nextCell);
+    }
   }
 }
 
 function switchCellToKeyboard(cell){
+  keyboardModeActive = true;
   const canvas = cell.querySelector('.pz-canvas');
   const input = cell.querySelector('.pz-input');
   const letterDiv = cell.querySelector('.pz-letter');
