@@ -400,38 +400,52 @@ body{font-family:var(--S);-webkit-font-smoothing:antialiased;display:flex;flex-d
   .spine{display:none}
   #page-right{
     border-radius:10px!important;
-    transition:transform .2s ease;
+    transition:transform .22s cubic-bezier(.2,.8,.2,1);
     touch-action:pan-y;
+    --curl-fwd:44px;
+    --curl-back:44px;
   }
+  /* While a finger is actively dragging, updates must be instant (no
+     lag behind the touch) — the eased transition above/below is only
+     for the settle-to-complete or settle-back-to-rest phase after
+     release, toggled via this class. */
+  #page-right.flip-dragging{transition:none}
+  #page-right.flip-dragging::after,
+  #page-right.flip-dragging::before{transition:none}
   /* Page-curl affordance: a folded-corner hint that this page can be
      turned, since the nav arrows/buttons are hidden here in favor of
      swipe + edge-tap navigation. A gradient (simulating the back of the
      paper showing through the fold) plus a real drop-shadow sells the
-     "lifted corner" look — sized to actually catch the eye. */
+     "lifted corner" look. Size is driven by --curl-fwd (a CSS custom
+     property JS updates every touchmove frame) so the fold grows in
+     lockstep with the finger drag/rotation instead of sitting static. */
   #page-right::after{
     content:'';
     position:absolute;
     bottom:0;right:0;
-    width:44px;height:44px;
+    width:var(--curl-fwd);height:var(--curl-fwd);
     background:linear-gradient(135deg, transparent 50%, #EAE5D8 50%, #C9C2AE 100%);
     clip-path:polygon(100% 0, 100% 100%, 0 100%);
     filter:drop-shadow(-2px -3px 5px rgba(0,0,0,.35));
     border-radius:0 0 10px 0;
     pointer-events:none;
+    transition:width .22s cubic-bezier(.2,.8,.2,1), height .22s cubic-bezier(.2,.8,.2,1);
   }
   /* Mirrored curl for going back a page — only shown once there's a
-     previous spread to return to (toggled via .has-prev in render()). */
+     previous spread to return to (toggled via .has-prev in render()).
+     Driven by --curl-back the same way. */
   #page-right::before{
     content:'';
     position:absolute;
     top:0;left:0;
-    width:44px;height:44px;
+    width:var(--curl-back);height:var(--curl-back);
     background:linear-gradient(-45deg, transparent 50%, #EAE5D8 50%, #C9C2AE 100%);
     clip-path:polygon(0 0, 100% 0, 0 100%);
     filter:drop-shadow(2px 3px 5px rgba(0,0,0,.35));
     border-radius:10px 0 0 0;
     pointer-events:none;
     display:none;
+    transition:width .22s cubic-bezier(.2,.8,.2,1), height .22s cubic-bezier(.2,.8,.2,1);
   }
   #page-right.has-prev::before{display:block}
   /* Nav arrows and the bottom text-nav bar are replaced by swipe + an
@@ -2060,72 +2074,113 @@ function isPuzzlePageActive(){
   return !!(pg && pg.id === 'm-puzzle');
 }
 
+// Direction-aware, continuous drag-to-flip. A single 0→1 "progress" value
+// (finger travel / DRAG_RANGE) drives the page's rotateY/translateX AND the
+// corner curl's size at the same time, so the fold visibly grows as the
+// finger pulls it instead of sitting there as static decoration. Forward
+// (dx<0) hinges/curls from the bottom-right corner; backward (dx>0) from
+// the top-left — matching whichever corner's curl is showing.
+const DRAG_RANGE = 150;   // px of travel that maps to progress=1
+const MAX_ANGLE = 78;     // deg at progress=1
+const MAX_TRANSLATE = 92; // px at progress=1
+const CURL_BASE = 44;     // resting curl size, px
+const CURL_MAX = 190;     // curl size at progress=1, px
+const FLIP_THRESHOLD = 60; // px of travel required on release to commit a page change
+
+function getFlipPage(){
+  return document.getElementById('page-right');
+}
+
+// Full, unconditional reset — used on every touchstart (so a prior
+// interrupted gesture can never leave a residual half-state), on
+// touchcancel, and after a below-threshold release. Removing
+// .flip-dragging first lets the CSS transition ease everything back to
+// rest instead of snapping.
+function resetDrag(){
+  const page = getFlipPage();
+  if(!page) return;
+  page.classList.remove('flip-dragging');
+  page.style.transform = '';
+  page.style.transformOrigin = '';
+  page.style.removeProperty('--curl-fwd');
+  page.style.removeProperty('--curl-back');
+}
+
+function setDragVisual(forward, progress){
+  const page = getFlipPage();
+  if(!page) return;
+  const angle = progress * MAX_ANGLE;
+  const translate = progress * MAX_TRANSLATE;
+  page.style.transformOrigin = forward ? '100% 100%' : '0% 0%';
+  page.style.transform = `translateX(${forward ? -translate : translate}px) rotateY(${forward ? angle : -angle}deg)`;
+  const curlSize = CURL_BASE + progress * (CURL_MAX - CURL_BASE);
+  page.style.setProperty(forward ? '--curl-fwd' : '--curl-back', curlSize + 'px');
+  page.style.setProperty(forward ? '--curl-back' : '--curl-fwd', CURL_BASE + 'px');
+}
+
 stageEl.addEventListener('touchstart', e => {
   txOnCanvas = !!e.target.closest('.pz-canvas');
   touchStartX = e.touches[0].clientX;
   touchStartY = e.touches[0].clientY;
-  // render()'s flipIn keyframe finishes with animation-fill-mode:forwards,
-  // which keeps overriding transform (pinned to its end value) even after
-  // the animation completes — that silently blocked every drag transform
-  // below from having any visual effect. Clearing it here (render() sets
-  // a fresh one on the next real page change anyway) frees transform back
-  // up for the drag.
   if(isMobileStage() && !txOnCanvas){
-    const page = document.getElementById('page-right');
+    // render()'s flipIn keyframe finishes with animation-fill-mode:forwards,
+    // which keeps overriding transform (pinned to its end value) even after
+    // the animation completes — clearing it here frees transform back up
+    // for the drag (render() sets a fresh one on the next real page change).
+    const page = getFlipPage();
     if(page) page.style.animation = 'none';
+    // Defensive: guarantee a clean slate even if the previous gesture was
+    // interrupted in some way that skipped touchend/touchcancel.
+    resetDrag();
+    if(page) page.classList.add('flip-dragging');
   }
-});
-
-// Direction-aware 3D drag: forward (swiping toward the next page) hinges
-// the rotation from the bottom-right corner, matching that corner's curl
-// hint; backward hinges from the top-left, matching its mirrored curl.
-function applyDragTransform(dx){
-  const page = document.getElementById('page-right');
-  if(!page) return;
-  const clamped = Math.max(-90, Math.min(90, dx));
-  const angle = (clamped / 90) * 18;
-  page.style.transformOrigin = dx < 0 ? '100% 100%' : '0% 0%';
-  page.style.transform = `translateX(${clamped * 0.3}px) rotateY(${-angle}deg)`;
-}
-function resetDragTransform(){
-  const page = document.getElementById('page-right');
-  if(!page) return;
-  page.style.transform = '';
-  page.style.transformOrigin = '';
-}
-// Once a swipe clears the threshold, keep swinging the page further away
-// (via the same transition already on #page-right) for a beat before the
-// content actually swaps, so the release continues the drag's motion
-// instead of cutting straight to the next page's own flipIn.
-function completeFlip(forward){
-  const page = document.getElementById('page-right');
-  if(page){
-    page.style.transformOrigin = forward ? '100% 100%' : '0% 0%';
-    page.style.transform = `translateX(${forward ? -70 : 70}px) rotateY(${forward ? 50 : -50}deg)`;
-  }
-  setTimeout(() => { forward ? nextPage() : prevPage(); }, 160);
-}
+}, { passive: true });
 
 stageEl.addEventListener('touchmove', e => {
   if(txOnCanvas || !isMobileStage() || isZoomedStage()) return;
   const dx = e.touches[0].clientX - touchStartX;
   const dy = e.touches[0].clientY - touchStartY;
-  if(Math.abs(dx) > Math.abs(dy)) applyDragTransform(dx);
+  if(Math.abs(dx) <= Math.abs(dy)) return;
+  const forward = dx < 0;
+  if(!forward && cur === 0) return; // nothing behind the first page to flip back to
+  const progress = Math.min(Math.abs(dx) / DRAG_RANGE, 1);
+  setDragVisual(forward, progress);
 }, { passive: true });
 
+// Once a swipe clears the threshold, ease the rest of the way to a full
+// flip (same transition, now re-enabled by dropping .flip-dragging) before
+// the content actually swaps, so release continues the drag's motion
+// instead of cutting straight to the next page's own flipIn. Whichever
+// branch touchend takes, it ends in one of exactly two terminal states —
+// fully flipped-and-swapped, or fully reset — never a stuck in-between.
+function completeFlip(forward){
+  const page = getFlipPage();
+  if(page){
+    page.classList.remove('flip-dragging');
+    setDragVisual(forward, 1);
+  }
+  setTimeout(() => {
+    forward ? nextPage() : prevPage();
+    resetDrag();
+  }, 180);
+}
+
 stageEl.addEventListener('touchend', e => {
-  if(txOnCanvas || isZoomedStage()){ resetDragTransform(); return; }
+  const page = getFlipPage();
+  if(txOnCanvas || isZoomedStage()){ resetDrag(); return; }
 
   const endX = e.changedTouches[0].clientX;
   const endY = e.changedTouches[0].clientY;
   const dx = endX - touchStartX;
   const dy = endY - touchStartY;
+  const forward = dx < 0;
 
-  if(Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy)){
-    completeFlip(dx < 0);
+  if(Math.abs(dx) > FLIP_THRESHOLD && Math.abs(dx) > Math.abs(dy) && (forward || cur > 0)){
+    completeFlip(forward);
     return;
   }
-  resetDragTransform();
+  if(page) page.classList.remove('flip-dragging');
+  resetDrag();
 
   if(!isMobileStage() || isPuzzlePageActive()) return;
   if(Math.abs(dx) > 10 || Math.abs(dy) > 10) return;
@@ -2139,8 +2194,12 @@ stageEl.addEventListener('touchend', e => {
 
 // If the browser hands the gesture off to native scrolling instead of
 // delivering a clean touchend (common once a drag reads as ambiguous),
-// just clear the follow-the-finger offset rather than leaving it stuck.
-stageEl.addEventListener('touchcancel', resetDragTransform);
+// just settle back to rest rather than leaving it stuck.
+stageEl.addEventListener('touchcancel', () => {
+  const page = getFlipPage();
+  if(page) page.classList.remove('flip-dragging');
+  resetDrag();
+});
 
 // CSS animation
 const style_tag = document.createElement('style');
