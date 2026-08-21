@@ -400,11 +400,27 @@ body{font-family:var(--S);-webkit-font-smoothing:antialiased;display:flex;flex-d
   .spine{display:none}
   #page-right{
     border-radius:10px!important;
+    transition:transform .2s ease;
   }
-  .nav-arrow{width:30px;height:30px;font-size:16px}
-  .nav-prev{left:2px}.nav-next{right:2px}
+  /* Page-curl affordance: a small folded-corner hint that this page can
+     be turned, since the nav arrows/buttons are hidden here in favor of
+     swipe + edge-tap navigation. */
+  #page-right::after{
+    content:'';
+    position:absolute;
+    bottom:0;right:0;
+    width:0;height:0;
+    border-style:solid;
+    border-width:0 0 26px 26px;
+    border-color:transparent transparent rgba(0,0,0,.14) transparent;
+    pointer-events:none;
+  }
+  /* Nav arrows and the bottom text-nav bar are replaced by swipe + an
+     invisible edge-tap zone on mobile (see the touch handler below). */
+  .nav-arrow{display:none}
+  div[style*="z-index:250"]{display:none!important}
   .page-counter{font-size:9px;padding:3px 10px;bottom:10px}
-  .zoom-ctrl{bottom:120px;right:8px}
+  .zoom-ctrl{bottom:20px;right:8px}
 
   /* Page content scaling */
   .mc-logo{font-size:20px}
@@ -559,12 +575,9 @@ if('serviceWorker' in navigator){
 #text-prev:hover:not(:disabled){background:rgba(255,255,255,.5);border-color:rgba(255,255,255,.4)}
 #text-prev:disabled{opacity:.3;cursor:default}
 #text-next:hover{background:#1f3940}
-@media(max-width:640px){
-  .stage{margin-bottom:60px}
-  div[style*="z-index:250"]{padding:10px 14px;gap:12px}
-  #text-prev,#text-next{padding:8px 14px;font-size:11px}
-  #text-page-label{font-size:12px;min-width:90px}
-}
+/* The bottom text-nav bar these used to size is hidden below 850px
+   (swipe/edge-tap take over), so this breakpoint has nothing left to
+   style. */
 </style>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
@@ -2000,16 +2013,67 @@ document.addEventListener('keydown', e=>{
 // for handwriting) both fire independently for the same physical touch, so
 // a letter stroke with >60px of horizontal movement would otherwise also
 // register as a page-flip swipe. Ignore touches that start on a canvas.
-let tx=0;
-let txOnCanvas=false;
-document.querySelector('.stage').addEventListener('touchstart',e=>{
+//
+// Mobile hides the round nav arrows and the bottom text-nav bar in favor
+// of two gestures on the page itself: a horizontal swipe past the
+// threshold (with a light "follow the finger" translateX for feedback,
+// and a check that the gesture is more horizontal than vertical so a
+// scroll doesn't get mistaken for a page turn), and — since there's no
+// visible button anymore — a near-stationary tap within ~15% of the
+// page's left/right edge as an accessible fallback. The edge-tap only
+// applies outside the puzzle page (the grid reaches the edges there) and
+// never overrides a tap that actually landed on a real link/button/input.
+let touchStartX = 0, touchStartY = 0, txOnCanvas = false;
+const stageEl = document.querySelector('.stage');
+
+function isZoomedStage(){
+  return stageEl.classList.contains('zoomed');
+}
+function isPuzzlePageActive(){
+  const pages = getPages();
+  const pg = pages[cur];
+  return !!(pg && pg.id === 'm-puzzle');
+}
+
+stageEl.addEventListener('touchstart', e => {
   txOnCanvas = !!e.target.closest('.pz-canvas');
-  tx=e.touches[0].clientX;
+  touchStartX = e.touches[0].clientX;
+  touchStartY = e.touches[0].clientY;
 });
-document.querySelector('.stage').addEventListener('touchend',e=>{
-  if(txOnCanvas) return;
-  const d = tx - e.changedTouches[0].clientX;
-  if(Math.abs(d)>60){ d>0?nextPage():prevPage(); }
+
+stageEl.addEventListener('touchmove', e => {
+  if(txOnCanvas || !isMobileStage() || isZoomedStage()) return;
+  const dx = e.touches[0].clientX - touchStartX;
+  const dy = e.touches[0].clientY - touchStartY;
+  if(Math.abs(dx) > Math.abs(dy)){
+    const page = document.getElementById('page-right');
+    if(page) page.style.transform = `translateX(${Math.max(-36, Math.min(36, dx * 0.25))}px)`;
+  }
+}, { passive: true });
+
+stageEl.addEventListener('touchend', e => {
+  const page = document.getElementById('page-right');
+  if(page) page.style.transform = '';
+  if(txOnCanvas || isZoomedStage()) return;
+
+  const endX = e.changedTouches[0].clientX;
+  const endY = e.changedTouches[0].clientY;
+  const dx = endX - touchStartX;
+  const dy = endY - touchStartY;
+
+  if(Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy)){
+    dx < 0 ? nextPage() : prevPage();
+    return;
+  }
+
+  if(!isMobileStage() || isPuzzlePageActive()) return;
+  if(Math.abs(dx) > 10 || Math.abs(dy) > 10) return;
+  if(e.target.closest('a, button, input, select, textarea, [onclick]')) return;
+  if(!page) return;
+  const rect = page.getBoundingClientRect();
+  const relX = (endX - rect.left) / rect.width;
+  if(relX < 0.15) prevPage();
+  else if(relX > 0.85) nextPage();
 });
 
 // CSS animation
