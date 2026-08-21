@@ -401,20 +401,39 @@ body{font-family:var(--S);-webkit-font-smoothing:antialiased;display:flex;flex-d
   #page-right{
     border-radius:10px!important;
     transition:transform .2s ease;
+    touch-action:pan-y;
   }
-  /* Page-curl affordance: a small folded-corner hint that this page can
-     be turned, since the nav arrows/buttons are hidden here in favor of
-     swipe + edge-tap navigation. */
+  /* Page-curl affordance: a folded-corner hint that this page can be
+     turned, since the nav arrows/buttons are hidden here in favor of
+     swipe + edge-tap navigation. A gradient (simulating the back of the
+     paper showing through the fold) plus a real drop-shadow sells the
+     "lifted corner" look — sized to actually catch the eye. */
   #page-right::after{
     content:'';
     position:absolute;
     bottom:0;right:0;
-    width:0;height:0;
-    border-style:solid;
-    border-width:0 0 26px 26px;
-    border-color:transparent transparent rgba(0,0,0,.14) transparent;
+    width:44px;height:44px;
+    background:linear-gradient(135deg, transparent 50%, #EAE5D8 50%, #C9C2AE 100%);
+    clip-path:polygon(100% 0, 100% 100%, 0 100%);
+    filter:drop-shadow(-2px -3px 5px rgba(0,0,0,.35));
+    border-radius:0 0 10px 0;
     pointer-events:none;
   }
+  /* Mirrored curl for going back a page — only shown once there's a
+     previous spread to return to (toggled via .has-prev in render()). */
+  #page-right::before{
+    content:'';
+    position:absolute;
+    top:0;left:0;
+    width:44px;height:44px;
+    background:linear-gradient(-45deg, transparent 50%, #EAE5D8 50%, #C9C2AE 100%);
+    clip-path:polygon(0 0, 100% 0, 0 100%);
+    filter:drop-shadow(2px 3px 5px rgba(0,0,0,.35));
+    border-radius:10px 0 0 0;
+    pointer-events:none;
+    display:none;
+  }
+  #page-right.has-prev::before{display:block}
   /* Nav arrows and the bottom text-nav bar are replaced by swipe + an
      invisible edge-tap zone on mobile (see the touch handler below). */
   .nav-arrow{display:none}
@@ -797,6 +816,7 @@ function applyZoom(){
   const scale = ZOOM_LEVELS[zoomIdx];
   const book = document.querySelector('.book');
   const stage = document.querySelector('.stage');
+  const page = document.getElementById('page-right');
   // CSS zoom (not transform:scale) so the browser genuinely re-lays-out
   // and re-renders the real text/DOM content at the new size, instead of
   // stretching an already-rasterized bitmap of it — transform:scale was
@@ -804,9 +824,13 @@ function applyZoom(){
   if(scale === 1){
     book.style.zoom = '';
     stage.classList.remove('zoomed');
+    // Restore the vertical-only touch-action the swipe handler relies on
+    // (see below) — while zoomed, panning needs to move in any direction.
+    if(page) page.style.touchAction = 'pan-y';
   } else {
     book.style.zoom = scale;
     stage.classList.add('zoomed');
+    if(page) page.style.touchAction = 'pan-x pan-y pinch-zoom';
   }
   document.getElementById('zoom-pct').textContent = Math.round(scale * 100) + '%';
   document.getElementById('zoom-out-btn').disabled = zoomIdx === 0;
@@ -846,6 +870,7 @@ function render(){
   document.getElementById('nav-prev').disabled = cur===0;
   document.getElementById('nav-next').disabled = cur>=pages.length-1;
   document.getElementById('prog-fill').style.width = ((cur+1)/pages.length*100)+'%';
+  R.classList.toggle('has-prev', cur > 0);
 
   // Text nav controls
   const tPrev = document.getElementById('text-prev');
@@ -2039,22 +2064,57 @@ stageEl.addEventListener('touchstart', e => {
   txOnCanvas = !!e.target.closest('.pz-canvas');
   touchStartX = e.touches[0].clientX;
   touchStartY = e.touches[0].clientY;
+  // render()'s flipIn keyframe finishes with animation-fill-mode:forwards,
+  // which keeps overriding transform (pinned to its end value) even after
+  // the animation completes — that silently blocked every drag transform
+  // below from having any visual effect. Clearing it here (render() sets
+  // a fresh one on the next real page change anyway) frees transform back
+  // up for the drag.
+  if(isMobileStage() && !txOnCanvas){
+    const page = document.getElementById('page-right');
+    if(page) page.style.animation = 'none';
+  }
 });
+
+// Direction-aware 3D drag: forward (swiping toward the next page) hinges
+// the rotation from the bottom-right corner, matching that corner's curl
+// hint; backward hinges from the top-left, matching its mirrored curl.
+function applyDragTransform(dx){
+  const page = document.getElementById('page-right');
+  if(!page) return;
+  const clamped = Math.max(-90, Math.min(90, dx));
+  const angle = (clamped / 90) * 18;
+  page.style.transformOrigin = dx < 0 ? '100% 100%' : '0% 0%';
+  page.style.transform = `translateX(${clamped * 0.3}px) rotateY(${-angle}deg)`;
+}
+function resetDragTransform(){
+  const page = document.getElementById('page-right');
+  if(!page) return;
+  page.style.transform = '';
+  page.style.transformOrigin = '';
+}
+// Once a swipe clears the threshold, keep swinging the page further away
+// (via the same transition already on #page-right) for a beat before the
+// content actually swaps, so the release continues the drag's motion
+// instead of cutting straight to the next page's own flipIn.
+function completeFlip(forward){
+  const page = document.getElementById('page-right');
+  if(page){
+    page.style.transformOrigin = forward ? '100% 100%' : '0% 0%';
+    page.style.transform = `translateX(${forward ? -70 : 70}px) rotateY(${forward ? 50 : -50}deg)`;
+  }
+  setTimeout(() => { forward ? nextPage() : prevPage(); }, 160);
+}
 
 stageEl.addEventListener('touchmove', e => {
   if(txOnCanvas || !isMobileStage() || isZoomedStage()) return;
   const dx = e.touches[0].clientX - touchStartX;
   const dy = e.touches[0].clientY - touchStartY;
-  if(Math.abs(dx) > Math.abs(dy)){
-    const page = document.getElementById('page-right');
-    if(page) page.style.transform = `translateX(${Math.max(-36, Math.min(36, dx * 0.25))}px)`;
-  }
+  if(Math.abs(dx) > Math.abs(dy)) applyDragTransform(dx);
 }, { passive: true });
 
 stageEl.addEventListener('touchend', e => {
-  const page = document.getElementById('page-right');
-  if(page) page.style.transform = '';
-  if(txOnCanvas || isZoomedStage()) return;
+  if(txOnCanvas || isZoomedStage()){ resetDragTransform(); return; }
 
   const endX = e.changedTouches[0].clientX;
   const endY = e.changedTouches[0].clientY;
@@ -2062,9 +2122,10 @@ stageEl.addEventListener('touchend', e => {
   const dy = endY - touchStartY;
 
   if(Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy)){
-    dx < 0 ? nextPage() : prevPage();
+    completeFlip(dx < 0);
     return;
   }
+  resetDragTransform();
 
   if(!isMobileStage() || isPuzzlePageActive()) return;
   if(Math.abs(dx) > 10 || Math.abs(dy) > 10) return;
@@ -2075,6 +2136,11 @@ stageEl.addEventListener('touchend', e => {
   if(relX < 0.15) prevPage();
   else if(relX > 0.85) nextPage();
 });
+
+// If the browser hands the gesture off to native scrolling instead of
+// delivering a clean touchend (common once a drag reads as ambiguous),
+// just clear the follow-the-finger offset rather than leaving it stuck.
+stageEl.addEventListener('touchcancel', resetDragTransform);
 
 // CSS animation
 const style_tag = document.createElement('style');
