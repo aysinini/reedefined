@@ -21,7 +21,7 @@
 body{background:var(--white);color:var(--ink);font-family:var(--S);-webkit-font-smoothing:antialiased;min-height:100vh}
 
 /* TOP BAR */
-.topbar{border-bottom:3px solid var(--ink);padding:0 48px;height:64px;display:flex;align-items:center;justify-content:space-between}
+.topbar{border-bottom:3px solid var(--ink);padding:0 48px;height:64px;display:flex;align-items:center;justify-content:space-between;padding-top:env(safe-area-inset-top)}
 .tb-logo{font-family:var(--H);font-size:22px;font-weight:400;color:var(--ink);cursor:pointer;letter-spacing:.08em}
 .tb-back{font-family:var(--C);font-size:13px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);cursor:pointer;transition:color .15s}
 .tb-back:hover{color:var(--ink)}
@@ -118,7 +118,7 @@ body{background:var(--white);color:var(--ink);font-family:var(--S);-webkit-font-
 @keyframes sp{to{transform:rotate(360deg)}}
 
 @media(max-width:480px){
-  .topbar{padding:0 20px}
+  .topbar{padding:0 20px;padding-top:env(safe-area-inset-top)}
   .main{padding:48px 20px 64px}
   .main-h{font-size:26px}
 }

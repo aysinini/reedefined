@@ -832,7 +832,7 @@ function dismissPWA(){
 // iOS Safari — show manual instructions
 const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent) && !window.MSStream;
 const isInStandalone = window.navigator.standalone;
-if(isIOS && !isInStandalone && !localStorage.getItem('pwa-dismissed')){
+if(isIOS && !isInStandalone && !localStorage.getItem('pwa-dismissed') && !window.__IS_NATIVE_APP__){
   setTimeout(()=>{
     const b = document.getElementById('pwa-banner');
     b.style.display='flex';
