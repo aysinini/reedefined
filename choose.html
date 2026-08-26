@@ -16,7 +16,7 @@
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 body{background:var(--bg);color:var(--ink);font-family:var(--S);-webkit-font-smoothing:antialiased;min-height:100vh;display:flex;flex-direction:column}
-.topbar{border-bottom:3px solid var(--ink);padding:0 48px;height:64px;display:flex;align-items:center;background:var(--white)}
+.topbar{border-bottom:3px solid var(--ink);padding:0 48px;min-height:64px;display:flex;align-items:center;background:var(--white);padding-top:env(safe-area-inset-top)}
 .tb-logo{font-family:var(--H);font-size:22px;font-weight:400;color:var(--ink);letter-spacing:.08em}
 .nav-av{width:32px;height:32px;border-radius:50%;background:var(--teal);display:flex;align-items:center;justify-content:center;font-family:var(--H);font-size:12px;font-weight:700;color:#fff;cursor:pointer}
 .profile-menu{background:#fff;border:1px solid rgba(74,124,63,.15);border-radius:12px;box-shadow:0 12px 32px rgba(0,0,0,.12);min-width:210px;overflow:hidden}
