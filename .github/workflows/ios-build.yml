@@ -49,12 +49,7 @@ jobs:
           # Pick a recent, non-Pro/Max/Plus iPhone device type rather than
           # hardcoding a model name that may not exist in whatever Xcode
           # version the runner has (older device types get retired).
-          DEVICE_TYPE=$(xcrun simctl list devicetypes -j | python3 -c "
-import json, re, sys
-types = [d for d in json.load(sys.stdin)['devicetypes'] if re.match(r'^iPhone \d+\$', d['name'])]
-types.sort(key=lambda d: int(re.search(r'\d+', d['name']).group()))
-print(types[-1]['identifier'])
-")
+          DEVICE_TYPE=$(xcrun simctl list devicetypes -j | python3 -c "import json, re, sys; types = [d for d in json.load(sys.stdin)['devicetypes'] if re.match(r'^iPhone \d+\$', d['name'])]; types.sort(key=lambda d: int(re.search(r'\d+', d['name']).group())); print(types[-1]['identifier'])")
           UDID=$(xcrun simctl create ReedefinedCI "$DEVICE_TYPE" "$RUNTIME")
           echo "UDID=$UDID" >> "$GITHUB_ENV"
           xcrun simctl boot "$UDID"
