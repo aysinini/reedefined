@@ -1,0 +1,16 @@
+{
+  "appId": "com.reedefined.magazine",
+  "appName": "Reedefined",
+  "webDir": "www",
+  "server": {
+    "androidScheme": "https",
+    "allowNavigation": [
+      "reedefined.app",
+      "*.reedefined.app",
+      "www.tiktok.com",
+      "*.tiktok.com",
+      "accounts.spotify.com",
+      "*.spotify.com"
+    ]
+  }
+}

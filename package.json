@@ -1,7 +1,21 @@
 {
   "name": "reedefined",
   "private": true,
+  "scripts": {
+    "sync-web": "bash scripts/sync-web.sh",
+    "cap:sync": "npm run sync-web && npx cap sync",
+    "android": "npm run cap:sync && npx cap run android",
+    "ios": "npm run cap:sync && npx cap run ios"
+  },
   "dependencies": {
+    "@capacitor/android": "^8.5.0",
+    "@capacitor/app": "^8.1.1",
+    "@capacitor/cli": "^8.5.0",
+    "@capacitor/core": "^8.5.0",
+    "@capacitor/ios": "^8.5.0",
     "@vercel/functions": "^3.9.3"
+  },
+  "devDependencies": {
+    "@capacitor/assets": "^3.0.5"
   }
 }
