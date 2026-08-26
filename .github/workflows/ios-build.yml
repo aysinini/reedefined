@@ -35,6 +35,8 @@ jobs:
             echo "Booting into $ENTRY for this run only (not committed)"
             cp "www/$ENTRY" www/index.html
           fi
+          echo "--- www/index.html first 20 lines (sanity check) ---"
+          head -20 www/index.html
           npx cap sync ios
 
       - name: Select Xcode
@@ -73,18 +75,26 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p screenshots
+          LAUNCH_TIME=$(date -u +%Y-%m-%dT%H:%M:%S)
+          echo "LAUNCH_TIME=$LAUNCH_TIME" >> "$GITHUB_ENV"
           xcrun simctl launch "$UDID" com.reedefined.magazine
-          sleep 6
+          sleep 8
           xcrun simctl io "$UDID" screenshot screenshots/01-launch.png
           # Give any async content (Supabase fetches, i18n, magazine-reader's
           # spread building) time to settle
-          sleep 10
+          sleep 15
           xcrun simctl io "$UDID" screenshot screenshots/02-settled.png
 
       - name: Collect device log
         if: always()
         run: |
-          xcrun simctl spawn "$UDID" log collect --output screenshots/device.logarchive || true
+          set -euo pipefail
+          echo "--- Recent WebKit/JS/Capacitor log lines (printed directly, not just archived) ---"
+          xcrun simctl spawn "$UDID" log show --style compact \
+            --predicate 'process == "App" OR eventMessage CONTAINS "Capacitor" OR eventMessage CONTAINS "WebKit" OR eventMessage CONTAINS "JavaScript"' \
+            --start "$LAUNCH_TIME" \
+            > screenshots/device-log.txt 2>&1 || true
+          tail -300 screenshots/device-log.txt || true
 
       - name: Upload screenshots + logs
         if: always()
