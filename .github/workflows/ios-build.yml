@@ -6,6 +6,11 @@ name: iOS Simulator build
 # Unsigned simulator build, no Apple Developer account needed.
 on:
   workflow_dispatch:
+    inputs:
+      entry_page:
+        description: "Which page to launch into (for this run only — never committed)"
+        required: false
+        default: index.html
 
 jobs:
   build-and-screenshot:
@@ -25,6 +30,11 @@ jobs:
       - name: Sync web assets into the native project
         run: |
           npm run sync-web
+          ENTRY="${{ github.event.inputs.entry_page }}"
+          if [ -n "$ENTRY" ] && [ "$ENTRY" != "index.html" ]; then
+            echo "Booting into $ENTRY for this run only (not committed)"
+            cp "www/$ENTRY" www/index.html
+          fi
           npx cap sync ios
 
       - name: Select Xcode
@@ -66,8 +76,9 @@ jobs:
           xcrun simctl launch "$UDID" com.reedefined.magazine
           sleep 6
           xcrun simctl io "$UDID" screenshot screenshots/01-launch.png
-          # Give any async content (Supabase fetches, i18n) time to settle
-          sleep 6
+          # Give any async content (Supabase fetches, i18n, magazine-reader's
+          # spread building) time to settle
+          sleep 10
           xcrun simctl io "$UDID" screenshot screenshots/02-settled.png
 
       - name: Collect device log
