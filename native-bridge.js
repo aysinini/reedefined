@@ -27,24 +27,24 @@ if (window.Capacitor && window.Capacitor.isNativePlatform()) {
 
   window.Capacitor.Plugins.App.addListener('appUrlOpen', (data) => {
     const url = new URL(data.url);
-    if (url.protocol !== 'reedefined:' || url.hostname !== 'oauth-callback') return;
+    if (url.protocol !== 'reedefined:') return;
+    // Non-special schemes like this one don't get authority (//host)
+    // parsing in every engine — Android's WebView, for one, leaves
+    // hostname empty and puts "oauth-callback" in pathname instead
+    // (as "//oauth-callback"). Strip leading slashes so this works
+    // the same regardless of how a given engine parses it.
+    if (url.pathname.replace(/^\/+/, '') !== 'oauth-callback') return;
 
-    const provider = url.searchParams.get('provider');
-    const token = url.searchParams.get('token');
-    const openId = url.searchParams.get('open_id');
-    const err = url.searchParams.get('error');
-
+    // finishOAuth() in callback.html already built these query params in
+    // the exact tiktok_token=.../tiktok_error=1/spotify_token=... shape
+    // connections.html's existing handleTikTokCallback()/
+    // handleSpotifyCallback() expect — just forward them as-is instead of
+    // re-deriving that mapping here (and re-risking getting it wrong).
     const target = new URL('connections.html', window.location.origin);
-    if (err) {
-      target.searchParams.set(provider + '_error', '1');
-    } else if (provider === 'tiktok') {
-      target.searchParams.set('tiktok_token', token || '');
-      target.searchParams.set('tiktok_open_id', openId || '');
-    } else if (provider === 'spotify') {
-      target.searchParams.set('spotify_token', token || '');
-    } else {
-      return;
-    }
+    url.searchParams.forEach((value, key) => {
+      if (key === 'provider') return;
+      target.searchParams.set(key, value);
+    });
     window.location.href = target.toString();
   });
 }

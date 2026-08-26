@@ -18,6 +18,15 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            <!-- Lets the OS route reedefined://oauth-callback back into this
+                 app (see native-bridge.js's appUrlOpen listener) once the
+                 TikTok/Spotify OAuth round trip finishes on reedefined.app. -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="reedefined" />
+            </intent-filter>
         </activity>
 
         <provider
