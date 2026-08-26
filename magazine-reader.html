@@ -24,7 +24,7 @@ body{font-family:var(--S);-webkit-font-smoothing:antialiased;display:flex;flex-d
 
 /* ── READER CHROME ── */
 .reader-bar {
-  height:48px;background:rgba(28,32,42,.97);border-bottom:1px solid #3a3e4e;
+  min-height:48px;background:rgba(28,32,42,.97);border-bottom:1px solid #3a3e4e;
   display:flex;align-items:center;justify-content:space-between;padding:0 24px;
   flex-shrink:0;z-index:100;
   padding-top:env(safe-area-inset-top);
@@ -392,7 +392,7 @@ body{font-family:var(--S);-webkit-font-smoothing:antialiased;display:flex;flex-d
 
 /* ── MOBILE < 640px ── */
 @media(max-width:850px){
-  .reader-bar{height:44px;padding:0 12px;padding-top:env(safe-area-inset-top)}
+  .reader-bar{min-height:44px;padding:0 12px;padding-top:env(safe-area-inset-top)}
   .rb-logo{font-size:16px}
   .rb-issue{display:none}
   .rb-page{font-size:12px}
