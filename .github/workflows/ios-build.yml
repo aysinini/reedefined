@@ -1,0 +1,88 @@
+name: iOS Simulator build
+
+# Manual trigger only — the local dev machine can't run the Xcode version
+# any current Capacitor major version requires (hardware-locked to an old
+# macOS), so this is how iOS gets built/smoke-tested at all right now.
+# Unsigned simulator build, no Apple Developer account needed.
+on:
+  workflow_dispatch:
+
+jobs:
+  build-and-screenshot:
+    runs-on: macos-15
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Sync web assets into the native project
+        run: |
+          npm run sync-web
+          npx cap sync ios
+
+      - name: Select Xcode
+        # Capacitor 8 requires Xcode 26.0+ (the macos-15 runner defaults to
+        # 16.4, which is below that) — pick the newest 26.x image explicitly.
+        run: sudo xcode-select -s /Applications/Xcode_26.3.app/Contents/Developer
+
+      - name: Build for iOS Simulator (unsigned)
+        run: |
+          xcodebuild \
+            -project ios/App/App.xcodeproj \
+            -scheme App \
+            -sdk iphonesimulator \
+            -configuration Debug \
+            -derivedDataPath build \
+            CODE_SIGNING_ALLOWED=NO \
+            build
+
+      - name: Boot a simulator and install the app
+        run: |
+          set -euo pipefail
+          RUNTIME=$(xcrun simctl list runtimes available -j | python3 -c "import json,sys; rt=[r for r in json.load(sys.stdin)['runtimes'] if r['platform']=='iOS']; print(sorted(rt, key=lambda r: r['version'])[-1]['identifier'])")
+          # Pick a recent, non-Pro/Max/Plus iPhone device type rather than
+          # hardcoding a model name that may not exist in whatever Xcode
+          # version the runner has (older device types get retired).
+          DEVICE_TYPE=$(xcrun simctl list devicetypes -j | python3 -c "
+import json, re, sys
+types = [d for d in json.load(sys.stdin)['devicetypes'] if re.match(r'^iPhone \d+\$', d['name'])]
+types.sort(key=lambda d: int(re.search(r'\d+', d['name']).group()))
+print(types[-1]['identifier'])
+")
+          UDID=$(xcrun simctl create ReedefinedCI "$DEVICE_TYPE" "$RUNTIME")
+          echo "UDID=$UDID" >> "$GITHUB_ENV"
+          xcrun simctl boot "$UDID"
+          xcrun simctl bootstatus "$UDID" -b
+          APP_PATH=$(find build/Build/Products -maxdepth 2 -iname "App.app" | head -1)
+          echo "Built app at: $APP_PATH"
+          xcrun simctl install "$UDID" "$APP_PATH"
+
+      - name: Launch app and capture screenshots
+        run: |
+          set -euo pipefail
+          mkdir -p screenshots
+          xcrun simctl launch "$UDID" com.reedefined.magazine
+          sleep 6
+          xcrun simctl io "$UDID" screenshot screenshots/01-launch.png
+          # Give any async content (Supabase fetches, i18n) time to settle
+          sleep 6
+          xcrun simctl io "$UDID" screenshot screenshots/02-settled.png
+
+      - name: Collect device log
+        if: always()
+        run: |
+          xcrun simctl spawn "$UDID" log collect --output screenshots/device.logarchive || true
+
+      - name: Upload screenshots + logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios-simulator-run
+          path: screenshots/
+          retention-days: 14
