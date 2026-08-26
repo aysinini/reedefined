@@ -75,7 +75,9 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p screenshots
-          LAUNCH_TIME=$(date -u +%Y-%m-%dT%H:%M:%S)
+          # `simctl log show --start` wants "%Y-%m-%d %H:%M:%S", not ISO 8601
+          # (a "T" separator silently makes it fail to parse and emit nothing).
+          LAUNCH_TIME=$(date -u "+%Y-%m-%d %H:%M:%S")
           echo "LAUNCH_TIME=$LAUNCH_TIME" >> "$GITHUB_ENV"
           xcrun simctl launch "$UDID" com.reedefined.magazine
           sleep 8
